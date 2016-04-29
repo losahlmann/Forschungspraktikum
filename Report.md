@@ -1,16 +1,63 @@
 # Delay Hybrid Systems
 
+Lorenz Sahlmann
+
+Ecole Polytechnique
+Carnegie-Mellon-University
+
 ## Delay Differential Equations
 
-### Definition
+### Piecewise Continuous Functions
+To capture the hybrid character of a variable evolution
+consider it to be piecewise continuous
+
+##### Definition (Piecewise Continuous)
+TODO: function def on [a,b], cont on [a,b) and jump in b, but next part has same value in b
+
+Let $D=[a,b]\subset\R$ be a closed interval. The mapping $g:D\rightarrow\R^n$ is called **piecewise continuous** if and only if there is a finite subdivision $\{x_i:i=0,\ldots,n\}$ of $D$ (\ie $a=x_0<x_1<\ldots<x_n=b$) such that $g$ is continuous on $[x_i,x_{i+1})$ for all $i=0,\ldots,n-1$ and the one sided limits
+
+$$ \lim_{x\nearrow x_{i+1}, x\in[x_i,x_{i+1})}g(x) $$
+
+exist.
+
+We denote by $C^0_\text{pw}(D,\R^n)$ the set of **piecewise continuous functions** on the compact interval $D$.
+
+### Definition DDE
+TODO: adopted to our needs
 autonomous (time independent)
 constant, discrete delay(s)
+$f:\statespace\rightarrow\R^n$
 In general, one could also consider equations with distributed delay
+
+\[ x'(t) = f\left(t,x(t),\int_{-\tau}^0\!\!x(t+\theta)d\theta\right) \]
+
 If the right hand side only depends on $x(t-\tau)$ and not on $x(t)$, we call the DDE _pure_.
 
 ### Definition of Solution
-global,
+TODO: solution if initial condition piecewise continuous (-> not cont in t=0)
+A function $x$ is called **local solution** of the DDE, if and only if there exists a $T>0$ such that $x:[-\tau,T]\rightarrow \R^n$
+C^1? on ?
+differentiable in rand points?
+it ... and obeys the initial condition on $[-\tau,0]$. This solution need in general not be differentiable in $t=0$
 partly
+**global solution**
+
+
+
+### Existence and Uniqueness of Solutions
+
+$f$ Lipschitz
+with piecewise continuous initial function
+have existence and uniqueness ????
+smoothing
+
+##### Theorem
+##### Proof
+need open subset of $\statespace$
+need topology
+
+just proof existence/uniqueness on each peace of continuity
+proof continuity at knots
 
 ### Method of Steps
 
@@ -36,7 +83,7 @@ for $x_0\equiv 1$, can compute first solutions by method of steps.
 
 [plot]
 
-## Piecewise Continuous Functions
+
 
 ### Definition
 
