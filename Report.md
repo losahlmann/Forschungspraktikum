@@ -2,8 +2,14 @@
 
 Lorenz Sahlmann
 
-Ecole Polytechnique
+Ecole Polytechnique /
 Carnegie-Mellon-University
+
+In this work we extend Differential Dynamic Logic with Delay Differential Equations.
+
+This requires an extension of the syntax, a (partially) redefinition of the semantics and the introduction of additional axioms and proof rules.
+
+This results in a superset of \dL which we call **Delay Differential Dynamic Logic**.
 
 ## Delay Differential Equations
 
@@ -60,7 +66,7 @@ on $[-\tau,0]$.
 
 If the function $x$ is solution for all $T\in\R_{>0}$, it is called **global**.
 
-TODO: solution (for autonomous) is curve/trajectory in statespace
+TODO: solution (for autonomous) is curve/trajectory in statespace, defined on t>=0 (im gegensatz zu definition of solution above)
 state at t provides all information needed to determine solution for time >= t. Hence needs to contain initial function
 write state $\xbartau\in\statespace$
 defined as $\xbartaut(s):=x(t+s)$ for $s\in [-\tau,0]$
@@ -162,45 +168,55 @@ leading and following car
 
 ### Syntax
 #### Terms
-We extent the definitions of terms with a symbol for a **delayed variable**
+We extent the grammar defining **terms** with a symbol for a **delayed variable**
 
 $$ \theta,\eta ::= x|\xtau|c|\theta+\eta|\theta\cdot\eta $$
 
 ### Semantics
 HP $\alpha$
-binary reachability relation $\rho(\alpha)\subseteq\states\times\states$
 transition semantics
 define inductively
 
 remain unchanged
 
-### Terms
-New **state space** $\statespace$, the set of piecewise continuous functions.
+#### Terms
+Following the remark to the solution of a DDE, we change the **state space** to $\statespace$, the set of piecewise continuous functions, as defined above.
 
-FIXME: need \xbartau
+TODO: need \xbartau
 
 Denote by $\states$ the set of states.
 A state $\omega\in\states$ is a mapping $\omega : \mathcal{V}\cup\mathcal{V'}\rightarrow\statespace$
-that assigns a _history_ (function) $\xbartau$ to each variable symbol and diff var symbol.
+that assigns a _history_ (function) $\xbartau$ to each variable symbol and
+FIXME diff var symbol.
 
-$$ [\xtau]_\nu=\nu(x)(-\tau)=:\xbartau(-\tau) $$
+The semantics of the variable symbols in terms are given by
+$$ [[\xtau]]_\nu=\nu(x)(-\tau)=:\xbartau(-\tau) $$
+and
+$$ [[x]]_\nu=\nu(x)(0)=:\xbartau(0) $$
 
-and update the semantics of
+When we write $\xtau$ we mean $x(t-\tau)$ and with $x$ we mean $x(t)$.
 
-$$ [x]_\nu=\nu(x)(0)=:\xbartau(0) $$
+#### Hybrid Programs
+The transition semantic of a hybrid program is inductively given by a binary reachability relation $\rho(\alpha)\subseteq\states\times\states$.
+Since the state space has been replaced, we need to redefine the semantics:
 
-So when we write $\xtau$ we mean $x(t-\tau)$ and with $x$ we mean $x(t)$.
+The _discrete assignment_ does not rewrite history, but changes only the value at the current time instant:
+$$
+\rho(x:=\theta) = \left\{(\nu,\omega): \omega = \nu \text{ except } \omega(x)=\left(t\mapsto\begin{cases}[[\theta]]_\nu & t=0\\ \nu(t) &t\in[-\tau,0)\end{cases}\right)\qquad\right\}_.
+$$
+This assignment is the actual reason why we need to consider piecewise continuous evolutions.
 
-### Continuous Programs
-Using that, we can write down a delay differential equation or an ordinary differential equation in the form $x'=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
+TODO: super dense time: multiple assignments
 
-### Discrete Programs
-discrete assignment
-does not rewrite history
-hence piecewise continuous functions
-super dense time: multiple assignments
+Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $x'=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
 
-
+$$
+    \rho(x'=\theta\,\&\,\chi) = \left\{ (\varphi(0),\varphi(s))\,:\,\varphi(t)\models x'=\theta\,\wedge\,\varphi(t)\models\chi\,\forall\,0\leq t\leq s\text{ for a solution } \varphi:[0,s]\rightarrow\states \right\}
+$$
+As a solution, $\varphi$ needs to fulfill
+$$
+    \varphi(t)(x')(0) \stackrel{\text{def}}{=} \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} [[\theta]]_{\varphi(t)(x)}
+$$
 
 ## Delay Differential Dynamic Logic
 
@@ -227,8 +243,38 @@ apply methods of steps
 ### Proof Rules
 
 #### Rule of Steps
+condition valid for initial condition
+and
+given condition then condition holds after dde-evolution of max time tau
+and
+safety follows from condition
+then
+condition holds after dde with mentioned initial condition
+
+$$
+\frac{F(\theta_0)\quad F\rightarrow [x'=\theta() \& t\leq\tau]F \quad F\rightarrow\phi}{\xbartau = \theta_0 \rightarrow [x'=\theta(\xbartau)]\phi}
+$$
+
+
+#### Delay Differential Invariant
+
+$$
+\frac{}{\xbartau}
+$$
+
+Usually, one would try not to mention $\xtau$ in the invariant, since derivation would lead to the occurrence of the symbol $x_{2\tau}$, whose properties are out of the scope of the current state.
 
 ### Example
-We want to proof the safety condition $\phi\equiv(-1\leq x\wedge x\leq 1)$.
-Use the algebraic differential invariant
-$F\equiv(-1\leq x^3\wedge x^3\leq1)$.
+We want to proof the safety condition $\phi\equiv(-1\leq x\wedge x\leq 1)$ for the continuous program
+
+TODO: can replace \xbartau with forall t? but then have t occuring
+
+$$
+    -1\leq\xbartau\leq 1 \rightarrow [x'=-\xtau]\phi.
+$$
+Use the algebraic differential invariant $F\equiv(-1\leq x^3\wedge x^3\leq1)$,
+which is valid for the initial condition. Differentiation leads to the inequalities, which needs to be shown $\forall t\in[0,\tau]$
+$$
+    0\leq 3\,x(t)^2 x'(t) = -3\,x(t)^2 \xtau(t)
+$$
+This holds since
