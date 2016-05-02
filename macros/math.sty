@@ -1,0 +1,136 @@
+\ProvidesPackage{math}
+\NeedsTeXFormat{LaTeX2e}
+%%
+%% Copyright (c) 2003-2006 Andre Platzer
+%%
+%% This package provides mathematical terminology and notation.
+%%
+%% The functionality distributes to subpackages
+%%    msymb.sty
+%%    malgebra.sty
+%%    manalysis.sty
+
+\RequirePackage{amssymb}
+\RequirePackage{xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% optional parameters to this package
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Symbols
+%% Pass options to msymb
+\DeclareOption{bbsets}{\PassOptionsToPackage{\CurrentOption}{msymb}}
+\DeclareOption{boldsets}{\PassOptionsToPackage{\CurrentOption}{msymb}}
+\DeclareOption{setrelation}{\PassOptionsToPackage{\CurrentOption}{msymb}}
+\DeclareOption{inlinerelation}{\PassOptionsToPackage{\CurrentOption}{msymb}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Pass options to manalysis
+\DeclareOption{Dprime}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{DLagrange}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{Ddot}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{DNewton}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{DD}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{DEuler}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{DiEuler}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{Dsub}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{Ddiff}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{DLeibniz}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{Dbullet}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{Dupbullet}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{Dnum}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{Dfdot}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{Dfprime}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{Dfbullet}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{Dfupbullet}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+
+\DeclareOption{Ddiffinline}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+\DeclareOption{Ddifffraction}{\PassOptionsToPackage{\CurrentOption}{manalysis}}
+
+\DeclareOption*{\PackageError{math}{Unknown option `\CurrentOption'}}
+\ProcessOptions\relax
+
+%% Subpackages
+\RequirePackage{msymb}
+\RequirePackage{malgebra}
+\RequirePackage{manalysis}
+
+
+%% function head signature, function definition body
+\newcommand{\functiondef}[2]{#1;#2}
+
+%% the set of all functions from #1 to #2
+\newcommand{\maps}[2]{{#2}^{#1}}
+%% restrict a function/relation to a subset
+\providecommand{\restrict}[2]{#1\vert_{#2}}
+%% \extends{L'}{L} means L' is an extension over L
+\newcommand{\extends}[2]{\ensuremath{#1/#2}}
+
+
+%% \modulo{G}{N} denotes G/N, i.e. G modulo N
+\newcommand{\modulo}[2]{\ensuremath{{#1}/{#2}}}
+
+
+%% modifies a relation to mean disjoint union or disjoint section or...
+\newcommand{\disjoint}[1]{\dot{#1}}
+
+%%@todo
+\def\reducesto{\mapsto}
+
+%% closure operations
+\newcommand{\closureTransitive}[1]{#1^\ast}
+
+%% particular structures
+
+%% \interval{[3,9]} is the closed interval from 3 to 9
+%% \interval{(3,9]} is the left-open interval from 3 to 9, etc.
+\newcommand{\interval}[1]{\ensuremath{#1}}
+
+%% equation system
+%% \begin{eqsystem}
+%%  x(y) =& f(x,y)\\
+%%  x(0) =& 1
+%% \end{eqsystem}
+\newenvironment{eqsystem}
+{\left[\array{rl}}
+{\endarray\right]}
+
+%% a vector
+%% \begin{avector}
+%%  0\\
+%%  3\\
+%%  x^2
+%% \end{avector}
+\newenvironment{avector}
+{\left(\array{c}}
+{\endarray\right)}
+
+
+%% Types
+
+%
+% type style classes
+%
+
+%% for signifiers of semiotics.
+\newcommand{\signifier}[1]{/\texttt{#1}/}
+%% for signifieds of semiotics.
+\newcommand{\signified}[1]{\ll\textit{#1}\gg}
+%% for objects (referents) of semiotics.
+\newcommand{\referent}[1]{#1}
+
+
+%% deprecated
+
+%% differential operator
+%%\diff[n]{x} the n-th derivative of x
+%%@deprecated Use \D[n]{x} instead.
+% \newcommand{\diff}[2][1]{#2\ifthenelse{\equal{#1}{0}}{}  {\ifthenelse{\equal{#1}{1}}{'}
+%     {\ifthenelse{\equal{#1}{2}}{''}{^{(#1)}}
+%     }
+%   }}

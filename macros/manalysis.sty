@@ -1,0 +1,305 @@
+\ProvidesPackage{manalysis}
+\NeedsTeXFormat{LaTeX2e}
+%%
+%% Copyright (c) 2006-2015 Andre Platzer
+%%
+%% The math package provides mathematical terminology and notation.
+%% This subpackage provides notions from mathematical analysis, calculus and related topics.
+%%
+
+\RequirePackage{ifthen}
+\RequirePackage{amssymb}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% optional parameters to this package
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Derivative/derivation/differential standard notation
+%%
+\newcommand{\D}[2][1]{\Dopt[#1]{#2}}
+%%
+%% pure derivatives, i.e., only one uniform notation
+%%
+%% use pure derivative with Lagrange x'
+\DeclareOption{Dprime}{\renewcommand{\D}[2][1]{\Dprime[#1]{#2}}}
+\DeclareOption{DLagrange}{\renewcommand{\D}[2][1]{\Dprime[#1]{#2}}}
+%% use pure derivative with Newton \dot{x}
+\DeclareOption{Ddot}{\renewcommand{\D}[2][1]{\Ddots[#1]{#2}}}
+\DeclareOption{DNewton}{\renewcommand{\D}[2][1]{\Ddots[#1]{#2}}}
+%% use pure derivative with Euler notation D_x f(x), D^2_x f(x), D f(x)
+%% using differential operator D
+\DeclareOption{DD}{\renewcommand{\D}[2][1]{\DD[#1]{#2}}}
+\DeclareOption{DEuler}{\renewcommand{\D}[2][1]{\DD[#1]{#2}}}
+%% use pure derivative with implicit Euler notation f_x(x), f_{x^2}(x), f_{xy}(x)
+\DeclareOption{DiEuler}{\renewcommand{\D}[2][]{\Dsub[#1]{#2}}}
+\DeclareOption{Dsub}{\renewcommand{\D}[2][]{\Dsub[#1]{#2}}}
+%% use pure derivative with Leibniz notation d/dx f(x), df(x)/dx, d^3 f(x)/dx^3 etc.
+\DeclareOption{Ddiff}{\renewcommand{\D}[2][1]{\Ddiff[#1]{#2}}}
+\DeclareOption{DLeibniz}{\renewcommand{\D}[2][1]{\Ddiff[#1]{#2}}}
+%% use pure derivative with thick bullet x^{\bullet}
+\DeclareOption{Dbullet}{\renewcommand{\D}[2][1]{\Dbullet[#1]{#2}}}
+%% use pure derivative with thick bullet above \stackrel{\bullet}{x}
+\DeclareOption{Dupbullet}{\renewcommand{\D}[2][1]{\Dupbullet[#1]{#2}}}
+
+%% derivative with numbers f^(1), f^(2), ... f^(n)
+\DeclareOption{Dnum}{\renewcommand{\D}[2][1]{\Dnum[#1]{#2}}}
+
+%%
+%% smart & fancy derivatives with adaptive notation that favours one notation but falls back to other notation if the favourite notation doesn't work out
+%%
+%\newcommand{\Dfavour}[2][1]{\Ddots[#1]{#2}}
+\newcommand{\Dfavour}[2][1]{\Dprime[#1]{#2}}  % default changed to [Dfprime] on 2013/08/19
+%% use smart derivative favouring fancy dots with fallback to diff...
+\DeclareOption{Dfdot}{\renewcommand{\Dfavour}[2][1]{\Ddots[#1]{#2}}}
+%% use smart derivative favouring fancy primes with fallback to diff...
+\DeclareOption{Dfprime}{\renewcommand{\Dfavour}[2][1]{\Dprime[#1]{#2}}}
+%% use smart derivative favouring fancy bullets with fallback to diff...
+\DeclareOption{Dfbullet}{\renewcommand{\Dfavour}[2][1]{\Dbullet[#1]{#2}}}
+%% use smart derivative favouring fancy up bullets with fallback to diff...
+\DeclareOption{Dfupbullet}{\renewcommand{\Dfavour}[2][1]{\Dupbullet[#1]{#2}}}
+
+\newif\if@Dinline
+\@Dinlinefalse
+%% option whether to inline powers of \Ddiff as \frac{d^n}{dt^n}f
+\DeclareOption{Ddiffinline}{\global\@Dinlinetrue}
+%% option whether to keep powers of \Ddiff on fraction as \frac{d^n f}{dt^n}
+\DeclareOption{Ddifffraction}{\global\@Dinlinefalse}
+
+
+\DeclareOption*{\PackageError{manalysis}{Unknown option `\CurrentOption'}}
+\ProcessOptions\relax
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Implementation
+%%
+
+%% marks end of variable parameter list in TeX
+\def\@gobbleend\vargend{}
+
+%%
+%% Function classes (some are function spaces)
+%%
+
+%% \continuouss[k]{D}{T} the class of k-times continuous partially differentiable functions from D \to T
+\newcommand{\continuouss}[3][]{\ensuremath{C^{#1}\ifthenelse{\equal{#2}{}}{}{\ifthenelse{\equal{#3}{}}{(#2)}{(#2,#3)}}}}
+
+%% \continuouscompactsupps[k]{D}{T} the class of k-times continuous partially differentiable functions from D \to T of compact support, i.e., support lies in some compact domain
+\newcommand{\continuouscompactsupps}[3][]{\ensuremath{C_C^{#1}\ifthenelse{\equal{#2}{}}{}{\ifthenelse{\equal{#3}{}}{(#2)}{(#2,#3)}}}}
+
+%% \measurables{D}{T} the class of measurable functions from D \to T
+\newcommand{\measurables}[2]{\ensuremath{\mathcal{M}\ifthenelse{\equal{#1}{}}{}{\ifthenelse{\equal{#2}{}}{(#1)}{(#1,#2)}}}}
+
+
+%% \lebesgues[p]{D}{T} the class  of Lebesgue integrable functions from D \to T.
+%% @param p The L^p Banach space of measurable functions f:D\to T with measure $\mu$ on D such that \(\norm[p]{f}=(\int_D \abs{f}^p d\mu)^{\frac{1}{p}}<\infty\)
+\newcommand{\lebesgues}[3][]{\ensuremath{L^{#1}(#2\ifthenelse{\equal{#3}{}}{}{,#3})}}
+
+%%
+%% Operators
+%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% differential operators or derivations
+%%
+
+%% the standard differential operator
+\providecommand{\@dop}{{\normalfont{\textsf{d}}}}
+% Springer books: \newcommand{\@dop}{\mathrm{d}}
+
+%% (formal) derivative operator
+%% \D[xxy]{f} the derivative d^2/dx^2 d/dy f
+%% \D[2]{f} the 2nd derivative f'' = d^2/dx^2 f by some implicit variable x
+%% \D[(n)]{f} the n-th derivative f^(n) = d^n/dx^n f by some implicit variable x
+%% \newcommand{\D}[2][1]   see below for implementation
+
+%% derivative with Lagrange notation f', f'', ... f^(n)
+%% applicable for 0,1,2,3,n,...,(0),(1),(n),...
+\newcommand{\Dprime}[2][1]{\Dprime@cases#1!{#2}}
+\def\Dprime@cases{\@ifnextchar{!}{\Dprime@prime}{\@ifnextchar({\Dprime@counted}{\Dprime@prime}}}
+\def\Dprime@counted(#1)!#2{{#2}^{(#1)}}
+\def\Dprime@prime#1!#2{%
+\ifthenelse{\equal{#1}{0}}{{#2}}
+  {\ifthenelse{\equal{#1}{1}}{#2'}
+    {\ifthenelse{\equal{#1}{2}}{#2''}
+      {\ifthenelse{\equal{#1}{3}}{#2'''}
+        {%% general case
+          {#2}^{(#1)}%
+        }
+      }
+    }
+  }}
+
+%% derivative with numbers f^(1), f^(2), ... f^(n)
+%% applicable for 0,1,2,3,n,...,(0),(1),(n),...
+\newcommand{\Dnum}[2][1]{\Dnum@cases#1!{#2}}
+\def\Dnum@cases{\@ifnextchar{!}{\Dnum@num}{\@ifnextchar({\Dnum@counted}{\Dnum@num}}}
+\def\Dnum@counted(#1)!#2{{#2}^{(#1)}}
+\def\Dnum@num#1!#2{{#2}^{(#1)}}
+
+%% derivative with Newton notation \dot{x}, \ddot{x}
+%% applicable for 0,1,2,3,fallback
+\newcommand{\Ddots}[2][1]
+{\ifthenelse{\equal{#1}{0}}{#2}
+  {\ifthenelse{\equal{#1}{1}}{\dot{#2}}
+    {\ifthenelse{\equal{#1}{2}}{\ddot{#2}}
+      {\ifthenelse{\equal{#1}{3}}{\dddot{#2}}
+        {%% general case: throw exception / use fallback
+          \Dfallback[#1]{#2}%
+        }
+      }
+    }
+  }}
+%% add #2 to #1 yet at the point of #1 where the first subscript starts (or at the end if none)
+% \newcommand{\hopoversubscripts}[2]
+% {{\do@hopoversubscripts{#2}#1\vargend}}
+% \def\do@hopoversubscripts#1#2{%
+%   \@ifnextchar\vargend{#2#1\@gobbleend}
+%   {\@ifnextchar_{\do@hopoversubscripts@sub#1#2}
+%   {#2\do@hopoversubscripts#1}}}
+% \def\do@hopoversubscripts@sub#1#2_#3{%
+%   {#2#1}_{#3}%
+%   \@ifnextchar\vargend{\@gobbleend}{\do@hopoversubscripts{}}}
+
+%% derivative with Euler notation D_x f(x), D^2_x f(x), D f(x)
+%% using differential operator D
+%% applicable for 0,1,2,3,x,y...
+%% not yet applicable for x^2, x y^2 z^3
+\newcommand{\DD}[2][1]
+{\ifthenelse{\equal{#1}{0}}{#2}
+  {\ifthenelse{\equal{#1}{1}}{D#2}
+    {\ifthenelse{\equal{#1}{2}}{D^2#2}
+      {\ifthenelse{\equal{#1}{3}}{D^3#2}
+        {%% general case   xxx does not yet detect x^3
+          D_{#1}{#2}%
+        }
+      }
+    }
+  }} 
+
+%% pure derivative with implicit Euler notation f_x(x), f_{x^2}(x), f_{xy}(x)
+\newcommand{\Dsub}[2][]{\ifthenelse{\equal{#1}{}}{#2'}{{#2}_{#1}}}
+
+
+%% derivative with Leibniz notation d/dx f(x), df(x)/dx, d^3 f(x)/dx^3 etc.
+%% applicable for x, y, x^2, x y^2 z^3
+%% not applicable for 1,2,3,... because deriving by numbers doesn't really make sense
+%% xxx \mathbf{} and \mathbb{} fonts must have already been used before they occur in #2
+\newcommand{\Ddiff}[2][1]
+{{\def\@Ddiff@function@tmp{{#2}}
+  %%\frac{\@dop#2}{\@dop#1}
+  {\do@Ddiff@first#1\vargend}%
+ }}
+%% \Ddiff case splits for first derivatives
+\def\do@Ddiff@first#1{%
+  \@ifnextchar\vargend{%
+   \frac{\@dop\@Ddiff@function@tmp}{\@dop#1}\@gobbleend}
+  {\@ifnextchar^{\do@Ddiff@power#1}
+  {\frac{\@dop}{\@dop#1}%
+   \do@Ddiff@rest}%
+  }}
+%% \Ddiff case splits for rest derivatives
+\def\do@Ddiff@rest#1{%
+  \@ifnextchar\vargend{\frac{\@dop}{\@dop#1}\@Ddiff@function@tmp\@gobbleend}
+  {\@ifnextchar^{\do@Ddiff@power#1}
+  {\frac{\@dop}{\@dop#1}%
+   \do@Ddiff@rest}%
+  }}
+\if@Dinline
+  %% formats \Ddiff[x^n]{} cases
+  \def\do@Ddiff@power#1^#2{%
+    \frac{\@dop^{#2}}{\@dop#1^{#2}}%
+    \@ifnextchar\vargend{\@Ddiff@function@tmp\@gobbleend}{\do@Ddiff@rest}}
+\else
+  %% formats \Ddiff[x^n]{} cases
+  \def\do@Ddiff@power#1^#2{%
+    \@ifnextchar\vargend{\frac{\@dop^{#2}\@Ddiff@function@tmp}{\@dop#1^{#2}}\@gobbleend}%
+    {\frac{\@dop^{#2}}{\@dop#1^{#2}}\do@Ddiff@rest}}
+\fi
+
+%% standard/smart derivative which chooses the appropriate notation from several alternatives
+\newcommand{\Dopt}[2][1]{\D@cases#1!{#2}}
+% splits into cases
+\def\D@cases{\@ifnextchar{!}{\D@dot}{\@ifnextchar({\D@counted}{\D@dot}}}
+% case: explicit differential count (7) or (n)
+\def\D@counted(#1)!#2{{#2}^{(#1)}}
+% case: no explicit differential count (7) or (n)
+% which favours \Dfavour for 0,1,2,3 and general case \Ddiff otherwise
+\def\D@dot#1!#2{\ifthenelse{\equal{#1}{0} \OR \equal{#1}{1} \OR \equal{#1}{2} \OR \equal{#1}{3}}
+  {\Dfavour[#1]{#2}}
+  {%% general case
+    \Ddiff[#1]{#2}%
+  }}
+
+%% derivative with thick bullet notation x^\bullet
+%% applicable for 0,1,fallback
+\newcommand{\Dbullet}[2][1]
+{\ifthenelse{\equal{#1}{0}}{#2}
+  {\ifthenelse{\equal{#1}{1}}{#2^\bullet}
+    {%% general case: throw exception / use fallback
+          \Dfallback[#1]{#2}%
+    }
+  }}
+%% derivative with thick bullet notation \stackrel{\bullet}{x}
+%% applicable for 0,1,fallback
+\newcommand{\Dupbullet}[2][1]
+{\ifthenelse{\equal{#1}{0}}{#2}
+  {\ifthenelse{\equal{#1}{1}}{\stackrel{\text{\tiny$\bullet$}}{#2}}
+    {%% general case: throw exception / use fallback
+          \Dfallback[#1]{#2}%
+    }
+  }}
+
+%% the fallback derivative notation used when the others don't apply for the given argument #1.
+\let\Dfallback\Dopt
+
+
+%% partial derivative operator (s.a.)
+\newcommand{\Dp}[2][1]{\ifthenelse{\equal{#1}{0}}{#2}
+        {\frac{\mathrm{\partial}#2}{\mathrm{\partial}#1}}
+  }
+
+
+%%\differential{f} the differential of f
+\newcommand{\differential}[1]{\@dop#1}
+
+
+%%\gradient{f} the gradient of f, i.e. vector of partial derivatives
+\newcommand{\gradient}[1]{\nabla#1}
+
+%%
+%% end of differential operators or derivations
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Topology and metrical spaces
+
+%% \neighbourhood[\epsilon]{x} is the open \epsilon-neighbourhood of (point or subset) x.
+\newcommand{\neighbourhood}[2][]{\mathcal{U}_{#1}(#2)}
+
+%% \neighbourhood[\epsilon]{x} is the closed \epsilon-neighbourhood ball of (point or subset) x.
+\newcommand{\ball}[2][]{\overline{\mathcal{U}}_{#1}(#2)}
+
+%% the border of set #1
+\newcommand{\border}[1]{\partial#1}
+
+%% the topological closure of set #1
+\newcommand{\closure}[1]{\overline{#1}}
+
+%% the topological interior of set #1
+\newcommand{\interior}[1]{\stackrel{\circ}{#1}}
+
+%% \norm[p]{x} the p-norm of x
+\newcommand{\norm}[2][]{\|#2\|_{#1}}
+
+%% converge down to, i.e. monotone decreasing
+\newcommand{\downto}{\searrow}
+
+%% converge up to, i.e. monotone increasing
+\newcommand{\upto}{\nearrow}

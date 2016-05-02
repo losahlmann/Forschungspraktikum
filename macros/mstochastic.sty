@@ -1,0 +1,42 @@
+\ProvidesPackage{mstochastic}
+\NeedsTeXFormat{LaTeX2e}
+%%
+%% Copyright (c) 2010 Andre Platzer
+%%
+%% The math package provides mathematical terminology and notation.
+%% This subpackage provides notions from stochastic, probability theory, measure theory and related topics.
+%%
+
+\RequirePackage{ifthen}
+\RequirePackage{amssymb}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% optional parameters to this package
+%%
+
+
+\DeclareOption*{\PackageError{manalysis}{Unknown option `\CurrentOption'}}
+\ProcessOptions\relax
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Implementation
+%%
+
+% distribution relation
+\let\dist\sim
+
+\newcommand{\cadlag}{c\`adl\`ag\xspace}
+\newcommand{\caglad}{c\`agl\`ad\xspace}
+\renewcommand{\charf}[1]{\mathcal{I}_{#1}}
+
+% infix minimum operator
+\newcommand{\imin}{\sqcap}
+% infix maximum operator
+\newcommand{\imax}{\sqcup}
+
+%% \pproc{v} point process stuck at state of random variable #1 of duration 0
+\newcommand{\pproc}[1]{\hat{#1}}
+
