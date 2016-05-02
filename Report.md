@@ -177,6 +177,8 @@ remain unchanged
 ### Terms
 New **state space** $\statespace$, the set of piecewise continuous functions.
 
+FIXME: need \xbartau
+
 Denote by $\states$ the set of states.
 A state $\omega\in\states$ is a mapping $\omega : \mathcal{V}\cup\mathcal{V'}\rightarrow\statespace$
 that assigns a _history_ (function) $\xbartau$ to each variable symbol and diff var symbol.
@@ -204,9 +206,23 @@ super dense time: multiple assignments
 
 \dL terms
 
-### Axiomatization
+### Dynamic Axioms
 
 #### Method of Steps
+The _Method of Steps_ presented above translates into an axiom. It allows to partially unwind an autonomous DDE given a analytic representation of its solution.
+
+Let $\theta_0$ and $\theta$ be TODO ...
+$$
+    \xbartau = \theta_0 \rightarrow [x'=\theta(\xbartau)]\phi
+    \leftrightarrow
+    \left(\forall 0\leq t\leq\tau [x:= y(t)]\phi
+    \wedge \xbartau = y \rightarrow [x'=\theta (\xbartau)] \right)
+$$
+where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, \ie $y$ is a local solution of the DDE.
+The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
+
+##### Proof
+apply methods of steps
 
 ### Proof Rules
 
