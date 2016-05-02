@@ -22,6 +22,10 @@ exist. So $g(b)$ can be an isolated point and this right interval limit $b$ is t
 
 We denote by $C^0_\text{pw}(D,\R^n)$ the set of **piecewise continuous functions** on the compact interval $D$.
 
+![Allowed](allowed.png)
+
+![Not allowed](not-allowed.png)
+
 ### Definition DDE
 TODO: adopted to our needs
 
@@ -68,7 +72,17 @@ $$ \label{eq:test}\begin{cases}
     x(t)=x_0(t) & \text{for } t\in[-\tau,0]
    \end{cases} $$
 
+##### Lemma
 TODO: solving dde equiv to solving integral equation??? (-> Lemma) and compare with ODE lecture notes
+
+Finding a solution of the DDE (??) is equivalent to computing the integral
+
+$$
+    x(t) = x_0(0) + \int_0^t g(\bar{x}_{\tau,s})ds
+$$
+
+##### Proof
+integrate from discontinuity of $\xbartaut$ to discontinuity and proof stetige fortsetzbarkeit at these points
 
 ### Method of Steps
 for $t\in [0,\tau]$, $x$ must satisfy the following ordinary initial value problem obtained by plugging the initial function into equation (??).
@@ -133,7 +147,7 @@ has a much richer dynamics, but solution (as series)
 for $x_0\equiv 1$, can compute first solutions by method of steps.
 ...
 
-[plot]
+![plot](piecewise-initial-function.png)
 
 
 
