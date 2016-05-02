@@ -25,7 +25,7 @@ We denote by $C^0_\text{pw}(D,\R^n)$ the set of **piecewise continuous functions
 ### Definition DDE
 TODO: adopted to our needs
 
-Let $f:\R^n\times\R^n\rightarrow\R^n$. A functional equation of the form
+Let $f:\R^n\times\R^n\rightarrow\R^n$ and $\tau > 0$. A functional equation of the form
 
 \[ x'(t) = f\left(x(t),x(t-\tau)\right) \]
 
@@ -34,18 +34,42 @@ It is _autonomous_, since its right hand side $f$ is time independent.
 
 If the right hand side only depends on $x(t-\tau)$ and not on $x(t)$, we call the DDE _pure_.
 
+TODO: initial condition
+Obviously, such an equation should be equipped with a initial condition, which specifies the values of $x$ on $[-\tau, 0]$ on which the right hand side depends.
+
 TODO: multiple constant discrete delays would also be possible.
 
 ### Definition of Solution
 TODO: solution if initial condition piecewise continuous (-> not cont in t=0)
-A function $x$ is called **local solution** of the DDE, if and only if there exists a $T>0$ such that $x:[-\tau,T]\rightarrow \R^n$
-C^1? on ?
-differentiable in rand points?
-it ... and obeys the initial condition on $[-\tau,0]$. This solution need in general not be differentiable in $t=0$
-partly
-**global solution**
+
+A piecewise continuous function $x\in C^0_\text{pw}([-\tau,T],\R^n)$ is called **local solution** of the DDE (??), if and only if there exists a $T>0$ such that $x|_{(0,T)}\in C^1((0,T),\R^n)$ with
+
+\[ x'(t) = f\left(x(t),x(t-\tau)\right) \]
+
+for $t\in (0,T)$ and right-hand derivative $=f(x(0),x(-\tau))$ in $t=0$.
+differentiable in rand points? what is diff there? dde gives value. one sided diff? in t=0 right-hand deriv
+and obeys the initial condition:
+
+$$ x(t) = x_0(t) \quad\text{for } t\in [-\tau,0]$$
+
+on $[-\tau,0]$.
+
+If the function $x$ is solution for all $T\in\R_{>0}$, it is called **global**.
+
+TODO: solution (for autonomous) is curve/trajectory in statespace
+state at t provides all information needed to determine solution for time >= t. Hence needs to contain initial function
+write state $\xbartau\in\statespace$
+defined as $\xbartaut(s):=x(t+s)$ for $s\in [-\tau,0]$
+is a dynamical systems point of view
+cav write DDE as $x'=f(\xbartaut)$
 
 TODO: solving dde equiv to solving integral equation??? (-> Lemma) and compare with ODE lecture notes
+
+### Method of Steps
+for $t\in [0,\tau]$, $x$ must satisfy the following ordinary initial value problem obtained by plugging the initial function into equation (??).
+For suitable $f$ and $x_0$, the existence (and uniqueness) of a solution on $[0,\tau]$ is guaranteed by ODE theory (... or Picard-Lindelöf theorems).
+
+This procedure can then be applied repeatedly to extend the obtained solution by steps of length $\tau$.
 
 ### Existence and Uniqueness of Solutions
 
@@ -60,9 +84,9 @@ need open subset of $\statespace$
 need topology
 
 just proof existence/uniqueness on each peace of continuity
-proof continuity at knots
+proof continuity at knots with Lemma of integral equ
 
-### Method of Steps
+
 
 ### Example
 The basic ODE IVP
