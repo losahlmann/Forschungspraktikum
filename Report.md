@@ -8,7 +8,7 @@ Carnegie-Mellon-University
 ## Delay Differential Equations
 
 ### Piecewise Continuous Functions
-To capture the hybrid character of a variable evolution
+The following definition is motivated to capture the character of a variable evolution arising from hybrid
 consider it to be piecewise continuous
 
 ##### Definition (Piecewise Continuous)
@@ -61,7 +61,12 @@ state at t provides all information needed to determine solution for time >= t. 
 write state $\xbartau\in\statespace$
 defined as $\xbartaut(s):=x(t+s)$ for $s\in [-\tau,0]$
 is a dynamical systems point of view
-cav write DDE as $x'=f(\xbartaut)$
+cav write DDE (??) as
+
+$$ \label{eq:test}\begin{cases}
+    x'=g(\xbartaut):=f(\xbartaut(0),\xbartaut(-\tau)) &\text{for } t\geq 0\\
+    x(t)=x_0(t) & \text{for } t\in[-\tau,0]
+   \end{cases} $$
 
 TODO: solving dde equiv to solving integral equation??? (-> Lemma) and compare with ODE lecture notes
 
@@ -79,7 +84,27 @@ have existence and uniqueness ????
 smoothing
 
 ##### Theorem
+Consider the Delay Differential Equation
+
+$$
+\begin{cases}
+    x'=f(\xbartaut) & \text{for } t\geq 0\\
+    x(t)=x_0(t)     & \text{for } t\in [-\tau,0]
+\end{cases}
+$$
+
+with $f:\statespace\rightarrow\R^2$ satisfying the (global) Lipschitz condition
+
+$$ \exists L>0\,\forall x,y\in C^0([-\tau,0],\R^n) : \abs{f(x)-f(y)} \leq L\norm{x-y} $$
+
+where $\abs{\cdot}$ denotes the Euclidian norm on $\R^?$ (TODO) and $\norm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
+
+and initial condition
+
+Then there **exists** a **unique global solution** of the DDE.
+
 ##### Proof
+use Theorem 3.7 from [] or ...
 need open subset of $\statespace$
 need topology
 
