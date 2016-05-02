@@ -12,26 +12,29 @@ To capture the hybrid character of a variable evolution
 consider it to be piecewise continuous
 
 ##### Definition (Piecewise Continuous)
-TODO: function def on [a,b], cont on [a,b) and jump in b, but next part has same value in b
+TODO: function def on [a,b], cont on [a,b) and jump in b, but next part has same value in b  and the continuity condition holds $g(x_{i+1}) = \lim_{x\searrow x_{i+1}, x\in[x_{i+1},x_{i+2})}g(x)$
 
 Let $D=[a,b]\subset\R$ be a closed interval. The mapping $g:D\rightarrow\R^n$ is called **piecewise continuous** if and only if there is a finite subdivision $\{x_i:i=0,\ldots,n\}$ of $D$ (\ie $a=x_0<x_1<\ldots<x_n=b$) such that $g$ is continuous on $[x_i,x_{i+1})$ for all $i=0,\ldots,n-1$ and the one sided limits
 
 $$ \lim_{x\nearrow x_{i+1}, x\in[x_i,x_{i+1})}g(x) $$
 
-exist.
+exist. So $g(b)$ can be an isolated point and this right interval limit $b$ is the only spot where such is allowed.
 
 We denote by $C^0_\text{pw}(D,\R^n)$ the set of **piecewise continuous functions** on the compact interval $D$.
 
 ### Definition DDE
 TODO: adopted to our needs
-autonomous (time independent)
-constant, discrete delay(s)
-$f:\statespace\rightarrow\R^n$
-In general, one could also consider equations with distributed delay
 
-\[ x'(t) = f\left(t,x(t),\int_{-\tau}^0\!\!x(t+\theta)d\theta\right) \]
+Let $f:\R^n\times\R^n\rightarrow\R^n$. A functional equation of the form
+
+\[ x'(t) = f\left(x(t),x(t-\tau)\right) \]
+
+is called **Delay Differential Equation (DDE)** with _constant, discrete delay_.
+It is _autonomous_, since its right hand side $f$ is time independent.
 
 If the right hand side only depends on $x(t-\tau)$ and not on $x(t)$, we call the DDE _pure_.
+
+TODO: multiple constant discrete delays would also be possible.
 
 ### Definition of Solution
 TODO: solution if initial condition piecewise continuous (-> not cont in t=0)
@@ -42,7 +45,7 @@ it ... and obeys the initial condition on $[-\tau,0]$. This solution need in gen
 partly
 **global solution**
 
-
+TODO: solving dde equiv to solving integral equation??? (-> Lemma) and compare with ODE lecture notes
 
 ### Existence and Uniqueness of Solutions
 
