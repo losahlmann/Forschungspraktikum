@@ -14,27 +14,23 @@ This results in a superset of \dL which we call **Delay Differential Dynamic Log
 ## Delay Differential Equations
 
 ### Piecewise Continuous Functions
-The following definition is motivated to capture the character of a variable evolution arising from hybrid
-consider it to be piecewise continuous
+The following definition is motivated by capturing the character evolution arising from hybrid systems. We will see that we can consider such to be piecewise continuous.
 
 ##### Definition (Piecewise Continuous)
-TODO: function def on [a,b], cont on [a,b) and jump in b, but next part has same value in b  and the continuity condition holds $g(x_{i+1}) = \lim_{x\searrow x_{i+1}, x\in[x_{i+1},x_{i+2})}g(x)$
-
-Let $D=[a,b]\subset\R$ be a closed interval. The mapping $g:D\rightarrow\R^n$ is called **piecewise continuous** if and only if there is a finite subdivision $\{x_i:i=0,\ldots,n\}$ of $D$ (\ie $a=x_0<x_1<\ldots<x_n=b$) such that $g$ is continuous on $[x_i,x_{i+1})$ for all $i=0,\ldots,n-1$ and the one sided limits
+Let $D=[a,b]\subset\R$ be a closed interval (this includes the cases when $a=-\infty$ or $b=\infty$, or both). The mapping $g:D\rightarrow\R^n$ is called **piecewise continuous** if and only if there is a finite subdivision $\{x_i:i=0,\ldots,m\}$ of $D$ (\ie $a=x_0<x_1<\ldots<x_m=b$) such that $g$ is continuous on $[x_i,x_{i+1})$ for all $i=0,\ldots,m-1$ and the one sided limits
 
 $$ \lim_{x\nearrow x_{i+1}, x\in[x_i,x_{i+1})}g(x) $$
 
-exist. So $g(b)$ can be an isolated point and this right interval limit $b$ is the only spot where such is allowed.
+exist. Hence $g(b)$ can be an isolated point and this right interval limit $b$ is the only spot where such is allowed.
 
-We denote by $C^0_\text{pw}(D,\R^n)$ the set of **piecewise continuous functions** on the compact interval $D$.
+We denote by $C^0_\text{pw}(D,\R^n)$ the set of **piecewise continuous functions** on the compact interval $D$, mapping to $\R^n$
 
+This figure shows an admissible piecewise continuous function.
 ![Allowed](allowed.png)
-
+The following function however is not allowed!
 ![Not allowed](not-allowed.png)
 
 ### Definition DDE
-TODO: adopted to our needs
-
 Let $f:\R^n\times\R^n\rightarrow\R^n$ and $\tau > 0$. A functional equation of the form
 
 \[ x'(t) = f\left(x(t),x(t-\tau)\right) \]
@@ -44,10 +40,9 @@ It is _autonomous_, since its right hand side $f$ is time independent.
 
 If the right hand side only depends on $x(t-\tau)$ and not on $x(t)$, we call the DDE _pure_.
 
-TODO: initial condition
-Obviously, such an equation should be equipped with a initial condition, which specifies the values of $x$ on $[-\tau, 0]$ on which the right hand side depends.
+A DDE can be equipped with an **initial condition**. It specifies the values of $x$ on $[-\tau, 0]$ on which the right hand side depends.
 
-TODO: multiple constant discrete delays would also be possible.
+The definition of a DDE can be extended to multiple constant discrete delays. For simplicity, we restrict here to a single delay.
 
 ### Definition of Solution
 TODO: solution if initial condition piecewise continuous (-> not cont in t=0)
@@ -70,6 +65,8 @@ TODO: solution (for autonomous) is curve/trajectory in statespace, defined on t>
 state at t provides all information needed to determine solution for time >= t. Hence needs to contain initial function
 write state $\xbartau\in\statespace$
 defined as $\xbartaut(s):=x(t+s)$ for $s\in [-\tau,0]$
+In the case of $t=0$, we simplify the notation by $\xbartau := \bar{x}_{\tau,0}$
+
 is a dynamical systems point of view
 cav write DDE (??) as
 
@@ -179,6 +176,10 @@ define inductively
 
 remain unchanged
 
+The temporal character of delay differential equations (they depend on their own temporal evolution with limited horizon) suggests the introduction of trace semantics.
+
+However, we go the way of introducing transition semantics with an augmented state space.
+
 #### Terms
 Following the remark to the solution of a DDE, we change the **state space** to $\statespace$, the set of piecewise continuous functions, as defined above.
 
@@ -220,11 +221,19 @@ $$
 
 ## Delay Differential Dynamic Logic
 
+
+
 \dL terms
 
 ### Dynamic Axioms
 
-#### Method of Steps
+#### History Axiom
+The occurence of $\xbartau$ in expressions can be replaced by turning the (implicitely existing) time variable explicit, \ie
+$$
+F(\xbartau) \leftrightarrow \forall\,-\tau\leq t\leq 0\, F(x(t))
+$$
+
+#### Axiom of Steps
 The _Method of Steps_ presented above translates into an axiom. It allows to partially unwind an autonomous DDE given a analytic representation of its solution.
 
 Let $\theta_0$ and $\theta$ be TODO ...
