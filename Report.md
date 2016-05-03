@@ -72,12 +72,12 @@ If the function $x$ is solution for all $T\in\R_{>0}$, it is called **global**.
 TODO:
 The notion of solution for an autonomous DDE as given above can be lifted to be a trajectory in the statespace
 $$
-    \gamma_x:[0,T]\rightarrow\statespace,\\ t\mapsto\xbartaut
+    \gamma_x:[0,T]\rightarrow\statespace,\\ t\mapsto\xbartaut{t}
 $$
 
 The **state** at time $t$ is a function which provides a time limited history up to the current time. This is all information needed to determine (using the DDE) to determine the solution for time $\geq t$.
-It is defined as $\xbartaut(s)\def x(t+s)$ for $s\in [-\tau,0]$.
-In the case of $t=0$, we simplify the notation to $\xbartau \def \bar{x}_{\tau,0}$.
+It is defined as $\xbartaut{t}(s)\def x(t+s)$ for $s\in [-\tau,0]$.
+In the case of $t=0$, we simplify the notation to $\xbartau \def \xbartaut{0}$.
 
 This notion of solution is a _dynamical systems_ point of view which later turns out to be useful.
 
@@ -85,7 +85,7 @@ TODO: can write DDE (??) as
 
 $$
 \begin{cases}
-    x'=g(\xbartaut)\def f(\xbartaut(0),\xbartaut(-\tau)) &\text{for } t\geq 0\\
+    x'=g(\xbartaut{t})\def f(\xbartaut{t}(0),\xbartaut{t}(-\tau)) &\text{for } t\geq 0\\
     x(t)=x_0(t) & \text{for } t\in[-\tau,0]
 \end{cases}
 $$
@@ -100,7 +100,7 @@ $$
 $$
 
 ##### Proof
-integrate from discontinuity of $\xbartaut$ to discontinuity and proof stetige fortsetzbarkeit at these points
+integrate from discontinuity of $\xbartaut{t}$ to discontinuity and proof stetige fortsetzbarkeit at these points
 
 ### Method of Steps
 for $t\in [0,\tau]$, $x$ must satisfy the following ordinary initial value problem obtained by plugging the initial function into equation (??).
@@ -120,7 +120,7 @@ Consider the Delay Differential Equation
 
 $$
 \begin{cases}
-    x'=f(\xbartaut) & \text{for } t\geq 0\\
+    x'=f(\xbartaut{t}) & \text{for } t\geq 0\\
     x(t)=x_0(t)     & \text{for } t\in [-\tau,0]
 \end{cases}
 $$
@@ -261,6 +261,8 @@ $$
 where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, \ie $y$ is a local solution of the DDE.
 The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
 
+Since the DDE is autonomous, we can emit the time index.
+
 ##### Proof
 apply methods of steps
 
@@ -269,33 +271,35 @@ apply methods of steps
 #### Rule of Steps
 condition valid for initial condition
 and
-given condition then condition holds after dde-evolution of max time tau
+given condition for a $s\leq t$ then condition holds after dde-evolution of max time tau
 and
 safety follows from condition
 then
 condition holds after dde with mentioned initial condition
 
 $$
-\frac{F(\theta_0)\quad F\rightarrow [x'=\theta() \& t\leq\tau]F \quad F\rightarrow\phi}{\xbartau = \theta_0 \rightarrow [x'=\theta(\xbartau)]\phi}
+\frac{\xbartaut{0}=\theta_0\rightarrow F(\xbartaut{0})\quad F(\xbartaut{s})\rightarrow [x'=\theta(\xbartaut{t})\,\&\,t\leq\tau]F(\xbartaut{t}) \quad F(\xbartaut{t})\rightarrow\phi}{\xbartaut{0} = \theta_0 \rightarrow [x'=\theta(\xbartaut{t})]\phi}
 $$
 
 
 #### Delay Differential Invariant
-
-$$
-\frac{}{\xbartau}
-$$
-
 Usually, one would try not to mention $\xtau$ in the invariant, since derivation would lead to the occurrence of the symbol $x_{2\tau}$, whose properties are out of the scope of the current state.
 
 ### Example
-We want to proof the safety condition $\phi\equiv(-1\leq x\wedge x\leq 1)$ for the continuous program
-
-TODO: can replace \xbartau with forall t? but then have t occuring
-
+We want to proof the safety condition $\phi\equiv(-1\leq x\wedge x\leq 1)$ for the continuous program with delay differential equation
 $$
-    -1\leq\xbartau\leq 1 \rightarrow [x'=-\xtau]\phi.
+    \forall\,t\in[-\tau,0]:\,-1\leq\xbartaut{0}(t)\wedge\xbartaut{0}(t)\leq 1
+    \rightarrow
+    [x'=-\xtau] (\forall\,s\in[t-\tau,t]:\,-1\leq\xbartaut{t}(s)\wedge\xbartaut{t}(s)\leq 1)
 $$
+in explicit quantified representation. It can be simplified by using an implicit time variable and a context depending meaning of $\xtau$
+$$
+    -1\leq\xtau\leq 1 \rightarrow [x'=-\xtau]\phi.
+$$
+
+We apply the rule of steps
+
+
 Use the algebraic differential invariant $F\equiv(-1\leq x^3\wedge x^3\leq1)$,
 which is valid for the initial condition. Differentiation leads to the inequalities, which needs to be shown $\forall t\in[0,\tau]$
 $$
