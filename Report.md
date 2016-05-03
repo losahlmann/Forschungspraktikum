@@ -42,38 +42,53 @@ If the right hand side only depends on $x(t-\tau)$ and not on $x(t)$, we call th
 
 A DDE can be equipped with an **initial condition**. It specifies the values of $x$ on $[-\tau, 0]$ on which the right hand side depends.
 
+Since we only consider autonomous DDEs, we can without loss of generality restrict to the case of initial time $t_0=0$.
+
 The definition of a DDE can be extended to multiple constant discrete delays. For simplicity, we restrict here to a single delay.
 
 ### Definition of Solution
-TODO: solution if initial condition piecewise continuous (-> not cont in t=0)
-
-A piecewise continuous function $x\in C^0_\text{pw}([-\tau,T],\R^n)$ is called **local solution** of the DDE (??), if and only if there exists a $T>0$ such that $x|_{(0,T)}\in C^1((0,T),\R^n)$ with
+A piecewise continuous function $x\in C^0_\text{pw}([-\tau,T],\R^n)$ is called **local solution** of the DDE (eq ??), if and only if there exists a $T>0$ such that $x|_{(0,T)}\in C^1((0,T),\R^n)$ with
 
 \[ x'(t) = f\left(x(t),x(t-\tau)\right) \]
 
-for $t\in (0,T)$ and right-hand derivative $=f(x(0),x(-\tau))$ in $t=0$.
-differentiable in rand points? what is diff there? dde gives value. one sided diff? in t=0 right-hand deriv
+for all $t\in (0,T)$ and in $t=0$, it holds for the right-hand derivative
+$$
+    \lim_{h\searrow 0}\frac{x(h)-x(0)}{h}=f(x(0),x(-\tau))
+$$
+
 and obeys the initial condition:
 
 $$ x(t) = x_0(t) \quad\text{for } t\in [-\tau,0]$$
 
 on $[-\tau,0]$.
 
+TODO: differentiable in right rand point? need not derivative in right hand point
+
+TODO: Fortsetzbarkeit
+For example initial condition has jump, this point is limit for local solution.
+
 If the function $x$ is solution for all $T\in\R_{>0}$, it is called **global**.
 
-TODO: solution (for autonomous) is curve/trajectory in statespace, defined on t>=0 (im gegensatz zu definition of solution above)
-state at t provides all information needed to determine solution for time >= t. Hence needs to contain initial function
-write state $\xbartau\in\statespace$
-defined as $\xbartaut(s):=x(t+s)$ for $s\in [-\tau,0]$
-In the case of $t=0$, we simplify the notation by $\xbartau := \bar{x}_{\tau,0}$
+TODO:
+The notion of solution for an autonomous DDE as given above can be lifted to be a trajectory in the statespace
+$$
+    \gamma_x:[0,T]\rightarrow\statespace,\\ t\mapsto\xbartaut
+$$
 
-is a dynamical systems point of view
-cav write DDE (??) as
+The **state** at time $t$ is a function which provides a time limited history up to the current time. This is all information needed to determine (using the DDE) to determine the solution for time $\geq t$.
+It is defined as $\xbartaut(s)\def x(t+s)$ for $s\in [-\tau,0]$.
+In the case of $t=0$, we simplify the notation to $\xbartau \def \bar{x}_{\tau,0}$.
 
-$$ \label{eq:test}\begin{cases}
-    x'=g(\xbartaut):=f(\xbartaut(0),\xbartaut(-\tau)) &\text{for } t\geq 0\\
+This notion of solution is a _dynamical systems_ point of view which later turns out to be useful.
+
+TODO: can write DDE (??) as
+
+$$
+\begin{cases}
+    x'=g(\xbartaut)\def f(\xbartaut(0),\xbartaut(-\tau)) &\text{for } t\geq 0\\
     x(t)=x_0(t) & \text{for } t\in[-\tau,0]
-   \end{cases} $$
+\end{cases}
+$$
 
 ##### Lemma
 TODO: solving dde equiv to solving integral equation??? (-> Lemma) and compare with ODE lecture notes
@@ -191,9 +206,9 @@ that assigns a _history_ (function) $\xbartau$ to each variable symbol and
 FIXME diff var symbol.
 
 The semantics of the variable symbols in terms are given by
-$$ [[\xtau]]_\nu=\nu(x)(-\tau)=:\xbartau(-\tau) $$
+$$ [[\xtau]]_\nu=\nu(x)(-\tau)\def:\xbartau(-\tau) $$
 and
-$$ [[x]]_\nu=\nu(x)(0)=:\xbartau(0) $$
+$$ [[x]]_\nu=\nu(x)(0)\def:\xbartau(0) $$
 
 When we write $\xtau$ we mean $x(t-\tau)$ and with $x$ we mean $x(t)$.
 
@@ -216,7 +231,7 @@ $$
 $$
 As a solution, $\varphi$ needs to fulfill
 $$
-    \varphi(t)(x')(0) \stackrel{\text{def}}{=} \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} [[\theta]]_{\varphi(t)(x)}
+    \varphi(t)(x')(0) \def \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} [[\theta]]_{\varphi(t)(x)}
 $$
 
 ## Delay Differential Dynamic Logic
