@@ -1,0 +1,50 @@
+% Math Environements
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+%
+% General Mathematics
+%
+% natural numbers
+\newcommand{\N}{\mathbb{N}}
+% real numbers
+\newcommand{\R}{\mathbb{R}}
+% define as
+% FIXME: define "def" properly
+\newcommand{\defeq}{\,\stackrel{\text{def}}{=}\,}
+% defined by
+\newcommand\logeq{\mathrel{\vcentcolon\Longleftrightarrow}}
+% norm
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert_{\text{sup}}}
+% boundary
+\newcommand{\boundary}[1]{\partial #1}
+\newcommand{\bOmega}{\boundary{\upOmega}}
+% disjunct sets
+\newcommand{\cupdot}{\mathbin{\mathaccent\cdot\cup}}
+
+%
+% Analysis
+%
+% Derivative
+\newcommand{\DD}[2]{\frac{\text{d} #1}{\text{d} #2}}
+
+%
+% Differential Dynamic Logic
+%
+% dL
+\newcommand{\dL}{\textsf{d{\kern-0.1em}$\mathcal{L}$}}
+
+
+%
+% Delay Differential Dynamic Logic
+%
+\newcommand{\states}{\mathcal{S}}
+\newcommand{\statespace}{C^0_\text{pw}([-\tau,0],\R^n)}
+\newcommand{\xtau}{x_{\tau}}
+\newcommand{\xbartau}{\bar{x}_{\tau}}
+\newcommand{\xbartaut}[1]{\bar{x}_{\tau,#1}}
