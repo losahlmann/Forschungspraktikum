@@ -33,7 +33,9 @@ The following function however is not allowed!
 ### Definition DDE
 Let $f:\R^n\times\R^n\rightarrow\R^n$ and $\tau > 0$. A functional equation of the form
 
-\[ x'(t) = f\left(x(t),x(t-\tau)\right) \]
+$$
+    x'(t) = f\left(x(t),x(t-\tau)\right)
+$$
 
 is called **Delay Differential Equation (DDE)** with _constant, discrete delay_.
 It is _autonomous_, since its right hand side $f$ is time independent.
@@ -49,7 +51,9 @@ The definition of a DDE can be extended to multiple constant discrete delays. Fo
 ### Definition of Solution
 A piecewise continuous function $x\in C^0_\text{pw}([-\tau,T],\R^n)$ is called **local solution** of the DDE (eq ??), if and only if there exists a $T>0$ such that $x|_{(0,T)}\in C^1((0,T),\R^n)$ with
 
-\[ x'(t) = f\left(x(t),x(t-\tau)\right) \]
+$$
+    x'(t) = f\left(x(t),x(t-\tau)\right)
+$$
 
 for all $t\in (0,T)$ and in $t=0$, it holds for the right-hand derivative
 $$
