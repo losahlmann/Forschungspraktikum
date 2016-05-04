@@ -81,14 +81,7 @@ In the case of $t=0$, we simplify the notation to $\xbartau \def \xbartaut{0}$.
 
 This notion of solution is a _dynamical systems_ point of view which later turns out to be useful.
 
-TODO: can write DDE (??) as
 
-$$
-\begin{cases}
-    x'=g(\xbartaut{t})\def f(\xbartaut{t}(0),\xbartaut{t}(-\tau)) &\text{for } t\geq 0\\
-    x(t)=x_0(t) & \text{for } t\in[-\tau,0]
-\end{cases}
-$$
 
 ##### Lemma
 TODO: solving dde equiv to solving integral equation??? (-> Lemma) and compare with ODE lecture notes
@@ -115,8 +108,13 @@ with piecewise continuous initial function
 have existence and uniqueness ????
 smoothing
 
+
 ##### Theorem
-Consider the Delay Differential Equation
+Consider the autonomous Delay Differential Equation
+
+TODO: do we need global existence or just local?
+
+TODO: this DDE is more general than in definition above
 
 $$
 \begin{cases}
@@ -125,24 +123,35 @@ $$
 \end{cases}
 $$
 
-with $f:\statespace\rightarrow\R^2$ satisfying the (global) Lipschitz condition
+with $f:\statespace\rightarrow\R^n$ satisfying the (local) Lipschitz condition
 
-$$ \exists L>0\,\forall x,y\in C^0([-\tau,0],\R^n) : \abs{f(x)-f(y)} \leq L\norm{x-y} $$
+$$ \forall M>0\,\exists L>0\,\forall x,y\in C^0([-\tau,0],\R^n) : \norm{x},\norm{y}\leq M\Rightarrow\abs{f(x)-f(y)} \leq L\norm{x-y} $$
 
-where $\abs{\cdot}$ denotes the Euclidian norm on $\R^?$ (TODO) and $\norm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
+where $\abs{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\norm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
 
-and initial condition
-
-Then there **exists** a **unique global solution** of the DDE.
+Then for each **bounded initial condition** $x_0\in\statespace$, \ie $\norm{x_0}< \infty$, there **exists** a **unique local solution** of the DDE on a time interval $[-\tau, T]$ with $T>0$.
 
 ##### Proof
 use Theorem 3.7 from [] or ...
-need open subset of $\statespace$
-need topology
 
 just proof existence/uniqueness on each peace of continuity
 proof continuity at knots with Lemma of integral equ
 
+##### Corollary
+when f is polynomial and depends on x(t) and x(t-\tau) then theorem holds
+
+polynomial -> continuously differentiable -> locally Lipschitz
+
+TODO: can write DDE (eq??) from definition as
+
+$$
+\begin{cases}
+    x'=f(\xbartaut{t})\def g(\xbartaut{t}(0),\xbartaut{t}(-\tau)) &\text{for } t\geq 0\\
+    x(t)=x_0(t) & \text{for } t\in[-\tau,0]
+\end{cases}
+$$
+
+##### Proof
 
 
 ### Example
@@ -253,15 +262,15 @@ The _Method of Steps_ presented above translates into an axiom. It allows to par
 
 Let $\theta_0$ and $\theta$ be TODO ...
 $$
-    \xbartau = \theta_0 \rightarrow [x'=\theta(\xbartau)]\phi
+    \xbartau = \theta_0 \rightarrow [x'=\theta(\xbartaut{t})]\phi
     \leftrightarrow
-    \left(\forall 0\leq t\leq\tau [x:= y(t)]\phi
-    \wedge \xbartau = y \rightarrow [x'=\theta (\xbartau)] \right)
+    \left(\forall 0\leq t\leq\tau: [x:= y(t)]\phi \right)
+    \wedge \xbartaut{\tau} = y \rightarrow [x'=\theta (\xbartaut{t})]\phi
 $$
 where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, \ie $y$ is a local solution of the DDE.
 The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
 
-Since the DDE is autonomous, we can emit the time index.
+(Since the DDE is autonomous, we can emit the time index.)
 
 ##### Proof
 apply methods of steps
@@ -278,26 +287,33 @@ then
 condition holds after dde with mentioned initial condition
 
 $$
-\frac{\xbartaut{0}=\theta_0\rightarrow F(\xbartaut{0})\quad F(\xbartaut{s})\rightarrow [x'=\theta(\xbartaut{t})\,\&\,t\leq\tau]F(\xbartaut{t}) \quad F(\xbartaut{t})\rightarrow\phi}{\xbartaut{0} = \theta_0 \rightarrow [x'=\theta(\xbartaut{t})]\phi}
+\frac{\Gamma(\xbartaut{0})\rightarrow F(\xbartaut{0})\quad F(\xbartaut{s})\rightarrow [x'=\theta(\xbartaut{t})\,\&\,t\leq\tau]F(\xbartaut{t}) \quad F(\xbartaut{t})\rightarrow\phi}{\Gamma(\xbartaut{0}) \rightarrow [x'=\theta(\xbartaut{t})]\phi}
 $$
 
 
 #### Delay Differential Invariant
 Usually, one would try not to mention $\xtau$ in the invariant, since derivation would lead to the occurrence of the symbol $x_{2\tau}$, whose properties are out of the scope of the current state.
 
+TODO: much doubt if that is sound
+$$
+    \frac{H\wedge\forall\,t-\tau\leq s<t: F(x(s))\rightarrow (F')^{\theta}_{x'}}{F(\xbartau)\rightarrow [x'=\theta(\xbartaut{t})\,\&\,(H\wedge t\leq\tau)]F(\xbartaut{t})}
+$$
+
 ### Example
 We want to proof the safety condition $\phi\equiv(-1\leq x\wedge x\leq 1)$ for the continuous program with delay differential equation
 $$
     \forall\,t\in[-\tau,0]:\,-1\leq\xbartaut{0}(t)\wedge\xbartaut{0}(t)\leq 1
     \rightarrow
-    [x'=-\xtau] (\forall\,s\in[t-\tau,t]:\,-1\leq\xbartaut{t}(s)\wedge\xbartaut{t}(s)\leq 1)
+    [x'=-\xtau] (\forall\,s\in[-\tau,0]:\,-1\leq\xbartaut{t}(s)\wedge\xbartaut{t}(s)\leq 1)
 $$
 in explicit quantified representation. It can be simplified by using an implicit time variable and a context depending meaning of $\xtau$
 $$
     -1\leq\xtau\leq 1 \rightarrow [x'=-\xtau]\phi.
 $$
 
-We apply the rule of steps
+We apply the rule of steps using the safety condition $\phi$ as step condition $F(x)\equiv(\forall\,t\in[-\tau,0]:\,-1\leq x(t)\wedge x(t)\leq 1)$.
+
+The first and third premisses hold. The second by ??? (delay differential invariant)
 
 
 Use the algebraic differential invariant $F\equiv(-1\leq x^3\wedge x^3\leq1)$,
