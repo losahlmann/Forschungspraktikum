@@ -56,13 +56,13 @@ The following definition is motivated by capturing the character evolution arisi
 \begin{definition}[Piecewise Continuous]
     \label{definition-piecewise-continuous}
 
-    Let $D=[a,b]\subset\R$ be a closed interval (this includes the cases when $a=-\infty$ or $b=\infty$, or both). The mapping $g:D\rightarrow\R^n$ is called \textbf{piecewise continuous} if and only if there is a finite subdivision $\{x_i:i=0,\ldots,m\}$ of $D$ (i.e.\ $a=x_0<x_1<\ldots<x_m=b$) such that $g$ is continuous on $[x_i,x_{i+1})$ for all $i=0,\ldots,m-1$ and the one sided limits
+    Let $D=[a,b]\subset\R$ be a closed interval (this includes the cases when $a=-\infty$ or $b=\infty$, or both). The mapping $x:D\rightarrow\R^n$ is called \textbf{piecewise continuous} if and only if there is a finite subdivision $\{t_i:i=0,\ldots,m\}$ of $D$ (i.e.\ $a=t_0<t_1<\ldots<t_m=b$) such that $x$ is continuous on each interval piece $[t_i,t_{i+1})$ for all $i=0,\ldots,m-1$ and the left sided limits
     \begin{equation}
-        \lim_{x\nearrow x_{i+1}, x\in[x_i,x_{i+1})}g(x)
+        \lim_{\substack{t\nearrow t_{i+1}\\ t\in[t_i,t_{i+1})}} x(t)
     \end{equation}
-    exist. Hence $g(b)$ can be an isolated point and this right interval limit $b$ is the only spot where such is allowed.
+    exist. Hence $x(b)$ can be an isolated point and this right interval limit $b$ is the only spot where such is allowed.
 
-    We denote by $C^0_\text{pw}(D,\R^n)$ the set of \textbf{piecewise continuous functions} on the compact interval $D$, mapping to $\R^n$.
+    We denote by $C^0_\text{pw}(D,\R^n)$ the set of \textbf{piecewise continuous functions} on the compact interval $D$ (this excludes the cases with $\pm\infty$), mapping to $\R^n$.
 
 \end{definition}
 
