@@ -17,7 +17,6 @@ p1 = plot(
     Guide.annotation(compose(context(),
         circle(1.0, 6.0, 1mm),
         fill(colorant"#1f77b4"),
-        #stroke(colorant"orange")
         )),
     Theme(
         background_color=colorant"white",
@@ -30,7 +29,10 @@ p1 = plot(
 p2 = plot(
     layer(f01, 0, 1),
     layer(f12, 1, 2),
-    layer(x=[1], y=[3], Geom.point),
+    Guide.annotation(compose(context(),
+        circle(1.0, 3.0, 1mm),
+        fill(colorant"#1f77b4"),
+        )),
     Guide.annotation(compose(context(),
         circle(1.0, -4.0, 1mm),
         fill(nothing),
