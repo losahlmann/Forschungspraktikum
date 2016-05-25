@@ -48,9 +48,9 @@ This requires an extension of the syntax, a (partially) redefinition of the sema
 
 This results in a superset of \dL which we call \textbf{Delay Differential Dynamic Logic}.
 
-\section{Delay Differential Equations}\label{delay-differential-equations}
+\section{Delay Differential Equations} \label{sec:delay-differential-equations}
 
-\subsection{Piecewise Continuous Functions}\label{piecewise-continuous-functions}
+\subsection{Piecewise Continuous Functions} \label{sec:piecewise-continuous-functions}
 The following definition is motivated by capturing the character evolution arising from hybrid systems. We will see that we can consider such to be piecewise continuous.
 
 \begin{definition}[Piecewise Continuous]
@@ -66,6 +66,7 @@ The following definition is motivated by capturing the character evolution arisi
 
 \end{definition}
 
+% TODO: sup-norm for pw
 
 \begin{figure}[h]\centering
 	\includegraphics[width=\textwidth]{allowed.png}
@@ -73,16 +74,18 @@ The following definition is motivated by capturing the character evolution arisi
 	\label{fig:allowed}
 \end{figure}
 
-
 \begin{figure}[h]\centering
     \includegraphics[width=\textwidth]{not-allowed.png}
 	\caption{The following function however is not allowed!}
 	\label{fig:not-allowed}
 \end{figure}
 
-\subsection{Definition DDE}\label{definition-dde}
+
+\subsection{Definition DDE} \label{sec:definition-dde}
 
 \begin{definition}[Delay Differential Equation]
+    \label{definition-dde}
+
     Let $f:\R^n\times\R^n\rightarrow\R^n$ and $\tau > 0$.
     A functional equation of the form
     \begin{equation}
@@ -100,27 +103,29 @@ Since we only consider autonomous DDEs, we can without loss of generality restri
 
 The definition of a DDE can be extended to multiple constant discrete delays. For simplicity, we restrict here to a single delay.
 
-\subsection{Definition of Solution}\label{definition-of-solution}
+\subsection{Definition of Solution} \label{sec:definition-of-solution}
 
 \begin{definition}[Solution of DDE]
-A piecewise continuous function $x\in C^0_\text{pw}([-\tau,T],\R^n)$ is called \textbf{local solution} of the DDE (eq ??), if and only if there exists a $T>0$ such that $x|_{(0,T)}\in C^1((0,T),\R^n)$ with
-\begin{equation}
-    x'(t) = f\left(x(t),x(t-\tau)\right)
-\end{equation}
-for all $t\in (0,T)$ and in $t=0$, it holds for the right-hand derivative \begin{equation}
-    \lim_{h\searrow 0}\frac{x(h)-x(0)}{h}=f(x(0),x(-\tau))
-\end{equation}
-and obeys the initial condition:
-\begin{equation}
-    x(t) = x_0(t) \quad\text{for } t\in [-\tau,0]
-\end{equation}
-on $[-\tau,0]$.
+    \label{definition-solution-dde}
+
+    A piecewise continuous function $x\in C^0_\text{pw}([-\tau,T],\R^n)$ is called \textbf{local solution} of the DDE (eq ??), if and only if there exists a $T>0$ such that $x|_{(0,T)}\in C^1((0,T),\R^n)$ with
+    \begin{equation}
+        x'(t) = f\left(x(t),x(t-\tau)\right)
+    \end{equation}
+    for all $t\in (0,T)$ and in $t=0$, it holds for the right-hand derivative \begin{equation}
+        \lim_{h\searrow 0}\frac{x(h)-x(0)}{h}=f(x(0),x(-\tau))
+    \end{equation}
+    and obeys the initial condition:
+    \begin{equation}
+        x(t) = x_0(t) \quad\text{for } t\in [-\tau,0]
+    \end{equation}
+    on $[-\tau,0]$.
 
 %TODO: differentiable in right rand point? need not derivative in right hand point
 
 %TODO: Fortsetzbarkeit For example initial condition has jump, this point is limit for local solution.
 
-If the function $x$ is solution for all $T\in\R_{>0}$, it is called \textbf{global}.
+    If the function $x$ is solution for all $T\in\R_{>0}$, it is called \textbf{global}.
 
 \end{definition}
 
@@ -134,26 +139,63 @@ The \textbf{state} at time $t$ is a function which provides a time limited histo
 
 This notion of solution is a \emph{dynamical systems} point of view which later turns out to be useful.
 
-\paragraph{Lemma}\label{lemma}
+\begin{figure}[h]\centering
+    \includegraphics[width=\textwidth]{multiple.png}
+	\caption{Illustration of proof to Lemma \ref{lemma-continuity}}
+	\label{fig:not-allowed}
+\end{figure}
+
+\begin{lemma}
+    \label{lemma-continuity}
+
+    Let $x:[\sigma-\tau,\sigma+T] \rightarrow \R^n$ be piecewise continuous (as in Definition \ref{definition-piecewise-continuous}) with the subdivision ..., i.e. there $n$ subintervals.
+
+    Then $t \mapsto \xtau = x(t+\theta)$, where $\theta\in[-\tau,0]$, is a continuous mapping from $[\sigma,\sigma+T]$ into $C^0([-\tau,0],\R^n)$.
+\end{lemma}
+
+\begin{proof}
+    $x$ is piecewise continuous and hence uniformly piecewise continuous on $I=[\sigma-\tau,\sigma+T]$.
+    Let $\epsilon > 0$. $x|_{[t_i,t_{i+1}]}$ (with stetiger fortsetzung in right interval limit) is uniformly continuous, i.e. there is a $\delta_i > 0$ (for the given $\epsilon$), such that $\forall\,t, s \in [t_i,t_{i+1}]$ holds
+    % TODO: can use \leq ?
+    \begin{equation}
+        \abs{t-s} < \delta_i \Rightarrow \norm{x(t)-x(s)} < \frac{\epsilon}{n}
+    \end{equation}
+
+    Among the given $\delta_i$, choose the smallest as $\delta = min_i \delta_i$.
+
+    Given any $t,s \in I$, let $\eta_1,\ldots,\eta_k$ be the discontinuity points between $t$ and $s$ (t or s can be disconituity point themselves, but are not denoted by $\eta$). It holds
+    \begin{equation}
+        \norm{x(t)-x(s)} \leq \norm{x(t)-x(\eta_k)} + \norm{x(\eta_k)-x(\eta_{k-1})} + \ldots + \norm{x(\eta_1)-x(s)}
+        < k\frac{\epsilon}{n} \leq \epsilon
+    \end{equation}
+    since $k \leq n$.
+
+
+\end{proof}
+
+\begin{lemma}
+    \label{lemma-integral-equation}
 
 %TODO: solving dde equiv to solving integral equation??? (-\textgreater{} Lemma) and compare with ODE lecture notes
 
-Finding a solution of the DDE (??) is equivalent to computing the integral
+    Finding a solution of the DDE (??) is equivalent to computing the integral
 
-\begin{equation}
-    x(t) = x_0(0) + \int_0^t g(\bar{x}_{\tau,s})ds
-\end{equation}
+    \begin{equation}
+        x(t) = x_0(0) + \int_0^t g(\bar{x}_{\tau,s})ds
+    \end{equation}
 
-\paragraph{Proof}\label{proof}
+\end{lemma}
 
+\begin{proof}
 integrate from discontinuity of $\xbartaut{t}$ to discontinuity and proof stetige fortsetzbarkeit at these points
+\end{proof}
 
-\subsection{Method of Steps}\label{method-of-steps}
+\subsection{Method of Steps} \label{sec:method-of-steps}
 for $t\in [0,\tau]$, $x$ must satisfy the following ordinary initial value problem obtained by plugging the initial function into equation (??). For suitable $f$ and $x_0$, the existence (and uniqueness) of a solution on $[0,\tau]$ is guaranteed by ODE theory (\ldots{} or Picard-Lindelöf theorems).
 
 This procedure can then be applied repeatedly to extend the obtained solution by steps of length $\tau$.
 
-\subsection{Existence and Uniqueness of Solutions}\label{existence-and-uniqueness-of-solutions}
+\subsection{Existence and Uniqueness of Solutions} \label{existence-and-uniqueness-of-solutions}
 
 $f$ Lipschitz with piecewise continuous initial function have existence and uniqueness ???? smoothing
 
@@ -173,11 +215,11 @@ Consider the autonomous Delay Differential Equation
 
 with $f:\statespace\rightarrow\R^n$ satisfying the (local) Lipschitz condition
 \begin{equation}
-    \forall M>0\,\exists L>0\,\forall x,y\in C^0([-\tau,0],\R^n) : \norm{x},\norm{y}\leq M\Rightarrow\abs{f(x)-f(y)} \leq L\norm{x-y}
+    \forall M>0\,\exists L>0\,\forall x,y\in C^0([-\tau,0],\R^n) : \supnorm{x},\supnorm{y}\leq M\Rightarrow\norm{f(x)-f(y)} \leq L\supnorm{x-y}
 \end{equation}
-where $\abs{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\norm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
+where $\norm{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\supnorm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
 
-Then for each \textbf{bounded initial condition} $x_0\in\statespace$, i.e.\ $\norm{x_0}< \infty$, there \textbf{exists} a \textbf{unique local solution} of the DDE on a time interval $[-\tau, T]$ with $T>0$.
+Then for each \textbf{bounded initial condition} $x_0\in\statespace$, i.e.\ $\supnorm{x_0}< \infty$, there \textbf{exists} a \textbf{unique local solution} of the DDE on a time interval $[-\tau, T]$ with $T>0$.
 
 \paragraph{Proof}\label{proof-1}
 use Theorem 3.7 from {[}{]} or \ldots{}
