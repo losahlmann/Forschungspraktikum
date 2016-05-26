@@ -148,29 +148,61 @@ This notion of solution is a \emph{dynamical systems} point of view which later 
 \begin{lemma}
     \label{lemma-continuity}
 
-    Let $x:[\sigma-\tau,\sigma+T] \rightarrow \R^n$ be piecewise continuous (as in Definition \ref{definition-piecewise-continuous}) with the subdivision ..., i.e. there $n$ subintervals.
+    Let $x:[\sigma-\tau,\sigma+T] \rightarrow \R^n$ be piecewise continuous (as in Definition \ref{definition-piecewise-continuous}) with the subdivision $\{t_0,\ldots,t_k\}$, i.e. there are $k$ subintervals.
 
-    Then $t \mapsto \xtau = x(t+\theta)$, where $\theta\in[-\tau,0]$, is a continuous mapping from $[\sigma,\sigma+T]$ into $C^0([-\tau,0],\R^n)$.
+    Then $t \mapsto x_t = x(t+\theta)$, where $\theta\in[-\tau,0]$, is a piecewise continuous mapping from $[\sigma,\sigma+T]$ into $\statespace$.
 \end{lemma}
 
 \begin{proof}
-    $x$ is piecewise continuous and hence uniformly piecewise continuous on $I=[\sigma-\tau,\sigma+T]$.
+    $x$ is piecewise continuous and hence uniformly piecewise continuous on the compact interval $I=[\sigma-\tau,\sigma+T]$.
+    i.e. uniformely continuous on each subinterval with stetiger Fortsetzung in right side.
+    \begin{equation}
+        \forall\epsilon >0 \exists\delta_i >0 \forall t,s\in I_i: \quad \abs{t-s}<\delta_i \Rightarrow \norm{x(t)-x(s)}<\epsilon
+    \end{equation}
     Let $\epsilon > 0$. $x|_{[t_i,t_{i+1}]}$ (with stetiger fortsetzung in right interval limit) is uniformly continuous, i.e. there is a $\delta_i > 0$ (for the given $\epsilon$), such that $\forall\,t, s \in [t_i,t_{i+1}]$ holds
     % TODO: can use \leq ?
     \begin{equation}
-        \abs{t-s} < \delta_i \Rightarrow \norm{x(t)-x(s)} < \frac{\epsilon}{n}
+        \abs{t-s} < \delta_i \Rightarrow \norm{x(t)-x(s)} < \epsilon
     \end{equation}
 
-    Among the given $\delta_i$, choose the smallest as $\delta = min_i \delta_i$.
+    Among the given $\delta_i$, choose the smallest as $\delta = \min_i \delta_i$.
 
-    Given any $t,s \in I$, let $\eta_1,\ldots,\eta_k$ be the discontinuity points between $t$ and $s$ (t or s can be disconituity point themselves, but are not denoted by $\eta$). It holds
+    For any $i$ and $s,t\in [t_i,t_{i+1})\subset [\sigma,\sigma+T]$ with $\abs{t-s}<\delta$, it holds
     \begin{equation}
-        \norm{x(t)-x(s)} \leq \norm{x(t)-x(\eta_k)} + \norm{x(\eta_k)-x(\eta_{k-1})} + \ldots + \norm{x(\eta_1)-x(s)}
-        < k\frac{\epsilon}{n} \leq \epsilon
+        \supnorm{x_t - x_s} = \sup_{\theta\in [-\tau,0]}\norm{x(t+\theta) - x(s+\theta)} < \epsilon
     \end{equation}
-    since $k \leq n$.
+    since $t+\theta, s+\theta \in I$
+    Hence $t \mapsto x_t$ is uniformely continuous on $[t_i,t_{i+1})$.
 
 
+\end{proof}
+
+\begin{lemma}
+    \label{lemma-bounded-f}
+
+    Let $f:\R\times\statespace\rightarrow\R^n$ be continuous and Lipschitz in its second argument, i.e. $\forall a,b\in\R,\forall M>0 \exists K>0$:
+    \begin{equation}
+        \norm{f(t,\phi) - f(t,\psi)} \leq K\supnorm{\phi - \psi}
+    \end{equation}
+    for all $t\in [a,b]$ and $\supnorm{\phi},\supnorm{\psi}\leq M$.
+
+    For any given compact interval $[a,b]$ ans $M>0$ there exists a bound $L>0$
+    \begin{equation}
+        \norm{f(t,\psi)}\leq L
+    \end{equation}
+    where $t\in[a,b]$ and $\supnorm{\psi}\leq M$.
+\end{lemma}
+
+\begin{proof}
+    Let $o:[-\tau,0]\rightarrow\R^n, t\mapsto 0$ be the zero-function, which is in $\statespace$.
+    Given $[a,b]$ and $M$, let K be the Lipschitz constant of $f$. Then
+    \begin{equation}
+        \norm{f(t,\psi)} \leq \norm{f(t,\psi) - f(t,o)} + \norm{f(t,o)} \leq K\supnorm{\psi-o} + \norm{f(t,o)} \leq KM+P =: L
+    \end{equation}
+    when $t\in[a,b]$ and $\supnorm{psi}\leq M$. We used the conituity of $f$ for
+    \begin{equation}
+        P = \max_{s\in [a,b]}\norm{f(s,o(s))}
+    \end{equation}.
 \end{proof}
 
 \begin{lemma}
