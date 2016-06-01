@@ -1,5 +1,5 @@
-% fix bugs
-\RequirePackage{fixltx2e}
+% fix bugs: fixes already in kernel now
+%\RequirePackage{fixltx2e}
 
 
 \documentclass[10pt]{article}
@@ -68,17 +68,19 @@ The following definition is motivated by capturing the character evolution arisi
 
 % TODO: sup-norm for pw
 
-\begin{figure}[h]\centering
-	\includegraphics[width=\textwidth]{allowed.png}
-	\caption{This figure shows an admissible piecewise continuous function.}
-	\label{fig:allowed}
-\end{figure}
-
-\begin{figure}[h]\centering
-    \includegraphics[width=\textwidth]{not-allowed.png}
-	\caption{The following function however is not allowed!}
-	\label{fig:not-allowed}
-\end{figure}
+% \begin{figure*}[h]\centering
+%     \begin{subfigure}[t]{0.5\textwidth}\centering
+%         \includegraphics[width=\textwidth]{allowed.png}
+%         \caption{Admissible piecewise continuous function.}
+%         \label{fig:allowed}
+%     \end{subfigure}
+%     \begin{subfigure}[t]{0.5\textwidth}\centering
+%         \includegraphics[width=\textwidth]{not-allowed.png}
+% 	    \caption{Not allowed!}
+% 	    \label{fig:not-allowed}
+%     \end{subfigure}
+%     \caption{Examples to Definition \ref{definition-piecewise-continuous}.}
+% \end{figure*}
 
 
 \subsection{Definition DDE} \label{sec:definition-dde}
@@ -139,70 +141,75 @@ The \textbf{state} at time $t$ is a function which provides a time limited histo
 
 This notion of solution is a \emph{dynamical systems} point of view which later turns out to be useful.
 
-\begin{figure}[h]\centering
-    \includegraphics[width=\textwidth]{multiple.png}
-	\caption{Illustration of proof to Lemma \ref{lemma-continuity}}
-	\label{fig:not-allowed}
-\end{figure}
+% \begin{figure}[h]\centering
+%     \includegraphics[width=\textwidth]{multiple.png}
+% 	\caption{Illustration of proof to Lemma \ref{lemma-continuity}}
+% 	\label{fig:not-allowed}
+% \end{figure}
 
+% FIXME: This lemma is wrong. Show instead integrability of f(t,x_t)
 \begin{lemma}
     \label{lemma-continuity}
 
-    Let $x:[\sigma-\tau,\sigma+T] \rightarrow \R^n$ be piecewise continuous (as in Definition \ref{definition-piecewise-continuous}) with the subdivision $\{t_0,\ldots,t_k\}$, i.e. there are $k$ subintervals.
-
-    Then $t \mapsto x_t = x(t+\theta)$, where $\theta\in[-\tau,0]$, is a piecewise continuous mapping from $[\sigma,\sigma+T]$ into $\statespace$.
+    % Let $x:[\sigma-\tau,\sigma+T] \rightarrow \R^n$ be piecewise continuous (as in Definition \ref{definition-piecewise-continuous}) with the subdivision $\{t_0,\ldots,t_k\}$, i.e. there are $k$ subintervals.
+    %
+    % Then $t \mapsto x_t = x(t+\theta)$, where $\theta\in[-\tau,0]$, is a piecewise continuous mapping from $[\sigma,\sigma+T]$ into $\statespace$.
 \end{lemma}
 
 \begin{proof}
-    $x$ is piecewise continuous and hence uniformly piecewise continuous on the compact interval $I=[\sigma-\tau,\sigma+T]$.
-    i.e. uniformely continuous on each subinterval with stetiger Fortsetzung in right side.
-    \begin{equation}
-        \forall\epsilon >0 \exists\delta_i >0 \forall t,s\in I_i: \quad \abs{t-s}<\delta_i \Rightarrow \norm{x(t)-x(s)}<\epsilon
-    \end{equation}
-    Let $\epsilon > 0$. $x|_{[t_i,t_{i+1}]}$ (with stetiger fortsetzung in right interval limit) is uniformly continuous, i.e. there is a $\delta_i > 0$ (for the given $\epsilon$), such that $\forall\,t, s \in [t_i,t_{i+1}]$ holds
-    % TODO: can use \leq ?
-    \begin{equation}
-        \abs{t-s} < \delta_i \Rightarrow \norm{x(t)-x(s)} < \epsilon
-    \end{equation}
-
-    Among the given $\delta_i$, choose the smallest as $\delta = \min_i \delta_i$.
-
-    For any $i$ and $s,t\in [t_i,t_{i+1})\subset [\sigma,\sigma+T]$ with $\abs{t-s}<\delta$, it holds
-    \begin{equation}
-        \supnorm{x_t - x_s} = \sup_{\theta\in [-\tau,0]}\norm{x(t+\theta) - x(s+\theta)} < \epsilon
-    \end{equation}
-    since $t+\theta, s+\theta \in I$
-    Hence $t \mapsto x_t$ is uniformely continuous on $[t_i,t_{i+1})$.
-
-
+    % $x$ is piecewise continuous and hence uniformly piecewise continuous on the compact interval $I=[\sigma-\tau,\sigma+T]$.
+    % i.e. uniformely continuous on each subinterval with stetiger Fortsetzung in right side.
+    % \begin{equation}
+    %     \forall\epsilon >0 \exists\delta_i >0 \forall t,s\in I_i: \quad \abs{t-s}<\delta_i \Rightarrow \norm{x(t)-x(s)}<\epsilon
+    % \end{equation}
+    % Let $\epsilon > 0$. $x|_{[t_i,t_{i+1}]}$ (with stetiger fortsetzung in right interval limit) is uniformly continuous, i.e. there is a $\delta_i > 0$ (for the given $\epsilon$), such that $\forall\,t, s \in [t_i,t_{i+1}]$ holds
+    % % TODO: can use \leq ?
+    % \begin{equation}
+    %     \abs{t-s} < \delta_i \Rightarrow \norm{x(t)-x(s)} < \epsilon
+    % \end{equation}
+    %
+    % Among the given $\delta_i$, choose the smallest as $\delta = \min_i \delta_i$.
+    %
+    % For any $i$ and $s,t\in [t_i,t_{i+1})\subset [\sigma,\sigma+T]$ with $\abs{t-s}<\delta$, it holds
+    % \begin{equation}
+    %     \supnorm{x_t - x_s} = \sup_{\theta\in [-\tau,0]}\norm{x(t+\theta) - x(s+\theta)} < \epsilon
+    % \end{equation}
+    % since $t+\theta, s+\theta \in I$
+    % Hence $t \mapsto x_t$ is uniformely continuous on $[t_i,t_{i+1})$.
 \end{proof}
+
+\begin{definition}
+    \label{definition-lipschitz}
+
+    A function $f:\deff\rightarrow\R^n$ is called \textbf{locally Lipschitz continuous} in its second argument if and only if $\forall a,b\in\R,\forall M>0 \exists L>0$:
+    \begin{equation}
+        \norm{f(t,x,y) - f(t,\bar{x},y} \leq L\norm{x - \bar{x}}
+    \end{equation}
+    for all $t\in [a,b]$ and $\norm{x},\norm{\bar{x}},\norm{y}\leq M$.
+\end{definition}
 
 \begin{lemma}
     \label{lemma-bounded-f}
 
-    Let $f:\R\times\statespace\rightarrow\R^n$ be continuous and Lipschitz in its second argument, i.e. $\forall a,b\in\R,\forall M>0 \exists K>0$:
-    \begin{equation}
-        \norm{f(t,\phi) - f(t,\psi)} \leq K\supnorm{\phi - \psi}
-    \end{equation}
-    for all $t\in [a,b]$ and $\supnorm{\phi},\supnorm{\psi}\leq M$.
+    Let $f:\deff\rightarrow\R^n$ be continuous and Lipschitz in its second argument.
 
-    For any given compact interval $[a,b]$ ans $M>0$ there exists a bound $L>0$
+    For any given compact interval $[a,b]$ ans $M>0$ there exists a bound $K>0$
     \begin{equation}
-        \norm{f(t,\psi)}\leq L
+        \norm{f(t,x,y)}\leq K
     \end{equation}
-    where $t\in[a,b]$ and $\supnorm{\psi}\leq M$.
+    where $t\in[a,b]$ and $\norm{x},\norm{y}\leq M$.
 \end{lemma}
 
 \begin{proof}
-    Let $o:[-\tau,0]\rightarrow\R^n, t\mapsto 0$ be the zero-function, which is in $\statespace$.
-    Given $[a,b]$ and $M$, let K be the Lipschitz constant of $f$. Then
+    Let $L$ be the Lipschitz constant of $f$ for given $[a,b]$ and $M$. Then
+    \begin{multline}
+        \norm{f(t,x,y)} \leq \norm{f(t,x,y) - f(t,0,y)} + \norm{f(t,0,y)}\\
+        \leq L\norm{x-0} + \norm{f(t,0,y)} \leq LM+P = K
+    \end{multline}
+    when $t\in[a,b]$ and $\norm{x},\norm{y}\leq M$. We used the continuity of $f$ for the existence of
     \begin{equation}
-        \norm{f(t,\psi)} \leq \norm{f(t,\psi) - f(t,o)} + \norm{f(t,o)} \leq K\supnorm{\psi-o} + \norm{f(t,o)} \leq KM+P =: L
+        P = \max_{s\in [a,b],y}\norm{f(s,0,y)}
     \end{equation}
-    when $t\in[a,b]$ and $\supnorm{psi}\leq M$. We used the conituity of $f$ for
-    \begin{equation}
-        P = \max_{s\in [a,b]}\norm{f(s,o(s))}
-    \end{equation}.
 \end{proof}
 
 \begin{lemma}
@@ -210,12 +217,12 @@ This notion of solution is a \emph{dynamical systems} point of view which later 
 
 %TODO: solving dde equiv to solving integral equation??? (-\textgreater{} Lemma) and compare with ODE lecture notes
 
-    Finding a solution of the DDE (??) is equivalent to computing the integral
+    Finding a solution of the DDE (??) is equivalent to solving the integral equation
 
     \begin{equation}
         x(t) = x_0(0) + \int_0^t g(\bar{x}_{\tau,s})ds
     \end{equation}
-
+    and is continuous in t.
 \end{lemma}
 
 \begin{proof}
@@ -231,34 +238,130 @@ This procedure can then be applied repeatedly to extend the obtained solution by
 
 $f$ Lipschitz with piecewise continuous initial function have existence and uniqueness ???? smoothing
 
-\paragraph{Theorem}\label{theorem}
-Consider the autonomous Delay Differential Equation
+\begin{theorem}
+    \label{theorem-solution-existence}
+    Consider the Delay Differential Equation
 
 %TODO: do we need global existence or just local?
 
 %TODO: this DDE is more general than in definition above
 
-\begin{equation}
-    \begin{cases}
-        x'=f(\xbartaut{t}) & \text{for } t\geq 0\\
-        x(t)=x_0(t)     & \text{for } t\in [-\tau,0]
-    \end{cases}
-\end{equation}
+    \begin{equation}
+        \begin{cases}
+            x' = f(t,x(t),x(t-\tau)) & \text{for } t\geq\sigma\\
+            x(t) = x_\sigma(t-\sigma)     & \text{for } t\in [\sigma-\tau,\sigma]
+        \end{cases}
+    \end{equation}
 
-with $f:\statespace\rightarrow\R^n$ satisfying the (local) Lipschitz condition
-\begin{equation}
-    \forall M>0\,\exists L>0\,\forall x,y\in C^0([-\tau,0],\R^n) : \supnorm{x},\supnorm{y}\leq M\Rightarrow\norm{f(x)-f(y)} \leq L\supnorm{x-y}
-\end{equation}
-where $\norm{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\supnorm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
+    with $f:\deff\rightarrow\R^n$ continuous and satisfying the (local) Lipschitz condition (\ref{definition-lipschitz}).
+    % \begin{equation}
+    %     \forall M>0\,\exists L>0\,\forall x,y\in C^0([-\tau,0],\R^n) : \supnorm{x},\supnorm{y}\leq M\Rightarrow\norm{f(x)-f(y)} \leq L\supnorm{x-y}
+    % \end{equation}
+    % where $\norm{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\supnorm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
 
-Then for each \textbf{bounded initial condition} $x_0\in\statespace$, i.e.\ $\supnorm{x_0}< \infty$, there \textbf{exists} a \textbf{unique local solution} of the DDE on a time interval $[-\tau, T]$ with $T>0$.
+    Then for each \textbf{initial condition} $x_\sigma\in\statespace$ and start time $\sigma$, there \textbf{exists} a \textbf{unique local solution} of the DDE on a time interval $[\sigma-\tau, \sigma+T]$. $T>0$ depends on in the initial condition, in terms of its bound and discontinuity points.
+\end{theorem}
+The proof is smiliar to the proof of ... given in \cite{smith2010introDDE}.
+\begin{proof}
+    The initial condition is bounded by $\supnorm{x_\sigma}\leq M$.
+    Let $K>0$ be the bound for $f$ from Lemma \ref{lemma-bounded-f} on the set $[\sigma,\sigma+t_1] \times \{x\in R^n: \norm{x}\leq 2M\}\times \{y\in R^n: \norm{y}\leq M\}$ and $L>0$ the Lipschitz constant for that set.
 
-\paragraph{Proof}\label{proof-1}
-use Theorem 3.7 from {[}{]} or \ldots{}
+    We construct a series which approximates the solution.
+    Set
+    \begin{equation}
+        x^{(0)}(t)= \begin{cases}
+            x_\sigma(0) & t\in [\sigma,\sigma+T]\\
+            x_\sigma(t-\sigma) & t\in [\sigma-\tau,\sigma]
+        \end{cases}
+    \end{equation}
+    For $m\in\N_0$ define
+    \begin{equation}
+        x^{(m+1)}(t)= \begin{cases}
+            x_\sigma(0) + \int_\sigma^t f(s,x^{(m)}(s),x^{(m)}(s-\tau))\dx{s} & t\in [\sigma,\sigma+T]\\
+            x_\sigma(t-\sigma) & t\in [\sigma-\tau,\sigma]
+        \end{cases}
+    \end{equation}
+    It holds for all m $\forall\,t\in [\sigma-\tau,\sigma]$
+    \begin{equation}
+        \norm{x^{(m+1)}(t)-x^{(m)}(t)}=0
+    \end{equation}
+    We show by induction that
+    \begin{equation}
+        \norm{x^{(m)}(t)-x^{(m-1)}(t)} \leq \frac{K}{L}\frac{L^m (t-\sigma)^m}{m!}
+    \end{equation}
+    $\forall\,t\in [\sigma,\sigma+T]$.
+    The IA holds, since obviously $\norm{x^{(0)}(t)}\leq M$
+    \begin{equation}
+        \norm{x^{(1)}(t)-x^{(0)}(t)} = \norm{\int_\sigma^t f(s,x^{(0)}(s),x^{(0)}(s-\tau))\dx{s}} \leq K(t-\sigma)
+    \end{equation}
+    Since for any $m$, it holds
+    \begin{equation}
+        \norm{x^{(m)}}\leq \norm{x_\sigma(0)} + \int_\sigma^t \norm{f(s,x^{(m)}(s),x^{(m)}(s-\tau))}\dx{s}
+        \leq M + K(t-\sigma) \leq M+KT \leq 2M
+    \end{equation}
+    we can apply Lipschitz in the induction step
+    \begin{align}
+        \norm{x^{(m+1)}(t)-x^{(m)}(t)} &= \norm{\int_\sigma^t f(s,x^{(m)}(s),x^{(m)}(s-\tau)) - f(s,x^{(m-1)}(s),x^{(m-1)}(s-\tau))\dx{s}}\\
+        & \leq K \int_\sigma^t \norm{x^{(m)}(s) - x^{(m-1)}(s)}\dx{s} \leq \frac{L^m K}{m!} \int_\sigma^t (s-\sigma)^m\dx{s}\\
+        & = \frac{L^m K}{(m+1)!}(t-\sigma)^{m+1}
+    \end{align}
+    We use this bound and the triangle inequality in
+    \begin{equation}
+        \norm{x^{(t)}(t)-x^{(k)}(t)}\leq \norm{x^{(m)}(t)-x^{(m-1)}(t)} + \norm{x^{(m-1)}(t)-x^{(m-2)}(t)} +\ldots + \norm{x^{(k+1)}(t)-x^{(k)}(t)}\\
+        \leq \frac{K}{L}\frac{L^m (t-\sigma)^m}{m!} + \frac{K}{L}\frac{L^{m-1} (t-\sigma)^{m-1}}{(m-1)!} +\ldots +\frac{K}{L}\frac{L^{k+1} (t-\sigma)^{k+1}}{(k+1)!}\\
+        \leq \frac{K}{L}\sum_{i=k+1}^\infty \frac{(LT)^i}{i!}
+    \end{equation}
+    for any $k\in\N$ and $m\geq k$ and $t\in [\sigma,\sigma+T]$.
+    This is the tail of the convergent exponential series and hence it converges to zero for $k\rightarrow\infty$.
+    Since $x^{(m)}$ is continuous on $[\sigma,\sigma+T]$, this Cauchy sequence admits a limit $x$ in the Banach space $C^0([\sigma,\sigma+T],\R^n)$. Extend again to $[\sigma-\tau,\sigma]$ with $x_\sigma$, so $x\in C^0_\text{pw}([\sigma-\tau,\sigma],\R^n)$.
 
-just proof existence/uniqueness on each peace of continuity proof continuity at knots with Lemma of integral equ
 
-\paragraph{Corollary}\label{corollary}
+    Due to the uniform convergence of $x^(m)\rightarrow x$, we get uniform convergence of
+    \begin{equation}
+        f(s,x^{(m)}(s),x^{(m)}(s-\tau)) \rightarrow^{m\rightarrow\infty} f(s,x(s),x(s-\tau))
+    \end{equation}
+    and hence the integral and the limit process swap and by
+    \begin{equation}
+        x(t) = \lim_{m\rightarrow\infty} x^{(m+1)} = x_\sigma(0) + \lim_{m\rightarrow\infty}\int_\sigma^t f(s,x^{(m)}(s),x^{(m)}(s-\tau))\dx{s} = \int_\sigma^t f(s,x(s),x(s-\tau))\dx{s}
+    \end{equation}
+    it follows that $x$ solves the integral equation.
+    This proofs the existence of a solution to the DDE. It remains to show uniqueness.
+
+    % TODO: can one solution be on [\sigma, T_2] with T_2<T ?
+    Let $x$ and $\bar{x}$ be two solutions of the DDE on $[\sigma,\sigma+T]$.
+    By Lemma \ref{lemma-integral-equation} they are equivalent to solutions of the integral equations
+    \begin{equation}
+        x(t) = x_\sigma + \int_\sigma^t f(s,x(s,\xtau{s}))\dx{s}
+    \end{equation}
+    and
+    \begin{equation}
+        \bar{x}(t) = x_\sigma + \int_\sigma^t f(s,\bar{x}(s,x_0{\sigma-s}))\dx{s}
+    \end{equation}
+
+    For $t\in [\sigma,T]$, we set
+    \begin{align*}
+        \rho(t) &= \norm{x(t)-\bar{x}(t)} \leq \int_\sigma^t \norm{f()-f()}\dx{s}\\
+        & \leq L \int_\sigma^t \norm{x(s)-\bar{x}(s)}\dx{s} = L \int_\sigma^t \rho(s)\dx(s)\\
+        & L \int_\sigma^t \e{-\alpha s}\rho(s)\e{\alpha s}\dx{s} \leq L \sup_{s\in [\sigma,T]}(\e{-\alpha s}\rho(s))\int_\sigma^t \e{\alpha s}\dx{s}\\
+        & \leq\frac{L}{\alpha}\e{\alpha s} \sup_{s\in [\sigma,T]}(\e{-\alpha s}\rho(s))
+    \end{align*}
+    Choosing $\alpha=2L$ and multiplying with $\e{-\alpha t}>0$ leads to
+    \begin{equation}
+        \rho(t)\e{-2Lt} \leq \frac{1}{2}\sup_{s\in [\sigma,T]}(\e{-\alpha s}\rho(s))
+    \end{equation}
+    for all $t\in [\sigma,T]$
+    \begin{equation}
+        0 \leq sup_{t\in [\sigma,T]}(\rho(t)\e{-2Lt}) \leq \frac{1}{2}\sup_{s\in [\sigma,T]}(\e{-\alpha s}\rho(s))
+    \end{equation}
+    and hence $\rho(t)=0$ for all $t\in [\sigma,T]$, which means $x(t)=\bar{x}(t)$.
+
+    % TODO: still needed?
+    just proof existence/uniqueness on each peace of continuity proof continuity at knots with Lemma of integral equ
+
+\end{proof}
+
+\begin{corollary}
+    \label{corollary}
 when f is polynomial and depends on $x(t)$ and $x(t-\tau)$ then theorem holds
 
 polynomial -\textgreater{} continuously differentiable -\textgreater{} locally Lipschitz
@@ -271,8 +374,11 @@ polynomial -\textgreater{} continuously differentiable -\textgreater{} locally L
         x(t)=x_0(t) & \text{for } t\in[-\tau,0]
     \end{cases}
 \end{equation}
+\end{corollary}
 
-\paragraph{Proof}\label{proof-2}
+\begin{proof}
+
+\end{proof}
 
 \subsection{Example}\label{example}
 The basic ODE IVP
@@ -438,5 +544,8 @@ Use the algebraic differential invariant $F\equiv(-1\leq x^3\wedge x^3\leq1)$, w
 
 This holds since
 
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{Bibliography}
 
 \end{document}
