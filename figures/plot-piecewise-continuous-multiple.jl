@@ -18,8 +18,22 @@ f_08_155(t) = 2*(t-0.55)
 f_155_23(t) = 5*(t-2.5)^2+(t-0.5)^3-2
 f_23_35(t) = -5*(t-3)^2+3#+(t-1)^3
 
+function f(t)
+    if 0.3<=t<0.8
+        f_03_08(t)
+    elseif 0.8<=t<1.55
+        f_08_155(t)
+    elseif 1.55<=t<2.3
+        f_155_23(t)
+    elseif 2.3<=t<=3.5
+        f_23_35(t)
+    else
+        throw(ArgumentError("Out of definition domain!"))
+    end
+end
 
 p = plot(
+    layer(t->f(t)+2, 0.3, 3.5, Theme(default_color=colorant"orange")),
     Guide.annotation(compose(context(),
         circle(0.3, f_03_08(0.3), 1mm),
         fill(colorant"#1f77b4"),

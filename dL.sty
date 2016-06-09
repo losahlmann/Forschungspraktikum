@@ -19,7 +19,7 @@
 
 
 %% \@dL@interpretationformatfix{const,algebra}{state,assign}{formula}
-\newcommand*{\@dL@interpretationformatfix}[3]{#2^{#1}(#3)}
+\newcommand*{\@dL@interpretationformatfix}[3]{{#2}^{#1}(#3)}
 %%\@dL@modalinterpretationformatfix{I}{\alpha}
 \newcommand{\@dL@modalinterpretationformatfix}[2]
 {\iaccessibility\ifthenelse{\equal{#1}{}}{}{(#1)}}
@@ -29,11 +29,14 @@
 %% optional parameters to this package
 %%
 
-
 \newif\if@dL@interpretationabbreviated
 \@dL@interpretationabbreviatedfalse
 \newif\if@dL@interpretationusesformatfix
 \@dL@interpretationusesformatfixfalse
+
+\@ifpackageloaded{lsemantics}
+{
+
 %% Whether to use abbreviated interpretation notation whenever possible
 %% Use long verbose interpretation notation val_I(s,...)
 \DeclareOption{longinterpret}{\global\@dL@interpretationabbreviatedfalse}
@@ -45,7 +48,7 @@
 %\DeclareOption{abbrinterpret}{\global\@dL@interpretationabbreviatedtrue}
 %% Use prefix notation for interpretations I,s[[...]] or I,s(...)
 \DeclareOption{prefixinterpret}{\global\@dL@interpretationusesformatfixtrue
-\renewcommand*{\@dL@interpretationformatfix}[3]{#2^{#1}\lenvelope#3\renvelope}}
+\renewcommand*{\@dL@interpretationformatfix}[3]{{#2}^{#1}\lenvelope#3\renvelope}}
 %% Use postfix notation for interpretations [[...]]^I s or (...)^I s
 \DeclareOption{postfixinterpret}{\global\@dL@interpretationusesformatfixtrue
 \renewcommand*{\@dL@interpretationformatfix}[3]{\lenvelope#3\renvelope^{#1}#2}}
@@ -57,6 +60,7 @@
 
 %NOTE does less than \usepackage[fixformat]{lsemantics}
 \DeclareOption{fixformat}{%
+\global\@modelsinterpretationsettrue%
 \renewcommand*{\@dL@modalinterpretationformatfix}[2]{\@dL@interpretationformatfix{#1}{}{#2}}
 \PassOptionsToPackage{\CurrentOption}{lsemantics}
 \renewcommand*{\@modelsinterpretationformatfix}[3][]{\iget[state]{#2}\in{\@dL@interpretationformatfix{\iget[const]{#2}}{}{#3}}}
@@ -69,10 +73,19 @@
 \let\@dL@oldmodalinterpretationformatfix\@dL@modalinterpretationformatfix
 \renewcommand{\@dL@modalinterpretationformatfix}[2]
 {\@dL@oldmodalinterpretationformatfix{}{#2}}%
+%
 %like \PassOptionsToPackage{\CurrentOption}{lsemantics}
+%NOTE adapt depending on whether [fixformat] or [setfixinterpret] has been set
+\if@modelsinterpretationset
+\renewcommand*{\@modelsinterpretationformatfix}[3][]{\iget[state]{#2}\in{\@interpretationformatfix{}{}{#3}}}
+\renewcommand{\@nonmodelsinterpretationformatfix}[3][]{\iget[state]{#2}\not\in{\@interpretationformatfix{}{}{#3}}}%
+\else
 \renewcommand*{\@modelsinterpretationformatfix}[3][]{\iget[state]{#2}\models_{#1}#3}%
 \renewcommand*{\@nonmodelsinterpretationformatfix}[3][]{\iget[state]{#2}\nonmodels_{#1}#3}%
+\fi
 }
+
+}%%end: \RequirePackage{lsemantics}
 
 % single \dbox and \ddiamond modalities
 \providecommand*{\useoperatordbox}[1]{[{#1}]}
@@ -91,7 +104,7 @@
 % optional uniform substitution predicate or predicational for formulas where both P and p(#1) are sound with optional argument #1
 \newcommand{\ousfml}[1][]{p(#1)}
 % evolution domain constraint with optional argument #1
-\newcommand{\uivr}[1][]{q(#1)}
+\newcommand{\oivr}[1][]{q(#1)}
 % schema variables for programs
 \newcommand{\asprg}{\alpha}
 \newcommand{\bsprg}{\beta}
@@ -142,7 +155,7 @@
 % optional uniform substitution predicate or predicational for formulas where both P and p(#1) are sound with optional argument #1
 \newcommand{\ousfml}[1][]{\ausfml}%{\ausfml}%{p(#1)}
 % evolution domain constraint with optional argument #1
-\newcommand{\uivr}[1][]{Q}
+\newcommand{\oivr}[1][]{Q}
 % schema variables for programs
 \newcommand{\asprg}{\alpha}%{a}%{\alpha} %a is for acceleration
 \newcommand{\bsprg}{\beta}%{b}%{\beta}
@@ -183,7 +196,7 @@
 \newcommand{\var}{\varphi}
 }
 
-\DeclareOption*{\PackageError{dL}{Unknown option `\CurrentOption'}}
+\DeclareOption*{\PackageError{dL}{Unknown option `\CurrentOption' or usepackage{lsemantics} needs to be loaded first.}}
 \ProcessOptions\relax
 
 \if@dL@interpretationusesformatfix
@@ -428,6 +441,20 @@
 %%
 \@ifpackageloaded{lsemantics}
 {
+
+%% hybrid games
+% \inflop[n]{X} inflationary/extensive operator of order n for Knaster-Tarski fixpoint theorem.
+%\newcommand{\inflop}[2][]{\varsigma_\alpha^{#1}(#2)}
+
+% \inflopstrat[n][alpha]{X} inflationary/extensive operator of order n for game alpha with winning condition X
+\newcommand{\inflopstrat}[1][]{\def\inflopstratargI{{#1}}\inflopstratRelay}
+\newcommand{\inflopstratRelay}[2][]{\varsigma_{#1}^{\inflopstratargI}(#2)}
+
+% \strategyfor[alpha]{X} Angel's winning region for hybrid game alpha with winning condition X
+\newcommand*{\strategyfor}[2][]{\varsigma_{#1}(#2)}
+% \dstrategyfor[alpha]{X} Demon's winning region for hybrid game alpha with winning condition X
+\newcommand*{\dstrategyfor}[2][]{\delta_{#1}(#2)}
+
 %%%%%%
 %% Data structure inheritance.
 %% \vdL extends \usepackage{logic}\interpretation management

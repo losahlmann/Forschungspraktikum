@@ -74,7 +74,7 @@
 %% suppress \iget[const] and \iget[algebra] parts to be silent in notations, with only explicit access if needed.
 \DeclareOption{silentconst}{\let\@oldinterpretationformatfix\@interpretationformatfix%
 \renewcommand*{\@interpretationformatfix}[3]{\@oldinterpretationformatfix{}{#2}{#3}}%
-%TODO adapt depending on whether [fixformat] or [setfixinterpret] has been set
+%NOTE adapt depending on whether [fixformat] or [setfixinterpret] has been set
 \if@modelsinterpretationset
 \renewcommand*{\@modalinterpretationformatfix}[2]{\@interpretationformatfix{#1}{}{#2}}
 \renewcommand*{\@modelsinterpretationformatfix}[3][]{\iget[state]{#2}\in{\@interpretationformatfix{}{}{#3}}}

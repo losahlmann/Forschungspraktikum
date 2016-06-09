@@ -25,6 +25,9 @@
 % For including figures, rotating or scaling text (dont use file extension)
 \usepackage{graphicx}
 
+\usepackage[sidenotecalculus]{logic}
+\usepackage{dL}
+
 % own symbol definitions
 \input{mathcommands}
 
@@ -68,14 +71,24 @@ The following definition is motivated by capturing the character evolution arisi
 
 % TODO: sup-norm for pw
 
+\begin{lemma}[]
+    \label{lemma-piecewise-continuous-integrable}
+
+    A piecewise continuous function, as defined in Definition \ref{definition-piecewise-continuous} is (Riemann) integrable.
+\end{lemma}
+
+\begin{proof}
+    See standard analysis literature, such as \cite{rudin1976principles} or \cite{gathmanngrundlagen}.
+\end{proof}
+
 % \begin{figure*}[h]\centering
 %     \begin{subfigure}[t]{0.5\textwidth}\centering
-%         \includegraphics[width=\textwidth]{allowed.png}
+%         \includegraphics[width=\textwidth]{figures/allowed.png}
 %         \caption{Admissible piecewise continuous function.}
 %         \label{fig:allowed}
 %     \end{subfigure}
 %     \begin{subfigure}[t]{0.5\textwidth}\centering
-%         \includegraphics[width=\textwidth]{not-allowed.png}
+%         \includegraphics[width=\textwidth]{figures/not-allowed.png}
 % 	    \caption{Not allowed!}
 % 	    \label{fig:not-allowed}
 %     \end{subfigure}
@@ -142,7 +155,7 @@ The \textbf{state} at time $t$ is a function which provides a time limited histo
 This notion of solution is a \emph{dynamical systems} point of view which later turns out to be useful.
 
 % \begin{figure}[h]\centering
-%     \includegraphics[width=\textwidth]{multiple.png}
+%     \includegraphics[width=\textwidth]{figures/multiple.png}
 % 	\caption{Illustration of proof to Lemma \ref{lemma-continuity}}
 % 	\label{fig:not-allowed}
 % \end{figure}
@@ -264,7 +277,7 @@ $f$ Lipschitz with piecewise continuous initial function have existence and uniq
 The proof is smiliar to the proof of ... given in \cite{smith2010introDDE}.
 \begin{proof}
     The initial condition is bounded by $\supnorm{x_\sigma}\leq M$.
-    Let $K>0$ be the bound for $f$ from Lemma \ref{lemma-bounded-f} on the set $[\sigma,\sigma+t_1] \times \{x\in R^n: \norm{x}\leq 2M\}\times \{y\in R^n: \norm{y}\leq M\}$ and $L>0$ the Lipschitz constant for that set.
+    Let $K>0$ be the bound for $f$ from Lemma \ref{lemma-bounded-f} on the set $[\sigma,\sigma+t_1] \times \{x\in R^n: \norm{x}\leq 2M\}\times \{y\in R^n: \norm{y}\leq M\}$ and $L>0$ the Lipschitz constant for that set. Choose $T=\min\{t_1-\tau ?, \frac{M}{K}\}$
 
     We construct a series which approximates the solution.
     Set
@@ -361,10 +374,16 @@ The proof is smiliar to the proof of ... given in \cite{smith2010introDDE}.
 \end{proof}
 
 \begin{corollary}
-    \label{corollary}
-when f is polynomial and depends on $x(t)$ and $x(t-\tau)$ then theorem holds
+    \label{cor:continuability-of-solution}
+    If in Theorem \ref{theorem-solution-existence} $T=t_1-\tau$, can reapplay theorem with starting point $\sigma=\sigma_{old}+t_1-\tau$. Get existence of unique solution on $[\sigma-\tau,\sigma+S]$ with $S>T$.
+\end{corollary}
 
-polynomial -\textgreater{} continuously differentiable -\textgreater{} locally Lipschitz
+\begin{corollary}
+    \label{corollary}
+    If f is polynomial in $t$, $x(t)$ and $x(t-\tau)$ then theorem holds
+
+    polynomial -> continuously differentiable -> locally Lipschitz
+% IDEA: can show? init cond bounded by M, and loc sol bounded by M, get glob sol since f glob Lip on set of bounded inputs?
 
 %TODO: can write DDE (eq??) from definition as
 
@@ -379,6 +398,8 @@ polynomial -\textgreater{} continuously differentiable -\textgreater{} locally L
 \begin{proof}
 
 \end{proof}
+
+% TODO: non-autonomous -> autonomous
 
 \subsection{Example}\label{example}
 The basic ODE IVP
@@ -398,7 +419,7 @@ has the solution $x(t)=x_0 e^{-t}$. However the similiar DDE
 has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can compute first solutions by method of steps. \ldots{}
 
 \begin{figure}[h]\centering
-    \includegraphics[width=\textwidth]{piecewise-initial-function.png}
+    \includegraphics[width=\textwidth]{figures/piecewise-initial-function.png}
 	%\caption{}
 	\label{fig:not-allowed}
 \end{figure}
@@ -407,94 +428,127 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
 
 \section{Hybrid Programs with DDEs}\label{hybrid-programs-with-ddes}
 
-Extent classic hybrid programs (HP) with syntax, semantics and axiomatization and proof rules for DDEs. Is a super set, \dL is a fragment
+    We extent classic hybrid programs (\HP) and \dL formulae with syntax, semantics, axiomatization and proof rules for DDEs.
+    %Is a super set, \dL is a fragment
 
-\subsection{Example}\label{example-1}
+    \subsection{Example}
+        \label{example-hp-cars}
+        To motivate the need of being able to treat Delayed Differential Equations in hybrid programs, we present some examples.
 
-leading and following car
+        leading and following car
 
-\subsection{Syntax}\label{syntax}
+        network induced delay in control loops
 
-\paragraph{Terms}\label{terms}
+    \subsection{Syntax}
+        \label{sec:syntax}
 
-We extent the grammar defining \textbf{terms} with a symbol for a \textbf{delayed variable}
+        \paragraph{Terms}
+            \label{sec:terms}
 
-\begin{equation} \theta,\eta := x|\xtau|c|\theta+\eta|\theta\cdot\eta \end{equation}
+            We extent the grammar defining \textbf{terms} with a symbol for a \textbf{delayed variable}
+            % FIXME: replace ::=
+            % FIXME: replace |
+            % FIXME: replace x'
+            \begin{equation}
+                \theta,\eta ::= x|\xtau|x'|c|\theta+\eta|\theta\cdot\eta
+            \end{equation}
 
-\subsection{Semantics}\label{semantics}
+    The grammars for hybrid programs and \dL formulas remain unchanged.
 
-HP $\alpha$ transition semantics define inductively
 
-remain unchanged
+    \subsection{Semantics}\label{semantics}
 
-The temporal character of delay differential equations (they depend on their own temporal evolution with limited horizon) suggests the introduction of trace semantics.
+    HP $\alpha$ transition semantics define inductively
 
-However, we go the way of introducing transition semantics with an augmented state space.
+    remain unchanged
 
-\paragraph{Terms}\label{terms-1}
+    The temporal character of delay differential equations (they depend on their own temporal evolution with limited horizon) suggests the introduction of trace semantics.
 
-Following the remark to the solution of a DDE, we change the \textbf{state space} to $\statespace$, the set of piecewise continuous functions, as defined above.
+    However, we go the way of introducing transition semantics with an augmented state space.
 
-%TODO: need $\xbartau$
+        \paragraph{Terms}
+            \label{sec:terms-semantic}
 
-Denote by $\states$ the set of states. A state $\omega\in\states$ is a mapping $\omega : \mathcal{V}\cup\mathcal{V'}\rightarrow\statespace$ that assigns a \emph{history} (function) $\xbartau$ to each variable symbol and
-%FIXME: diff var symbol.
+            Following the remark to the solution of a DDE, we augment the \textbf{state space} to $\statespace$, the set of piecewise continuous functions on $[-\tau,0]$, as defined above.
 
-The semantics of the variable symbols in terms are given by
-\begin{equation}
-    [[\xtau]]_\nu=\nu(x)(-\tau)\defeq:\xbartau(-\tau)
-\end{equation}
-and
-\begin{equation}
-    [[x]]_\nu=\nu(x)(0)\defeq:\xbartau(0)
-\end{equation}
+            %TODO: need $\xbartau$
 
-When we write $\xtau$ we mean $x(t-\tau)$ and with $x$ we mean $x(t)$.
+            We senote by $\states$ the set of states. A state $\omega\in\states$ is a mapping
+            \begin{equation}
+                \omega : \mathcal{V}\cup\mathcal{V'}\rightarrow\statespace
+            \end{equation}
+            that assigns a \emph{history} (function) $\xbartau$ to each variable symbol and
 
-\paragraph{Hybrid Programs}\label{hybrid-programs}
+            %FIXME: need diff var symbol? can determine derivative from x? need pw diffable?
 
-The transition semantic of a hybrid program is inductively given by a binary reachability relation $\rho(\alpha)\subseteq\states\times\states$. Since the state space has been replaced, we need to redefine the semantics:
+            The semantic of the new symbol $\xtau$ depends on the context in which the term occures:
+            \begin{itemize}
+                \item in a hybrid program: $\imodel[\nu]{}{\xtau} = \imodel[\nu]{}{x(t-\tau)} = \nu(x)(-\tau)$
+                \item in a formula: $\imodel[\nu]{}{\phi(\xtau)} = \lforall{t\in[-\tau,0]}{\imodel[\nu]{}{\phi(x(t-\tau))}}=$
+            \end{itemize}
 
-The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
-\begin{equation}
-\rho(x:=\theta) = \left\{(\nu,\omega): \omega = \nu \text{ except } \omega(x)=\left(t\mapsto\begin{cases}[[\theta]]_\nu & t=0\\ \nu(t) &t\in[-\tau,0)\end{cases}\right)\qquad\right\}_.
-\end{equation}
-This assignment is the actual reason why we need to consider piecewise continuous evolutions.
+            The semantics of the variable symbols in terms are given by
+            \begin{equation}
+                \imodel[\nu]{}{x}=\nu(x)(0)
+            \end{equation}
 
-%TODO: super dense time: multiple assignments
+            % FIXME: need that?
+            \begin{equation}
+                \imodel[\nu]{}{x'}=\nu(x')(0)
+            \end{equation}
 
-Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $x'=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
+            When we write $x$ we mean $x(t)$.
 
-\begin{equation}
-    \rho(x'=\theta\,\&\,\chi) = \left\{ (\varphi(0),\varphi(s))\,:\,\varphi(t)\models x'=\theta\,\wedge\,\varphi(t)\models\chi\,\forall\,0\leq t\leq s\text{ for a solution } \varphi:[0,s]\rightarrow\states \right\}
-\end{equation} As a solution, $\varphi$ needs to fulfill \begin{equation}
-    \varphi(t)(x')(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} [[\theta]]_{\varphi(t)(x)}
-\end{equation}
+            \paragraph{Hybrid Programs}\label{hybrid-programs}
+
+            The transition semantic of a hybrid program is inductively given by a binary reachability relation $\rho(\alpha)\subseteq\states\times\states$. Since the state space has been replaced, we need to redefine the semantics:
+
+            The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
+            \begin{equation}
+            \rho(x:=\theta) = \left\{(\nu,\omega): \omega = \nu \text{ except } \omega(x)=\left(t\mapsto\begin{cases}[[\theta]]_\nu & t=0\\ \nu(t) &t\in[-\tau,0)\end{cases}\right)\qquad\right\}_.
+            \end{equation}
+            This assignment is the actual reason why we need to consider piecewise continuous evolutions.
+
+            %TODO: super dense time: multiple assignments
+
+            Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $x'=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
+
+            \begin{equation}
+                \rho(x'=\theta\,\&\,\chi) = \left\{ (\varphi(0),\varphi(s))\,:\,\varphi(t)\models x'=\theta\,\wedge\,\varphi(t)\models\chi\,\forall\,0\leq t\leq s\text{ for a solution } \varphi:[0,s]\rightarrow\states \right\}
+            \end{equation} As a solution, $\varphi$ needs to fulfill \begin{equation}
+                \varphi(t)(x')(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} [[\theta]]_{\varphi(t)(x)}
+            \end{equation}
 
 \section{Delay Differential Dynamic Logic}\label{delay-differential-dynamic-logic}
 
 \dL terms
 
-\subsection{Dynamic Axioms}\label{dynamic-axioms}
+\subsection{Dynamic Axioms}
+    \label{sec:dynamic-axioms}
 
+% TODO: History Axiom
 \paragraph{History Axiom}\label{history-axiom}
 The occurence of $\xbartau$ in expressions can be replaced by turning the (implicitely existing) time variable explicit, i.e.\
 \begin{equation}
     F(\xbartau) \leftrightarrow \forall\,-\tau\leq t\leq 0\, F(x(t))
 \end{equation}
 
-\paragraph{Axiom of Steps}
-\label{axiom-of-steps}
-The \emph{Method of Steps} presented above translates into an axiom. It allows to partially unwind an autonomous DDE given a analytic representation of its solution.
+    \paragraph{Axiom of Steps}
+        \label{sec:axiom-of-steps}
+        The \emph{Method of Steps} presented above translates into an axiom.
+        %It allows to partially unwind an autonomous DDE given a analytic representation of its solution.
 
-Let $\theta_0$ and $\theta$ be %TODO: \ldots{}
-\begin{equation}
-    \xbartau = \theta_0 \rightarrow [x'=\theta(\xbartaut{t})]\phi
-    \leftrightarrow
-    \left(\forall 0\leq t\leq\tau: [x:= y(t)]\phi \right)
-    \wedge \xbartaut{\tau} = y \rightarrow [x'=\theta (\xbartaut{t})]\phi
-\end{equation} where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$,
-i.e.\ $y$ is a local solution of the DDE. The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
+        % Let $\theta_0$ and $\theta$
+        \begin{equation}
+            % \xbartau = \theta_0 \rightarrow [x'=\theta(\xbartaut{t})]\phi
+            % \leftrightarrow
+            % \left(\forall 0\leq t\leq\tau: [x:= y(t)]\phi \right)
+            % \wedge \xbartaut{\tau} = y \rightarrow [x'=\theta (\xbartaut{t})]\phi
+            \dbox[]{\hevolvein{x'=\rho(x,\xtau)}{\chi}}{\phi}
+            \lbisubjunct
+            \dbox[]{(\hupdate{\humod{t}{0}};\hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land 0\leq t\leq\tau)})^*}{\phi}
+        \end{equation}
+        % where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, i.e.\ $y$ is a local solution of the DDE. The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
 
 (Since the DDE is autonomous, we can emit the time index.)
 
@@ -503,12 +557,75 @@ apply methods of steps
 
 \subsection{Proof Rules}\label{proof-rules}
 
-\paragraph{Rule of Steps}\label{rule-of-steps}
+% TODO: Rule of Steps
+    \paragraph{Rule of Steps}\label{rule-of-steps}
 
 condition valid for initial condition and given condition for a $s\leq t$ then condition holds after dde-evolution of max time tau and safety follows from condition then condition holds after dde with mentioned initial condition
 \begin{equation}
 \frac{\Gamma(\xbartaut{0})\rightarrow F(\xbartaut{0})\quad F(\xbartaut{s})\rightarrow [x'=\theta(\xbartaut{t})\,\&\,t\leq\tau]F(\xbartaut{t}) \quad F(\xbartaut{t})\rightarrow\phi}{\Gamma(\xbartaut{0}) \rightarrow [x'=\theta(\xbartaut{t})]\phi}
 \end{equation}
+
+    \begin{sequentdeduction}
+        \linfer[]{
+            \lsequent{\Gamma}{F,\Delta}
+            &\lsequent{t=0,F(\theta(t-\tau))}{\dbox[]{\hevolvein{t'=1\syssep x'=\rho(x,\theta(t-\tau))}{(\chi\land 0\leq t\leq\tau)}}{F}}
+            &\lsequent{F}{\phi}
+        }{
+            \lsequent{\Gamma}{\dbox[]{\hevolvein{x'=\rho(x,\xtau)}{\chi}}{\phi,\Delta}}
+        }
+    \end{sequentdeduction}
+
+    \paragraph{Delay Differential Induction}
+        \label{sec:delay-differential-induction}
+
+        \begin{sequentdeduction}
+            \linfer[]{
+                \lsequent{\Gamma}{F,\Delta}
+                &\lsequent{\chi,0\leq t\leq\tau,F(\theta(t-\tau))}{\dbox[]{\hevolve{x':=\rho(x,\theta(t-\tau))}}{(F)'}}
+                &\lsequent{F}{\phi}
+            }{
+                \lsequent{\Gamma}{\dbox[]{\hevolvein{x'=\rho(x,\xtau)}{\chi}}{\phi,\Delta}}
+            }
+        \end{sequentdeduction}
+
+        \begin{proof}
+            \begin{sequentdeduction}
+                \linfer[]{
+                    \linfer[]{
+                        % FIXME: formel zu hoch
+                            \lsequent{\Gamma}{F,\Delta}
+                        &\linfer[]{
+                            \linfer[]{
+                                \linfer[]{
+                                    \lsequent{}{}
+                                }{
+                                    \lsequent{F,t=0}{\dbox[]{\hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land t\leq\tau\land F(x(t-\tau)))}}{F}}
+                                }&\linfer[]{
+                                    % dW
+                                    \linfer[]{
+                                        *
+                                    }{
+                                        \lsequent{\lforall{s\in[-\tau,0]}{F(x(s))}}{\lforall{(x,t)}{(\chi\land 0\leq t\leq\tau\limply)}}
+                                    }
+                                }{
+                                    \lsequent{F,t=0}{\dbox[]{\hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land t\leq\tau)}}{F(x(t-\tau))}}
+                                }
+                            }{
+                                \lsequent{F,t=0}{\dbox[]{\hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land t\leq\tau)}}{F}}
+                            }
+                        }{
+                            \lsequent{F}{\dbox[]{t:=0; \hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land t\leq\tau)}}{F}}
+                        }&\linfer[]{
+                            \lsequent{}{}
+                        }{
+                            \lsequent{F}{\phi}
+                        }
+                    }{
+                    \lsequent{\Gamma}{\dbox[]{(\hupdate{\humod{t}{0}}; \hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land t\leq\tau))}}{\phi,\Delta}}}
+                }
+                {\lsequent{\Gamma}{\dbox[]{\hevolvein{x'=\rho(x,\xtau)}{\chi}}{\phi,\Delta}}}
+            \end{sequentdeduction}
+        \end{proof}
 
 \paragraph{Delay Differential Invariant}
 \label{delay-differential-invariant}
@@ -520,6 +637,7 @@ Usually, one would try not to mention $\xtau$ in the invariant, since derivation
     \frac{H\wedge\forall\,t-\tau\leq s<t: F(x(s))\rightarrow (F')^{\theta}_{x'}}{F(\xbartau)\rightarrow [x'=\theta(\xbartaut{t})\,\&\,(H\wedge t\leq\tau)]F(\xbartaut{t})}
 \end{equation}
 
+% TODO: Example
 \subsection{Example}
 \label{example-2}
 We want to proof the safety condition $\phi\equiv(-1\leq x\wedge x\leq 1)$ for the continuous program with delay differential equation
@@ -543,6 +661,15 @@ Use the algebraic differential invariant $F\equiv(-1\leq x^3\wedge x^3\leq1)$, w
 \end{equation}
 
 This holds since
+
+
+
+
+
+
+
+
+
 
 \nocite{*}
 \bibliographystyle{plain}
