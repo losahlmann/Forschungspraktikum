@@ -1,0 +1,114 @@
+\section{Hybrid Programs with DDEs}\label{hybrid-programs-with-ddes}
+
+    We extent classic hybrid programs (\HP) and \dL formulae with syntax, semantics, axiomatization and proof rules for DDEs.
+    %Is a super set, \dL is a fragment
+
+    \subsection{Example}
+        \label{example-hp-cars}
+        To motivate the need of being able to treat Delayed Differential Equations in hybrid programs, we present some examples.
+
+        \subsubsection{Leading and Following Car}
+
+        \subsubsection{Network Induced Delay in Control Loops}
+
+    \subsection{Syntax}
+        \label{sec:syntax}
+
+        \paragraph{Terms}
+            \label{sec:terms}
+
+            We extent the grammar defining \textbf{terms} with a symbol for a \textbf{delayed variable}
+            % FIXME: replace ::=
+            % FIXME: replace |
+            % FIXME: replace x'
+            \begin{equation}
+                \theta,\eta ::= x|\xtau|x'|c|\theta+\eta|\theta\cdot\eta
+            \end{equation}
+
+    The grammars for hybrid programs and \dL formulas remain unchanged.
+
+
+    \subsection{Semantics}
+        \label{sec:semantics}
+        \begin{equation}
+            \imodels[\I]{\phi}{x}
+        \end{equation}
+
+        Following the remark to the solution of a DDE, we augment the \textbf{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $[-\tau,0]$, as defined in \ref{definition-piecewise-continuous}.
+
+        %TODO: need $\xbartau$
+
+        We senote by $\states$ the set of states. A state $\omega\in\states$ is a mapping
+        \begin{equation}
+            \omega : \mathcal{V}\cup\mathcal{V'}\rightarrow\statespace
+        \end{equation}
+        that assigns a \emph{history} (function) $\xbartau$ to each variable symbol and
+
+        %FIXME: need diff var symbol? can determine derivative from x? need pw diffable?
+
+        % TODO: Abgrenzung zu Trace Semantics
+        % The temporal character of delay differential equations (they depend on their own temporal evolution with limited horizon) suggests the introduction of trace semantics.
+        %
+        % However, we go the way of introducing transition semantics with an augmented state space.
+
+        \subsubsection{Terms}
+            \label{sec:terms-semantic}
+
+            The semantic of the new symbol $\xtau$ depends on the context in which the term occures:
+            \begin{itemize}
+                \item in a hybrid program: $\imodel{\I}{\xtau} = \imodel[\nu]{}{x(t-\tau)} = \nu(x)(-\tau)$
+                \item in a formula: \begin{equation}
+                    % FIXME: rechte seite noch nicht korrekt
+                    \imodel[]{}{\phi(\xtau)} =
+                    \{\nu\in\states : \lforall{t\in[-\tau,0]}{\phi(\nu(x)(t))} \}
+                \end{equation}
+            \end{itemize}
+
+            The semantics of the variable symbols in terms are given by
+            \begin{equation}
+                \imodel[\nu]{}{x}=\nu(x)(0)
+            \end{equation}
+            and
+            \begin{equation}
+                \imodel[\nu]{}{x'}=\nu(x')(0)
+            \end{equation}
+            In the precondition, no values are associated to the differential symbols. In general, the initial function is only piecewise continuous.
+            Since for later time instances, the values of the differential symbols derive from the DDE, they become (locally) smooth function.
+
+
+            When we write $x$ we mean $x(t)$.
+
+        \subsubsection{\dL semantics}
+            With the semantics of terms if follows for the meaning of $\dbox{\alpha}{\phi}$, that $\phi$ must only hold up to time $\tau$ before leaving the \HP $\alpha$. It is possible, that $\phi$ was not verified before, while \textit{executing} the \HP.
+
+            However when we apply the Rule of steps, we get the validity of $\phi$ for the entire trace.
+
+            % TODO: is it better to only have xtau and not choice? What if both mentioned?
+            in formulae (such as safety condition or evolution constraint), we have two possibilities: only value at current time instant ($x$) or for entire last $\tau$ time $\xtau$
+
+        \subsubsection{Hybrid Programs}
+            \label{sec:hp-semantics}
+
+            The transition semantic of a hybrid program $\alpha$ is inductively given by a binary reachability relation $\rho(\alpha)\subseteq\states\times\states$. Since the state space has been replaced, we need to redefine the semantics:
+
+            The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
+            \begin{equation}
+            \rho(x:=\theta) = \left\{(\nu,\omega): \omega = \nu \text{ except } \omega(x)=\left(t\mapsto\begin{cases}\imodel{\I}{\theta} & t=0\\ \nu(t) &t\in[-\tau,0)\end{cases}\right)\qquad\right\}_.
+            \end{equation}
+            This assignment is the actual reason why we need to consider piecewise continuous evolutions.
+
+            %TODO: super dense time: multiple assignments
+
+            Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $x'=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
+            \begin{equation}
+                \rho(x'=\theta\,\&\,\chi) = \left\{
+                    (\varphi(0),\varphi(s))\,:\,\varphi(t)\models x'=\theta\,\wedge\,\varphi(t)(0)\models\chi\,\forall\,0\leq t\leq s\text{ for a solution } \varphi:[0,s]\rightarrow\states \right\}
+            \end{equation}
+            As a solution, $\varphi$ needs to fulfill
+            \begin{equation}
+                \varphi(t)(x')(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel[]{\varphi(t)}{\theta}
+            \end{equation}
+            Remember that a $\xtau$ mentioned in $\theta$ here means $\varphi(t)(x)(-\tau)$.
+            And so needs $\chi$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
+
+            % TODO: what about [a;b]p. is [a][b]p correct?
