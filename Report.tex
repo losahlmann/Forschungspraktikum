@@ -513,6 +513,9 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
 
             However when we apply the Rule of steps, we get the validity of $\phi$ for the entire trace.
 
+            % TODO: is it better to only have xtau and not choice? What if both mentioned?
+            in formulae (such as safety condition or evolution constraint), we have two possibilities: only value at current time instant ($x$) or for entire last $\tau$ time $\xtau$
+
         \subsubsection{Hybrid Programs}
             \label{sec:hp-semantics}
 
@@ -543,47 +546,53 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
 \section{Delay Differential Dynamic Logic}
     \label{sec:delay-differential-dynamic-logic}
 
-    \subsection{Proof Rules}
-        \label{sec:seq-calc-proof-rules}
+    \subsection{Axioms}
+        \label{sec:axioms}
 
-        We keep the standard sequent calculus proof rules
+
 
         \begin{calculus}
-          \cinferenceRule[andR|$\land$R]{and right proof rule}
-           {
-           \linferenceRule[sequent]
-           {\lsequent{\Gamma} {p,\Delta}
-           &\lsequent{\Gamma} {q,\Delta}
-           }
-           {\lsequent{\Gamma} {p\land q,\Delta}}
-           }{}
-          \cinferenceRule[andL|$\land$L]{and left proof rule}
-           {
-           \linferenceRule[sequent]
-           {\lsequent{\Gamma, p, q} {\Delta}}
-           {\lsequent{\Gamma, p\land q} {\Delta}}
-           \quad
-           }{\text{no side condition}}
-          \cinferenceRule[implyR|$\limply$R]{imply right proof rule}
-           {
-           \linferenceRule[sequent]
-           {\lsequent{\Gamma,p} {q,\Delta}}
-           {\lsequent{\Gamma} {p\limply q,\Delta}}
-           }{}
+            % TODO: Diamond-Axiom
+            % TODO: assignment-Axiom
+            % TODO: test-Axiom
+            % TODO: choice-Axiom
+            % TODO: star-Axiom
+            % TODO: forall-Axiom
+            % TODO: K-Axiom
+            % TODO: I-Axiom
+            % TODO: V-Axiom
+            % TODO: G-Axiom
+            % TODO: MP-Axiom
+            % TODO: CT-Axiom
+            % TODO: CQ-Axiom
+            % TODO: CE-Axiom
+            % TODO: US-Axiom
+            % TODO: replace ;
+            \cinferenceRule[composeb|$;$]{composition}{
+                \linferenceRule[equiv]{
+                    \dbox{\alpha}{\dbox{\beta}{P}}
+                }{
+                    \dbox{\alpha;\beta}{P}
+                }
+            }{}
         \end{calculus}
 
-
-    \subsection{Dynamic Axioms}
-        \label{sec:dynamic-axioms}
 
 % TODO: History Axiom
         \subsubsection{History Axiom}
             \label{history-axiom}
             Just replace symbol by its semantical meaning
             The occurence of $\xbartau$ in expressions can be replaced by turning the (implicitely existing) time variable explicit, i.e.\
-            \begin{equation}
-                F(\xbartau) \leftrightarrow \forall\,-\tau\leq t\leq 0\, F(x(t))
-            \end{equation}
+            uniform substitution $\sigma$
+            allows substitution of $\xtau$ by, depending on context, $x(t-\tau)$ or $\forall{s\in[0,\tau]}{x(t-\tau)}$
+            \begin{calculus}
+                \cinferenceRule[hist|hist]{history axiom}{
+                    \linferenceRule[equiv]{}{
+                        p(\xtau)
+                    }
+                }{}
+                %F(\xbartau) \leftrightarrow \forall\,-\tau\leq t\leq 0\, F(x(t))
+            \end{calculus}
 
         \subsubsection{Axiom of Steps}
             \label{sec:axiom-of-steps}
@@ -591,15 +600,21 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
             %It allows to partially unwind an autonomous DDE given a analytic representation of its solution.
 
             % Let $\theta_0$ and $\theta$
-            \begin{equation}
+            \begin{calculus}
+                % TODO: actually doesn't need to be in a box?
+                \cinferenceRule[stepsb|steps]{method of steps axiom}{
+                    \linferenceRule[equiv]{
+                        \dbox[]{\prepeat{(\hupdate{\humod{t}{0}};\hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land 0\leq t\leq\tau)})}}{\phi}
+                    }{
+                        \dbox[]{\hevolvein{x'=\rho(x,\xtau)}{\chi}}{\phi}
+                    }
+                }{}
                 % \xbartau = \theta_0 \rightarrow [x'=\theta(\xbartaut{t})]\phi
                 % \leftrightarrow
                 % \left(\forall 0\leq t\leq\tau: [x:= y(t)]\phi \right)
                 % \wedge \xbartaut{\tau} = y \rightarrow [x'=\theta (\xbartaut{t})]\phi
-                \dbox[]{\hevolvein{x'=\rho(x,\xtau)}{\chi}}{\phi}
-                \lbisubjunct
-                \dbox[]{\prepeat{(\hupdate{\humod{t}{0}};\hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land 0\leq t\leq\tau)})}}{\phi}
-            \end{equation}
+
+            \end{calculus}
             % where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, i.e.\ $y$ is a local solution of the DDE. The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
 
             (Since the DDE is autonomous, we can emit the time index.)
@@ -610,10 +625,38 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
 
     \subsection{Proof Rules}
         \label{sec:proof-rules}
-
+We keep the standard sequent calculus proof rules
         \begin{calculus}
-            % TODO: [;]
-            %\cinferenceRule[[;]|]{}{\linferenceRule[]{}{}}{}
+            \cinferenceRule[close|id]{close by identity}{
+                \linferenceRule[sequent]{
+                %\lsequent{}{}
+                }{
+                    \lsequent{P,\Gamma}{P,\Delta}
+                }
+            }{}
+            \cinferenceRule[allR|$\forall$R]{for all right proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma}{p(y),\Delta}
+                }{
+                    \lsequent{\Gamma}{\lforall{x}{p(x)},\Delta}
+                }
+            }{$(y\notin\Gamma,Delta)$}
+            \cinferenceRule[andR|$\land$R]{and right proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma} {p,\Delta}
+                    &\lsequent{\Gamma} {q,\Delta}
+                }{\lsequent{\Gamma} {p\land q,\Delta}}
+            }{}
+            \cinferenceRule[andL|$\land$L]{and left proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma, p, q} {\Delta}
+                }{\lsequent{\Gamma, p\land q} {\Delta}}
+            }{}
+            \cinferenceRule[implyR|$\limply$R]{imply right proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma,p} {q,\Delta}}{
+                    \lsequent{\Gamma} {p\limply q,\Delta}}
+            }{}
             % TODO: replace := by command
             \cinferenceRule[assignb|$\mathrel{{:}{=}}$]{discrete assignment}{
                 \linferenceRule[sequent]{
@@ -652,9 +695,9 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
             \label{sec:rule-of-steps}
 
             condition valid for initial condition and given condition for a $s\leq t$ then condition holds after dde-evolution of max time tau and safety follows from condition then condition holds after dde with mentioned initial condition
-            \begin{equation}
-            \frac{\Gamma(\xbartaut{0})\rightarrow F(\xbartaut{0})\quad F(\xbartaut{s})\rightarrow [x'=\theta(\xbartaut{t})\,\&\,t\leq\tau]F(\xbartaut{t}) \quad F(\xbartaut{t})\rightarrow\phi}{\Gamma(\xbartaut{0}) \rightarrow [x'=\theta(\xbartaut{t})]\phi}
-            \end{equation}
+            % \begin{equation}
+            % \frac{\Gamma(\xbartaut{0})\rightarrow F(\xbartaut{0})\quad F(\xbartaut{s})\rightarrow [x'=\theta(\xbartaut{t})\,\&\,t\leq\tau]F(\xbartaut{t}) \quad F(\xbartaut{t})\rightarrow\phi}{\Gamma(\xbartaut{0}) \rightarrow [x'=\theta(\xbartaut{t})]\phi}
+            % \end{equation}
 
             \begin{calculus}
                 % FIXME: \landS -> steps
@@ -672,29 +715,31 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
         \subsubsection{Delay Differential Induction}
             \label{sec:delay-differential-induction}
 
-            \begin{sequentdeduction}
-                \linfer[]{
-                    \lsequent{\Gamma}{F,\Delta}
-                    &\lsequent{\chi,0\leq t\leq\tau,F(\theta(t-\tau))}{\dbox[]{\hevolve{x':=\rho(x,\theta(t-\tau))}}{(F)'}}
-                    &\lsequent{F}{\phi}
-                }{
-                    \lsequent{\Gamma}{\dbox[]{\hevolvein{x'=\rho(x,\xtau)}{\chi}}{\phi,\Delta}}
-                }
-            \end{sequentdeduction}
+            \begin{calculus}
+                \cinferenceRule[DDI|DDI]{delay differential induction proof rule}{
+                    \linferenceRule[sequent]{
+                        \lsequent{\Gamma}{F,\Delta}
+                        &\lsequent{\chi,0\leq t\leq\tau,F(\theta(t-\tau))}{\dbox[]{\hevolve{x':=\rho(x,\theta(t-\tau))}}{(F)'}}
+                        &\lsequent{F}{\phi}
+                    }{
+                        \lsequent{\Gamma}{\dbox[]{\hevolvein{x'=\rho(x,\xtau)}{\chi}}{\phi,\Delta}}
+                    }
+                }{}
+            \end{calculus}
 
             %\begin{proof}\small
             \begin{sidewaysfigure}\footnotesize
             \centering
             \begin{sequentdeduction}[]
-                \linfer[Axsteps]{
+                \linfer[stepsb]{
                     \linfer[loop]{
                         % FIXME: formel zu hoch
                         \lsequent{\Gamma(\xtau)}{F(\xtau),\Delta}
-                        &\linfer[assignb,seq]{
+                        &\linfer[assignb composeb]{
                             \linfer[DC]{
                                 \linfer[dI]{
-                                    \linfer[Hist]{
-                                        \linfer[id]{
+                                    \linfer[hist]{
+                                        \linfer[close]{
                                             \lclose
                                         }{
                                             \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}}{\lforall{r\in[-\tau,0]}{F(\theta(r))}}
@@ -705,14 +750,14 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
                                     &\linfer[]{
                                         \lsequent{}{}
                                     }{
-                                        \lsequent{\chi, 0\leq t\leq\tau, F(x(t-\tau)))}{\dbox{t':=1, x':=\rho(x,\xtau)}{(F)'}}
+                                        \lsequent{\chi, 0\leq t\leq\tau, F(x(t-\tau)))}{\dbox{t':=1, x':=\eta(x,\xtau)}{(F)'}}
                                     }
                                 }{
-                                    \lsequent{F,t=0}{\dbox{\hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land 0\leq t\leq\tau\land F(x(t-\tau)))}}{F}}
+                                    \lsequent{F,t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau\land F(x(t-\tau)))}}{F}}
                                 }&\linfer[]{
                                     \linfer[dW]{
                                         \linfer[allR]{
-                                            \linfer[implR]{
+                                            \linfer[implyR]{
                                                 \linfer[]{
                                                     \lclose
                                                 }{
@@ -725,22 +770,22 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
                                             \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))},t=0}{\lforall{(t,x)}{(\chi\land 0\leq t\leq\tau\limply F(\theta(t-\tau)))}}
                                         }
                                     }{
-                                        \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))},t=0}{\dbox{\hevolvein{t'=1\syssep x'=\rho(x,\theta(t-\tau))}{(\chi\land 0\leq t\leq\tau)}}{F(\theta(t-\tau))}}
+                                        \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))},t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\theta(t-\tau))}{(\chi\land 0\leq t\leq\tau)}}{F(\theta(t-\tau))}}
                                     }
                                 }{
-                                    \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F(x(t-\tau))}}
+                                    \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F(x(t-\tau))}}
                                 }
                             }{
-                                \lsequent{F,t=0}{\dbox[]{\hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F}}
+                                \lsequent{F,t=0}{\dbox[]{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F}}
                             }
                         }{
-                            \lsequent{F(\xtau)}{\dbox[]{\hupdate{\humod{t}{0}}; \hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F}}
+                            \lsequent{F(\xtau)}{\dbox[]{\hupdate{\humod{t}{0}}; \hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F}}
                         }
                         \lsequent{F(\xtau)}{\phi}
                     }{
-                    \lsequent{\Gamma(\xtau)}{\dbox{\prepeat{(\hupdate{\humod{t}{0}}; \hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land 0\leq t\leq\tau))}}}{\phi,\Delta}}}
+                    \lsequent{\Gamma(\xtau)}{\dbox{\prepeat{(\hupdate{\humod{t}{0}}; \hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau))}}}{\phi,\Delta}}}
                 }
-                {\lsequent{\Gamma(\xtau)}{\dbox{\hevolvein{x'=\rho(x,\xtau)}{\chi}}{\phi,\Delta}}}
+                {\lsequent{\Gamma(\xtau)}{\dbox{\hevolvein{x'=\eta(x,\xtau)}{\chi}}{\phi,\Delta}}}
             \end{sequentdeduction}
             \end{sidewaysfigure}
             \normalsize
@@ -750,6 +795,8 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
             \label{sec:elay-differential-invariant}
 
             Mentioning $\xtau$ in the invariant differential invariant is not permitted, since derivation would lead to the occurrence of the symbol $x_{2\tau}$, whose properties are out of the scope of the current state.
+
+            Meaning of derivative $(F(\xtau))'=\lforall{s\in[-\tau,0]}{(F(x(s)))'}$
 
             %TODO: much doubt if that is sound
             \begin{equation}
