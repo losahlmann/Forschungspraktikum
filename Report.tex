@@ -2,7 +2,7 @@
 %\RequirePackage{fixltx2e}
 
 
-\documentclass[10pt]{article}
+\documentclass[10pt]{report}
 
 % encoding of tex-file
 \usepackage[utf8x]{inputenc}
@@ -258,54 +258,120 @@ We keep the standard sequent calculus proof rules
                         &\linfer[assignb composeb]{
                             \linfer[DC]{
                                 \linfer[dI]{
-                                    \linfer[hist]{
-                                        \linfer[close]{
-                                            \lclose
-                                        }{
-                                            \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}}{\lforall{r\in[-\tau,0]}{F(\theta(r))}}
-                                        }
-                                    }{
-                                        \lsequent{F(\xtau),t=0,\chi, 0\leq t\leq\tau, F(x(t-\tau))}{F(\xtau)}
-                                    }
-                                    &\linfer[]{
-                                        \lsequent{}{}
-                                    }{
-                                        \lsequent{\chi, 0\leq t\leq\tau, F(x(t-\tau)))}{\dbox{t':=1, x':=\eta(x,\xtau)}{(F)'}}
-                                    }
+                                    (1)
                                 }{
-                                    \lsequent{F,t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau\land F(x(t-\tau)))}}{F}}
-                                }&\linfer[]{
-                                    \linfer[dW]{
-                                        \linfer[allR]{
-                                            \linfer[implyR]{
-                                                \linfer[]{
-                                                    \lclose
-                                                }{
-                                                    \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))},t=0,\chi(r,y),0\leq r\leq\tau}{F(\theta(r-\tau))}
-                                                }
-                                            }{
-                                                \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))},t=0}{\chi(r,y)\land 0\leq r\leq\tau\limply F(\theta(r-\tau))}
-                                            }
-                                        }{
-                                            \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))},t=0}{\lforall{(t,x)}{(\chi\land 0\leq t\leq\tau\limply F(\theta(t-\tau)))}}
-                                        }
-                                    }{
-                                        \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))},t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\theta(t-\tau))}{(\chi\land 0\leq t\leq\tau)}}{F(\theta(t-\tau))}}
-                                    }
+                                    \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau\land F(x(t-\tau)))}}{F(\xtau)}}
+                                }
+                                &\linfer[]{
+                                    (2)
                                 }{
                                     \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F(x(t-\tau))}}
                                 }
                             }{
-                                \lsequent{F,t=0}{\dbox[]{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F}}
+                                \lsequent{F(\xtau),t=0}{\dbox[]{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F(\xtau)}}
                             }
                         }{
-                            \lsequent{F(\xtau)}{\dbox[]{\hupdate{\humod{t}{0}}; \hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F}}
+                            \lsequent{F(\xtau)}{\dbox[]{\hupdate{\humod{t}{0}}; \hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F(\xtau)}}
                         }
-                        \lsequent{F(\xtau)}{\phi}
+                        \lsequent{F(\xtau)}{\phi(\xtau)}
                     }{
-                    \lsequent{\Gamma(\xtau)}{\dbox{\prepeat{(\hupdate{\humod{t}{0}}; \hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau))}}}{\phi,\Delta}}}
+                    \lsequent{\Gamma(\xtau)}{\dbox{\prepeat{(\hupdate{\humod{t}{0}}; \hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau))}}}{\phi(\xtau),\Delta}}}
                 }
-                {\lsequent{\Gamma(\xtau)}{\dbox{\hevolvein{x'=\eta(x,\xtau)}{\chi}}{\phi,\Delta}}}
+                {\lsequent{\Gamma(\xtau)}{\dbox{\hevolvein{x'=\eta(x,\xtau)}{\chi}}{\phi(\xtau),\Delta}}}
+            \end{sequentdeduction}
+
+            % TODO: ref to here: (2)
+            \begin{sequentdeduction}
+                \linfer[hist]{
+                    \linfer[dW]{
+                        \linfer[allR]{
+                            \linfer[implyR]{
+                                \linfer[]{
+                                    \lclose
+                                }{
+                                    \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))},t=0,\chi(r,y),0\leq r\leq\tau}{F(\theta(r-\tau))}
+                                }
+                            }{
+                                \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))},t=0}{\chi(r,y)\land 0\leq r\leq\tau\limply F(\theta(r-\tau))}
+                            }
+                        }{
+                            \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))},t=0}{\lforall{(t,x)}{(\chi\land 0\leq t\leq\tau\limply F(\theta(t-\tau)))}}
+                        }
+                    }{
+                        \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))},t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\theta(t-\tau))}{(\chi\land 0\leq t\leq\tau)}}{F(\theta(t-\tau))}}
+                    }
+                }{
+                    \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(\chi\land 0\leq t\leq\tau)}}{F(x(t-\tau))}}
+                }
+            \end{sequentdeduction}
+
+            % TODO: ref to here: (1)
+            \begin{sequentdeduction}
+                \linfer[DC]{
+                    \linfer[dI]{
+                        \linfer[hist]{
+                            \linfer[]{
+                                \lclose
+                            }{
+                                \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}}{F(\theta(0))}
+                            }
+                        }{
+                            \lsequent{F(\xtau),t=0,Q, F(x(t-\tau))}{F(t)}
+                        }
+                        % TODO: Q=\chi, 0\leq t\leq\tau
+                        &\lsequent{Q, F(x(t-\tau)))}{\dbox{t':=1, x':=\eta(x,\xtau)}{(F(x(t)))'}}
+                        %}
+                    }{
+                        \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(Q\land F(x(t-\tau)))}}{F(t)}}
+                    }
+                    &\linfer[hist]{
+                        (3)
+                        % \linfer[dW]{
+                        %     \linfer[allR]{
+                        %         \linfer[implyR]{
+                        %             \linfer[close]{
+                        %                 \lclose
+                        %             }{
+                        %                 \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0, Q, F(\theta(-\tau)), F(\theta(0))}{\lforall{r\in[-\tau,0]}{F(\theta(r))}}
+                        %             }
+                        %         }{
+                        %             \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{((Q\land F(\theta(-\tau))\land F(\theta(0)))\limply\lforall{r\in[-\tau,0]}{F(\theta(r))})}
+                        %         }
+                        %     }{
+                        %         \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{\lforall{(t,x)}{((Q\land F(\theta(-\tau))\land F(\theta(0)))\limply\lforall{r\in[-\tau,0]}{F(\theta(r))})}}
+                        %     }
+                        % }{
+                        %     \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(Q\land F(\theta(-\tau))\land F(\theta(0)))}}{(\lforall{r\in[-\tau,0]}{F(\theta(r))})}}
+                        % }
+                    }{
+                        \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(Q\land F(x(t-\tau))\land F(x(t)))}}{F(\xtau)}}
+                    }
+                }{
+                    \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(Q\land F(x(t-\tau)))}}{F(\xtau)}}
+                }
+            \end{sequentdeduction}
+            \begin{sequentdeduction}
+                \linfer[hist]{
+                    \linfer[dW]{
+                        \linfer[allR]{
+                            \linfer[implyR]{
+                                \linfer[close]{
+                                    \lclose
+                                }{
+                                    \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0, Q, F(\theta(-\tau)), F(\theta(0))}{\lforall{r\in[-\tau,0]}{F(\theta(r))}}
+                                }
+                            }{
+                                \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{((Q\land F(\theta(-\tau))\land F(\theta(0)))\limply\lforall{r\in[-\tau,0]}{F(\theta(r))})}
+                            }
+                        }{
+                            \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{\lforall{(t,x)}{((Q\land F(\theta(-\tau))\land F(\theta(0)))\limply\lforall{r\in[-\tau,0]}{F(\theta(r))})}}
+                        }
+                    }{
+                        \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(Q\land F(\theta(-\tau))\land F(\theta(0)))}}{(\lforall{r\in[-\tau,0]}{F(\theta(r))})}}
+                    }
+                }{
+                    \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(Q\land F(x(t-\tau))\land F(x(t)))}}{F(\xtau)}}
+                }
             \end{sequentdeduction}
             \end{sidewaysfigure}
             \normalsize
@@ -315,6 +381,9 @@ We keep the standard sequent calculus proof rules
             \label{sec:delay-differential-invariant}
 
             Mentioning $\xtau$ in the invariant differential invariant is not permitted, since derivation would lead to the occurrence of the symbol $x_{2\tau}$, whose properties are out of the scope of the current state.
+
+            loop and differential invariants are of form $\lforall{s\in[-\tau,0]}{F(x(s))}$
+            can they have $x$?
 
             Meaning of derivative $(F(\xtau))'=\lforall{s\in[-\tau,0]}{(F(x(s)))'}$
 
