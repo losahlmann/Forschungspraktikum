@@ -57,6 +57,7 @@
 %
 \newcommand{\states}{\mathcal{S}}
 \newcommand{\statespace}{C^0_\text{pw}([-\tau,0],\R^n)}
-\newcommand{\xtau}{x[\tau]}
+\newcommand{\xtau}[1][]{\ifthenelse{\equal{#1}{}}{x[\tau]}{x[#1]}}
+%\newcommand{\xtau}{x[\tau]}
 \newcommand{\xbartau}{\bar{x}_{\tau}}
 \newcommand{\xbartaut}[1]{\bar{x}_{\tau,#1}}

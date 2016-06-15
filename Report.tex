@@ -106,12 +106,15 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
 
             \begin{calculus}
                 \cinferenceRule[hist|hist]{history axiom}{
-                    \linferenceRule[equiv]{}{
+                    \linferenceRule[equiv]{
+                        \lforall{s\in[-\tau,0]}{p(\theta(t+s))}
+                    }{
                         p(\xtau)
                     }
                 }{}
                 %F(\xbartau) \leftrightarrow \forall\,-\tau\leq t\leq 0\, F(x(t))
             \end{calculus}
+            for a piecewise continuous function $\theta\in\statespace$.
 
         \subsubsection{Axiom of Steps}
             \label{sec:axiom-of-steps}
@@ -121,7 +124,7 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
             % Let $\theta_0$ and $\theta$
             \begin{calculus}
                 % TODO: actually doesn't need to be in a box?
-                \cinferenceRule[stepsb|steps]{method of steps axiom}{
+                \cinferenceRule[stepsb|stpsb]{method of steps axiom}{
                     \linferenceRule[equiv]{
                         \dbox[]{\prepeat{(\hupdate{\humod{t}{0}};\hevolvein{t'=1\syssep x'=\rho(x,\xtau)}{(\chi\land 0\leq t\leq\tau)})}}{\phi}
                     }{
@@ -221,7 +224,7 @@ We keep the standard sequent calculus proof rules
 
             \begin{calculus}
                 % FIXME: \landS -> steps
-                \cinferenceRule[steps|steps]{steps proof rule}{
+                \cinferenceRule[steps|stps]{steps proof rule}{
                     \linferenceRule[sequent]{
                         \lsequent{\Gamma}{F,\Delta}
                         &\lsequent{t=0,F(\theta(t-\tau))}{\dbox[]{\hevolvein{t'=1\syssep x'=\rho(x,\theta(t-\tau))}{(\chi\land 0\leq t\leq\tau)}}{F}}
@@ -326,23 +329,6 @@ We keep the standard sequent calculus proof rules
                     }
                     &\linfer[hist]{
                         (3)
-                        % \linfer[dW]{
-                        %     \linfer[allR]{
-                        %         \linfer[implyR]{
-                        %             \linfer[close]{
-                        %                 \lclose
-                        %             }{
-                        %                 \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0, Q, F(\theta(-\tau)), F(\theta(0))}{\lforall{r\in[-\tau,0]}{F(\theta(r))}}
-                        %             }
-                        %         }{
-                        %             \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{((Q\land F(\theta(-\tau))\land F(\theta(0)))\limply\lforall{r\in[-\tau,0]}{F(\theta(r))})}
-                        %         }
-                        %     }{
-                        %         \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{\lforall{(t,x)}{((Q\land F(\theta(-\tau))\land F(\theta(0)))\limply\lforall{r\in[-\tau,0]}{F(\theta(r))})}}
-                        %     }
-                        % }{
-                        %     \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(Q\land F(\theta(-\tau))\land F(\theta(0)))}}{(\lforall{r\in[-\tau,0]}{F(\theta(r))})}}
-                        % }
                     }{
                         \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(Q\land F(x(t-\tau))\land F(x(t)))}}{F(\xtau)}}
                     }
@@ -350,6 +336,7 @@ We keep the standard sequent calculus proof rules
                     \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{t'=1\syssep x'=\eta(x,\xtau)}{(Q\land F(x(t-\tau)))}}{F(\xtau)}}
                 }
             \end{sequentdeduction}
+            % TODO: ref here (3)
             \begin{sequentdeduction}
                 \linfer[hist]{
                     \linfer[dW]{
@@ -387,35 +374,120 @@ We keep the standard sequent calculus proof rules
 
             Meaning of derivative $(F(\xtau))'=\lforall{s\in[-\tau,0]}{(F(x(s)))'}$
 
-            %TODO: much doubt if that is sound
-            \begin{equation}
-                \frac{H\wedge\forall\,t-\tau\leq s<t: F(x(s))\rightarrow (F')^{\theta}_{x'}}{F(\xbartau)\rightarrow [x'=\theta(\xbartaut{t})\,\&\,(H\wedge t\leq\tau)]F(\xbartaut{t})}
-            \end{equation}
+        % TODO: Example
+        \subsubsection{Examples}
+            \label{sec:examples}
 
-% TODO: Example
-        \subsubsection{Example}
-            \label{sec:example}
-            We want to proof the safety condition $\phi\equiv(-1\leq x\wedge x\leq 1)$ for the continuous program with delay differential equation
-            \begin{equation}
-                \forall\,t\in[-\tau,0]:\,-1\leq\xbartaut{0}(t)\wedge\xbartaut{0}(t)\leq 1
-                \rightarrow
-                [x'=-\xtau] (\forall\,s\in[-\tau,0]:\,-1\leq\xbartaut{t}(s)\wedge\xbartaut{t}(s)\leq 1)
-            \end{equation}
-            in explicit quantified representation. It can be simplified by using an implicit time variable and a context depending meaning of $\xtau$
-            \begin{equation}
-                -1\leq\xtau\leq 1 \rightarrow [x'=-\xtau]\phi.
-            \end{equation}
+            \paragraph{Example 1}
+                \label{sec:ddi-example-1}
+                Consider the non-linear first order delay differential equation
+                \begin{equation}
+                    x'(t) = \begin{cases}
+                         x(t-1) & t \geq 0\\
+                         \theta(t)\geq 0 & t \in [-1,0]
+                    \end{cases}
+                \end{equation}
+                Using $F\equiv(x^3\leq 0)$ we prove that the solution stays non-negativ for all time $t$.
+                \begin{sequentdeduction}
+                    \linfer[DDI]{
+                        \linfer[]{
+                            \lclose
+                        }{
+                            \lsequent{\xtau[1]\geq 0}{\xtau[1]^3\geq 0}
+                        }
+                        &\linfer[]{
+                            \linfer[]{
+                                \linfer[closeTrue]{
+                                    \lclose
+                                }{
+                                    \lsequent{}{3x^2\theta\geq 0}
+                                }
+                            }{
+                                \lsequent{0\geq t\geq\tau,\theta(t)^3\geq 0}{\dbox{ x':=\theta(t)}{(3x(t)^2 x'\geq 0)}}
+                            }
+                        }{
+                            %\lclose
+                            \lsequent{0\geq t\leq\tau,\theta(t)^3\geq 0}{\dbox{t':=1, x':=\theta(t)}{\der{x\geq 0}}}
+                        }
+                        &\linfer[]{
+                            \lclose
+                        }{
+                            \lsequent{\xtau[1]^3\geq 0}{\xtau[1]\geq 0}
+                        }
+                    }{
+                        \lsequent{\xtau[1]\geq 0}{\dbox{x'=\xtau[1]}{(\xtau[1]\geq 0)}}
+                    }
+                \end{sequentdeduction}
+                In the same way we can prove that the solution stays negative for all $t$, if the initial condition is non-positive.
 
-            We apply the rule of steps using the safety condition $\phi$ as step condition $F(x)\equiv(\forall\,t\in[-\tau,0]:\,-1\leq x(t)\wedge x(t)\leq 1)$.
+            \paragraph{Example 2}
+                \label{sec:ddi-example-2}
+                Consider the non-linear first order delay differential equation
+                \begin{equation}
+                    x'(t) = \begin{cases}
+                         -x(t-1)^2 & t \geq 0\\
+                         t & t \in [-1,0]
+                    \end{cases}
+                \end{equation}
+                Using $F\equiv(x^3\leq 0)$ we prove that the solution stays non-positiv.
+                \begin{sequentdeduction}
+                    \linfer[DDI]{
+                        \linfer[]{
+                            \lclose
+                        }{
+                            \lsequent{\xtau[1]\leq 0}{\xtau[1]^3\leq 0}
+                        }
+                        &\linfer[]{
+                            \linfer[]{
+                                \linfer[closeTrue]{
+                                    \lclose
+                                }{
+                                    \lsequent{}{-3x^2\theta^2\leq 0}
+                                }
+                            }{
+                                \lsequent{0\leq t\leq\tau,\theta(t)^3\leq 0}{\dbox{ x':=-\theta(t)^2}{(-3x(t)^2 x'\leq 0)}}
+                            }
+                        }{
+                            %\lclose
+                            \lsequent{0\leq t\leq\tau,\theta(t)^3\leq 0}{\dbox{t':=1, x':=-\theta(t)^2}{\der{x\leq 0}}}
+                        }
+                        &\linfer[]{
+                            \lclose
+                        }{
+                            \lsequent{\xtau[1]^3\leq 0}{\xtau[1]\leq 0}
+                        }
+                    }{
+                        \lsequent{\xtau[1]\leq 0}{\dbox{x'=-\xtau[1]^2}{(\xtau[1]\leq 0)}}
+                    }
+                \end{sequentdeduction}
+                This proof doesn't even need any premisse about $\xtau$ in the induction step.
+            \paragraph{Second Example}
+            \label{sec:second-example}
 
-            The first and third premisses hold. The second by ??? (delay differential invariant)
+            \paragraph{Example 3}
+                \label{sec:ddi-example-3}
 
-            Use the algebraic differential invariant $F\equiv(-1\leq x^3\wedge x^3\leq1)$, which is valid for the initial condition. Differentiation leads to the inequalities, which needs to be shown $\forall t\in[0,\tau]$
-            \begin{equation}
-                0\leq 3\,x(t)^2 x'(t) = -3\,x(t)^2 \xtau(t)
-            \end{equation}
+                We want to proof the safety condition $\phi\equiv(-1\leq x\wedge x\leq 1)$ for the continuous program with delay differential equation
+                \begin{equation}
+                    \forall\,t\in[-\tau,0]:\,-1\leq\xbartaut{0}(t)\wedge\xbartaut{0}(t)\leq 1
+                    \rightarrow
+                    [x'=-\xtau] (\forall\,s\in[-\tau,0]:\,-1\leq\xbartaut{t}(s)\wedge\xbartaut{t}(s)\leq 1)
+                \end{equation}
+                in explicit quantified representation. It can be simplified by using an implicit time variable and a context depending meaning of $\xtau$
+                \begin{equation}
+                    -1\leq\xtau\leq 1 \rightarrow [x'=-\xtau]\phi.
+                \end{equation}
 
-            This holds since
+                We apply the rule of steps using the safety condition $\phi$ as step condition $F(x)\equiv(\forall\,t\in[-\tau,0]:\,-1\leq x(t)\wedge x(t)\leq 1)$.
+
+                The first and third premisses hold. The second by ??? (delay differential invariant)
+
+                Use the algebraic differential invariant $F\equiv(-1\leq x^3\wedge x^3\leq1)$, which is valid for the initial condition. Differentiation leads to the inequalities, which needs to be shown $\forall t\in[0,\tau]$
+                \begin{equation}
+                    0\leq 3\,x(t)^2 x'(t) = -3\,x(t)^2 \xtau(t)
+                \end{equation}
+
+                This holds since
 
 
 
