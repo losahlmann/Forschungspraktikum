@@ -20,24 +20,23 @@
 \newcommand\logeq{\mathrel{\vcentcolon\Longleftrightarrow}}
 % norm
 %\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
-\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\nnorm}{\lVert}{\rVert}
 \DeclarePairedDelimiter{\supnorm}{\lVert}{\rVert_{\text{\scriptsize{sup}}}}
-% boundary
-\newcommand{\boundary}[1]{\partial #1}
-\newcommand{\bOmega}{\boundary{\upOmega}}
-% disjunct sets
-\newcommand{\cupdot}{\mathbin{\mathaccent\cdot\cup}}
+
 % exponential function
 \newcommand{\e}[1]{\text{e}^{#1}}
 
 %
 % Analysis
 %
-% Derivative
-\newcommand{\DD}[2]{\frac{\text{d} #1}{\text{d} #2}}
+% derivative: Lagrange style
+%\newcommand{\D}[1]{#1'} % ' defined in latex and is same as \prime
+% derivative: Leibniz style
+%\newcommand{\DD}[2]{\frac{\text{d} #1}{\text{d} #2}}
 % differential in integral
-\newcommand{\dx}[1]{\text{d}#1}
+\newcommand{\dx}[1][x]{\text{d}#1}
 
+\newcommand{\continuouspws}[3][]{\ensuremath{C^{#1}_\text{pw}\ifthenelse{\equal{#2}{}}{}{\ifthenelse{\equal{#3}{}}{(#2)}{(#2,#3)}}}}
 
 %
 % Delay Differential Equation
@@ -56,8 +55,8 @@
 % Delay Differential Dynamic Logic
 %
 \newcommand{\states}{\mathcal{S}}
-\newcommand{\statespace}{C^0_\text{pw}([-\tau,0],\R^n)}
-\newcommand{\xtau}[1][]{\ifthenelse{\equal{#1}{}}{x[\tau]}{x[#1]}}
-%\newcommand{\xtau}{x[\tau]}
+\newcommand{\statespace}{\continuouspws[0]{[-\tau,0]}{\R^n}}
+%\newcommand{\xtau}[1][]{\ifthenelse{\equal{#1}{}}{x[\tau]}{x[#1]}}
+\newcommand{\xtau}[1][\tau]{x[#1]}
 \newcommand{\xbartau}{\bar{x}_{\tau}}
 \newcommand{\xbartaut}[1]{\bar{x}_{\tau,#1}}

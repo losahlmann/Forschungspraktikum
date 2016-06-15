@@ -20,9 +20,8 @@
             We extent the grammar defining \textbf{terms} with a symbol for a \textbf{delayed variable}
             % FIXME: replace ::=
             % FIXME: replace |
-            % FIXME: replace x'
             \begin{equation}
-                \theta,\eta ::= x|\xtau|x'|c|\theta+\eta|\theta\cdot\eta
+                \theta,\eta ::= x|\xtau|\D{x}|c|\theta+\eta|\theta\cdot\eta
             \end{equation}
 
             The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\xtau$.
@@ -73,7 +72,7 @@
             \end{equation}
             and
             \begin{equation}
-                \imodel[\nu]{}{x'}=\nu(x')(0)
+                \imodel[\nu]{}{\D{x}}=\nu(\D{x})(0)
             \end{equation}
             In the precondition, no values are associated to the differential symbols. In general, the initial function is only piecewise continuous.
             Since for later time instances, the values of the differential symbols derive from the DDE, they become (locally) smooth function.
@@ -96,22 +95,22 @@
 
             The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
             \begin{equation}
-            \rho(x:=\theta) = \left\{(\nu,\omega): \omega = \nu \text{ except } \omega(x)=\left(t\mapsto\begin{cases}\imodel{\I}{\theta} & t=0\\ \nu(t) &t\in[-\tau,0)\end{cases}\right)\qquad\right\}_.
+            \rho(\hupdate{\humod{x}{\theta}}) = \left\{(\nu,\omega): \omega = \nu \text{ except } \omega(x)=\left(t\mapsto\begin{cases}\imodel{\I}{\theta} & t=0\\ \nu(t) &t\in[-\tau,0)\end{cases}\right)\qquad\right\}_.
             \end{equation}
             This assignment is the actual reason why we need to consider piecewise continuous evolutions.
 
             %TODO: super dense time: multiple assignments
 
-            Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $x'=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
+            Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
             \begin{equation}
-                \rho(x'=\theta\,\&\,\chi) = \left\{
-                    (\varphi(0),\varphi(s))\,:\,\varphi(t)\models x'=\theta\,\wedge\,\varphi(t)(0)\models\chi\,\forall\,0\leq t\leq s\text{ for a solution } \varphi:[0,s]\rightarrow\states \right\}
+                \rho(\hevolvein{\D{x}=\theta}{\ivr}) = \left\{
+                    (\varphi(0),\varphi(s))\,:\,\lforall{0\leq t\leq s}{\varphi(t)\models \D{x}=\theta\,\wedge\,\varphi(t)(0)\models\ivr}\text{ for a solution } \varphi:[0,s]\rightarrow\states \right\}
             \end{equation}
             As a solution, $\varphi$ needs to fulfill
             \begin{equation}
-                \varphi(t)(x')(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel[]{\varphi(t)}{\theta}
+                \varphi(t)(\D{x})(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel[]{\varphi(t)}{\theta}
             \end{equation}
             Remember that a $\xtau$ mentioned in $\theta$ here means $\varphi(t)(x)(-\tau)$.
-            And so needs $\chi$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
+            And so needs $\ivr$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
 
             % TODO: what about [a;b]p. is [a][b]p correct?
