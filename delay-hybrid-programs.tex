@@ -1,20 +1,20 @@
-\section{Hybrid Programs with DDEs}\label{hybrid-programs-with-ddes}
+\chapter{Hybrid Programs with DDEs}\label{hybrid-programs-with-ddes}
 
     We extent classic hybrid programs (\HP) and \dL formulae with syntax, semantics, axiomatization and proof rules for DDEs.
     %Is a super set, \dL is a fragment
 
-    \subsection{Example}
+    \section{Example}
         \label{example-hp-cars}
         To motivate the need of being able to treat Delayed Differential Equations in hybrid programs, we present some examples.
 
-        \subsubsection{Leading and Following Car}
+        \subsection{Leading and Following Car}
 
-        \subsubsection{Network Induced Delay in Control Loops}
+        \subsection{Network Induced Delay in Control Loops}
 
-    \subsection{Syntax}
+    \section{Syntax}
         \label{sec:syntax}
 
-        \paragraph{Terms}
+        \subsubsection{Terms}
             \label{sec:terms}
 
             We extent the grammar defining \textbf{terms} with a symbol for a \textbf{delayed variable}
@@ -25,11 +25,14 @@
                 \theta,\eta ::= x|\xtau|x'|c|\theta+\eta|\theta\cdot\eta
             \end{equation}
 
+            The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\xtau$.
+
     The grammars for hybrid programs and \dL formulas remain unchanged.
 
 
-    \subsection{Semantics}
+    \section{Semantics}
         \label{sec:semantics}
+        % TODO: fix display of semantics [[]]
         \begin{equation}
             \imodels[\I]{\phi}{x}
         \end{equation}
@@ -51,7 +54,7 @@
         %
         % However, we go the way of introducing transition semantics with an augmented state space.
 
-        \subsubsection{Terms}
+        \subsection{Terms}
             \label{sec:terms-semantic}
 
             The semantic of the new symbol $\xtau$ depends on the context in which the term occures:
@@ -78,7 +81,7 @@
 
             When we write $x$ we mean $x(t)$.
 
-        \subsubsection{\dL semantics}
+        \subsection{\dL semantics}
             With the semantics of terms if follows for the meaning of $\dbox{\alpha}{\phi}$, that $\phi$ must only hold up to time $\tau$ before leaving the \HP $\alpha$. It is possible, that $\phi$ was not verified before, while \textit{executing} the \HP.
 
             However when we apply the Rule of steps, we get the validity of $\phi$ for the entire trace.
@@ -86,7 +89,7 @@
             % TODO: is it better to only have xtau and not choice? What if both mentioned?
             in formulae (such as safety condition or evolution constraint), we have two possibilities: only value at current time instant ($x$) or for entire last $\tau$ time $\xtau$
 
-        \subsubsection{Hybrid Programs}
+        \subsection{Hybrid Programs}
             \label{sec:hp-semantics}
 
             The transition semantic of a hybrid program $\alpha$ is inductively given by a binary reachability relation $\rho(\alpha)\subseteq\states\times\states$. Since the state space has been replaced, we need to redefine the semantics:

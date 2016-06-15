@@ -1,6 +1,6 @@
-\section{Delay Differential Equations} \label{sec:delay-differential-equations}
+\chapter{Delay Differential Equations} \label{sec:delay-differential-equations}
 
-\subsection{Piecewise Continuous Functions} \label{sec:piecewise-continuous-functions}
+\section{Piecewise Continuous Functions} \label{sec:piecewise-continuous-functions}
 The following definition is motivated by capturing the character evolution arising from hybrid systems. We will see that we can consider such to be piecewise continuous.
 
 \begin{definition}[Piecewise Continuous]
@@ -43,7 +43,7 @@ The following definition is motivated by capturing the character evolution arisi
 % \end{figure*}
 
 
-\subsection{Definition DDE} \label{sec:definition-dde}
+\section{Definition DDE} \label{sec:definition-dde}
 
 \begin{definition}[Delay Differential Equation]
     \label{definition-dde}
@@ -65,7 +65,7 @@ Since we only consider autonomous DDEs, we can without loss of generality restri
 
 The definition of a DDE can be extended to multiple constant discrete delays. For simplicity, we restrict here to a single delay.
 
-\subsection{Definition of Solution} \label{sec:definition-of-solution}
+\section{Definition of Solution} \label{sec:definition-of-solution}
 
 \begin{definition}[Solution of DDE]
     \label{definition-solution-dde}
@@ -189,12 +189,12 @@ This notion of solution is a \emph{dynamical systems} point of view which later 
 integrate from discontinuity of $\xbartaut{t}$ to discontinuity and proof stetige fortsetzbarkeit at these points
 \end{proof}
 
-\subsection{Method of Steps} \label{sec:method-of-steps}
+\section{Method of Steps} \label{sec:method-of-steps}
 for $t\in [0,\tau]$, $x$ must satisfy the following ordinary initial value problem obtained by plugging the initial function into equation (??). For suitable $f$ and $x_0$, the existence (and uniqueness) of a solution on $[0,\tau]$ is guaranteed by ODE theory (\ldots{} or Picard-Lindelöf theorems).
 
 This procedure can then be applied repeatedly to extend the obtained solution by steps of length $\tau$.
 
-\subsection{Existence and Uniqueness of Solutions} \label{existence-and-uniqueness-of-solutions}
+\section{Existence and Uniqueness of Solutions} \label{existence-and-uniqueness-of-solutions}
 
 $f$ Lipschitz with piecewise continuous initial function have existence and uniqueness ???? smoothing
 
@@ -348,7 +348,7 @@ The proof is smiliar to the proof of ... given in \cite{smith2010introDDE}.
 
 % TODO: non-autonomous -> autonomous
 
-\subsection{Example}\label{example}
+\section{Example}\label{example}
 The basic ODE IVP
 \begin{equation}
     \begin{cases}
@@ -371,4 +371,4 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
 	\label{fig:not-allowed}
 \end{figure}
 
-\subsection{Definition}\label{definition}
+\section{Definition}\label{definition}
