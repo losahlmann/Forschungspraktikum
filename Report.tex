@@ -164,70 +164,108 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
     \section{Proof Rules}
         \label{sec:proof-rules}
 
-        We keep the standard sequent calculus proof rules
+        We keep the standard sequent calculus proof rules, given in \dL.
 
-        \begin{calculus}
-            \cinferenceRule[close|id]{close by identity}{
-                \linferenceRule[sequent]{
-                %\lsequent{}{}
-                }{
-                    \lsequent{P,\Gamma}{P,\Delta}
-                }
-            }{}
-            \cinferenceRule[allR|$\forall$R]{for all right proof rule}{
-                \linferenceRule[sequent]{
-                    \lsequent{\Gamma}{p(y),\Delta}
-                }{
-                    \lsequent{\Gamma}{\lforall{x}{p(x)},\Delta}
-                }
-            }{$y\notin\Gamma,\Delta$}
-            \cinferenceRule[andR|$\land$R]{and right proof rule}{
-                \linferenceRule[sequent]{
-                    \lsequent{\Gamma} {p,\Delta}
-                    &\lsequent{\Gamma} {q,\Delta}
-                }{\lsequent{\Gamma} {p\land q,\Delta}}
-            }{}
-            \cinferenceRule[andL|$\land$L]{and left proof rule}{
-                \linferenceRule[sequent]{
-                    \lsequent{\Gamma, p, q} {\Delta}
-                }{\lsequent{\Gamma, p\land q} {\Delta}}
-            }{}
-            \cinferenceRule[implyR|$\limply$R]{imply right proof rule}{
-                \linferenceRule[sequent]{
-                    \lsequent{\Gamma,p} {q,\Delta}}{
-                    \lsequent{\Gamma} {p\limply q,\Delta}}
-            }{}
-            % TODO: replace := by command
-            \cinferenceRule[assignb|$\mathrel{{:}{=}}$]{discrete assignment}{
-                \linferenceRule[sequent]{
-                    \lsequent{\Gamma,x=e}{P,\Delta}
-                }{\lsequent{\Gamma}{\dbox{\hupdate{\humod{x}{e}}}{P},\Delta}}
-            }{$x\notin\Gamma,\Delta$}
-            \cinferenceRule[loop|loop]{loop invariant}{
-                \linferenceRule[sequent]{
-                    \lsequent{\Gamma}{J,\Delta}
-                    &\lsequent{J}{\dbox{\alpha}{J}}
-                    &\lsequent{J}{P}
-                }{\lsequent{\Gamma}{\dbox{\prepeat{\alpha}}{P},\Delta}}
-            }{}
-            \cinferenceRule[DC|DC]{differential cut}{
-                \linferenceRule[sequent]{
-                    \lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{r(x)},\Delta}
-                    &\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr\land r(x)}}{P}}
-                }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
-            }{}
-            \cinferenceRule[dI|dI]{differential invariant}{
-                \linferenceRule[sequent]{
-                    \lsequent{\Gamma,Q}{P,\Delta}
-                    &\lsequent{Q}{\dbox{\Dupdate{\Dumod{\D{x}}{f(x)}}}{\der{P}}}
-                }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
-            }{}
-            \cinferenceRule[dW|dW]{differential weakening}{
-                \linferenceRule[sequent]{
-                    \lsequent{\Gamma}{\lforall{x}{(\ivr\limply P)},\Delta}
-                }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
-            }{}
-        \end{calculus}
+        \paragraph{Propositional Sequent Calculus Proof Rules}
+            \label{sec:propositional-rules}
+
+            some text
+
+            \begin{calculus}
+                \cinferenceRule[closeTrue|$\top$R]{close by always true antedecent}{
+                    \linferenceRule[sequent]{
+                    %\lsequent{}{}
+                    }{
+                        \lsequent{\Gamma}{\ltrue,\Delta}
+                    }
+                }{}
+                \cinferenceRule[close|id]{close by identity}{
+                    \linferenceRule[sequent]{
+                    %\lsequent{}{}
+                    }{
+                        \lsequent{P,\Gamma}{P,\Delta}
+                    }
+                }{}
+                \cinferenceRule[andR|$\land$R]{and right proof rule}{
+                    \linferenceRule[sequent]{
+                        \lsequent{\Gamma} {p,\Delta}
+                        &\lsequent{\Gamma} {q,\Delta}
+                    }{\lsequent{\Gamma} {p\land q,\Delta}}
+                }{}
+                \cinferenceRule[andL|$\land$L]{and left proof rule}{
+                    \linferenceRule[sequent]{
+                        \lsequent{\Gamma, p, q} {\Delta}
+                    }{\lsequent{\Gamma, p\land q} {\Delta}}
+                }{}
+                \cinferenceRule[implyR|$\limply$R]{imply right proof rule}{
+                    \linferenceRule[sequent]{
+                        \lsequent{\Gamma,p} {q,\Delta}}{
+                        \lsequent{\Gamma} {p\limply q,\Delta}}
+                }{}
+
+            \end{calculus}
+
+
+        \paragraph{Quantifier Sequent Calculus Proof Rules}
+            \label{sec:quantifier-rules}
+
+            some text
+
+            \begin{calculus}
+                \cinferenceRule[allR|$\forall$R]{for all right proof rule}{
+                    \linferenceRule[sequent]{
+                        \lsequent{\Gamma}{p(y),\Delta}
+                    }{
+                        \lsequent{\Gamma}{\lforall{x}{p(x)},\Delta}
+                    }
+                }{$y\notin\Gamma,\Delta$}
+            \end{calculus}
+
+        \paragraph{\dL Sequent Calculus Proof Rules}
+            \label{sec:dL-rules}
+
+            some text
+
+            \begin{calculus}
+                % TODO: replace := by command
+                \cinferenceRule[assignb|$\mathrel{{:}{=}}$]{discrete assignment}{
+                    \linferenceRule[sequent]{
+                        \lsequent{\Gamma,x=e}{P,\Delta}
+                    }{\lsequent{\Gamma}{\dbox{\hupdate{\humod{x}{e}}}{P},\Delta}}
+                }{$x\notin\Gamma,\Delta$}
+                \cinferenceRule[loop|loop]{loop invariant}{
+                    \linferenceRule[sequent]{
+                        \lsequent{\Gamma}{J,\Delta}
+                        &\lsequent{J}{\dbox{\alpha}{J}}
+                        &\lsequent{J}{P}
+                    }{\lsequent{\Gamma}{\dbox{\prepeat{\alpha}}{P},\Delta}}
+                }{}
+            \end{calculus}
+
+        \paragraph{Differential Equation Sequent Calculus Proof Rules}
+            \label{sec:ode-rules}
+
+            some text
+
+            \begin{calculus}
+                \cinferenceRule[DC|DC]{differential cut}{
+                    \linferenceRule[sequent]{
+                        \lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{r(x)},\Delta}
+                        &\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr\land r(x)}}{P}}
+                    }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
+                }{}
+                \cinferenceRule[dI|dI]{differential invariant}{
+                    \linferenceRule[sequent]{
+                        \lsequent{\Gamma,Q}{P,\Delta}
+                        &\lsequent{Q}{\dbox{\Dupdate{\Dumod{\D{x}}{f(x)}}}{\der{P}}}
+                    }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
+                }{}
+                \cinferenceRule[dW|dW]{differential weakening}{
+                    \linferenceRule[sequent]{
+                        \lsequent{\Gamma}{\lforall{x}{(\ivr\limply P)},\Delta}
+                    }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
+                }{}
+            \end{calculus}
 
         % TODO: Rule of Steps
         \subsection{Rule of Steps}
@@ -446,7 +484,7 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
 
             \subsubsection{Example 2}
                 \label{sec:ddi-example-2}
-                
+
                 Consider the non-linear first order delay differential equation
                 \begin{equation}
                     \D{x}(t) = \begin{cases}
