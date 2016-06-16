@@ -100,6 +100,7 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
 % TODO: History Axiom
         \subsection{History Axiom}
             \label{history-axiom}
+
             Just replace symbol by its semantical meaning
             The occurence of $\xbartau$ in expressions can be replaced by turning the (implicitely existing) time variable explicit, i.e.\
             uniform substitution $\sigma$
@@ -113,18 +114,29 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
                         p(\xtau)
                     }
                 }{}
-                %F(\xbartau) \leftrightarrow \forall\,-\tau\leq t\leq 0\, F(x(t))
             \end{calculus}
             for a piecewise continuous function $\theta\in\statespace$.
 
+        \subsection{Solution Axiom}
+            \label{sec:solution-axiom}
+
+            % \xbartau = \theta_0 \rightarrow [\D{x}=\theta(\xbartaut{t})]\phi
+            % \leftrightarrow
+            % \left(\forall 0\leq t\leq\tau: [x:= y(t)]\phi \right)
+            % \wedge \xbartaut{\tau} = y \rightarrow [\D{x}=\theta (\xbartaut{t})]\phi
+            % where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, i.e.\ $y$ is a local solution of the DDE. The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
+            (Since the DDE is autonomous, we can emit the time index.)
+
+
         \subsection{Axiom of Steps}
             \label{sec:axiom-of-steps}
+
             The \emph{Method of Steps} presented above translates into an axiom.
             %It allows to partially unwind an autonomous DDE given a analytic representation of its solution.
 
             % Let $\theta_0$ and $\theta$
             \begin{calculus}
-                % TODO: actually doesn't need to be in a box?
+                % TODO: stepsb actually doesn't need to be in a box?
                 \cinferenceRule[stepsb|stpsb]{method of steps axiom}{
                     \linferenceRule[equiv]{
                         \dbox[]{\prepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\rho(x,\xtau)}{(\ivr\land 0\leq t\leq\tau)})}}{\phi}
@@ -132,23 +144,27 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
                         \dbox[]{\hevolvein{\D{x}=\rho(x,\xtau)}{\ivr}}{\phi}
                     }
                 }{}
-                % \xbartau = \theta_0 \rightarrow [\D{x}=\theta(\xbartaut{t})]\phi
-                % \leftrightarrow
-                % \left(\forall 0\leq t\leq\tau: [x:= y(t)]\phi \right)
-                % \wedge \xbartaut{\tau} = y \rightarrow [\D{x}=\theta (\xbartaut{t})]\phi
+
 
             \end{calculus}
-            % where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, i.e.\ $y$ is a local solution of the DDE. The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
 
-            (Since the DDE is autonomous, we can emit the time index.)
+            What if $T=t_{max} < \tau$?
 
             \begin{proof}
                 apply methods of steps
             \end{proof}
 
+        \subsection{Axiom of One Step}
+            \label{sex:axiom-of-one-step}
+
+            Unwind loop in axiom od steps
+            given an analytic solution on $[0,\tau]$ and given initial condition
+            useful for bounded model checking
+
     \section{Proof Rules}
         \label{sec:proof-rules}
-We keep the standard sequent calculus proof rules
+
+        We keep the standard sequent calculus proof rules
 
         \begin{calculus}
             \cinferenceRule[close|id]{close by identity}{
@@ -253,14 +269,16 @@ We keep the standard sequent calculus proof rules
             %\begin{proof}\small
             \begin{sidewaysfigure}\footnotesize
             \centering
+            % TODO: hist axiom earlier? before first DC?
             \begin{sequentdeduction}[]
                 \linfer[stepsb]{
                     \linfer[loop]{
                         % FIXME: formel zu hoch
                         \lsequent{\Gamma(\xtau)}{F(\xtau),\Delta}
-                        &\linfer[assignb composeb]{
+                        % FIXME: multiple rules at once
+                        &\linfer[assignb,composeb]{
                             \linfer[DC]{
-                                \linfer[dI]{
+                                \linfer[DC]{
                                     (1)
                                 }{
                                     \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(\ivr\land 0\leq t\leq\tau\land F(x(t-\tau)))}}{F(\xtau)}}
@@ -319,13 +337,13 @@ We keep the standard sequent calculus proof rules
                                 \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}}{F(\theta(0))}
                             }
                         }{
-                            \lsequent{F(\xtau),t=0,A, F(x(t-\tau))}{F(t)}
+                            \lsequent{F(\xtau),t=0,A, F(x(t-\tau))}{F(x(t))}
                         }
                         % TODO: A=\ivr, 0\leq t\leq\tau
-                        &\lsequent{A, F(x(t-\tau)))}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{ \D{x}}{\eta(x,\xtau)}}}{\der{F(x(t))}}}
+                        &\lsequent{A, F(\theta(t-\tau)))}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{ \D{x}}{\eta(x,\theta(t-\tau))}}}{\der{F(x(t))}}}
                         %}
                     }{
-                        \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(A\land F(x(t-\tau)))}}{F(t)}}
+                        \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(A\land F(x(t-\tau)))}}{F(x(t))}}
                     }
                     &\linfer[hist]{
                         (3)
@@ -342,19 +360,19 @@ We keep the standard sequent calculus proof rules
                     \linfer[dW]{
                         \linfer[allR]{
                             \linfer[implyR]{
-                                \linfer[close]{
+                                \linfer[]{
                                     \lclose
                                 }{
-                                    \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0, A, F(\theta(-\tau)), F(\theta(0))}{\lforall{r\in[-\tau,0]}{F(\theta(r))}}
+                                    \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0, \ivr(r,y), 0\leq r\leq\tau, F(\theta(r-\tau)), F(\theta(r))}{\lforall{s\in[-\tau,0]}{F(\theta(r+s))}}
                                 }
                             }{
-                                \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{((A\land F(\theta(-\tau))\land F(\theta(0)))\limply\lforall{r\in[-\tau,0]}{F(\theta(r))})}
+                                \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{((\ivr(r,y)\land 0\leq r\leq\tau\land F(\theta(r-\tau))\land F(\theta(r)))\limply\lforall{s\in[-\tau,0]}{F(\theta(r+s))})}
                             }
                         }{
-                            \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{\lforall{(t,x)}{((A\land F(\theta(-\tau))\land F(\theta(0)))\limply\lforall{r\in[-\tau,0]}{F(\theta(r))})}}
+                            \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{\lforall{(t,x)}{((A\land F(\theta(t-\tau))\land F(\theta(t)))\limply\lforall{s\in[-\tau,0]}{F(\theta(t+s))})}}
                         }
                     }{
-                        \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(s))}, t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(A\land F(\theta(-\tau))\land F(\theta(0)))}}{(\lforall{r\in[-\tau,0]}{F(\theta(r))})}}
+                        \lsequent{\lforall{s\in[-\tau,0]}{F(\theta(t+s))}, t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\theta(t-\tau))}{(A\land F(\theta(t-\tau))\land F(\theta(t)))}}{(\lforall{s\in[-\tau,0]}{F(\theta(t+s))})}}
                     }
                 }{
                     \lsequent{F(\xtau),t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(A\land F(x(t-\tau))\land F(x(t)))}}{F(\xtau)}}
@@ -367,8 +385,6 @@ We keep the standard sequent calculus proof rules
         \subsection{Delay Differential Invariant}
             \label{sec:delay-differential-invariant}
 
-
-
             loop and differential invariants are of form $\lforall{s\in[-\tau,0]}{F(x(s))}$
             can they have $x$?
 
@@ -376,12 +392,18 @@ We keep the standard sequent calculus proof rules
 
             Mentioning $\xtau$ in the invariant differential invariant is not permitted, since derivation would lead to the occurrence of the symbol $x_{2\tau}$, whose properties are out of the scope of the current state.
 
+            % TODO: ref to DDI
+            As for ODEs in \dL, we cannot have $x(t)$ in the premise in DDI. Would permit to prove wrong statements.
+
+            Invariant for limited time: use with loop unrolling (can it be generalized to unlimited inv?)
+
         % TODO: Example
         \subsection{Examples}
             \label{sec:examples}
 
             \subsubsection{Example 1}
                 \label{sec:ddi-example-1}
+
                 Consider the non-linear first order delay differential equation
                 \begin{equation}
                     \D{x}(t) = \begin{cases}
@@ -424,6 +446,7 @@ We keep the standard sequent calculus proof rules
 
             \subsubsection{Example 2}
                 \label{sec:ddi-example-2}
+                
                 Consider the non-linear first order delay differential equation
                 \begin{equation}
                     \D{x}(t) = \begin{cases}
