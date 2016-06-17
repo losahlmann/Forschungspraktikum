@@ -1,118 +1,216 @@
 \chapter{Hybrid Programs with DDEs}\label{hybrid-programs-with-ddes}
 
-    We extent classic hybrid programs (\HP) and \dL formulae with syntax, semantics, axiomatization and proof rules for DDEs.
-    %Is a super set, \dL is a fragment
+We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semantics, axiomatization and proof rules which allow to deal with Delay Differential Equations.
+%Is a super set, \dL is a fragment
 
-    \section{Example}
-        \label{example-hp-cars}
-        To motivate the need of being able to treat Delayed Differential Equations in hybrid programs, we present some examples.
+\section{Example}
+    \label{example-hp-cars}
+    To motivate the need of being able to treat Delayed Differential Equations in hybrid programs, we present some examples.
 
-        \subsection{Leading and Following Car}
+    \subsection{Leading and Following Car}
 
-        \subsection{Network Induced Delay in Control Loops}
+    \subsection{Network Induced Delay in Control Loops}
 
-    \section{Syntax}
-        \label{sec:syntax}
+\section{Syntax}
+    \label{sec:syntax}
 
-        \subsubsection{Terms}
-            \label{sec:terms}
+    $\allvars$ set of \textit{all variables} and $\D{\allvars}\defeq\{\D{x}:x\in\allvars\}$ set of \textit{differential symbols}
 
-            We extent the grammar defining \textbf{terms} with a symbol for a \textbf{delayed variable}
-            % FIXME: replace ::=
-            % FIXME: replace |
-            \begin{equation}
-                \theta,\eta ::= x|\xtau|\D{x}|c|\theta+\eta|\theta\cdot\eta
-            \end{equation}
+    variables $x,y,z\in\allvars$ with their differential symbols $\D{x},\D{y},\D{z}\in\D{\allvars}$
 
-            The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\xtau$.
+    % TODO: meaning of function, predicate, constant
+    function symbols $f,g,h$
 
-    The grammars for hybrid programs and \dL formulas remain unchanged.
+    predicate symbols $p,q,r$
 
+    program constants $\ausprg, \busprg, c$, may be in $\rationals$
 
-    \section{Semantics}
-        \label{sec:semantics}
-        % TODO: fix display of semantics [[]]
+    defined inductively
+
+    \begin{definition}[Terms]
+        \label{def:syntax-terms}
+
+        We extent the grammar defining \textbf{terms} with a symbol for a \textbf{delayed variable}
+        % FIXME: replace ::=
+        % FIXME: replace |
         \begin{equation}
-            \imodels[\I]{\phi}{x}
+            \theta,\eta ::= x|\xtau|\D{x}|c|\theta+\eta|\theta\cdot\eta
         \end{equation}
 
-        Following the remark to the solution of a DDE, we augment the \textbf{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $[-\tau,0]$, as defined in \ref{definition-piecewise-continuous}.
+        The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\xtau$.
 
-        %TODO: need $\xbartau$
+    \end{definition}
 
-        We senote by $\states$ the set of states. A state $\omega\in\states$ is a mapping
+    where $x$ and where $\xtau$?
+    %The grammars for hybrid programs and \dL formulas remain unchanged, but are shown here for completeness.
+
+    \begin{definition}[Hybrid program]
+        \label{def:syntax-HP}
+
+        grammar
+        $\asprg, \bsprg$ \HPs, program constants $\ausprg$, variable $x$, term $\astrm$ (possibly containing $x$ or $\xtau$?), formula $\bsfml$ of first-order logic of real arithmetic
+
         \begin{equation}
-            \omega : \mathcal{V}\cup\mathcal{V'}\rightarrow\statespace
+            % TODO: replace ;
+            \asprg, \bsprg ::= a | \hupdate{\humod{x}{\astrm}} | \Dupdate{\Dumod{\D{x}}{\astrm}} | \htest{\bsfml} | \hchoice{\asprg}{\bsprg} | \asprg;\bsprg | \hrepeat{\asprg} | \hevolvein{\D{x}=\astrm}{\bsfml}
         \end{equation}
-        that assigns a \emph{history} (function) $\xbartau$ to each variable symbol and
 
-        %FIXME: need diff var symbol? can determine derivative from x? need pw diffable?
+        difference to \dL, refer to Section \ref{sec:dynamic-semantics} for meaning of the following, different meaning for formulae
 
-        % TODO: Abgrenzung zu Trace Semantics
-        % The temporal character of delay differential equations (they depend on their own temporal evolution with limited horizon) suggests the introduction of trace semantics.
-        %
-        % However, we go the way of introducing transition semantics with an augmented state space.
+        assignment, discretely at an instant of time
+        test of formula in current state
+        nondeterministic choice
+        sequential composition
+        nondeterministic repetition
+        delay differential equation with restricted evolution, due to domain constraint $\bsfml$, follow arbitrary amount of time
 
-        \subsection{Terms}
-            \label{sec:terms-semantic}
+    \end{definition}
 
-            The semantic of the new symbol $\xtau$ depends on the context in which the term occures:
-            \begin{itemize}
-                \item in a hybrid program: $\imodel{\I}{\xtau} = \imodel[\nu]{}{x(t-\tau)} = \nu(x)(-\tau)$
-                \item in a formula: \begin{equation}
-                    % FIXME: rechte seite noch nicht korrekt
-                    \imodel[]{}{\phi(\xtau)} =
-                    \{\nu\in\states : \lforall{t\in[-\tau,0]}{\phi(\nu(x)(t))} \}
-                \end{equation}
-            \end{itemize}
+    \begin{definition}[(\dL) formula]
+        \label{def:syntax-formula}
 
-            The semantics of the variable symbols in terms are given by
-            \begin{equation}
-                \imodel[\nu]{}{x}=\nu(x)(0)
+        formulas of (differential dynamic logic \dL)
+        defined by grammar
+        with \dL formulas $\asfml,\bsfml$, terms $\astrm,\bstrm,\istrm{1},\ldots,\istrm{k}$,
+        % TODO: replace with command for predicate symbols, quantifier symbol
+        predicate symbol $p$, quantifier symbol $C$, variable $x$, \HP $\asprg$
+
+        \begin{equation}
+            \asfml,\bsfml ::= \astrm\geq\bstrm | p(\istrm{1},\ldots,\istrm{k}) | \contextapp{C}{\asfml} | \lnot\asfml | \asfml\land\bsfml | \lforall{x}{\asfml} | \lexists{x}{\asfml} | \dbox{\asprg}{\asfml} | \ddiamond{\asprg}{\asfml}
+        \end{equation}
+
+        other operators, such as $>,\leq,<,\lor,\limply,\lbisubjunct$ can be derived from $\land,\lnot$
+
+        modal formula $\dbox{\asprg}{\asfml}$ : $\asfml$ holds in the state after all runs of $\asprg$, dual: there is a run
+        quantifier symbols $C$, with formula as argument are higher order predicate symbols and bind the variables of $\asfml$
+
+    \end{definition}
+
+\section{Dynamic Semantics}
+    \label{sec:dynamic-semantics}
+    % TODO: fix display of semantics [[]]
+    \begin{equation}
+        \imodels[\I]{\phi}{x}
+    \end{equation}
+
+    Following the remark to the solution of a DDE, we augment the \textbf{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $[-\tau,0]$, as defined in \ref{definition-piecewise-continuous}.
+
+
+    We denote by $\states$ the set of states. A state $\omega\in\states$ is a mapping
+    \begin{equation}
+        \omega : \mathcal{V}\cup\mathcal{V'}\rightarrow\statespace
+    \end{equation}
+    that assigns a \emph{history} (function) $\xbartau$ to each variable and differential symbol.
+
+    %FIXME: need diff var symbol? can determine derivative from x? need pw diffable?
+
+    rewriting history is not allowed, only values at current time instant can be changed $\modif{\nu}{x}{r}$ denotes state which is equal to state $\nu$ except for the value of variable $x$ at the time $t=0$, which is changed to $r\in\R$. values of $x$ for time before do not change
+
+    % TODO: Abgrenzung zu Trace Semantics
+    % The temporal character of delay differential equations (they depend on their own temporal evolution with limited horizon) suggests the introduction of trace semantics.
+    %
+    % However, we go the way of introducing transition semantics with an augmented state space.
+
+    \begin{definition}[Semantics of terms]
+        \label{def:sematic-terms}
+        semantics of a term $\astrm$ in a state $\nu\in\statespace$ is a value in $\R$????
+        defined inductively as follows
+
+        % The semantics of the variable symbols in terms are given by
+        \begin{itemize}
+            \item $\imodel{}{x} = \nu(x)(0)$
+            \item $\imodel[\nu]{}{\D{x}}=\nu(\D{x})(0)$
+            \item $\imodel{}{f(\istrm{1},\ldots,\istrm{k})} = $ for function symbol $f$
+            \item $\imodel{}{\astrm+\bstrm} = \imodel{}{\astrm} + \imodel{}{\bstrm}$
+            \item $\imodel{}{\astrm\cdot\bstrm} = \imodel{}{\astrm} \cdot \imodel{}{\bstrm}$
+            \item $\imodel{}{\D{(\astrm)}} = $
+        \end{itemize}
+
+        The semantic of the new symbol $\xtau$ depends on the context in which the term occures:
+        \begin{itemize}
+            \item in a hybrid program: $\imodel{\I}{\xtau} = \imodel[\nu]{}{x(t-\tau)} = \nu(x)(-\tau)$
+            \item in a formula: \begin{equation}
+                % FIXME: rechte seite noch nicht korrekt
+                \imodel[]{}{\phi(\xtau)} =
+                \{\nu\in\states : \lforall{t\in[-\tau,0]}{\phi(\nu(x)(t))} \}
             \end{equation}
-            and
-            \begin{equation}
-                \imodel[\nu]{}{\D{x}}=\nu(\D{x})(0)
-            \end{equation}
-            In the precondition, no values are associated to the differential symbols. In general, the initial function is only piecewise continuous.
-            Since for later time instances, the values of the differential symbols derive from the DDE, they become (locally) smooth function.
+        \end{itemize}
+
+        In the precondition, no values are associated to the differential symbols. In general, the initial function is only piecewise continuous.
+        Since for later time instances, the values of the differential symbols derive from the DDE, they become (locally) smooth function.
+
+    \end{definition}
+
+    When we write $x$ we mean $x(t)$.
+
+    \begin{definition}[Semantics of (\dL) formulae]
+        \label{def:semantic-formulae}
+
+        semantics of (\dL) formula $\asfml$ with set of states $\states$ is the subset of states $\imodel{}{\asfml}\subset\states$ in which $\asfml$ is true. this set is defined inductively by
+
+        \begin{itemize}
+            % TODO: replace : in set by \with
+            \item $\imodel{}{\asfml\geq\bsfml} = \{\nu\in\states : \imodel{}{\asfml}\geq\imodel{}{\bsfml}\}$
+            \item $\imodel{}{p(\istrm{1},\ldots,\istrm{k})} = \{\nu\in\states : \}$
+            \item $\imodel{}{\contextapp{C}{\asfml}} = $
+            \item $\imodel{}{\lnot\asfml} = \scomplement{(\imodel{}{\asfml})} = \states\setminus\imodel{}{\asfml}$
+            \item $\imodel{}{\asfml\land\bsfml} = \imodel{}{\asfml}\cap\imodel{}{\bsfml}$
+            \item $\imodel{}{\lforall{x}{\asfml}} = \{\nu\in\states \with \modif{\nu}{x}{r}\in\imodel{}{\asfml} \text{ for all } r\in\R \}$
+            \item $\imodel{}{\lexists{x}{\asfml}} = \{\nu\in\states \with \modif{\nu}{x}{r}\in\imodel{}{\asfml} \text{ for some } r\in\R \}$
+            \item $\imodel{}{\dbox{\asprg}{\asfml}} = \{\nu\in\states \with \omega\in\imodel{}{\asfml} \text{ for all $\omega$ such that} (\nu,\omega)\in\imodel{}{\asprg}\}$
+            \item $\imodel{}{\ddiamond{\asprg}{\asfml}} = \{\nu\in\states \with \omega\in\imodel{}{\asfml} \text{ for some $\omega$ such that} (\nu,\omega)\in\imodel{}{\asprg}\}$
+        \end{itemize}
+        if formula $\asfml$ is true in state $\nu$ we write $\nu\models\asfml$. It is called valid, written as $\models\asfml$ iff $\asfml$ is true in all states.
+
+    \end{definition}
 
 
-            When we write $x$ we mean $x(t)$.
+        With the semantics of terms if follows for the meaning of $\dbox{\asprg}{\phi}$, that $\phi$ must only hold up to time $\tau$ before leaving the \HP $\asprg$. It is possible, that $\phi$ was not verified before, while \textit{executing} the \HP.
 
-        \subsection{\dL semantics}
-            \label{sec:dL-semantics}
-            
-            With the semantics of terms if follows for the meaning of $\dbox{\alpha}{\phi}$, that $\phi$ must only hold up to time $\tau$ before leaving the \HP $\alpha$. It is possible, that $\phi$ was not verified before, while \textit{executing} the \HP.
+        However when we apply the Rule of steps, we get the validity of $\phi$ for the entire trace.
 
-            However when we apply the Rule of steps, we get the validity of $\phi$ for the entire trace.
+        % TODO: is it better to only have xtau and not choice? What if both mentioned?
+        in formulae (such as safety condition or evolution constraint), we have two possibilities: only value at current time instant ($x$) or for entire last $\tau$ time $\xtau$
 
-            % TODO: is it better to only have xtau and not choice? What if both mentioned?
-            in formulae (such as safety condition or evolution constraint), we have two possibilities: only value at current time instant ($x$) or for entire last $\tau$ time $\xtau$
 
-        \subsection{Hybrid Programs}
-            \label{sec:hp-semantics}
+    \begin{definition}[Transition semantics of \HPs]
+        \label{def:semantic-HP}
 
-            The transition semantic of a hybrid program $\alpha$ is inductively given by a binary reachability relation $\rho(\alpha)\subseteq\states\times\states$. Since the state space has been replaced, we need to redefine the semantics:
+         reachability relation $\iaccessibility(\asprg)\subseteq\states\times\states$. Since, with respect to \dL, the state space has been replaced, we need to redefine the semantics:
+        \begin{itemize}
+            % TODO: () for iaccessibility
+            \item $\iaccessibility{a} = $
+            \item $\iaccessibility{\hupdate{\humod{x}{\astrm}}}$
+            \item $\iaccessibility{\Dupdate{\Dumod{\D{x}}{\astrm}}} $
+            \item $\iaccessibility{\htest{\bsfml}}$
+            \item $\iaccessibility{\hchoice{\asprg}{\bsprg}} = \hchoice{\iaccessibility{\asprg}}{\iaccessibility{\bsprg}}$
+            \item $\iaccessibility{\asprg;\bsprg} $
+            \item $\iaccessibility{\hrepeat{\asprg}} = \hrepeat{(\iaccessibility{\asprg})} = \cupfold_{n\in\N}\iaccessibility{\asprg^n}$ with $\asprg^{n+1}\equiv (\asprg^n;\asprg)$ and $\asprg^0\equiv \htest{\ltrue}$
+            \item $\iaccessibility{\hevolvein{\D{x}=\astrm}{\bsfml}}$
+        \end{itemize}
 
-            The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
-            \begin{equation}
-            \rho(\hupdate{\humod{x}{\theta}}) = \left\{(\nu,\omega): \omega = \nu \text{ except } \omega(x)=\left(t\mapsto\begin{cases}\imodel{\I}{\theta} & t=0\\ \nu(t) &t\in[-\tau,0)\end{cases}\right)\qquad\right\}_.
-            \end{equation}
-            This assignment is the actual reason why we need to consider piecewise continuous evolutions.
+    \end{definition}
 
-            %TODO: super dense time: multiple assignments
+        The transition semantic of a hybrid program $\asprg$ is inductively given by a binary
 
-            Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
-            \begin{equation}
-                \rho(\hevolvein{\D{x}=\theta}{\ivr}) = \left\{
-                    (\varphi(0),\varphi(s))\,:\,\lforall{0\leq t\leq s}{\varphi(t)\models \D{x}=\theta\,\wedge\,\varphi(t)(0)\models\ivr}\text{ for a solution } \varphi:[0,s]\rightarrow\states \right\}
-            \end{equation}
-            As a solution, $\varphi$ needs to fulfill
-            \begin{equation}
-                \varphi(t)(\D{x})(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel[]{\varphi(t)}{\theta}
-            \end{equation}
-            Remember that a $\xtau$ mentioned in $\theta$ here means $\varphi(t)(x)(-\tau)$.
-            And so needs $\ivr$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
+        The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
+        \begin{equation}
+        \iaccessibility(\hupdate{\humod{x}{\theta}}) = \left\{(\nu,\omega): \omega = \nu \text{ except } \omega(x)=\left(t\mapsto\begin{cases}\imodel{\I}{\theta} & t=0\\ \nu(t) &t\in[-\tau,0)\end{cases}\right)\qquad\right\}_.
+        \end{equation}
+        This assignment is the actual reason why we need to consider piecewise continuous evolutions.
 
-            % TODO: what about [a;b]p. is [a][b]p correct?
+        %TODO: super dense time: multiple assignments
+
+        Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
+        \begin{equation}
+            \iaccessibility(\hevolvein{\D{x}=\theta}{\ivr}) = \left\{
+                (\varphi(0),\varphi(s))\,:\,\lforall{0\leq t\leq s}{\varphi(t)\models \D{x}=\theta\,\wedge\,\varphi(t)(0)\models\ivr}\text{ for a solution } \varphi:[0,s]\rightarrow\states \right\}
+        \end{equation}
+        As a solution, $\varphi$ needs to fulfill
+        \begin{equation}
+            \varphi(t)(\D{x})(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel[]{\varphi(t)}{\theta}
+        \end{equation}
+        Remember that a $\xtau$ mentioned in $\theta$ here means $\varphi(t)(x)(-\tau)$.
+        And so needs $\ivr$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
+
+        % TODO: what about [a;b]p. is [a][b]p correct?
