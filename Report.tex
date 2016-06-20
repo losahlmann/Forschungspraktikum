@@ -69,7 +69,7 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
     \label{sec:axioms}
 
 
-
+    % QUESTION: which axioms are needed? in papers differences
     \begin{calculus}
         % TODO: Diamond-Axiom
 
@@ -88,6 +88,7 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
                 \dbox{\htest{\chi}}{\asfml}
             }
         }{}
+        % TODO: ['] axiom
         \cinferenceRule[choiceb|$\hchoice{}{}$]{choice}{
             \linferenceRule[equiv]{
                 \dbox{\asprg}{\asfml}\land\dbox{\bsprg}{\asfml}
@@ -95,24 +96,7 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
                 \dbox{\hchoice{\asprg}{\bsprg}}{\asfml}
             }
         }{}
-        % TODO: iterateb symbol
-        \cinferenceRule[iterateb|$k$]{loop unrolling}{
-            \linferenceRule[equiv]{
-                \asfml\land\dbox{\asprg}{\dbox{\hrepeat{\asprg}}{\asfml}}
-            }{
-                \dbox{\hrepeat{\asprg}}{\asfml}
-            }
-        }{}
-        % TODO: forall-Axiom
-        % TODO: K-Axiom
-        % TODO: I-Axiom
-        % TODO: V-Axiom
-        % TODO: G-Axiom
-        % TODO: MP-Axiom
-        % TODO: CT-Axiom
-        % TODO: CQ-Axiom
-        % TODO: CE-Axiom
-        % TODO: US-Axiom
+        % TODO: [&]
         % TODO: composeb symbol
         \cinferenceRule[composeb|$;$]{composition}{
             \linferenceRule[equiv]{
@@ -121,9 +105,96 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
                 \dbox{\asprg;\bsprg}{\asfml}
             }
         }{}
+        % TODO: iterateb symbol
+        \cinferenceRule[iterateb|$*$]{loop unrolling}{
+            \linferenceRule[equiv]{
+                \asfml\land\dbox{\asprg}{\dbox{\hrepeat{\asprg}}{\asfml}}
+            }{
+                \dbox{\hrepeat{\asprg}}{\asfml}
+            }
+        }{}
+        % TODO: proper name K-Axiom
+        \cinferenceRule[Kb|K]{}{
+            \linferenceRule[impl]{
+                \dbox{\asprg}{(\asfml\limply\bsfml)}
+            }{
+                (\dbox{\asprg}{\asfml}\limply\dbox{\asprg}{\bsfml})
+            }
+        }{}
+        % TODO: proper name I-Axiom
+        \cinferenceRule[Ib|I]{}{
+            \linferenceRule[impl]{
+                \dbox{\hrepeat{\asprg}}{(\asfml\limply\dbox{\asprg}{\asfml})}
+            }{
+                (\asfml\limply\dbox{\hrepeat{\asprg}}{\asfml})
+            }
+        }{}
+        % TODO: proper name C-Axiom
+        \cinferenceRule[Cb|C]{}{
+            \linferenceRule[impl]{
+                \dbox{\hrepeat{\asprg}}{\lforall{v>0 (\varphi(v)\limply\ddiamond{\asprg}{\varphi(v-1)})}}
+            }{
+                \lforall{v}{(\varphi(v)\limply\ddiamond{\hrepeat{\asprg}}{\lexists{v\leq 0}{\varphi(v)}})}
+            }
+        }{$v\notin\asprg$}
+        % TODO: proper name B-Axiom
+        \cinferenceRule[Bb|B]{}{
+            \linferenceRule[impl]{
+                \lforall{x}{\dbox{\asprg}{\asfml}}
+            }{
+                \dbox{\asprg}{\lforall{x}{\asfml}}
+            }
+        }{$x\notin\asprg$}
+        % TODO: proper name V-Axiom
+        % QUESTION: what is difference between V and G axiom?
+        \cinferenceRule[Vb|V]{}{
+            \linferenceRule[impl]{
+                \asfml
+            }{
+                \dbox{\asprg}{\asfml}
+            }
+        }{$\freevars{\asfml}\cap\boundvars{\asprg}=\emptyset$}
+        % TODO: proper name G-Axiom
+        \cinferenceRule[Gb|G]{}{
+            \linferenceRule[sequent]{
+                \asfml
+            }{
+                \dbox{\asprg}{\asfml}
+            }
+        }{}
+        \cinferenceRule[MP|MP]{modus ponens}{
+            \linferenceRule[sequent]{
+                \asfml\limply\bsfml & \asfml
+            }{
+                \bsfml
+            }
+        }{}
+        \cinferenceRule[forall|$\forall$]{forall generalization rule}{
+            \linferenceRule[sequent]{
+                \asfml
+            }{
+                \lforall{x}{\asfml}
+            }
+        }{}
+
+        % TODO: CT-Axiom
+        % TODO: CQ-Axiom
+        % TODO: CE-Axiom
+        % TODO: US-Axiom
+
     \end{calculus}
 
     % TODO: proofs, do not change, since only mention states?
+    \begin{theorem}[Soundness of \dL]
+        \label{thm:dL-soundness}
+        The \dL calculus adapted to delay differential equations is sound.
+
+    \end{theorem}
+    \begin{proof}
+        The arguments of most proof parts are the same as they were for the classic \dL, since only the definition of the statespace has been replaced. The proofs were independent of this definition, though. (this is the case for [?], [choice], [;], [*], K, I, C, B, V, G)
+        Exceptions: [:=] (->substitution lemma), ['] (-> new PL)
+        [\&]???
+    \end{proof}
 
 
     \subsection{History Axiom}
@@ -323,7 +394,7 @@ it often makes sense to treat the very first initial condition separately, becau
             }{}
         \end{calculus}
         %\end{small}
-        
+
         Formulas of the form $\Gamma(\xtau)$ implicitely also include a statement about $x$.
 
     \subsection{Delay Differential Induction}
