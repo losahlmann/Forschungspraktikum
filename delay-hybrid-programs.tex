@@ -14,7 +14,7 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
 \section{Syntax}
     \label{sec:syntax}
 
-    $\allvars$ set of \textit{all variables} and $\D{\allvars}\defeq\{\D{x}:x\in\allvars\}$ set of \textit{differential symbols}
+    $\allvars$ set of \textit{all variables} and $\diffvars\defeq\{\D{x} \with x\in\allvars\}$ set of \textit{differential symbols} and set of \textit{delayed variables} $\delayedvars\defeq\{\xtau \with x\in\allvars\}$
 
     variables $x,y,z\in\allvars$ with their differential symbols $\D{x},\D{y},\D{z}\in\D{\allvars}$
 
@@ -34,8 +34,10 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
         % FIXME: replace ::=
         % FIXME: replace |
         \begin{equation}
-            \theta,\eta ::= x|\xtau|\D{x}|c|\theta+\eta|\theta\cdot\eta
+            \astrm,\bstrm ::= x|\xtau|\D{x}|c|\astrm+\bstrm|\astrm\cdot\bstrm
         \end{equation}
+
+        % subtraction and division
 
         The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\xtau$.
 
@@ -48,7 +50,10 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
         \label{def:syntax-HP}
 
         grammar
-        $\asprg, \bsprg$ \HPs, program constants $\ausprg$, variable $x$, term $\astrm$ (possibly containing $x$ or $\xtau$?), formula $\bsfml$ of first-order logic of real arithmetic
+        $\asprg, \bsprg$ \HPs, program constants $\ausprg$, variable $x$, term $\astrm$ (possibly containing $x$ or $\xtau$?), formula $\bsfml$ of first-order logic of real arithmetic (\FOLR)
+
+        % TODO: first order logic of real arithmetic formulas include \xtau?
+        % TODO: difference dL formula and FOLR formula
 
         \begin{equation}
             % TODO: replace ;
@@ -63,6 +68,7 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
         sequential composition
         nondeterministic repetition
         delay differential equation with restricted evolution, due to domain constraint $\bsfml$, follow arbitrary amount of time
+        ODE still possible
 
     \end{definition}
 
@@ -78,7 +84,7 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
         \begin{equation}
             \asfml,\bsfml ::= \astrm\geq\bstrm | p(\istrm{1},\ldots,\istrm{k}) | \contextapp{C}{\asfml} | \lnot\asfml | \asfml\land\bsfml | \lforall{x}{\asfml} | \lexists{x}{\asfml} | \dbox{\asprg}{\asfml} | \ddiamond{\asprg}{\asfml}
         \end{equation}
-
+        % TODO: need = in formulas ?
         other operators, such as $>,\leq,<,\lor,\limply,\lbisubjunct$ can be derived from $\land,\lnot$
 
         modal formula $\dbox{\asprg}{\asfml}$ : $\asfml$ holds in the state after all runs of $\asprg$, dual: there is a run
@@ -93,12 +99,15 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
         \imodels[\I]{\phi}{x}
     \end{equation}
 
-    Following the remark to the solution of a DDE, we augment the \textbf{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $[-\tau,0]$, as defined in \ref{definition-piecewise-continuous}.
+    Following the remark to the solution of a DDE, we augment the \textbf{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $[-\tau,0]$, as defined in Definition \ref{definition-piecewise-continuous}.
+
+    Variables remember limited history
+    hence implicit notion of underlying time/clock
 
 
     We denote by $\states$ the set of states. A state $\omega\in\states$ is a mapping
     \begin{equation}
-        \omega : \mathcal{V}\cup\mathcal{V'}\rightarrow\statespace
+        \omega : \allvars\cup\diffvars\rightarrow\statespace
     \end{equation}
     that assigns a \emph{history} (function) $\xbartau$ to each variable and differential symbol.
 
@@ -123,18 +132,37 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
             \item $\imodel{}{f(\istrm{1},\ldots,\istrm{k})} = $ for function symbol $f$
             \item $\imodel{}{\astrm+\bstrm} = \imodel{}{\astrm} + \imodel{}{\bstrm}$
             \item $\imodel{}{\astrm\cdot\bstrm} = \imodel{}{\astrm} \cdot \imodel{}{\bstrm}$
-            \item $\imodel{}{\D{(\astrm)}} = $
+            \item $\imodel{}{\D{(\astrm)}}\nu = \sum_{x\in\allvars} \nu(\D{x})\frac{\partial\imodel{}{\astrm}}{\partial x}(\nu)$ syntactic (total) derivation, common derivation rules, gives new term, $\astrm$ must not contain $\xtau$
         \end{itemize}
+        Cannot define the derivative of delayed symbols
 
         The semantic of the new symbol $\xtau$ depends on the context in which the term occures:
         \begin{itemize}
-            \item in a hybrid program: $\imodel{\I}{\xtau} = \imodel[\nu]{}{x(t-\tau)} = \nu(x)(-\tau)$
-            \item in a formula: \begin{equation}
+            \item in a hybrid program: $\imodel{\I}{\xtau} = \imodel[\nu]{}{x(t-\tau)} = \nu(x)(-\tau)\in\R$
+            \item in a formula $\xtau\in\statespace$: \begin{equation}
                 % FIXME: rechte seite noch nicht korrekt
                 \imodel[]{}{\phi(\xtau)} =
                 \{\nu\in\states : \lforall{t\in[-\tau,0]}{\phi(\nu(x)(t))} \}
             \end{equation}
+            with uniform substitution: $\sigma=\{\xtau\rightarrow\theta_0\}$
         \end{itemize}
+
+        Meaning differential symbol: defined by state, since time derivative may not be defined in isolated point (different to ODE, where isolated state=value in $\R$)
+        Along a solution of a DDE $\varphi:[0,r]\rightarrow\states$ (continous differentiable), the differential symbols are interpreted as time derivatives, $r>0$ at any $\zeta\in[0,r]$, meaning of symbol is rate of change of value of $x$ over time
+        \begin{equation}
+            % TODO: replace \DD with Andres command
+            \imodel{}{\D{x}}\varphi(\zeta)=\varphi(\zeta)(\D{x})(0)\defeq\DD{\varphi(t)(x)(0)}{t}(\zeta) = \DD{\imodel{}{x}\varphi(t)}{t}(\zeta)
+        \end{equation}
+        if $r=0$
+        and what if there is no ODE/DDE given: in a given state should also be real value
+        state assigns real values to all symbols, also differential symbols $\nu(\D{x}=\imodel{}{f(x)}\nu$
+        in initial state an arbitray value is allowed, will then sync with equation to fullfil $\varphi(\zeta)(\D{x})=\imodel{}{f(x)}\varphi(r)$
+
+        Like for ODE case, only use last value given in state. Since in $t=0$ could be incontinuity we cannot use history to define derivative.
+
+        \begin{lemma}[Differential Lemma]
+
+        \end{lemma}
 
         In the precondition, no values are associated to the differential symbols. In general, the initial function is only piecewise continuous.
         Since for later time instances, the values of the differential symbols derive from the DDE, they become (locally) smooth function.
@@ -172,11 +200,13 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
         % TODO: is it better to only have xtau and not choice? What if both mentioned?
         in formulae (such as safety condition or evolution constraint), we have two possibilities: only value at current time instant ($x$) or for entire last $\tau$ time $\xtau$
 
+        $\dbox{}{}$ and $\ddiamond{}{}$ only refer to last state and not intermediate states, as \dTL does.
+
 
     \begin{definition}[Transition semantics of \HPs]
         \label{def:semantic-HP}
 
-         reachability relation $\iaccessibility(\asprg)\subseteq\states\times\states$. Since, with respect to \dL, the state space has been replaced, we need to redefine the semantics:
+         binary reachability relation $\iaccessibility(\asprg)\subseteq\states\times\states$. Since, with respect to \dL, the state space has been replaced, we need to redefine the semantics:
         \begin{itemize}
             % TODO: () for iaccessibility
             \item $\iaccessibility{a} = $
@@ -195,11 +225,13 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
 
         The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
         \begin{equation}
-        \iaccessibility(\hupdate{\humod{x}{\theta}}) = \left\{(\nu,\omega): \omega = \nu \text{ except } \omega(x)=\left(t\mapsto\begin{cases}\imodel{\I}{\theta} & t=0\\ \nu(t) &t\in[-\tau,0)\end{cases}\right)\qquad\right\}_.
+            \iaccessibility(\hupdate{\humod{x}{\theta}}) = \left\{(\nu,\omega): \omega = \nu \text{ except } \omega(x)=\left(t\mapsto\begin{cases}\imodel{\I}{\theta(0)} & t=0\\ \nu(t) &t\in[-\tau,0)\end{cases}\right)\qquad\right\}_.
         \end{equation}
         This assignment is the actual reason why we need to consider piecewise continuous evolutions.
 
-        %TODO: super dense time: multiple assignments
+        No functional assignment, which would essentially allow to rewrite history
+
+        %TODO: super dense time: multiple assignments, only consider last assignment
 
         Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
         \begin{equation}
@@ -208,9 +240,16 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
         \end{equation}
         As a solution, $\varphi$ needs to fulfill
         \begin{equation}
-            \varphi(t)(\D{x})(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel[]{\varphi(t)}{\theta}
+            \varphi(t)(\D{x})(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel[]{}{\theta}\varphi(t)
         \end{equation}
+        Along a DDE/ODE, values of differential symbols coincide with time derivative of value of corresponding variable
         Remember that a $\xtau$ mentioned in $\theta$ here means $\varphi(t)(x)(-\tau)$.
         And so needs $\ivr$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
+
+        \begin{lemma}[Differential Lemma]
+            lecture notes L10.20
+            needed for DI proof
+            no changes, except for rewriting $\varphi(t)(x)\rightarrow\varphi(t)(x)(0)$
+        \end{lemma}
 
         % TODO: what about [a;b]p. is [a][b]p correct?

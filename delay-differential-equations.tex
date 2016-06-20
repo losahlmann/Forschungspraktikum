@@ -26,6 +26,7 @@ The following definition is motivated by capturing the character evolution arisi
 
 \begin{proof}
     See standard analysis literature, such as \cite{rudin1976principles} or \cite{gathmanngrundlagen}.
+    % ObdA: one subint with jump at end
 \end{proof}
 
 % \begin{figure*}[h]\centering
@@ -320,8 +321,15 @@ The proof is smiliar to the proof of ... given in \cite{smith2010introDDE}.
 
 \end{proof}
 
+% TODO: on [\sigma,t_1] DDE equiv to ODE/IntEq
+% -> ex unique sol on [\sigma, t_1]
+% -> ex unique sol on [\sigma,\tau] (glob Lip of f on [sigma,tau])
+% -> ex unique sol on [\sigma,2\tau] (continuous?, diffable?)
+
 \begin{corollary}
     \label{cor:continuability-of-solution}
+
+    % TODO: What is derivation in randpunkten of interval [] ?
     If in Theorem \ref{theorem-solution-existence} $T=t_1-\tau$, can reapplay theorem with starting point $\sigma=\sigma_{old}+t_1-\tau$. Get existence of unique solution on $[\sigma-\tau,\sigma+S]$ with $S>T$.
 \end{corollary}
 

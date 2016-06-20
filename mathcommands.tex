@@ -32,7 +32,7 @@
 % derivative: Lagrange style
 %\newcommand{\D}[1]{#1'} % ' defined in latex and is same as \prime
 % derivative: Leibniz style
-%\newcommand{\DD}[2]{\frac{\text{d} #1}{\text{d} #2}}
+\renewcommand{\DD}[2]{\frac{\text{d} #1}{\text{d} #2}}
 % differential in integral
 \newcommand{\dx}[1][x]{\text{d}#1}
 
@@ -49,11 +49,12 @@
 %
 % dL
 %\newcommand{\dL}{\textsf{d{\kern-0.1em}$\mathcal{L}$ }}
-
-
+\newcommand{\FOLR}{FOL$_\R$}
 %
 % Delay Differential Dynamic Logic
 %
+\newcommand{\diffvars}{\D{\allvars}}
+\newcommand{\delayedvars}{\mathcal{V}_\tau}
 \newcommand{\states}{\mathcal{S}}
 \newcommand{\statespace}{\continuouspws[0]{[-\tau,0]}{\R^n}}
 %\newcommand{\xtau}[1][]{\ifthenelse{\equal{#1}{}}{x[\tau]}{x[#1]}}
