@@ -11,7 +11,7 @@
 \usepackage[T1]{fontenc}
 
 % proper hyphenation
-\usepackage[UKenglish]{babel}
+\usepackage[english]{babel}
 
 % better i18n Postscript version of Knuth's cm fonts, better than cm-super
 \usepackage{lmodern}
@@ -20,20 +20,39 @@
 \usepackage{mathtools} % extension and fixes of/in amsmath
 \usepackage{amssymb} % provides symbols, loads amsfonts
 \usepackage{amsthm} % provides theorem environment
-\usepackage{nicefrac} % better slash fracs in inline
+%\usepackage{nicefrac} % better slash fracs in inline
 
 % For including figures, rotating or scaling text (dont use file extension)
 \usepackage{graphicx}
 
+% rotate figures
+\usepackage{rotating}
+
+% LS-Lab auxiliary math commands
 \usepackage{math}
-\usepackage[postfixflatinterpret,bracketmodalinterpret,fixformat,silentconst,sidenotecalculus,longseqcontext]{logic}
-\usepackage[postfixflatinterpret,bracketmodalinterpret,fixformat,silentconst,simplenames]{dL}
+
+% LS-Lab logic commands: includes lcalculus, lmeta, lsemantics, lsyntax
+\usepackage[postfixflatinterpret,%
+    bracketmodalinterpret,%
+    fixformat,%
+    silentconst,%
+    sidenotecalculus,%
+    longseqcontext%
+    ]{logic}
+
+% LS-Lab differential dynamic logic commands
+\usepackage[postfixflatinterpret,%
+    bracketmodalinterpret,%
+    fixformat,%
+    silentconst,%
+    simplenames%
+    ]{dL}
 
 % own symbol definitions
 \input{mathcommands}
 
 
-\usepackage{rotating}
+
 \newcommand{\I}{\dLint[state=\nu]}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -42,18 +61,20 @@
 
 \title{Delay Hybrid Systems}
 
-\author{Lorenz Sahlmann\\ Ecole Polytechnique\\ Carnegie Mellon University}
+\author{Lorenz Sahlmann\\ École Polytechnique\\ Carnegie Mellon University}
 \date{\today}
 
 \maketitle
 
-\chapter{Introduction}
-In this work we extend Differential Dynamic Logic with Delay Differential Equations.
+\begin{abstract}
+    In this work we extend Differential Dynamic Logic with Delay Differential Equations.
 
-This requires an extension of the syntax, a (partially) redefinition of the semantics and the introduction of additional axioms and proof rules.
+    This requires an extension of the syntax, a (partially) redefinition of the semantics and the introduction of additional axioms and proof rules.
 
-This results in a superset of \dL which we call \textbf{Delay Differential Dynamic Logic}.
+    This results in a superset of \dL which we call \textbf{Delay Differential Dynamic Logic}.
+\end{abstract}
 
+\include{introduction}
 
 \include{delay-differential-equations}
 
@@ -62,6 +83,7 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
 \include{delay-hybrid-programs}
 
 %\include{delay-differential-logic}
+% FIXME: put dDL chapter in seperate file
 \chapter{Delay Differential Dynamic Logic}
 \label{sec:delay-differential-dynamic-logic}
 
@@ -88,7 +110,15 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
                 \dbox{\htest{\chi}}{\asfml}
             }
         }{}
-        % TODO: ['] axiom
+        % TODO: ['] axiom name
+        % FIXME: how is relation to DDE solution axiom
+        \cinferenceRule[solb|$'$]{}{
+            \linferenceRule[equiv]{
+                \lforall{t\geq 0}{\dbox{\hupdate{\humod{x}{y(t)}}}{\asfml}}
+            }{
+                \dbox{\hevolve{\D{x}=\astrm}}{\asfml}
+            }
+        }{$\hevolve{\D{y}(t)=\astrm}$}
         \cinferenceRule[choiceb|$\hchoice{}{}$]{choice}{
             \linferenceRule[equiv]{
                 \dbox{\asprg}{\asfml}\land\dbox{\bsprg}{\asfml}
@@ -96,7 +126,15 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
                 \dbox{\hchoice{\asprg}{\bsprg}}{\asfml}
             }
         }{}
-        % TODO: [&]
+        % TODO: name for [&]
+        % TODO: [&] also holds for DDEs?
+        \cinferenceRule[constb|$\&$]{}{
+            \linferenceRule[equiv]{
+                \lforall{t_0=x_0}{\dbox{\hevolve{\D{x}=\astrm}}{(\dbox{\hevolve{\D{x}=-\astrm}}{(x_0\geq t_0\limply\ivr)}\limply\asfml)}}
+            }{
+                \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}
+            }
+        }{}
         % TODO: composeb symbol
         \cinferenceRule[composeb|$;$]{composition}{
             \linferenceRule[equiv]{
@@ -155,7 +193,7 @@ This results in a superset of \dL which we call \textbf{Delay Differential Dynam
             }
         }{$\freevars{\asfml}\cap\boundvars{\asprg}=\emptyset$}
         % TODO: proper name G-Axiom
-        \cinferenceRule[Gb|G]{}{
+        \cinferenceRule[gen|G]{Gödel's generalization rule}{
             \linferenceRule[sequent]{
                 \asfml
             }{
