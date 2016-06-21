@@ -108,7 +108,7 @@
         % TODO: Diamond-Axiom
 
         % TODO: add box in rule names
-        \cinferenceRule[assignb|$\mathrel{{:}{=}}$]{discrete assignment}{
+        \cinferenceRule[assignbb|$\mathrel{{:}{=}}$]{discrete assignment}{
             \linferenceRule[equiv]{
                 \asfml(\astrm)
             }{
@@ -251,19 +251,21 @@
         \label{history-axiom}
 
         Just replace symbol by its semantical meaning
-        The occurence of $\xbartau$ in expressions can be replaced by turning the (implicitely existing) time variable explicit, i.e.\
+        The occurence of $\xtau$ in expressions can be replaced by turning the (implicitely existing) time variable explicit, i.e.\
         uniform substitution $\sigma$
         allows substitution of $\xtau$ by, depending on context, $x(t-\tau)$ or $\forall{s\in[0,\tau]}{x(t-\tau)}$
         allows substitution of x, +quantifier from semantics in certain contexts
+
         \begin{calculus}
             \cinferenceRule[hist|hist]{history axiom}{
                 \linferenceRule[equiv]{
-                    \lforall{s\in[-\tau,0]}{p(\theta(t+s))}
+                    \lforall{s\in[-\tau,0]}{\asfml(x(t+s))}
                 }{
-                    p(\xtau)
+                    \asfml(\xtau)
                 }
             }{}
         \end{calculus}
+
         for a piecewise continuous function $\theta\in\statespace$.
 
     \subsection{Solution Axiom}
@@ -466,9 +468,9 @@ it often makes sense to treat the very first initial condition separately, becau
         \begin{calculus}
             \cinferenceRule[DDI|DDI]{delay differential induction proof rule}{
                 \linferenceRule[sequent]{
-                    \lsequent{\Gamma}{\inv,\Delta}
+                    \lsequent{\Gamma}{\inv(\xtau),\Delta}
                     &\lsequent{\ivr,0\leq t\leq\tau,\inv(\theta)}{\dbox[]{\hevolve{\Dupdate{\Dumod{\D{x}}{\rho(x,\theta)}}}}{\der{\inv(x)}}}
-                    &\lsequent{\inv}{\asfml}
+                    &\lsequent{\inv(\xtau)}{\asfml}
                 }{
                     \lsequent{\Gamma}{\dbox[]{\hevolvein{\D{x}=\rho(x,\xtau)}{\ivr}}{\asfml,\Delta}}
                 }
@@ -485,7 +487,7 @@ it often makes sense to treat the very first initial condition separately, becau
                     % FIXME: formel zu hoch
                     \lsequent{\Gamma(\xtau)}{\inv(\xtau),\Delta}
                     % FIXME: multiple rules at once
-                    &\linfer[assignb,composeb]{
+                    &\linfer[assignb+composeb]{
                         \linfer[hist]{
                             \linfer[DC]{
                                 \linfer[DC]{
@@ -612,39 +614,39 @@ it often makes sense to treat the very first initial condition separately, becau
             Consider the non-linear first order delay differential equation
             \begin{equation}
                 \D{x}(t) = \begin{cases}
-                     x(t-1) & t \geq 0\\
-                     \theta(t)\geq 0 & t \in [-1,0]
+                     x(t-\tau) & t \geq \sigma\\
+                     \theta(t)\geq 0 & t \in [\sigma-\tau,\sigma]
                 \end{cases}
             \end{equation}
-            Using $F\equiv(x^3\leq 0)$ we prove that the solution stays non-negativ for all time $t$.
+            Using the invariant $F\equiv(x^3\geq 0)$ we prove that the solution stays non-negativ for all time $t$.
             \begin{sequentdeduction}
                 \linfer[DDI]{
                     \linfer[]{
                         \lclose
                     }{
-                        \lsequent{\xtau[1]\geq 0}{\xtau[1]^3\geq 0}
+                        \lsequent{\xtau\geq 0}{\xtau^3\geq 0}
                     }
                     &\linfer[]{
                         \linfer[]{
-                            \linfer[closeTrue]{
+                            \linfer[]{
                                 \lclose
                             }{
-                                \lsequent{}{3x^2\theta\geq 0}
+                                \lsequent{\theta^3\geq 0}{3x^2\theta\geq 0}
                             }
                         }{
-                            \lsequent{0\geq t\geq\tau,\theta(t)^3\geq 0}{\dbox{\Dupdate{\Dumod{\D{x}}{\theta(t)}}}{(3x(t)^2 \D{x}\geq 0)}}
+                            \lsequent{0\leq t\leq \tau,\theta^3\geq 0}{\dbox{\Dupdate{\Dumod{\D{x}}{\theta}}}{(3x^2 \D{x}\geq 0)}}
                         }
                     }{
                         %\lclose
-                        \lsequent{0\geq t\leq\tau,\theta(t)^3\geq 0}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{\D{x}}{\theta(t)}}}{\der{x\geq 0}}}
+                        \lsequent{0\leq t\leq \tau,\theta^3\geq 0}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{\D{x}}{\theta}}}{\der{x^3\geq 0}}}
                     }
                     &\linfer[]{
                         \lclose
                     }{
-                        \lsequent{\xtau[1]^3\geq 0}{\xtau[1]\geq 0}
+                        \lsequent{\xtau^3\geq 0}{\xtau\geq 0}
                     }
                 }{
-                    \lsequent{\xtau[1]\geq 0}{\dbox{\D{x}=\xtau[1]}{(\xtau[1]\geq 0)}}
+                    \lsequent{\xtau\geq 0}{\dbox{\D{x}=\xtau}{(\xtau\geq 0)}}
                 }
             \end{sequentdeduction}
             In the same way we can prove that the solution stays negative for all $t$, if the initial condition is non-positive.
@@ -652,7 +654,7 @@ it often makes sense to treat the very first initial condition separately, becau
         \subsubsection{Example 2}
             \label{sec:ddi-example-2}
 
-            Consider the non-linear first order delay differential equation
+            Consider the non-linear first order delay differential equation with explicitely given initial condition
             \begin{equation}
                 \D{x}(t) = \begin{cases}
                      -x(t-1)^2 & t \geq 0\\
@@ -660,36 +662,45 @@ it often makes sense to treat the very first initial condition separately, becau
                 \end{cases}
             \end{equation}
             Using $F\equiv(x^3\leq 0)$ we prove that the solution stays non-positiv.
-            \begin{sequentdeduction}
-                \linfer[DDI]{
-                    \linfer[]{
-                        \lclose
-                    }{
-                        \lsequent{\xtau[1]\leq 0}{\xtau[1]^3\leq 0}
-                    }
-                    &\linfer[]{
+            \begin{small}
+                \begin{sequentdeduction}
+                    \linfer[DDI]{
                         \linfer[]{
-                            \linfer[closeTrue]{
-                                \lclose
+                            \linfer[]{
+                                \linfer{\lclose}{
+                                    \lsequent{}{\lforall{s\in[-1,0]}{s^3\leq 0}}
+                                }
                             }{
-                                \lsequent{}{-3x^2\theta^2\leq 0}
+                                \lsequent{t=0,\lforall{s\in[-1,0]}{x(t+s)=t+s}}{\lforall{s\in[-1,0]}{x(t+s)^3\leq 0}}
                             }
                         }{
-                            \lsequent{0\leq t\leq\tau,\theta(t)^3\leq 0}{\dbox{\Dupdate{\Dumod{\D{x}}{-\theta(t)^2}}}{(-3x(t)^2 \D{x}\leq 0)}}
+                            \lsequent{t=0,\xtau[1]=t}{\xtau[1]^3\leq 0}
+                        }
+                        &\linfer[]{
+                            \linfer[]{
+                                \linfer[closeTrue]{
+                                    \lclose
+                                }{
+                                    \lsequent{}{-3x^2\theta^2\leq 0}
+                                }
+                            }{
+                                \lsequent{0\leq t\leq 1,\theta^3\leq 0}{\dbox{\Dupdate{\Dumod{\D{x}}{-\theta^2}}}{(-3x^2 \D{x}\leq 0)}}
+                            }
+                        }{
+                            %\lclose
+                            \lsequent{0\leq t\leq 1,\theta^3\leq 0}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{\D{x}}{-\theta^2}}}{\der{x\leq 0}}}
+                        }
+                        &\linfer[]{
+                            \lclose
+                        }{
+                            \lsequent{\xtau[1]^3\leq 0}{\xtau[1]\leq 0}
                         }
                     }{
-                        %\lclose
-                        \lsequent{0\leq t\leq\tau,\theta(t)^3\leq 0}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{\D{x}}{-\theta(t)^2}}}{\der{x\leq 0}}}
+                        \lsequent{t=0,\xtau[1]=t}{\dbox{\D{x}=-\xtau[1]^2}{(\xtau[1]\leq 0)}}
                     }
-                    &\linfer[]{
-                        \lclose
-                    }{
-                        \lsequent{\xtau[1]^3\leq 0}{\xtau[1]\leq 0}
-                    }
-                }{
-                    \lsequent{\xtau[1]\leq 0}{\dbox{\D{x}=-\xtau[1]^2}{(\xtau[1]\leq 0)}}
-                }
-            \end{sequentdeduction}
+                \end{sequentdeduction}
+            \end{small}
+
             This proof doesn't even need any premisse about $\xtau$ in the induction step.
 
         \subsubsection{Example 3}
