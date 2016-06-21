@@ -90,6 +90,18 @@
 \section{Axioms}
     \label{sec:axioms}
 
+    provide syntactic operations, verify properties without going back to their mathematical semantics
+    important for automatization of proofs
+
+    \dL axiomatization, as given in \cite{platzer2012complete}
+
+    use first-order Hilbert calculus, modus ponens and forall-generalization as basis
+
+    all instances of valid formulas of first-order real arithmetic are allowed as axiom
+
+    first-order real arithmetic is decideable by quantifier elimination ($\QE$)
+
+    axioms expressed in $\dbox{\cdot}$, duality to $\ddiamond{\cdot}$ by $\ddiamond{\asprg}{\asfml}\lbisubjunct\lnot\dbox{\asprg}{\lnot\asfml}$
 
     % QUESTION: which axioms are needed? in papers differences
     \begin{calculus}
@@ -455,7 +467,7 @@ it often makes sense to treat the very first initial condition separately, becau
             \cinferenceRule[DDI|DDI]{delay differential induction proof rule}{
                 \linferenceRule[sequent]{
                     \lsequent{\Gamma}{\inv,\Delta}
-                    &\lsequent{\ivr,0\leq t\leq\tau,\inv(\theta(t-\tau))}{\dbox[]{\hevolve{\Dupdate{\Dumod{\D{x}}{\rho(x,\theta(t-\tau))}}}}{\der{\inv}}}
+                    &\lsequent{\ivr,0\leq t\leq\tau,\inv(\theta)}{\dbox[]{\hevolve{\Dupdate{\Dumod{\D{x}}{\rho(x,\theta)}}}}{\der{\inv(x)}}}
                     &\lsequent{\inv}{\asfml}
                 }{
                     \lsequent{\Gamma}{\dbox[]{\hevolvein{\D{x}=\rho(x,\xtau)}{\ivr}}{\asfml,\Delta}}
@@ -474,16 +486,20 @@ it often makes sense to treat the very first initial condition separately, becau
                     \lsequent{\Gamma(\xtau)}{\inv(\xtau),\Delta}
                     % FIXME: multiple rules at once
                     &\linfer[assignb,composeb]{
-                        \linfer[DC]{
+                        \linfer[hist]{
                             \linfer[DC]{
-                                (1)
+                                \linfer[DC]{
+                                    (1)
+                                }{
+                                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau\land \inv(x(t-\tau)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
+                                }
+                                &\linfer[dW]{
+                                    (2)
+                                }{
+                                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
+                                }
                             }{
-                                \lsequent{\inv(\xtau),t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(\ivr\land 0\leq t\leq\tau\land \inv(x(t-\tau)))}}{\inv(\xtau)}}
-                            }
-                            &\linfer[]{
-                                (2)
-                            }{
-                                \lsequent{\inv(\xtau),t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
+                                \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
                             }
                         }{
                             \lsequent{\inv(\xtau),t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\xtau)}}
@@ -500,26 +516,22 @@ it often makes sense to treat the very first initial condition separately, becau
 
         % TODO: ref to here: (2)
         \begin{sequentdeduction}
-            \linfer[hist]{
-                \linfer[dW]{
-                    \linfer[allR]{
-                        \linfer[implyR]{
-                            \linfer[]{
-                                \lclose
-                            }{
-                                \lsequent{\lforall{s\in[-\tau,0]}{\inv(\theta(s))},t=0,\ivr(r,y),0\leq r\leq\tau}{\inv(\theta(r-\tau))}
-                            }
+            \linfer[dW]{
+                \linfer[allR]{
+                    \linfer[implyR]{
+                        \linfer[]{
+                            \lclose
                         }{
-                            \lsequent{\lforall{s\in[-\tau,0]}{\inv(\theta(s))},t=0}{\ivr(r,y)\land 0\leq r\leq\tau\limply \inv(\theta(r-\tau))}
+                            \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0,\ivr(r,y),0\leq r\leq\tau}{\inv(x(r-\tau))}
                         }
                     }{
-                        \lsequent{\lforall{s\in[-\tau,0]}{\inv(\theta(s))},t=0}{\lforall{(t,x)}{(\ivr\land 0\leq t\leq\tau\limply \inv(\theta(t-\tau)))}}
+                        \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\ivr(r,y)\land 0\leq r\leq\tau\limply \inv(x(r-\tau))}
                     }
                 }{
-                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(\theta(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\theta(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\theta(t-\tau))}}
+                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\lforall{(t,x)}{(\ivr\land 0\leq t\leq\tau\limply \inv(x(t-\tau)))}}
                 }
             }{
-                \lsequent{\inv(\xtau),t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
+                \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
             }
         \end{sequentdeduction}
 
@@ -531,48 +543,44 @@ it often makes sense to treat the very first initial condition separately, becau
                         \linfer[]{
                             \lclose
                         }{
-                            \lsequent{\lforall{s\in[-\tau,0]}{\inv(\theta(s))}}{\inv(\theta(0))}
+                            \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\inv(x(0))}
                         }
                     }{
-                        \lsequent{\inv(\xtau),t=0,A, \inv(x(t-\tau))}{\inv(x(t))}
+                        \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0,A, \inv(x(t-\tau))}{\inv(x(t))}
                     }
                     % TODO: A=\ivr, 0\leq t\leq\tau
-                    &\lsequent{A, \inv(\theta(t-\tau)))}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{ \D{x}}{\eta(x,\theta(t-\tau))}}}{\der{\inv(x(t))}}}
+                    &\lsequent{A, \inv(x(t-\tau)))}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{ \D{x}}{\eta(x(t),x(t-\tau))}}}{\der{\inv(x(t))}}}
                     %}
                 }{
-                    \lsequent{\inv(\xtau),t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(A\land \inv(x(t-\tau)))}}{\inv(x(t))}}
+                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau)))}}{\inv(x(t))}}
                 }
-                &\linfer[hist]{
+                &\linfer[dW]{
                     (3)
                 }{
-                    \lsequent{\inv(\xtau),t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(A\land \inv(x(t-\tau))\land \inv(x(t)))}}{\inv(\xtau)}}
+                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau))\land \inv(x(t)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
                 }
             }{
-                \lsequent{\inv(\xtau),t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(A\land \inv(x(t-\tau)))}}{\inv(\xtau)}}
+                \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
             }
         \end{sequentdeduction}
         % TODO: ref here (3)
         \begin{sequentdeduction}
-            \linfer[hist]{
-                \linfer[dW]{
-                    \linfer[allR]{
-                        \linfer[implyR]{
-                            \linfer[]{
-                                \lclose
-                            }{
-                                \lsequent{\lforall{s\in[-\tau,0]}{\inv(\theta(s))}, t=0, \ivr(r,y), 0\leq r\leq\tau, \inv(\theta(r-\tau)), \inv(\theta(r))}{\lforall{s\in[-\tau,0]}{\inv(\theta(r+s))}}
-                            }
+            \linfer[dW]{
+                \linfer[allR]{
+                    \linfer[implyR]{
+                        \linfer[]{
+                            \lclose
                         }{
-                            \lsequent{\lforall{s\in[-\tau,0]}{\inv(\theta(s))}, t=0}{((\ivr(r,y)\land 0\leq r\leq\tau\land \inv(\theta(r-\tau))\land \inv(\theta(r)))\limply\lforall{s\in[-\tau,0]}{\inv(\theta(r+s))})}
+                            \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))}, t=0, \ivr(r,y), 0\leq r\leq\tau, \inv(y(r-\tau)), \inv(y(r))}{\lforall{s\in[-\tau,0]}{\inv(y(r+s))}}
                         }
                     }{
-                        \lsequent{\lforall{s\in[-\tau,0]}{\inv(\theta(s))}, t=0}{\lforall{(t,x)}{((A\land \inv(\theta(t-\tau))\land \inv(\theta(t)))\limply\lforall{s\in[-\tau,0]}{\inv(\theta(t+s))})}}
+                        \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))}, t=0}{((\ivr(r,y)\land 0\leq r\leq\tau\land \inv(y(r-\tau))\land \inv(y(r)))\limply\lforall{s\in[-\tau,0]}{\inv(y(r+s))})}
                     }
                 }{
-                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(\theta(t+s))}, t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\theta(t-\tau))}{(A\land \inv(\theta(t-\tau))\land \inv(\theta(t)))}}{(\lforall{s\in[-\tau,0]}{\inv(\theta(t+s))})}}
+                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))}, t=0}{\lforall{(t,x)}{((A\land \inv(x(t-\tau))\land \inv(x(t)))\limply\lforall{s\in[-\tau,0]}{\inv(x(t+s))})}}
                 }
             }{
-                \lsequent{\inv(\xtau),t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(A\land \inv(x(t-\tau))\land \inv(x(t)))}}{\inv(\xtau)}}
+                \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))}, t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau))\land \inv(x(t)))}}{(\lforall{s\in[-\tau,0]}{\inv(x(t+s))})}}
             }
         \end{sequentdeduction}
         \end{sidewaysfigure}
@@ -683,8 +691,6 @@ it often makes sense to treat the very first initial condition separately, becau
                 }
             \end{sequentdeduction}
             This proof doesn't even need any premisse about $\xtau$ in the induction step.
-        \subsubsection{Second Example}
-        \label{sec:second-example}
 
         \subsubsection{Example 3}
             \label{sec:ddi-example-3}
