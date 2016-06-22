@@ -31,10 +31,8 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
         \label{def:syntax-terms}
 
         We extent the grammar defining \textbf{terms} with a symbol for a \textbf{delayed variable}
-        % FIXME: replace ::=
-        % FIXME: replace |
         \begin{equation}
-            \astrm,\bstrm ::= x|\xtau|\D{x}|c|\astrm+\bstrm|\astrm\cdot\bstrm
+            \astrm,\bstrm \Coloneqq x \mid \xtau \mid \D{x} \mid c \mid \astrm+\bstrm \mid \astrm\cdot\bstrm
         \end{equation}
 
         % subtraction and division
@@ -57,7 +55,7 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
 
         \begin{equation}
             % TODO: replace ;
-            \asprg, \bsprg ::= a | \hupdate{\humod{x}{\astrm}} | \Dupdate{\Dumod{\D{x}}{\astrm}} | \htest{\bsfml} | \hchoice{\asprg}{\bsprg} | \asprg;\bsprg | \hrepeat{\asprg} | \hevolvein{\D{x}=\astrm}{\bsfml}
+            \asprg, \bsprg \Coloneqq a \mid \hupdate{\humod{x}{\astrm}} \mid \Dupdate{\Dumod{\D{x}}{\astrm}} \mid \htest{\bsfml} \mid \hchoice{\asprg}{\bsprg} \mid \asprg;\bsprg \mid \hrepeat{\asprg} \mid \hevolvein{\D{x}=\astrm}{\bsfml}
         \end{equation}
 
         difference to \dL, refer to Section \ref{sec:dynamic-semantics} for meaning of the following, different meaning for formulae
@@ -82,7 +80,7 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
         predicate symbol $p$, quantifier symbol $C$, variable $x$, \HP $\asprg$
 
         \begin{equation}
-            \asfml,\bsfml ::= \astrm\geq\bstrm | p(\istrm{1},\ldots,\istrm{k}) | \contextapp{C}{\asfml} | \lnot\asfml | \asfml\land\bsfml | \lforall{x}{\asfml} | \lexists{x}{\asfml} | \dbox{\asprg}{\asfml} | \ddiamond{\asprg}{\asfml}
+            \asfml,\bsfml \Coloneqq \astrm\geq\bstrm \mid p(\istrm{1},\ldots,\istrm{k}) \mid \contextapp{C}{\asfml} \mid \lnot\asfml \mid \asfml\land\bsfml \mid \lforall{x}{\asfml} \mid \lexists{x}{\asfml} \mid \dbox{\asprg}{\asfml} \mid \ddiamond{\asprg}{\asfml}
         \end{equation}
         % TODO: need = in formulas ?
         other operators, such as $>,\leq,<,\lor,\limply,\lbisubjunct$ can be derived from $\land,\lnot$

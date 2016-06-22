@@ -1,4 +1,53 @@
 \chapter{Introduction to Logic}
 \label{sec:introduction-logic}
 
-first-order logic of real arithmetic (\FOLR)
+    \section{First-Order Logic}
+    \label{sec:first-order-logic}
+
+        as defined in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}
+
+        First-order logic (\FOL) defines  a syntax of logical formulas
+
+
+        define inductively
+        set of function and predicate symbols, called signature $\Sigma$. alphabet to built well-formed formulas from
+
+        function: takes value of argument, gives back value, can be any type
+        function symbol stand for function
+        $f,g,h$
+
+        predicate gives back either true or false, depending on values of arguments
+        predicate symbol is either true or false
+        $p,q,r$
+
+        arity of function or predicate symbol: number of arguments (can be 0)
+        specified by signature $\Sigma$
+
+        set of logical variable symbols $V$, stand for objects
+        $x,y,z$
+
+        terms are well-formed/feasible arguments for functions/predicates
+
+        \begin{definition}[Terms]
+            well-formed terms: variables, functions applied to terms
+            This can alternatively be written as grammar in Backus-Naur form
+            \begin{equation}
+                \astrm \Coloneqq x \mid c \mid f(\istrm{1},\ldots,\istrm{k})
+            \end{equation}
+
+        \end{definition}
+
+        \begin{definition}[First-Order Formulas]
+
+
+        \end{definition}
+
+        \subsection{First-Order Logic of Real Arithmetic}
+        \label{sec:first-order-logic-of-real-arithmetic}
+
+            first-order logic of real arithmetic (\FOLR)
+            formula of real arithmetic
+            is first order formula
+            function/predicate symbols $+,-,\cdot,/,=,<,\leq,>,\geq$
+            constant symbols $\Sigma$
+            logical Variables $V$
