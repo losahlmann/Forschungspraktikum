@@ -122,7 +122,7 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
 
     \begin{definition}[Semantics of terms]
         \label{def:sematic-terms}
-        semantics of a term $\astrm$ in a state $\nu\in\statespace$ is a value in $\R$????
+        semantics of a term $\astrm$ in a state $\nu\in\statespace$ (of time instant t) is a value in $\R$????
         defined inductively as follows
 
         % The semantics of the variable symbols in terms are given by
@@ -225,7 +225,12 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
 
         The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
         \begin{equation}
-            \iaccessibility(\hupdate{\humod{x}{\theta}}) = \left\{(\nu,\omega): \omega = \nu \text{ except } \omega(x)=\left(t\mapsto\begin{cases}\imodel{\I}{\theta(0)} & t=0\\ \nu(t) &t\in[-\tau,0)\end{cases}\right)\qquad\right\}_.
+            \iaccessibility(\hupdate{\humod{x}{\theta}}) =
+                \left\{(\nu,\omega): \omega = \nu \text{ except }
+                \omega(x) = \left(s\mapsto\begin{cases}
+                    \imodel{\I}{\theta(t)} & s=0\\
+                    \nu(s) & s\in[-\tau,0)
+                \end{cases}\right)\right\}
         \end{equation}
         This assignment is the actual reason why we need to consider piecewise continuous evolutions.
 

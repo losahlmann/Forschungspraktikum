@@ -106,15 +106,6 @@
     % QUESTION: which axioms are needed? in papers differences
     \begin{calculus}
         % TODO: Diamond-Axiom
-
-        % TODO: add box in rule names
-        \cinferenceRule[assignbb|$\mathrel{{:}{=}}$]{discrete assignment}{
-            \linferenceRule[equiv]{
-                \asfml(\astrm)
-            }{
-                \dbox{\hupdate{\humod{x}{\astrm}}}{\asfml(x)}
-            }
-        }{}
         \cinferenceRule[testb|$\htest{}$]{test condition}{
             \linferenceRule[equiv]{
                 (\chi\limply\asfml)
@@ -241,11 +232,25 @@
 
     \end{theorem}
     \begin{proof}
-        The arguments of most proof parts are the same as they were for the classic \dL, since only the definition of the statespace has been replaced. The proofs were independent of this definition, though. (this is the case for [?], [choice], [;], [*], K, I, C, B, V, G)
+        The arguments of most proof parts are the same as they were for the classic \dL, since only the definition of the statespace has been replaced. The proofs were independent of this definition, though. This is the case for [?], [choice], [;], [*], K, I, C, B, V, G and their proof can be found in \cite{platzer2012complete}.
         Exceptions: [:=] (->substitution lemma), ['] (-> new PL)
+
         [\&]???
     \end{proof}
 
+    \subsection{Box-Assignment Axiom}
+        \label{box-assignment-axiom}
+
+        \begin{calculus}
+            % TODO: add box in rule names
+            \cinferenceRule[assignbb|$\mathrel{{:}{=}}$]{discrete assignment}{
+                \linferenceRule[equiv]{
+                    \asfml(\astrm) \land \left( \lforall{s\in[-\tau,0)}{\asfml(x(t+s))} \right)
+                }{
+                    \dbox{\hupdate{\humod{x}{\astrm}}}{\asfml(x)}
+                }
+            }{}
+        \end{calculus}
 
     \subsection{History Axiom}
         \label{history-axiom}
@@ -265,6 +270,7 @@
                 }
             }{}
         \end{calculus}
+        and $t\rightarrow t+s$
 
         for a piecewise continuous function $\theta\in\statespace$.
 
@@ -665,7 +671,7 @@ it often makes sense to treat the very first initial condition separately, becau
             \begin{small}
                 \begin{sequentdeduction}
                     \linfer[DDI]{
-                        \linfer[]{
+                        \linfer[hist]{
                             \linfer[]{
                                 \linfer{\lclose}{
                                     \lsequent{}{\lforall{s\in[-1,0]}{s^3\leq 0}}
