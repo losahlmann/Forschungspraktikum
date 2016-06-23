@@ -3,6 +3,8 @@
 We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semantics, axiomatization and proof rules which allow to deal with Delay Differential Equations.
 %Is a super set, \dL is a fragment
 
+Similiar to first order logic and essentially as an extension of dL we define delay differential logic
+
 \section{Example}
     \label{example-hp-cars}
     To motivate the need of being able to treat Delayed Differential Equations in hybrid programs, we present some examples.
@@ -55,7 +57,15 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
 
         \begin{equation}
             % TODO: replace ;
-            \asprg, \bsprg \Coloneqq a \mid \hupdate{\humod{x}{\astrm}} \mid \Dupdate{\Dumod{\D{x}}{\astrm}} \mid \htest{\bsfml} \mid \hchoice{\asprg}{\bsprg} \mid \asprg;\bsprg \mid \hrepeat{\asprg} \mid \hevolvein{\D{x}=\astrm}{\bsfml}
+            \asprg, \bsprg \Coloneqq
+                a \mid
+                \hupdate{\humod{x}{\astrm}} \mid
+                \Dupdate{\Dumod{\D{x}}{\astrm}} \mid
+                \htest{\bsfml} \mid
+                \hchoice{\asprg}{\bsprg} \mid
+                \asprg;\bsprg \mid
+                \hrepeat{\asprg} \mid
+                \hevolvein{\D{x}=\astrm}{\bsfml}
         \end{equation}
 
         difference to \dL, refer to Section \ref{sec:dynamic-semantics} for meaning of the following, different meaning for formulae
@@ -94,10 +104,10 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
     \label{sec:dynamic-semantics}
     % TODO: fix display of semantics [[]]
     \begin{equation}
-        \imodels[\I]{\phi}{x}
+        \imodel[dL]{\IdL}{x}
     \end{equation}
 
-    Following the remark to the solution of a DDE, we augment the \textbf{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $[-\tau,0]$, as defined in Definition \ref{definition-piecewise-continuous}.
+    Following $\iget[state]{\IFOL}\lenvelope$ the remark to the solution of a DDE, we augment the \textbf{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $[-\tau,0]$, as defined in Definition \ref{definition-piecewise-continuous}.
 
     Variables remember limited history
     hence implicit notion of underlying time/clock
@@ -125,12 +135,12 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
 
         % The semantics of the variable symbols in terms are given by
         \begin{itemize}
-            \item $\imodel{}{x} = \nu(x)(0)$
-            \item $\imodel[\nu]{}{\D{x}}=\nu(\D{x})(0)$
-            \item $\imodel{}{f(\istrm{1},\ldots,\istrm{k})} = $ for function symbol $f$
-            \item $\imodel{}{\astrm+\bstrm} = \imodel{}{\astrm} + \imodel{}{\bstrm}$
-            \item $\imodel{}{\astrm\cdot\bstrm} = \imodel{}{\astrm} \cdot \imodel{}{\bstrm}$
-            \item $\imodel{}{\D{(\astrm)}}\nu = \sum_{x\in\allvars} \nu(\D{x})\frac{\partial\imodel{}{\astrm}}{\partial x}(\nu)$ syntactic (total) derivation, common derivation rules, gives new term, $\astrm$ must not contain $\xtau$
+            \item $\imodel{\IdL}{x} = \nu(x)(0)$
+            \item $\imodel{\IdL}{\D{x}}=\nu(\D{x})(0)$
+            \item $\imodel{\IdL}{f(\istrm{1},\ldots,\istrm{k})} = $ for function symbol $f$
+            \item $\imodel{\IdL}{\astrm+\bstrm} = \imodel{\IdL}{\astrm} + \imodel{\IdL}{\bstrm}$
+            \item $\imodel{\IdL}{\astrm\cdot\bstrm} = \imodel{\IdL}{\astrm} \cdot \imodel{\IdL}{\bstrm}$
+            \item $\imodel{\IdL}{\D{(\astrm)}}\nu = \sum_{x\in\allvars} \nu(\D{x})\frac{\partial\imodel{\IdL}{\astrm}}{\partial x}(\nu)$ syntactic (total) derivation, common derivation rules, gives new term, $\astrm$ must not contain $\xtau$
         \end{itemize}
         Cannot define the derivative of delayed symbols
 
@@ -149,12 +159,12 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
         Along a solution of a DDE $\varphi:[0,r]\rightarrow\states$ (continous differentiable), the differential symbols are interpreted as time derivatives, $r>0$ at any $\zeta\in[0,r]$, meaning of symbol is rate of change of value of $x$ over time
         \begin{equation}
             % TODO: replace \DD with Andres command
-            \imodel{}{\D{x}}\varphi(\zeta)=\varphi(\zeta)(\D{x})(0)\defeq\DD{\varphi(t)(x)(0)}{t}(\zeta) = \DD{\imodel{}{x}\varphi(t)}{t}(\zeta)
+            \imodel{\IdL}{\D{x}}\varphi(\zeta)=\varphi(\zeta)(\D{x})(0)\defeq\DD{\varphi(t)(x)(0)}{t}(\zeta) = \DD{\imodel{\IdL}{x}\varphi(t)}{t}(\zeta)
         \end{equation}
         if $r=0$
         and what if there is no ODE/DDE given: in a given state should also be real value
-        state assigns real values to all symbols, also differential symbols $\nu(\D{x}=\imodel{}{f(x)}\nu$
-        in initial state an arbitray value is allowed, will then sync with equation to fullfil $\varphi(\zeta)(\D{x})=\imodel{}{f(x)}\varphi(r)$
+        state assigns real values to all symbols, also differential symbols $\nu(\D{x}=\imodel{\IdL}{f(x)}\nu$
+        in initial state an arbitray value is allowed, will then sync with equation to fullfil $\varphi(\zeta)(\D{x})=\imodel{\IdL}{f(x)}\varphi(r)$
 
         Like for ODE case, only use last value given in state. Since in $t=0$ could be incontinuity we cannot use history to define derivative.
 
@@ -172,19 +182,19 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
     \begin{definition}[Semantics of (\dL) formulae]
         \label{def:semantic-formulae}
 
-        semantics of (\dL) formula $\asfml$ with set of states $\states$ is the subset of states $\imodel{}{\asfml}\subset\states$ in which $\asfml$ is true. this set is defined inductively by
+        semantics of (\dL) formula $\asfml$ with set of states $\states$ is the subset of states $\imodel{\IdL}{\asfml}\subset\states$ in which $\asfml$ is true. this set is defined inductively by
 
         \begin{itemize}
             % TODO: replace : in set by \with
-            \item $\imodel{}{\asfml\geq\bsfml} = \{\nu\in\states : \imodel{}{\asfml}\geq\imodel{}{\bsfml}\}$
-            \item $\imodel{}{p(\istrm{1},\ldots,\istrm{k})} = \{\nu\in\states : \}$
-            \item $\imodel{}{\contextapp{C}{\asfml}} = $
-            \item $\imodel{}{\lnot\asfml} = \scomplement{(\imodel{}{\asfml})} = \states\setminus\imodel{}{\asfml}$
-            \item $\imodel{}{\asfml\land\bsfml} = \imodel{}{\asfml}\cap\imodel{}{\bsfml}$
-            \item $\imodel{}{\lforall{x}{\asfml}} = \{\nu\in\states \with \modif{\nu}{x}{r}\in\imodel{}{\asfml} \text{ for all } r\in\R \}$
-            \item $\imodel{}{\lexists{x}{\asfml}} = \{\nu\in\states \with \modif{\nu}{x}{r}\in\imodel{}{\asfml} \text{ for some } r\in\R \}$
-            \item $\imodel{}{\dbox{\asprg}{\asfml}} = \{\nu\in\states \with \omega\in\imodel{}{\asfml} \text{ for all $\omega$ such that} (\nu,\omega)\in\imodel{}{\asprg}\}$
-            \item $\imodel{}{\ddiamond{\asprg}{\asfml}} = \{\nu\in\states \with \omega\in\imodel{}{\asfml} \text{ for some $\omega$ such that} (\nu,\omega)\in\imodel{}{\asprg}\}$
+            \item $\imodel{\IdL}{\asfml\geq\bsfml} = \{\nu\in\states : \imodel{\IdL}{\asfml}\geq\imodel{\IdL}{\bsfml}\}$
+            \item $\imodel{\IdL}{p(\istrm{1},\ldots,\istrm{k})} = \{\nu\in\states : \}$
+            \item $\imodel{\IdL}{\contextapp{C}{\asfml}} = $
+            \item $\imodel{\IdL}{\lnot\asfml} = \scomplement{(\imodel{\IdL}{\asfml})} = \states\setminus\imodel{\IdL}{\asfml}$
+            \item $\imodel{\IdL}{\asfml\land\bsfml} = \imodel{\IdL}{\asfml}\cap\imodel{\IdL}{\bsfml}$
+            \item $\imodel{\IdL}{\lforall{x}{\asfml}} = \{\nu\in\states \with \modif{\nu}{x}{r}\in\imodel{\IdL}{\asfml} \text{ for all } r\in\R \}$
+            \item $\imodel{\IdL}{\lexists{x}{\asfml}} = \{\nu\in\states \with \modif{\nu}{x}{r}\in\imodel{\IdL}{\asfml} \text{ for some } r\in\R \}$
+            \item $\imodel{\IdL}{\dbox{\asprg}{\asfml}} = \{\nu\in\states \with \omega\in\imodel{\IdL}{\asfml} \text{ for all $\omega$ such that} (\nu,\omega)\in\imodel{\IdL}{\asprg}\}$
+            \item $\imodel{\IdL}{\ddiamond{\asprg}{\asfml}} = \{\nu\in\states \with \omega\in\imodel{\IdL}{\asfml} \text{ for some $\omega$ such that} (\nu,\omega)\in\imodel{\IdL}{\asprg}\}$
         \end{itemize}
         if formula $\asfml$ is true in state $\nu$ we write $\nu\models\asfml$. It is called valid, written as $\models\asfml$ iff $\asfml$ is true in all states.
 

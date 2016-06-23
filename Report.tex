@@ -32,28 +32,35 @@
 \usepackage{math}
 
 % LS-Lab logic commands: includes lcalculus, lmeta, lsemantics, lsyntax
-\usepackage[postfixflatinterpret,%
+\usepackage[
+    varterms, sigmaterms, septerms,
     bracketmodalinterpret,%
     fixformat,%
-    silentconst,%
     sidenotecalculus,%
+    silentconst,%
     longseqcontext%
     ]{logic}
 
 % LS-Lab differential dynamic logic commands
-\usepackage[postfixflatinterpret,%
-    bracketmodalinterpret,%
+\usepackage[
+    %bracketmodalinterpret,% use [[]] for semantics
+    bracketinterpret,%
     fixformat,%
-    silentconst,%
+    %silentconst,% don't show `const' and `algebra'
     simplenames%
     ]{dL}
 
 % own symbol definitions
 \input{mathcommands}
 
-
-
-\newcommand{\I}{\dLint[state=\nu]}
+\newcommand{\IFOL}{\interpretation[
+    %algebra=\mathcal{M},
+    const=I,
+    assign=\ell,
+    state=s,
+    universe=\universe
+    ]}
+\newcommand{\IdL}{\dLint[state=\nu]}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
