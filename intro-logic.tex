@@ -1,16 +1,16 @@
 \chapter{Introduction to Logic}
-\label{sec:introduction-logic}
+    \label{sec:introduction-logic}
 
     \section{First-Order Logic}
-    \label{sec:first-order-logic}
+        \label{sec:first-order-logic}
 
         as defined in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}
 
-        First-order logic (\FOL) defines  a syntax of logical formulas
+        % TODO: is it predicate logic? not propositional
 
+        First-order logic (\FOL) defines a syntax of logical formulas inductively from a set of function and predicate symbols, called signature $\signature$. alphabet to built well-formed formulas from
 
-        define inductively
-        set of function and predicate symbols, called signature $\Sigma$. alphabet to built well-formed formulas from
+        (comprises three subsets: functions, predicates, constants)
 
         function: takes value of argument, gives back value, can be any type
         function symbol stand for function
@@ -20,34 +20,156 @@
         predicate symbol is either true or false
         $p,q,r$
 
+        refer to objects
         arity of function or predicate symbol: number of arguments (can be 0)
-        specified by signature $\Sigma$
+        specified by signature $\signature$
+        for zero arity $c$ constant symbol=function without argument, so-called nullary function
 
-        set of logical variable symbols $V$, stand for objects
+        set of logical variable symbols $\varsymbols$, stand for objects
         $x,y,z$
 
+        formulas denote truth values
+        terms are expressions which denote objects
         terms are well-formed/feasible arguments for functions/predicates
 
-        \begin{definition}[Terms]
-            well-formed terms: variables, functions applied to terms
-            This can alternatively be written as grammar in Backus-Naur form
-            \begin{equation}
-                \astrm \Coloneqq x \mid c \mid f(\istrm{1},\ldots,\istrm{k})
-            \end{equation}
+        \subsection{Syntax}
+            \label{sec:FOL-syntax}
 
-        \end{definition}
+            for now only syntactic definitions, no specific meaning yet
 
-        \begin{definition}[First-Order Formulas]
+            \begin{definition}[Terms]
+                well-formed terms: variables, functions applied to terms
+                $\terms$ set of all terms
+                smallest set with
+                \begin{enumerate}
+                    \item logical variables are terms, $x\in\varsymbols$ then $x\in\terms$
+                    \item a nullary function $c\in\signature$ is a term
+                    % TODO: command for integer range
+                    \item If $f\in\signature$ of arity $k>0$ and $\istrm{i}\in\terms$ for $i=1,\ldots,k$, then $f(\istrm{1},\ldots,\istrm{k})\in\terms$
+                \end{enumerate}
+
+                This can alternatively be written as grammar in Backus-Naur form
+                \begin{equation}
+                    \astrm,\istrm{i} \Coloneqq
+                        x \mid
+                        c \mid
+                        f(\istrm{1},\ldots,\istrm{k})
+                \end{equation}
+                where $x$ is ranging over the set of logical variables $\varsymbols$, $c$ over the nullary functions in $\signature$ and $f$ over the elements in $\signature$ with arity $k>0$.
+
+            \end{definition}
+
+            \begin{definition}[First-Order Formulas]
+                well-formed formulas of a (first-order) logic are
+                a formal language over alphabet $\signature\cup\varsymbols$
+                words formed by recursive combination of signature-symbols with logical operator symbols
+                using the set of terms $\terms$
+
+                $\FOLformulas$ set of formulas of first-order logic
+                smallest set with
+                \begin{enumerate}
+                    \item If predicate symbol $p\in\signature$ of arity $k>=0$ and $\istrm{i}\in\terms$ for $i=1,\ldots,k$ then $p(\istrm{1},\ldots,\istrm{k})\in\FOLformulas$
+                    \item If $\asfml,\bsfml\in\FOLformulas$, then $\lnot\asfml,(\asfml\land\bsfml),(\asfml\lor\bsfml),(\asfml\limply\bsfml)\in\FOLformulas$ are formulas
+                    \item quantifiers formula $\asfml$, variable $x$ $(\lforall{x}{\asfml}),(\lexists{x}{\asfml})\in\FOLformulas$
+                \end{enumerate}
+
+                or again as
+                \begin{equation}
+                    \asfml,\bsfml \Coloneqq
+                        p(\istrm{1},\ldots,\istrm{k}) \mid
+                        \lnot\asfml \mid
+                        \asfml\land\bsfml \mid
+                        \asfml\lor\bsfml \mid
+                        \asfml\limply\bsfml \mid
+                        \lforall{x}{\asfml} \mid
+                        \lexists{x}{\asfml}
+                \end{equation}
+                where $p\in\signature$ is a predicate symbol (of arity $k\geq 1$), the terms $\istrm{i}\in\terms$ and the variable $x\in\varsymbols$
+            \end{definition}
+
+        \subsection{Semantics}
+            \label{sec:FOL-semantics}
+
+            \textbf{semantics} specify an interpretation of each symbol of ...
+            in language of ...
+            given this defines a \textbf{truth value} of a full formula
+
+            \textbf{interpretation} $I$ of function and predicate symbols
+
+            assignment of logical variables
+            variables are place holders for any kind of concrete value
+
+            provide seperate characterisation, meaning of the connectives
+            truth tables
+            to define what is true and false
+            semantics is equivalent to proof theory
+
+            valuation: assignment of truth value to all atoms
+            infinitely many valuations, called models
+
+            evaluation of formula: computing truth value for it, based on a valuation
+            requires to fix a universe of concrete values
+
+            \begin{definition}[Interpretation]
+                An interpretation (or model) $\interpret$ assigns concrete elements/function/relation to their corresponding symbols in a given a signature $\signature$. It consists of
+                \begin{enumerate}
+                    \item The universe, a non-empty set $\universe$ of concrete values/objects
+                    \item nullary function symbol
+                    % FIXME: proper function definitions, ie. : and arrow
+                    % TODO: reference to cartesian product
+                    \item To each function symbol $f\in\signature$ of arity $k\geq 1$, $\interpret(f):\universe^k\rightarrow\universe$ is a function with $k$ arguments.
+                    \item each predicate symbol $p$ of arity $k\geq 1$ a relation $\interpret(p)\subseteq\universe^n$ subset
+                \end{enumerate}
+
+            \end{definition}
+
+            Interpretation associates $f$ with $\interpret(f)(d_1,\ldots,d_k)\in\universe$ value of function at position $(d_1,\ldots,d_k)\in\universe^k $
+            predicate $p$ true at position $(d_1,\ldots,d_k)\in\universe^k$ iff $(d_1,\ldots,d_k)\in\interpret(p)$
+            alternative but equivalent formulation: characteristic function $\interpret(p):\universe^k\rightarrow\{\ltrue,\lfalse\}$ with $p$ true at $(d_1,\ldots,d_k)\in\universe^k$ iff $\interpret(p)(d_1,\ldots,d_k)=\ltrue$
+
+            % FIXME: Zielraum in englisch
+            difference between functions and predicates is Zielraum
+
+            \begin{definition}[Assignment]
+                interpretation of variables
+                assignment for a logical variable $x\in\varsymbols$
+                map $\assignment:\varsymbols\rightarrow\universe$, assign a value/object from the universe to each variable symbol.
+            \end{definition}
 
 
-        \end{definition}
+            \subsubsection{Valuation of Terms}
+                \label{sec:valuation-of-terms}
+
+                given an interpretation and assignment, term can be evaluated
+                again inductively
+
+                valuation $\ivaluation{\IFOL}{\phi}$ defined by
+                \begin{enumerate}
+                    \item logical variable
+                    \item function symbol of arity
+                \end{enumerate}
+
+            \subsubsection{Valuation of First-Order Formulas}
+                \label{sec:valuation-of-formulas}
+
+
+
+
+
 
         \subsection{First-Order Logic of Real Arithmetic}
-        \label{sec:first-order-logic-of-real-arithmetic}
+            \label{sec:FOL-R}
 
             first-order logic of real arithmetic (\FOLR)
             formula of real arithmetic
             is first order formula
-            function/predicate symbols $+,-,\cdot,/,=,<,\leq,>,\geq$
+            function/predicate symbols $ = {+,-,\cdot,/,=,<,\leq,>,\geq}$
             constant symbols $\Sigma$
             logical Variables $V$
+
+
+        \subsubsection{Substitution}
+        \label{sec:substitution}
+
+        variables are place holders
+        means of replacing with concrete information
