@@ -118,7 +118,7 @@
                     % FIXME: proper function definitions, ie. : and arrow
                     % TODO: reference to cartesian product
                     \item To each function symbol $f\in\signature$ of arity $k\geq 1$, $\interpret(f):\universe^k\rightarrow\universe$ is a function with $k$ arguments.
-                    \item each predicate symbol $p$ of arity $k\geq 1$ a relation $\interpret(p)\subseteq\universe^n$ subset
+                    \item Each predicate symbol $p$ of arity $k\geq 1$ a relation $\interpret(p)\subseteq\universe^n$ subset
                 \end{enumerate}
 
             \end{definition}
@@ -134,28 +134,76 @@
                 interpretation of variables
                 assignment for a logical variable $x\in\varsymbols$
                 map $\assignment:\varsymbols\rightarrow\universe$, assign a value/object from the universe to each variable symbol.
+                % TODO: notation for x|->a
             \end{definition}
 
 
             \subsubsection{Valuation of Terms}
                 \label{sec:valuation-of-terms}
 
-                given an interpretation and assignment, term can be evaluated
+                given an interpretation and assignment for a signature, term can be evaluated
                 again inductively
 
-                valuation $\ivaluation{\IFOL}{\phi}$ defined by
-                \begin{enumerate}
-                    \item logical variable
-                    \item function symbol of arity
-                \end{enumerate}
+                \begin{definition}
+                    valuation $\ivaluation{\IFOL}{\phi}$ defined by
+                    \begin{enumerate}
+                        \item logical variable $\ivaluation{\IFOL}{x} = \assignment(x)$
+                        \item constant
+                        \item function symbol $f\in\signature$ of arity $k\geq 1$ $\ivaluation{\IFOL}{f(\istrm{1},\ldots,\istrm{k})} = \interpret(f)(\ivaluation{\IFOL}{\istrm{1}},\ldots,\ivaluation{\IFOL}{\istrm{k}})$
+                    \end{enumerate}
+                \end{definition}
 
             \subsubsection{Valuation of First-Order Formulas}
                 \label{sec:valuation-of-formulas}
 
+                truth table
+                translation into natural language?
+                \begin{definition}
+                    valuation of first-order formulas
+                    interpretation $\interpret$
+                    assignment $\assignment$
+                    \begin{enumerate}
+                        \item predicate $\ivaluation{\IFOL}{p(\istrm{1},\ldots,\istrm{k})} = \interpret(p)(\ivaluation{\IFOL}{\istrm{1}},\ldots,\ivaluation{\IFOL}{\istrm{k}})$
+                        \item and $\ivaluation{\IFOL}{\astrm\land\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ and $\ivaluation{\IFOL}{\bstrm}=\ltrue$
+                        \item or $\ivaluation{\IFOL}{\astrm\lor\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$
+                        \item not $\ivaluation{\IFOL}{\lnot\astrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$
+                        \item imply $\ivaluation{\IFOL}{\astrm\limply\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$
+                        \item forall $\ivaluation{\IFOL}{\lforall{x}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for all $a\in\R$
+                        \item exists $\ivaluation{\IFOL}{\lexists{s}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for some $a\in\R$
+                    \end{enumerate}
 
+                    % FIXME: use \imodels for |=
+                    With $M=(\interpret,\assignment)$ Also write $\imodels{\IFOL}{\astrm}$ the so-called satisfaction relation if and only if $\ivaluation{\IFOL}{\astrm}=\ltrue$
+                    say that $\interpret,\assignment$ satisfies $\astrm$.
+                    Formula $\astrm$ is called valid if $M|= \astrm$ for all possible interpretations and assignments. just write $|=\astrm$
+                \end{definition}
 
+                establish validity by proofs
+                semantics: given interpretation,assignment -> compute its truth value, check satisfaction easy
+                check validity difficult, need to check for all interpretations, assignments
+                proofs
 
+                need be equivalent
 
+                valid formulas are of particular interest, hold under all circumstances, ie for all interpretations and assignments
+
+                need to identify these, check validity
+
+                if not valid, there is a counterexample, an interpretation and assignment for which not true, ie false
+
+                can be hard to find such, but easy to check to be one
+
+                want to easily show validity
+                witness for not validity: counterexample
+                witness for validity: (formal) proof
+
+                formal proof is a derived formula, which is obviously valid
+                form initial formula by valid rules
+
+                can be difficult to find a proof
+                but proof can easil be verified by validity of proof rules
+
+                proof rules are derived from axioms or easy valid formulas
 
         \subsection{First-Order Logic of Real Arithmetic}
             \label{sec:FOL-R}
