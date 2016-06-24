@@ -267,7 +267,7 @@
   \@twocolumnmogeluncover
   {%% aligned sequent array
   \begin{array}[b]{@{}c@{\linferRefSeparation}r@{\linferSequentSeparation}l@{}}
-    & 
+    &
     \setcounter{beamerpausescolb}{\value{beamerpauses}}%  remember beamerpauses at branching point for second column
     \uncover<+->{#1}%
   \end{array}}%
@@ -289,7 +289,7 @@
     \@twocolumnmogeluncover
     {%% aligned sequent array
     \begin{array}[b]{@{}c@{\linferRefSeparation}r@{\linferSequentSeparation}l@{}}
-      & 
+      &
       \setcounter{beamerpausescolb}{\value{beamerpauses}}%  remember beamerpauses at branching point for second column
       \uncover<+->{#1}%
     \end{array}}%
@@ -497,7 +497,7 @@
 %    \@ifnextchar\vargend{\@gobbleend}{\ajinference@do}}
 %   \def\@gobbleend\vargend{}
 %% @todo for \begin{resolution}\linfer...\end{resolution} style
-%% proofs use something like 
+%% proofs use something like
 %%   \pstree[treemode=U,showbbox=false]{\Tr{$\exists X (F \lor G)$}}{
 %%    \pstree{\Tr{Bonk}}{\Tr{Doing}}
 %%    \Tr{Zonk}
@@ -666,7 +666,7 @@
     %\edef\currentsequentcontext{\defaultsequentcontext}%
     \let\cinferenceRuleShow\cinferenceRulev%
     \begin{array}{@{}l@{}}}{\end{array}\end{displaymath}\hfill\par}
-    
+
     \newenvironment{calculuscollections}[2][]
     {\ignorespaces}{\ignorespacesafterend}
 
@@ -674,16 +674,16 @@
     \newenvironment{calculuscollection}[1][\textwidth]
     {\begin{center}\begin{fpbox}{#1}}
     {\end{fpbox}\end{center}}
-    
+
     % Framed parbox environment.  May contain verbatim mode.
     \def\fpbox#1{\par
       \def\@tempwidth{#1}
       \setbox\@tempboxa\vbox\bgroup
       %%\advance\hsize-2\fboxrule \advance\hsize-2
-      %%\fboxsep\textwidth\hsize 
+      %%\fboxsep\textwidth\hsize
     }
     \def\endfpbox{\egroup\framebox[\@tempwidth]{\box\@tempboxa}\par}
-    
+
     \newcommand*{\cinferenceRulev}[4]{%
       \textrm{(#1) ~ #2}
       \\
@@ -797,6 +797,8 @@
    \expandafter\gdef\csname irrulestore\irlabelcurlabel\endcsname{#3}%
    \expandafter\gdef\csname ircondstore\irlabelcurlabel\endcsname{#4}%
    \cinferenceRuleShow{\irlabelcurform}{#2}{#3}{#4}%
+   % FIXED: missing \fi throwed "extra \else" error
+   \fi
 }
 
 %% \cinferenceRuleStore[label]{Name}{Rule}{Condition}
@@ -1001,4 +1003,3 @@
 %% end @deprecated
 %%
 %%%%%%%%%%%%
-

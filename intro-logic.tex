@@ -164,8 +164,8 @@
                     assignment $\assignment$
                     \begin{enumerate}
                         \item predicate $\ivaluation{\IFOL}{p(\istrm{1},\ldots,\istrm{k})} = \interpret(p)(\ivaluation{\IFOL}{\istrm{1}},\ldots,\ivaluation{\IFOL}{\istrm{k}})$
-                        \item and $\ivaluation{\IFOL}{\astrm\land\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ and $\ivaluation{\IFOL}{\bstrm}=\ltrue$
-                        \item or $\ivaluation{\IFOL}{\astrm\lor\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$
+                        \item and/conjunction $\ivaluation{\IFOL}{\astrm\land\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ and $\ivaluation{\IFOL}{\bstrm}=\ltrue$
+                        \item or/disjunction $\ivaluation{\IFOL}{\astrm\lor\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$
                         \item not $\ivaluation{\IFOL}{\lnot\astrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$
                         \item imply $\ivaluation{\IFOL}{\astrm\limply\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$
                         \item forall $\ivaluation{\IFOL}{\lforall{x}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for all $a\in\R$
@@ -186,8 +186,8 @@
             check validity difficult, need to check for all interpretations, assignments
             proofs shows validity, but not valid difficult, how to show that there is no proof?
 
-            proof for establishing evidence of assertions, like $\Gamma |- \astrm$ valid
-            not useful for $\Gamma |- \astrm$ not valid
+            proof for establishing evidence of assertions, like $\lsequent{\Gamma}{\astrm}$ valid
+            not useful for $\lsequent{\Gamma}{\astrm}$ not valid
 
             two characterisations need be equivalent, ie soundness and completeness
 
@@ -211,22 +211,40 @@
 
             proof rules are derived from axioms or easy valid formulas
 
-            natural deduction calculus
+            % TODO: natural deduction calculus
+            % or sequent calculus
+            % Gentzen, Hilbert
             % TODO: Bruch schreibweise, not iff, only if
 
             % TODO: free variables
 
+            \subsubsection{Axioms}
+                \label{sec:FOL-axioms}
+
+
             \subsubsection{Proof Rules}
                 \label{sec:FOL-proof-rules}
 
+                sequent is a standard form for logical formulas
+                antecedent $\Gamma$ assumed to be true
+                succedent $\Delta$ one of these to be shown
+                both finite sets of formulas
+                $\lsequent{\Gamma}{\Delta}$, which means
+                \begin{equation}
+                    \landfold{\asfml\in\Gamma}\asfml \limply \lorfold_{\bsfml\in\Delta}\bsfml
+                \end{equation}
+
+                comma in antecedent like conjunction, in succedent like disjunction
+                rules decompose propositional structure of a formula leading to simpler ones
                 %prop logic rules + rules for = and quantifiers
 
                 \paragraph{Universal Quantification Rules}
                     % TODO: forall e <-> forall i
                     eliminates $\forall$
                     $\lforall{x}{\asfml}$ is true if we can replace quantified variable by any term (side condition, $\astrm$ needs be free for x in $\asfml$) and this remains true
+
                     \begin{calculus}
-                        \cinferenceRule[FOLforall|$\forall$]{forall generalization rule}{
+                        \cinferenceRule[FOLforall|$\forall$]{}{
                             \linferenceRule[sequent]{
                                 \subst[\asfml]{x}{\astrm}
                             }{
@@ -234,6 +252,7 @@
                             }
                         }{}
                     \end{calculus}
+
                     soundness self-evident, since true for all, also for more concrete instance
 
                     \begin{example}
@@ -244,6 +263,7 @@
                 \paragraph{Existential Quantification Rules}
                     % TODO: exists e <-> exists i
                     exists introduction
+
                     \begin{calculus}
                         \cinferenceRule[FOLexists|$\exists$]{exists generalization rule}{
                             \linferenceRule[sequent]{
@@ -253,8 +273,13 @@
                             }
                         }{}
                     \end{calculus}
+
                     $\astrm$ free for $x$ in $\asfml$
                     can deduce $\lexists{x}{\asfml}$ if we know that true for a concrete instance, witness
+
+            \subsubsection{Ground Proving and Free Variable Proving}
+                \label{sec:ground-proving-free-variable-proving}
+
 
 
         \subsection{First-Order Logic of Real Arithmetic}
@@ -268,8 +293,8 @@
             logical Variables $V$
 
 
-        \subsubsection{Substitution}
-        \label{sec:substitution}
-
-        variables are place holders
-        means of replacing with concrete information
+        % \subsubsection{Substitution}
+        % \label{sec:substitution}
+        %
+        % variables are place holders
+        % means of replacing with concrete information
