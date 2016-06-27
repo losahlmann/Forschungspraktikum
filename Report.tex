@@ -34,18 +34,19 @@
 % LS-Lab logic commands: includes lcalculus, lmeta, lsemantics, lsyntax
 \usepackage[
     varterms, sigmaterms, septerms,
-    bracketmodalinterpret,%
-    fixformat,%
+    longinterpret,
+    %bracketinterpret,%
+    %fixformat,%
     sidenotecalculus,%
-    silentconst,%
+    %silentconst,%
     longseqcontext%
     ]{logic}
 
 % LS-Lab differential dynamic logic commands
 \usepackage[
     %bracketmodalinterpret,% use [[]] for semantics
-    bracketinterpret,%
-    fixformat,%
+    bracketmodalinterpret,%
+    %fixformat,%
     %silentconst,% don't show `const' and `algebra'
     simplenames%
     ]{dL}
@@ -60,7 +61,7 @@
     state=s,
     universe=\universe
     ]}
-\newcommand{\IdL}{\dLint[state=\nu]}
+% \newcommand{\IdL}{\dLint[state=\nu]}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -81,13 +82,13 @@
     This results in a superset of \dL which we call \textbf{Delay Differential Dynamic Logic}.
 \end{abstract}
 
-\include{introduction}
+%\include{introduction}
 
-\include{delay-differential-equations}
+%\include{delay-differential-equations}
 
 \include{intro-logic}
 
-\include{delay-hybrid-programs}
+%\include{delay-hybrid-programs}
 
 %\include{delay-differential-logic}
 % FIXME: put dDL chapter in seperate file
@@ -111,6 +112,7 @@
     axioms expressed in $\dbox{\cdot}$, duality to $\ddiamond{\cdot}$ by $\ddiamond{\asprg}{\asfml}\lbisubjunct\lnot\dbox{\asprg}{\lnot\asfml}$
 
     % QUESTION: which axioms are needed? in papers differences
+    % FIXME: is there a paragraph like calculus environment?
     \begin{calculus}
         % TODO: Diamond-Axiom
         \cinferenceRule[testb|$\htest{}$]{test condition}{

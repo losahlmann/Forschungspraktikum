@@ -6,9 +6,14 @@
 
         as defined in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}
 
-        % TODO: it is predicate logic, not propositional
 
-        First-order logic (\FOL) defines a syntax of logical formulas inductively from a set of function and predicate symbols, called signature $\signature$. alphabet to built well-formed formulas from
+        First-order logic (\FOL) defines a syntax of logical formulas inductively from a set of function and predicate symbols, called signature $\signature$ of the theory. alphabet to built well-formed formulas from
+        a set of symbols and their roles
+
+        % it is predicate logic, not propositional
+        extends propositional logic, which is based on \textit{declarative sentences}/propositions (can be declared as true or false) with quantifiers
+
+        declarative sentences made of atomic, indecomposible sentences
 
         (comprises three subsets: functions, predicates, constants)
 
@@ -31,6 +36,8 @@
         formulas denote truth values
         terms are expressions which denote objects
         terms are well-formed/feasible arguments for functions/predicates
+
+
 
         \subsection{Syntax}
             \label{sec:FOL-syntax}
@@ -104,6 +111,21 @@
             to define what is true and false
             semantics is equivalent to proof theory
 
+            formula is satisfieable, valid, or neither
+            satisfieable if there is at least one model in which formula evaluates to true
+            valid if always evaluates to true, in every model
+
+            relationship
+            $\asfml_1,\ldots,\asfml_n\models\bsfml$
+            looking at truth values of atomic formulas in premises and conclusion, how manipulated by logical connectives, defined by a table for all possible cases
+            calculate truth value of formula from truth value of atomic propositions
+
+            classical logic \cite{reis2014cutelimination}
+            set of truth values true,false
+            every sentence always true or false
+            its sequents calculus is LK
+            valuation/model of a formula is an assignment of a truth value to each atomic proposition inside that formula
+
             valuation: assignment of truth value to all atoms
             infinitely many valuations, called models
 
@@ -172,10 +194,9 @@
                         \item exists $\ivaluation{\IFOL}{\lexists{s}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for some $a\in\R$
                     \end{enumerate}
 
-                    % FIXME: use \imodels for |=
                     With $M=(\interpret,\assignment)$ Also write $\imodels{\IFOL}{\astrm}$ the so-called satisfaction relation if and only if $\ivaluation{\IFOL}{\astrm}=\ltrue$
                     say that $\interpret,\assignment$ satisfies $\astrm$.
-                    Formula $\astrm$ is called valid if $M|= \astrm$ for all possible interpretations and assignments. just write $|=\astrm$
+                    Formula $\astrm$ is called valid if $\imodels{\IFOL}{\astrm}$ for all possible interpretations and assignments. just write $\models\astrm$
                 \end{definition}
 
         \subsection{Proof Theory}
@@ -211,7 +232,80 @@
 
             proof rules are derived from axioms or easy valid formulas
 
+            different styles of formal logical argumentation
+
+            deduction systems in which a proof can be represented
+
+            proof of a sequent is a tree, initial sequent as root, axioms as leaves
+
+            \subsubsection{Hilbert Calculus}
+                \label{sec:hilbert-calculus}
+
+                Hilbert Style deduction system
+                every line of a proof is unconditional tautology or theorem
+
+                small number of inference rules
+                relying more on axioms
+
+                judgement is any formula of given (first-order) logic
+                theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
+
+
             % TODO: natural deduction calculus
+            \subsubsection{Natural Deduction}
+                \label{sec:natural-deduction}
+
+                Gentzen style, few axioms, more rules
+                every line is a conditional tautology,
+                zero or more conditions on left
+                exactly one asserted proposition on right
+
+                inference rules which operate on sequents
+
+                collection of proof rules
+                infer formulas from formulas
+                deduce a conclusion from a given set of promises by applying rules
+                premises: set of formulas $\asfml_1,\ldots,\asfml_n$
+                conclusion $\bsfml$ single formula
+                umforme premises with rules into conclusion
+                this intention, written as
+                from premisses conclude conclusion $\bsfml$
+                judgement of form
+                \begin{equation}
+                    \lsequent{\asfml_1,\ldots,\asfml_n}{\bsfml}
+                \end{equation}
+                called sequent
+                sets may be empty
+                sequent is valid, if there is a proof
+
+                in contrast to relationship $\asfml_1,\ldots,\asfml_n\models\bsfml$, see semantics
+
+                finding proof can be difficult, because it is not obvious which rules need to be applied in what order
+
+                theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
+
+                % TODO: add ref to soundness
+                rules well chosen, see soundness
+
+            \subsubsection{Sequent Calculus}
+                \label{sec:sequent-calculus}
+
+                Gentzen style
+                zero or more asserted propositions
+
+                sequent is a standard form for logical formulas
+                antecedent $\Gamma$ assumed to be true
+                succedent $\Delta$ one of these to be shown
+                both finite sets of formulas
+                $\lsequent{\Gamma}{\Delta}$, which means
+                \begin{equation}
+                    \landfold_{\asfml\in\Gamma}\asfml \limply \lorfold_{\bsfml\in\Delta}\bsfml
+                \end{equation}
+
+                comma in antecedent like conjunction, in succedent like disjunction
+                rules decompose propositional structure of a formula leading to simpler ones
+
+                empty sequent, both side empty, defined to be false
             % or sequent calculus
             % Gentzen, Hilbert
             % TODO: Bruch schreibweise, not iff, only if
@@ -221,22 +315,24 @@
             \subsubsection{Axioms}
                 \label{sec:FOL-axioms}
 
+                zero-premise rule
+                \begin{calculus}
+                    \cinferenceRule[ax|]{}{
+                        \linferenceRule[sequent]{}{\lsequent{\asfml}{\asfml}}
+                    }{}
+                \end{calculus}
+
 
             \subsubsection{Proof Rules}
                 \label{sec:FOL-proof-rules}
 
-                sequent is a standard form for logical formulas
-                antecedent $\Gamma$ assumed to be true
-                succedent $\Delta$ one of these to be shown
-                both finite sets of formulas
-                $\lsequent{\Gamma}{\Delta}$, which means
-                \begin{equation}
-                    \landfold{\asfml\in\Gamma}\asfml \limply \lorfold_{\bsfml\in\Delta}\bsfml
-                \end{equation}
 
-                comma in antecedent like conjunction, in succedent like disjunction
-                rules decompose propositional structure of a formula leading to simpler ones
+                two groups: logical (operate on formula and sub-formulas) and structural (such as contraction=copy, weakening=erase, cut)
+
                 %prop logic rules + rules for = and quantifiers
+
+                sequent below horizontal line: conclusion
+                sequents above horizontal line: premises
 
                 \paragraph{Universal Quantification Rules}
                     % TODO: forall e <-> forall i
