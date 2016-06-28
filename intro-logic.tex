@@ -4,14 +4,12 @@
     \section{First-Order Logic}
         \label{sec:first-order-logic}
 
-        framework for studying rules of argument (\cite{hodges2001ClassicalLogic})
+        \textit{First-order logic} (\FOL) is a framework for studying rules of argument (\cite{hodges2001ClassicalLogic}) and will be used a means for the specification of properties of hybrid programs later on.
 
-        as defined in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}
-        more subtleties are layed out in \cite{hodges2001ClassicalLogic}, though with a different notation/nomenclature
+        We introduce first-order logic similiar to the definitions given in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}. More subtleties are adapted from \cite{hodges2001ClassicalLogic}.
+        % though with a different notation/nomenclature
 
 
-        First-order logic (\FOL) defines a syntax of logical formulas inductively from a set of function and predicate symbols, called signature $\signature$ of the theory. alphabet to built well-formed formulas from
-        a set of symbols and their roles
 
         % it is predicate logic, not propositional
         propositional: no =, no quantifiers, no functions/predicates, only true/false constant symbols (= predicates of arity 0 = propositions)
@@ -20,7 +18,7 @@
 
         declarative sentences made of atomic, indecomposible sentences
 
-        (comprises three subsets: functions, predicates, constants)
+
 
         function: takes value of argument, gives back value, can be any type
         function symbol stand for function
@@ -47,28 +45,34 @@
         \subsection{Syntax}
             \label{sec:FOL-syntax}
 
-            for now only syntactic definitions, no specific meaning yet
+            First-order logic inductively defines a syntax of \textit{logical formulas} from a set of function and predicate symbols, the \textit{signature} $\signature$ of the theory.
+
+            alphabet to built well-formed formulas from
+            a set of symbols and their roles
+
+            The signature comprises three subsets: predicates, functions and constants.
+
+            nullary function
+
+            The syntax only defines how the given symbols can be textually combined. At this stage, they have no specific meaning yet.
 
             \begin{definition}[Terms]
-                well-formed terms: variables, functions applied to terms
-                $\terms$ set of all terms
-                smallest set with
+                Well-formed terms are either logical variables, constants or functions applied to terms:
+                The set of all \textit{terms} $\terms$ is the smallest set with
                 \begin{enumerate}
-                    \item logical variables are terms, $x\in\varsymbols$ then $x\in\terms$
-                    \item a nullary function $c\in\signature$ is a term
+                    \item If $x\in\varsymbols$ then $x\in\terms$.
+                    \item If $c\in\signature$ is a term
                     % TODO: command for integer range
-                    \item If $f\in\signature$ of arity $k>0$ and $\istrm{i}\in\terms$ for $i=1,\ldots,k$, then $f(\istrm{1},\ldots,\istrm{k})\in\terms$
+                    \item If $f\in\signature$ of arity $n>0$ and $\istrm{i}\in\terms$ for $i=\range{1}{n}$, then $f(\range{\istrm{1}}{\istrm{n}})\in\terms$
                 \end{enumerate}
-
                 This can alternatively be written as grammar in Backus-Naur form
                 \begin{equation}
                     \astrm,\istrm{i} \Coloneqq
                         x \mid
                         c \mid
-                        f(\istrm{1},\ldots,\istrm{k})
+                        f(\range{\istrm{1}}{\istrm{n}})
                 \end{equation}
-                where $x$ is ranging over the set of logical variables $\varsymbols$, $c$ over the nullary functions in $\signature$ and $f$ over the elements in $\signature$ with arity $k>0$.
-
+                where $x$ is ranging over the set of logical variables $\varsymbols$, $c$ over the nullary functions in $\signature$ and $f$ over the elements in $\signature$ with arity $n>0$.
             \end{definition}
 
             \begin{definition}[First-Order Formulas]
@@ -80,7 +84,7 @@
                 $\FOLformulas$ set of formulas of first-order logic
                 smallest set with
                 \begin{enumerate}
-                    \item If predicate symbol $p\in\signature$ of arity $k>=0$ and $\istrm{i}\in\terms$ for $i=1,\ldots,k$ then $p(\istrm{1},\ldots,\istrm{k})\in\FOLformulas$
+                    \item If predicate symbol $p\in\signature$ of arity $n\geq 0$ and $\istrm{i}\in\terms$ for $i=\range{1}{n}$ then $p(\range{\istrm{1}}{\istrm{n}})\in\FOLformulas$
                     \item If $\asfml,\bsfml\in\FOLformulas$, then $\lnot\asfml,(\asfml\land\bsfml),(\asfml\lor\bsfml),(\asfml\limply\bsfml)\in\FOLformulas$ are formulas
                     \item quantifiers formula $\asfml$, variable $x$ $(\lforall{x}{\asfml}),(\lexists{x}{\asfml})\in\FOLformulas$
                 \end{enumerate}
@@ -88,7 +92,7 @@
                 or again as
                 \begin{equation}
                     \asfml,\bsfml \Coloneqq
-                        p(\istrm{1},\ldots,\istrm{k}) \mid
+                        p(\range{\istrm{1}}{\istrm{n}}) \mid
                         \lnot\asfml \mid
                         \asfml\land\bsfml \mid
                         \asfml\lor\bsfml \mid
@@ -121,7 +125,7 @@
             valid if always evaluates to true, in every model
 
             relationship
-            $\asfml_1,\ldots,\asfml_n\models\bsfml$
+            $\range{\asfml_1}{\asfml_n}\models\bsfml$
             looking at truth values of atomic formulas in premises and conclusion, how manipulated by logical connectives, defined by a table for all possible cases
             calculate truth value of formula from truth value of atomic propositions
 
@@ -158,9 +162,9 @@
             interpretation of $p$ under $\interpret$
             interpretation of $f$ under $\interpret$
 
-            Interpretation associates $f$ with $\interpret(f)(d_1,\ldots,d_k)\in\universe$ value of function at position $(d_1,\ldots,d_k)\in\universe^k $
-            predicate $p$ true at position $(d_1,\ldots,d_k)\in\universe^k$ iff $(d_1,\ldots,d_k)\in\interpret(p)$
-            alternative but equivalent formulation: characteristic function $\interpret(p):\universe^k\rightarrow\{\ltrue,\lfalse\}$ with $p$ true at $(d_1,\ldots,d_k)\in\universe^k$ iff $\interpret(p)(d_1,\ldots,d_k)=\ltrue$
+            Interpretation associates $f$ with $\interpret(f)(\range{d_1}{d_n})\in\universe$ value of function at position $(\range{d_1}{d_n})\in\universe^k $
+            predicate $p$ true at position $(\range{d_1}{d_n})\in\universe^k$ iff $(\range{d_1}{d_n})\in\interpret(p)$
+            alternative but equivalent formulation: characteristic function $\interpret(p):\universe^n\rightarrow\{\ltrue,\lfalse\}$ with $p$ true at $(\range{d_1}{d_n})\in\universe^n$ iff $\interpret(p)(\range{d_1}{d_n})=\ltrue$
 
             % FIXME: Zielraum in englisch
             difference between functions and predicates is Zielraum
@@ -185,7 +189,7 @@
                     \begin{enumerate}
                         \item logical variable $\ivaluation{\IFOL}{x} = \assignment(x)$
                         \item constant
-                        \item function symbol $f\in\signature$ of arity $k\geq 1$ $\ivaluation{\IFOL}{f(\istrm{1},\ldots,\istrm{k})} = \interpret(f)(\ivaluation{\IFOL}{\istrm{1}},\ldots,\ivaluation{\IFOL}{\istrm{k}})$
+                        \item function symbol $f\in\signature$ of arity $n\geq 1$ $\ivaluation{\IFOL}{f(\range{\istrm{1}}{\istrm{n}})} = \interpret(f)(\range{\ivaluation{\IFOL}{\istrm{1}}}{\ivaluation{\IFOL}{\istrm{n}}})$
                     \end{enumerate}
                 \end{definition}
 
@@ -199,7 +203,7 @@
                     interpretation $\interpret$
                     assignment $\assignment$
                     \begin{enumerate}
-                        \item predicate $\ivaluation{\IFOL}{p(\istrm{1},\ldots,\istrm{k})} = \interpret(p)(\ivaluation{\IFOL}{\istrm{1}},\ldots,\ivaluation{\IFOL}{\istrm{k}})$
+                        \item predicate $\ivaluation{\IFOL}{p(\range{\istrm{1}}{\istrm{n}})} = \interpret(p)(\range{\ivaluation{\IFOL}{\istrm{1}}}{\ivaluation{\IFOL}{\istrm{n}}})$
                         \item and/conjunction $\ivaluation{\IFOL}{\astrm\land\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ and $\ivaluation{\IFOL}{\bstrm}=\ltrue$
                         \item or/disjunction $\ivaluation{\IFOL}{\astrm\lor\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$
                         \item not $\ivaluation{\IFOL}{\lnot\astrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$
@@ -318,20 +322,20 @@
                 collection of proof rules
                 infer formulas from formulas
                 deduce a conclusion from a given set of promises by applying rules
-                premises: set of formulas $\asfml_1,\ldots,\asfml_n$
+                premises: set of formulas $\range{\asfml_1}{\asfml_n}$
                 conclusion $\bsfml$ single formula
                 umforme premises with rules into conclusion
                 this intention, written as
                 from premisses conclude conclusion $\bsfml$
                 judgement of form
                 \begin{equation}
-                    \lsequent{\asfml_1,\ldots,\asfml_n}{\bsfml}
+                    \lsequent{\range{\asfml_1}{\asfml_n}}{\bsfml}
                 \end{equation}
                 called sequent
                 sets may be empty
                 sequent is valid, if there is a proof
 
-                in contrast to relationship $\asfml_1,\ldots,\asfml_n\models\bsfml$, see semantics
+                in contrast to relationship $\range{\asfml_1}{\asfml_n}\models\bsfml$, see semantics
 
                 finding proof can be difficult, because it is not obvious which rules need to be applied in what order
 

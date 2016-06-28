@@ -85,12 +85,12 @@ Similiar to first order logic and essentially as an extension of dL we define de
 
         formulas of (differential dynamic logic \dL)
         defined by grammar
-        with \dL formulas $\asfml,\bsfml$, terms $\astrm,\bstrm,\istrm{1},\ldots,\istrm{k}$,
+        with \dL formulas $\asfml,\bsfml$, terms $\astrm,\bstrm,\range{\istrm{1}}{\istrm{k}}$,
         % TODO: replace with command for predicate symbols, quantifier symbol
         predicate symbol $p$, quantifier symbol $C$, variable $x$, \HP $\asprg$
 
         \begin{equation}
-            \asfml,\bsfml \Coloneqq \astrm\geq\bstrm \mid p(\istrm{1},\ldots,\istrm{k}) \mid \contextapp{C}{\asfml} \mid \lnot\asfml \mid \asfml\land\bsfml \mid \lforall{x}{\asfml} \mid \lexists{x}{\asfml} \mid \dbox{\asprg}{\asfml} \mid \ddiamond{\asprg}{\asfml}
+            \asfml,\bsfml \Coloneqq \astrm\geq\bstrm \mid p(\range{\istrm{1}}{\istrm{k}}) \mid \contextapp{C}{\asfml} \mid \lnot\asfml \mid \asfml\land\bsfml \mid \lforall{x}{\asfml} \mid \lexists{x}{\asfml} \mid \dbox{\asprg}{\asfml} \mid \ddiamond{\asprg}{\asfml}
         \end{equation}
         % TODO: need = in formulas ?
         other operators, such as $>,\leq,<,\lor,\limply,\lbisubjunct$ can be derived from $\land,\lnot$
@@ -137,7 +137,7 @@ Similiar to first order logic and essentially as an extension of dL we define de
         \begin{itemize}
             \item $\imodel{\IdL}{x} = \nu(x)(0)$
             \item $\imodel{\IdL}{\D{x}}=\nu(\D{x})(0)$
-            \item $\imodel{\IdL}{f(\istrm{1},\ldots,\istrm{k})} = $ for function symbol $f$
+            \item $\imodel{\IdL}{f(\range{\istrm{1}}{\istrm{k}})} = $ for function symbol $f$
             \item $\imodel{\IdL}{\astrm+\bstrm} = \imodel{\IdL}{\astrm} + \imodel{\IdL}{\bstrm}$
             \item $\imodel{\IdL}{\astrm\cdot\bstrm} = \imodel{\IdL}{\astrm} \cdot \imodel{\IdL}{\bstrm}$
             \item $\imodel{\IdL}{\D{(\astrm)}}\nu = \sum_{x\in\allvars} \nu(\D{x})\frac{\partial\imodel{\IdL}{\astrm}}{\partial x}(\nu)$ syntactic (total) derivation, common derivation rules, gives new term, $\astrm$ must not contain $\xtau$
@@ -187,7 +187,7 @@ Similiar to first order logic and essentially as an extension of dL we define de
         \begin{itemize}
             % TODO: replace : in set by \with
             \item $\imodel{\IdL}{\asfml\geq\bsfml} = \{\nu\in\states : \imodel{\IdL}{\asfml}\geq\imodel{\IdL}{\bsfml}\}$
-            \item $\imodel{\IdL}{p(\istrm{1},\ldots,\istrm{k})} = \{\nu\in\states : \}$
+            \item $\imodel{\IdL}{p(\range{\istrm{1}}{\istrm{k}})} = \{\nu\in\states : \}$
             \item $\imodel{\IdL}{\contextapp{C}{\asfml}} = $
             \item $\imodel{\IdL}{\lnot\asfml} = \scomplement{(\imodel{\IdL}{\asfml})} = \states\setminus\imodel{\IdL}{\asfml}$
             \item $\imodel{\IdL}{\asfml\land\bsfml} = \imodel{\IdL}{\asfml}\cap\imodel{\IdL}{\bsfml}$
