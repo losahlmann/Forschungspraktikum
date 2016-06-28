@@ -4,14 +4,19 @@
     \section{First-Order Logic}
         \label{sec:first-order-logic}
 
+        framework for studying rules of argument (\cite{hodges2001ClassicalLogic})
+
         as defined in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}
+        more subtleties are layed out in \cite{hodges2001ClassicalLogic}, though with a different notation/nomenclature
 
 
         First-order logic (\FOL) defines a syntax of logical formulas inductively from a set of function and predicate symbols, called signature $\signature$ of the theory. alphabet to built well-formed formulas from
         a set of symbols and their roles
 
         % it is predicate logic, not propositional
+        propositional: no =, no quantifiers, no functions/predicates, only true/false constant symbols (= predicates of arity 0 = propositions)
         extends propositional logic, which is based on \textit{declarative sentences}/propositions (can be declared as true or false) with quantifiers
+        and variables
 
         declarative sentences made of atomic, indecomposible sentences
 
@@ -145,6 +150,14 @@
 
             \end{definition}
 
+            $\asfml$ is true in $\interpret$/under $\interpret$, $\interpret$ satisfies $\asfml$, is a model of $\asfml$
+
+            interpretation gives information needed to decide on truth value of a sentence
+            semantics determine if $\interpret$ makes $\asfml$ true or false
+
+            interpretation of $p$ under $\interpret$
+            interpretation of $f$ under $\interpret$
+
             Interpretation associates $f$ with $\interpret(f)(d_1,\ldots,d_k)\in\universe$ value of function at position $(d_1,\ldots,d_k)\in\universe^k $
             predicate $p$ true at position $(d_1,\ldots,d_k)\in\universe^k$ iff $(d_1,\ldots,d_k)\in\interpret(p)$
             alternative but equivalent formulation: characteristic function $\interpret(p):\universe^k\rightarrow\{\ltrue,\lfalse\}$ with $p$ true at $(d_1,\ldots,d_k)\in\universe^k$ iff $\interpret(p)(d_1,\ldots,d_k)=\ltrue$
@@ -159,6 +172,7 @@
                 % TODO: notation for x|->a
             \end{definition}
 
+            formula said to be true in $\interpret$ under $\assignment$
 
             \subsubsection{Valuation of Terms}
                 \label{sec:valuation-of-terms}
@@ -190,8 +204,8 @@
                         \item or/disjunction $\ivaluation{\IFOL}{\astrm\lor\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$
                         \item not $\ivaluation{\IFOL}{\lnot\astrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$
                         \item imply $\ivaluation{\IFOL}{\astrm\limply\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$
-                        \item forall $\ivaluation{\IFOL}{\lforall{x}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for all $a\in\R$
-                        \item exists $\ivaluation{\IFOL}{\lexists{s}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for some $a\in\R$
+                        \item universal quantifier $\ivaluation{\IFOL}{\lforall{x}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for all $a\in\R$
+                        \item existential quantifier $\ivaluation{\IFOL}{\lexists{x}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for some $a\in\R$
                     \end{enumerate}
 
                     With $M=(\interpret,\assignment)$ Also write $\imodels{\IFOL}{\astrm}$ the so-called satisfaction relation if and only if $\ivaluation{\IFOL}{\astrm}=\ltrue$
@@ -202,7 +216,8 @@
         \subsection{Proof Theory}
         \label{sec:FOL-proof-theory}
 
-            establish validity by proofs
+            % FIXME: when to use vDash instead of models? because of \entails in semantics
+            test $\models\vDash $ establish validity by proofs
             semantics: given interpretation,assignment -> compute its truth value, check satisfaction easy
             check validity difficult, need to check for all interpretations, assignments
             proofs shows validity, but not valid difficult, how to show that there is no proof?
@@ -238,23 +253,61 @@
 
             proof of a sequent is a tree, initial sequent as root, axioms as leaves
 
+            $T$ entails $\asfml$, all interpretations satisfying $T$ also satisfy $\asfml$
+            $\asfml$ is valid, if every interpretation makes it true
+
+            a sequent is deriveable in proof calculus $C$, $T|-_C\asfml$ if there is a formal proof in the calculus for the sequent
+
+            proof calculus is sound if invalid sequents are not deriveable in C
+            is complete if every valid sequent can be derived
+
+            \subsubsection{Axioms}
+                \label{sec:FOL-axioms}
+
+                theory of $\interpret$ is set of sentences satisfied by $\interpret$
+                generally, theory is set of sentences
+                model class of theory $T$: all interpretations which satisfy $T$ (all sentences given in T)
+                if $K$ (interpretations) is model class of theory $T$, then $T$ is set of axioms for $K$ (\cite{hodges2001ClassicalLogic})
+
+                zero-premise rule
+                \begin{calculus}
+                    \cinferenceRule[ax|]{}{
+                        \linferenceRule[sequent]{}{\lsequent{\asfml}{\asfml}}
+                    }{}
+                \end{calculus}
+
             \subsubsection{Hilbert Calculus}
                 \label{sec:hilbert-calculus}
 
-                Hilbert Style deduction system
+                \cite{hodges2001ClassicalLogic}
+
+                Hilbert Style deduction system/calculi
                 every line of a proof is unconditional tautology or theorem
 
                 small number of inference rules
                 relying more on axioms
 
+                reach a conclusion by applying deduction rules to axioms
+
+                useful when one wants to add further axioms to first-order base
+
                 judgement is any formula of given (first-order) logic
                 theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
+
+                define class of axioms, ie the set of all formulas which have any of the forms ...
+
+                formal proof is a derivation of the formula (conclusion) from axioms and premises by applying in each step modus ponens or quantifier-generalization
+
+                $\bsfml$ deriveable in C from premises, if exists a derivation with conclusion $\bsfml$
+
+                lemma to be used in another proof
 
 
             % TODO: natural deduction calculus
             \subsubsection{Natural Deduction}
                 \label{sec:natural-deduction}
 
+                natural deduction calculus
                 Gentzen style, few axioms, more rules
                 every line is a conditional tautology,
                 zero or more conditions on left
@@ -293,6 +346,8 @@
                 Gentzen style
                 zero or more asserted propositions
 
+                can be regarded as Hilbert-style calculus for deriving finite sequences instead of formulas \cite{hodges2001ClassicalLogic}
+
                 sequent is a standard form for logical formulas
                 antecedent $\Gamma$ assumed to be true
                 succedent $\Delta$ one of these to be shown
@@ -311,16 +366,12 @@
             % TODO: Bruch schreibweise, not iff, only if
 
             % TODO: free variables
+            free variable: needs an object assigned in order to determine a truth valua for formula
+            bound variable: no assignment needed
+            sentence is formula without free variables, has a determined truth value
+            quantifiers bind occurences of variable in formula
 
-            \subsubsection{Axioms}
-                \label{sec:FOL-axioms}
 
-                zero-premise rule
-                \begin{calculus}
-                    \cinferenceRule[ax|]{}{
-                        \linferenceRule[sequent]{}{\lsequent{\asfml}{\asfml}}
-                    }{}
-                \end{calculus}
 
 
             \subsubsection{Proof Rules}
@@ -388,6 +439,21 @@
             constant symbols $\Sigma$
             logical Variables $V$
 
+        \subsection{Decideability}
+            \label{sec:decideability}
+
+            (\cite{hodges2001ClassicalLogic})
+            language (e.g. FOL) decideable if there is an algorithm which returns for any finite sequent if it is valid or not
+
+        \subsection{Correctness}
+            \label{sec:correctness}
+
+            $\bsfml$ deriveable from premises, then sequent is valid
+
+        \subsection{Completeness}
+            \label{sec:completeness}
+
+            given a valid sequent, then conclusion is deriveable from premises
 
         % \subsubsection{Substitution}
         % \label{sec:substitution}

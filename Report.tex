@@ -34,6 +34,8 @@
 % LS-Lab logic commands: includes lcalculus, lmeta, lsemantics, lsyntax
 \usepackage[
     varterms, sigmaterms, septerms,
+    substopinline,
+    modifopinline, % arrow notation for \imodif in semantics
     longinterpret,
     %bracketinterpret,%
     %fixformat,%
@@ -56,9 +58,9 @@
 
 \newcommand{\IFOL}{\interpretation[
     %algebra=\mathcal{M},
-    const=I,
-    assign=\ell,
-    state=s,
+    const=\interpret,
+    assign=\assignment,
+    % state=\nu,
     universe=\universe
     ]}
 % \newcommand{\IdL}{\dLint[state=\nu]}
@@ -744,7 +746,7 @@ it often makes sense to treat the very first initial condition separately, becau
             This holds since
 
 
-
+% TODO: choose good citation style. Chicago?
 \nocite{*}
 \bibliographystyle{plain}
 \bibliography{Bibliography}
