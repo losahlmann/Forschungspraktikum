@@ -17,12 +17,15 @@
         and variables
 
         declarative sentences made of atomic, indecomposible sentences
+        a set of symbols and their roles
 
 
-
+        FOL deals with different kinds of symbols
         function: takes value of argument, gives back value, can be any type
         function symbol stand for function
         $f,g,h$
+
+        constant symbols nullary function
 
         predicate gives back either true or false, depending on values of arguments
         predicate symbol is either true or false
@@ -45,51 +48,41 @@
         \subsection{Syntax}
             \label{sec:FOL-syntax}
 
-            First-order logic inductively defines a syntax of \textit{logical formulas} from a set of function and predicate symbols, the \textit{signature} $\signature$ of the theory.
+            First-order logic inductively defines a syntax of well-formed \textit{logical formulae} from an alphabet with different kinds of symbols.
 
-            alphabet to built well-formed formulas from
-            a set of symbols and their roles
+            The syntax only defines rules which specify how the given symbols can be textually combined. At this stage, they have no specific meaning yet.
 
-            The signature comprises three subsets: predicates, functions and constants.
-
-            nullary function
-
-            The syntax only defines how the given symbols can be textually combined. At this stage, they have no specific meaning yet.
+            The \textit{signature} $\signature$ of the theory is a set of predicate, function and constant symbols.
 
             \begin{definition}[Terms]
-                Well-formed terms are either logical variables, constants or functions applied to terms:
+                For a given \textit{signature} $\signature$ and set of variable symbols $\varsymbols$, the well-formed terms are either logical variables, constants or functions applied to terms:
                 The set of all \textit{terms} $\terms$ is the smallest set with
                 \begin{enumerate}
                     \item If $x\in\varsymbols$ then $x\in\terms$.
-                    \item If $c\in\signature$ is a term
-                    % TODO: command for integer range
-                    \item If $f\in\signature$ of arity $n>0$ and $\istrm{i}\in\terms$ for $i=\range{1}{n}$, then $f(\range{\istrm{1}}{\istrm{n}})\in\terms$
+                    \item If $c\in\signature$ is a constant symbol, then $c\in\terms$.
+                    \item If $f\in\signature$ is a function symbol of arity $n\geq 1$ and $\istrm{i}\in\terms$ for $i=\range{1}{n}$, then $f(\range{\istrm{1}}{\istrm{n}})\in\terms$.
                 \end{enumerate}
-                This can alternatively be written as grammar in Backus-Naur form
+                This definition can alternatively be written as grammar in Backus-Naur form
                 \begin{equation}
                     \astrm,\istrm{i} \Coloneqq
                         x \mid
                         c \mid
                         f(\range{\istrm{1}}{\istrm{n}})
                 \end{equation}
-                where $x$ is ranging over the set of logical variables $\varsymbols$, $c$ over the nullary functions in $\signature$ and $f$ over the elements in $\signature$ with arity $n>0$.
+                where $x$ is ranging over the set of logical variables $\varsymbols$, $c$ over the nullary functions in $\signature$ and $f$ over the elements in $\signature$ with arity $n\geq 1$.
             \end{definition}
 
+            a formal language over alphabet $\signature\cup\varsymbols$
+
             \begin{definition}[First-Order Formulas]
-                well-formed formulas of a (first-order) logic are
-                a formal language over alphabet $\signature\cup\varsymbols$
-                words formed by recursive combination of signature-symbols with logical operator symbols
-                using the set of terms $\terms$
-
-                $\FOLformulas$ set of formulas of first-order logic
-                smallest set with
+                For given $\signature$ and $\varsymbols$, the well-formed formulas of a (first-order) logic are words formed by recursive combination of signature-symbols with logical operator symbols:
+                The set of formulas $\FOLformulas$ is the smallest set with
                 \begin{enumerate}
-                    \item If predicate symbol $p\in\signature$ of arity $n\geq 0$ and $\istrm{i}\in\terms$ for $i=\range{1}{n}$ then $p(\range{\istrm{1}}{\istrm{n}})\in\FOLformulas$
-                    \item If $\asfml,\bsfml\in\FOLformulas$, then $\lnot\asfml,(\asfml\land\bsfml),(\asfml\lor\bsfml),(\asfml\limply\bsfml)\in\FOLformulas$ are formulas
-                    \item quantifiers formula $\asfml$, variable $x$ $(\lforall{x}{\asfml}),(\lexists{x}{\asfml})\in\FOLformulas$
+                    \item If $p\in\signature$ is a predicate symbol of arity $n\geq 0$ and $\istrm{i}\in\terms$ for $i=\range{1}{n}$ then $p(\range{\istrm{1}}{\istrm{n}})\in\FOLformulas$.
+                    \item If $\asfml,\bsfml\in\FOLformulas$, then $\lnot\asfml,(\asfml\land\bsfml),(\asfml\lor\bsfml),(\asfml\limply\bsfml)\in\FOLformulas$ are formulas.
+                    \item For $\asfml\in\FOLformulas$ and $x\in\varsymbols$ the expressions $(\lforall{x}{\asfml}) and (\lexists{x}{\asfml})\in\FOLformulas$ are formulas.
                 \end{enumerate}
-
-                or again as
+                We may again write this as
                 \begin{equation}
                     \asfml,\bsfml \Coloneqq
                         p(\range{\istrm{1}}{\istrm{n}}) \mid
@@ -100,7 +93,7 @@
                         \lforall{x}{\asfml} \mid
                         \lexists{x}{\asfml}
                 \end{equation}
-                where $p\in\signature$ is a predicate symbol (of arity $k\geq 1$), the terms $\istrm{i}\in\terms$ and the variable $x\in\varsymbols$
+                where $p\in\signature$ ranges over the predicate symbols (of arity $k\geq 1$), $\istrm{i}\in\terms$ over the terms and $x\in\varsymbols$ over the variable symbols.
             \end{definition}
 
         \subsection{Semantics}
@@ -438,7 +431,7 @@
 
             first-order logic of real arithmetic (\FOLR)
             formula of real arithmetic
-            is first order formula
+            is first-order formula
             function/predicate symbols $ = {+,-,\cdot,/,=,<,\leq,>,\geq}$
             constant symbols $\Sigma$
             logical Variables $V$
