@@ -9,51 +9,52 @@
         We introduce first-order logic similiar to the definitions given in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}. More subtleties are adapted from \cite{hodges2001ClassicalLogic}.
         % though with a different notation/nomenclature
 
+        declarative sentences made of atomic, indecomposible sentences
 
 
         % it is predicate logic, not propositional
         propositional: no =, no quantifiers, no functions/predicates, only true/false constant symbols (= predicates of arity 0 = propositions)
-        extends propositional logic, which is based on \textit{declarative sentences}/propositions (can be declared as true or false) with quantifiers
+
+        % TODO: truth values
+
+        predicate logic
+
+        First-order logic extends propositional logic,
+        with quantifiers
         and variables
+        and functions/predicates of arity $\geq 1$
 
-        declarative sentences made of atomic, indecomposible sentences
-        a set of symbols and their roles
-
-
-        FOL deals with different kinds of symbols
-        function: takes value of argument, gives back value, can be any type
-        function symbol stand for function
-        $f,g,h$
-
-        constant symbols nullary function
-
-        predicate gives back either true or false, depending on values of arguments
-        predicate symbol is either true or false
-        $p,q,r$
-
-        refer to objects
-        arity of function or predicate symbol: number of arguments (can be 0)
-        specified by signature $\signature$
-        for zero arity $c$ constant symbol=function without argument, so-called nullary function
-
-        set of logical variable symbols $\varsymbols$, stand for objects
-        $x,y,z$
-
-        formulas denote truth values
-        terms are expressions which denote objects
-        terms are well-formed/feasible arguments for functions/predicates
+        Propositional logic only deals with \textit{declarative sentences}, so-called \textit{propositions}, which can be declared as either true or false. and how these can be connected
 
 
+
+        Functions take values as argument and give back a new value, which can be of any type. Function symbols stand for a function and are usually denoted by $f,g,h$.
+
+        % FIXME: Zielraum in englisch
+        difference between functions and predicates is Zielraum
+
+        In contrast to functions, predicates return either true or false, depending on the values of their arguments.
+        So depending on the context, a predicate symbol, usually written as $p,q,r$, is either true or false.
+
+        The \textit{arity} of a function or predicate symbol is the number of arguments it demands.
+        Functions can be of arity zero, i.e. without any argument.
+        For clarity, we will treat these so-called \textit{constants} (or nullary functions) seperately and write their symbols as $a,b,c$.
+        The arities are specified by the signature $\signature$.
+
+        Variable symbols $x,y,z$ refer to objects
+
+        Precisely define a set of symbols and their roles
 
         \subsection{Syntax}
             \label{sec:FOL-syntax}
 
-            First-order logic inductively defines a syntax of well-formed \textit{logical formulae} from an alphabet with different kinds of symbols.
+            First-order logic inductively defines a syntax of well-formed \textit{logical formulae} over an alphabet containing different kinds of symbols.
 
             The syntax only defines rules which specify how the given symbols can be textually combined. At this stage, they have no specific meaning yet.
 
-            The \textit{signature} $\signature$ of the theory is a set of predicate, function and constant symbols.
+            The alphabet $\signature\cup\varsymbols$ comprises the \textit{signature} $\signature$ of the theory, which is a set of predicate, function and constant symbols, and the set of logical variable symbols $\varsymbols$.
 
+            Terms are the expressions which denote feasible arguments for functions and predicates.
             \begin{definition}[Terms]
                 For a given \textit{signature} $\signature$ and set of variable symbols $\varsymbols$, the well-formed terms are either logical variables, constants or functions applied to terms:
                 The set of all \textit{terms} $\terms$ is the smallest set with
@@ -72,15 +73,14 @@
                 where $x$ is ranging over the set of logical variables $\varsymbols$, $c$ over the nullary functions in $\signature$ and $f$ over the elements in $\signature$ with arity $n\geq 1$.
             \end{definition}
 
-            a formal language over alphabet $\signature\cup\varsymbols$
-
+            Formulas are expressions which will admit truth values.
             \begin{definition}[First-Order Formulas]
                 For given $\signature$ and $\varsymbols$, the well-formed formulas of a (first-order) logic are words formed by recursive combination of signature-symbols with logical operator symbols:
                 The set of formulas $\FOLformulas$ is the smallest set with
                 \begin{enumerate}
                     \item If $p\in\signature$ is a predicate symbol of arity $n\geq 0$ and $\istrm{i}\in\terms$ for $i=\range{1}{n}$ then $p(\range{\istrm{1}}{\istrm{n}})\in\FOLformulas$.
-                    \item If $\asfml,\bsfml\in\FOLformulas$, then $\lnot\asfml,(\asfml\land\bsfml),(\asfml\lor\bsfml),(\asfml\limply\bsfml)\in\FOLformulas$ are formulas.
-                    \item For $\asfml\in\FOLformulas$ and $x\in\varsymbols$ the expressions $(\lforall{x}{\asfml}) and (\lexists{x}{\asfml})\in\FOLformulas$ are formulas.
+                    \item If $\asfml,\bsfml\in\FOLformulas$, then $\lnot\asfml,(\asfml\land\bsfml),(\asfml\lor\bsfml),(\asfml\limply\bsfml)\in\FOLformulas$.
+                    \item If $\asfml\in\FOLformulas$ and $x\in\varsymbols$ then $(\lforall{x}{\asfml})\in\FOLformulas$ and  $(\lexists{x}{\asfml})\in\FOLformulas$.
                 \end{enumerate}
                 We may again write this as
                 \begin{equation}
@@ -99,116 +99,105 @@
         \subsection{Semantics}
             \label{sec:FOL-semantics}
 
-            \textbf{semantics} specify an interpretation of each symbol of ...
-            in language of ...
-            given this defines a \textbf{truth value} of a full formula
+            The \textbf{semantics} of a first-order logic specify the meaning of each symbol occuring in terms and formulae with the goal to assign a \textbf{truth value} to a full formula.
 
-            \textbf{interpretation} $I$ of function and predicate symbols
+            need concrete objects for symbols
+            based on a valuation
+            requires to fix a \textit{universe} of concrete values
+
+            \begin{definition}[Interpretation]
+                An \textbf{interpretation} (or model) $\interpretation$ assigns concrete elements/function/relation to their corresponding symbols in a given signature $\signature$. It consists of
+                \begin{enumerate}
+                    % FIXME: is this part of interpretation, means that assignment only makes sense for a fixed interpretation
+                    \item The \textit{universe} $\universe$, a non-empty set of concrete values/objects of discurse.
+                    \item For each constant symbol $c\in\signature$ a value $\interpret{c}\in\universe$.
+                    % FIXME: proper function definitions, ie. : and arrow, \from\to
+                    % TODO: reference to cartesian product
+                    \item For each function symbol $f\in\signature$ of arity $k\geq 1$, $\interpret{f}\from\universe^k\to\universe$ is a function with $k$ arguments.
+                    \item For each predicate symbol $p$ of arity $k\geq 1$, $\interpret{p}\subseteq\universe^n$ is a relation.
+                \end{enumerate}
+
+            \end{definition}
+
+            % Interpretation associates $f$ with $\interpret{f}(\range{d_1}{d_n})\in\universe$ value of function at position $(\range{d_1}{d_n})\in\universe^k $
+
+            The predicate $p$ is \textit{true} at position $(\range{d_1}{d_n})\in\universe^k$ under $\interpretation$ if and only if $(\range{d_1}{d_n})\in\interpret{p}$.
+            An alternative but equivalent formulation uses the characteristic function $\interpret{p}\from\universe^n\to\{\ltrue,\lfalse\}$, where $p$ is true at $(\range{d_1}{d_n})\in\universe^n$ if and only if $\interpret{p}(\range{d_1}{d_n})=\ltrue$.
+
+            % provide seperate characterisation, meaning of the connectives
+            % truth tables
+            % to define what is true and false
+            % semantics is equivalent to proof theory
+
+
+            % relationship
+            % $\range{\asfml_1}{\asfml_n}\models\bsfml$
+            % looking at truth values of atomic formulas in premises and conclusion, how manipulated by logical connectives, defined by a table for all possible cases
+            % calculate truth value of formula from truth value of atomic propositions
+
+            % classical logic \cite{reis2014cutelimination}
+            % set of truth values true,false
+            % every sentence always true or false
+            % its sequent calculus is LK
+            % valuation/model of a formula is an assignment of a truth value to each atomic proposition inside that formula
+
 
             assignment of logical variables
-            variables are place holders for any kind of concrete value
+            Variables are only place holders and need to to refer to a concrete value
 
-            provide seperate characterisation, meaning of the connectives
-            truth tables
-            to define what is true and false
-            semantics is equivalent to proof theory
+            \begin{definition}[Assignment]
+                interpretation of variables
+                assignment for a logical variable
+                An \textbf{assignment} is a map $\assignment\from\varsymbols\to\universe$ which assigns a value/object from the universe to each variable symbol $x\in\varsymbols$.
+                % TODO: notation for x|->a
+            \end{definition}
+
+            Given the information in an interpretation and assignment, we can finally evaluate a formula, i.e. decide on its truth value.
+
+            given an interpretation and assignment for a signature, term can be evaluated
+            again inductively
 
             formula is satisfieable, valid, or neither
             satisfieable if there is at least one model in which formula evaluates to true
             valid if always evaluates to true, in every model
 
-            relationship
-            $\range{\asfml_1}{\asfml_n}\models\bsfml$
-            looking at truth values of atomic formulas in premises and conclusion, how manipulated by logical connectives, defined by a table for all possible cases
-            calculate truth value of formula from truth value of atomic propositions
-
-            classical logic \cite{reis2014cutelimination}
-            set of truth values true,false
-            every sentence always true or false
-            its sequents calculus is LK
-            valuation/model of a formula is an assignment of a truth value to each atomic proposition inside that formula
 
             valuation: assignment of truth value to all atoms
-            infinitely many valuations, called models
+            % infinitely many valuations, called models
 
-            evaluation of formula: computing truth value for it, based on a valuation
-            requires to fix a universe of concrete values
-
-            \begin{definition}[Interpretation]
-                An interpretation (or model) $\interpret$ assigns concrete elements/function/relation to their corresponding symbols in a given a signature $\signature$. It consists of
+            \begin{definition}[Valuation of Terms]
+                For $\terms$ the/a \textit{valuation} $\ivaluation{\IFOL}{\phi}$ is defined by
                 \begin{enumerate}
-                    \item The universe, a non-empty set $\universe$ of concrete values/objects
-                    \item nullary function symbol
-                    % FIXME: proper function definitions, ie. : and arrow
-                    % TODO: reference to cartesian product
-                    \item To each function symbol $f\in\signature$ of arity $k\geq 1$, $\interpret(f):\universe^k\rightarrow\universe$ is a function with $k$ arguments.
-                    \item Each predicate symbol $p$ of arity $k\geq 1$ a relation $\interpret(p)\subseteq\universe^n$ subset
+                    \item $\ivaluation{\IFOL}{x} = \assignment(x)$ for each logical variable $x\in\varsymbols$
+                    \item constant
+                    \item $\ivaluation{\IFOL}{f(\range{\istrm{1}}{\istrm{n}})} = \interpret{f}(\range{\ivaluation{\IFOL}{\istrm{1}}}{\ivaluation{\IFOL}{\istrm{n}}})$ for each function symbol $f\in\signature$ of arity $n\geq 1$.
+                \end{enumerate}
+            \end{definition}
+
+
+            meaning of connective symbols, how they preserve a truth value
+            defined as truth table
+            translation into natural language?
+            \begin{definition}[Valuation of First-Order Formulas]
+                valuation of first-order formulas $\FOLformulas$
+                in the interpretation $\interpretation$
+                under the assignment $\assignment$ is given by
+                \begin{enumerate}
+                    \item predicate $\ivaluation{\IFOL}{p(\range{\istrm{1}}{\istrm{n}})} = \interpret{p}(\range{\ivaluation{\IFOL}{\istrm{1}}}{\ivaluation{\IFOL}{\istrm{n}}})$
+                    \item The conjunction $\ivaluation{\IFOL}{\astrm\land\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ and $\ivaluation{\IFOL}{\bstrm}=\ltrue$.
+                    \item The disjunction $\ivaluation{\IFOL}{\astrm\lor\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$.
+                    \item The negation $\ivaluation{\IFOL}{\lnot\astrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$.
+                    \item The implication $\ivaluation{\IFOL}{\astrm\limply\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$.
+                    \item The universal quantifier $\ivaluation{\IFOL}{\lforall{x}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for all $a\in\R$.
+                    \item The existential quantifier $\ivaluation{\IFOL}{\lexists{x}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for some $a\in\R$.
                 \end{enumerate}
 
+                The statement $\ivaluation{\IFOL}{\astrm}=\ltrue$ can also be written as $\imodels{\IFOL}{\astrm}$, the so-called satisfaction relation.
+
+                One says that $\interpretation,\assignment$ satisfies $\asfml$ or that $\asfml$ is true in $\interpretation$ under $\assignment$.
+
+                A formula $\asfml$ is called valid (or a \textit{tautology}) if $\imodels{\IFOL}{\asfml}$ for all possible interpretations $\interpretation$ and assignments $\assignment$. In this case, one writes shortly $\models\asfml$.
             \end{definition}
-
-            $\asfml$ is true in $\interpret$/under $\interpret$, $\interpret$ satisfies $\asfml$, is a model of $\asfml$
-
-            interpretation gives information needed to decide on truth value of a sentence
-            semantics determine if $\interpret$ makes $\asfml$ true or false
-
-            interpretation of $p$ under $\interpret$
-            interpretation of $f$ under $\interpret$
-
-            Interpretation associates $f$ with $\interpret(f)(\range{d_1}{d_n})\in\universe$ value of function at position $(\range{d_1}{d_n})\in\universe^k $
-            predicate $p$ true at position $(\range{d_1}{d_n})\in\universe^k$ iff $(\range{d_1}{d_n})\in\interpret(p)$
-            alternative but equivalent formulation: characteristic function $\interpret(p):\universe^n\rightarrow\{\ltrue,\lfalse\}$ with $p$ true at $(\range{d_1}{d_n})\in\universe^n$ iff $\interpret(p)(\range{d_1}{d_n})=\ltrue$
-
-            % FIXME: Zielraum in englisch
-            difference between functions and predicates is Zielraum
-
-            \begin{definition}[Assignment]
-                interpretation of variables
-                assignment for a logical variable $x\in\varsymbols$
-                map $\assignment:\varsymbols\rightarrow\universe$, assign a value/object from the universe to each variable symbol.
-                % TODO: notation for x|->a
-            \end{definition}
-
-            formula said to be true in $\interpret$ under $\assignment$
-
-            \subsubsection{Valuation of Terms}
-                \label{sec:valuation-of-terms}
-
-                given an interpretation and assignment for a signature, term can be evaluated
-                again inductively
-
-                \begin{definition}
-                    valuation $\ivaluation{\IFOL}{\phi}$ defined by
-                    \begin{enumerate}
-                        \item logical variable $\ivaluation{\IFOL}{x} = \assignment(x)$
-                        \item constant
-                        \item function symbol $f\in\signature$ of arity $n\geq 1$ $\ivaluation{\IFOL}{f(\range{\istrm{1}}{\istrm{n}})} = \interpret(f)(\range{\ivaluation{\IFOL}{\istrm{1}}}{\ivaluation{\IFOL}{\istrm{n}}})$
-                    \end{enumerate}
-                \end{definition}
-
-            \subsubsection{Valuation of First-Order Formulas}
-                \label{sec:valuation-of-formulas}
-
-                truth table
-                translation into natural language?
-                \begin{definition}
-                    valuation of first-order formulas
-                    interpretation $\interpret$
-                    assignment $\assignment$
-                    \begin{enumerate}
-                        \item predicate $\ivaluation{\IFOL}{p(\range{\istrm{1}}{\istrm{n}})} = \interpret(p)(\range{\ivaluation{\IFOL}{\istrm{1}}}{\ivaluation{\IFOL}{\istrm{n}}})$
-                        \item and/conjunction $\ivaluation{\IFOL}{\astrm\land\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ and $\ivaluation{\IFOL}{\bstrm}=\ltrue$
-                        \item or/disjunction $\ivaluation{\IFOL}{\astrm\lor\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$
-                        \item not $\ivaluation{\IFOL}{\lnot\astrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$
-                        \item imply $\ivaluation{\IFOL}{\astrm\limply\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$
-                        \item universal quantifier $\ivaluation{\IFOL}{\lforall{x}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for all $a\in\R$
-                        \item existential quantifier $\ivaluation{\IFOL}{\lexists{x}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[assign]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for some $a\in\R$
-                    \end{enumerate}
-
-                    With $M=(\interpret,\assignment)$ Also write $\imodels{\IFOL}{\astrm}$ the so-called satisfaction relation if and only if $\ivaluation{\IFOL}{\astrm}=\ltrue$
-                    say that $\interpret,\assignment$ satisfies $\astrm$.
-                    Formula $\astrm$ is called valid if $\imodels{\IFOL}{\astrm}$ for all possible interpretations and assignments. just write $\models\astrm$
-                \end{definition}
 
         \subsection{Proof Theory}
         \label{sec:FOL-proof-theory}
@@ -255,13 +244,21 @@
 
             a sequent is deriveable in proof calculus $C$, $T|-_C\asfml$ if there is a formal proof in the calculus for the sequent
 
+            judgement of form
+            \begin{equation}
+                \lsequent{\range{\asfml_1}{\asfml_n}}{\bsfml}
+            \end{equation}
+            called sequent
+            sets may be empty
+            sequent is valid, if there is a proof
+
             proof calculus is sound if invalid sequents are not deriveable in C
             is complete if every valid sequent can be derived
 
             \subsubsection{Axioms}
                 \label{sec:FOL-axioms}
 
-                theory of $\interpret$ is set of sentences satisfied by $\interpret$
+                theory of $\interpretation$ is set of sentences satisfied by $\interpretation$
                 generally, theory is set of sentences
                 model class of theory $T$: all interpretations which satisfy $T$ (all sentences given in T)
                 if $K$ (interpretations) is model class of theory $T$, then $T$ is set of axioms for $K$ (\cite{hodges2001ClassicalLogic})
@@ -304,33 +301,24 @@
             \subsubsection{Natural Deduction}
                 \label{sec:natural-deduction}
 
-                natural deduction calculus
-                Gentzen style, few axioms, more rules
-                every line is a conditional tautology,
-                zero or more conditions on left
-                exactly one asserted proposition on right
+                The \textit{natural deduction calculus} Gentzen style,
+                and relies on only a few axioms but an exhaustive collection of inference rules which operate on sequents.
 
-                inference rules which operate on sequents
+                By applying these rules one infers formulas from formulas and finally deduces a conclusion from the given set of promises.
 
-                collection of proof rules
-                infer formulas from formulas
-                deduce a conclusion from a given set of promises by applying rules
+                Every line of a proof is a conditional tautology, with zero or more conditions on the left side of the sequent and exactly one asserted proposition on the right hand side.
+
                 premises: set of formulas $\range{\asfml_1}{\asfml_n}$
                 conclusion $\bsfml$ single formula
+
                 umforme premises with rules into conclusion
                 this intention, written as
                 from premisses conclude conclusion $\bsfml$
-                judgement of form
-                \begin{equation}
-                    \lsequent{\range{\asfml_1}{\asfml_n}}{\bsfml}
-                \end{equation}
-                called sequent
-                sets may be empty
-                sequent is valid, if there is a proof
+
 
                 in contrast to relationship $\range{\asfml_1}{\asfml_n}\models\bsfml$, see semantics
 
-                finding proof can be difficult, because it is not obvious which rules need to be applied in what order
+                Finding a proof can be difficult, because it might not be obvious which proof rules need to be applied and in what order.
 
                 theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
 

@@ -16,6 +16,8 @@
 \newcommand{\R}{\mathbb{R}}
 % integer range
 \newcommand{\range}[2]{#1,\ldots,#2}
+% functions: f\from\R\to\R
+\newcommand*{\from}{\colon}
 % define as
 % FIXME: define "def" properly
 %\newcommand{\defeq}{\,\stackrel{\text{def}}{=}\,}
@@ -58,8 +60,9 @@
 \newcommand{\FOLformulas}{\lformulas[\FOL]{\signature}{\varsymbols}}
 \newcommand{\FOL}{\text{FOL}}
 \newcommand{\FOLR}{\FOL$_\R$}
-\newcommand{\interpret}{I}
-\newcommand{\universe}{D_{\interpret}}
+\renewcommand{\interpretation}{I}
+\newcommand{\interpret}[1]{\interpretation(#1)}
+\newcommand{\universe}{D_{\interpretation}}
 \newcommand{\assignment}{\nu}
 %
 % Delay Differential Dynamic Logic
