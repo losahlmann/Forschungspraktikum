@@ -168,7 +168,7 @@
             \end{definition}
 
             \begin{definition}[Model]
-                A model is the triplet $\model=(\universe,\interpret,\assignment)$ of a universe $\universe$, an interpretation $\interpret$ and an assignment $\assignment$.
+                A model is the triple $\model=(\universe,\interpret,\assignment)$ of a universe $\universe$, an interpretation $\interpret$ and an assignment $\assignment$.
             \end{definition}
 
             We write $\modif{\model}{x}{a}$ for the model which differs from the model $\model$ only in the assignment to the logical variable $x$, to which the value $a\in\universe$ is allocated.
@@ -344,15 +344,82 @@
 
                 lemma to be used in another proof
 
+                % Nomenklatur
+                deductive rules
+                inference rules
+
 
             % TODO: natural deduction calculus
             \subsubsection{Natural Deduction}
                 \label{sec:natural-deduction}
 
-                The \textit{natural deduction} is a calculus in the so-called Gentzen style,
+                The \textit{natural deduction} is a calculus of the so-called Gentzen style,
                 which relies on only a few axioms but an exhaustive collection of inference rules operating on sequents.
 
                 By applying these rules one infers formulas from formulas and finally deduces a conclusion from the given set of promises.
+
+                % TODO: replace \Gamma with \asfmls, \Delta with \bsfmls
+                \begin{calculus}
+                    \cinferenceRule[FOLax|ax]{axiom, initial rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{}{}
+                        }{
+                            \lsequent{\asfmls,\asfml}{\asfml}
+                        }
+                    }{}
+                    \cinferenceRule[FOLmono|$\land$i]{monotonicity rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{}
+                        }{
+                            \lsequent{\asfmls}{}
+                        }
+                    }{}
+                    \cinferenceRule[FOLandi|$\land$i]{and introduction}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\asfml}
+                            &\lsequent{\asfmls}{\bsfml}
+                        }{
+                            \lsequent{\asfmls}{\asfml\land\bsfml}
+                        }
+                    }{}
+                    \cinferenceRule[FOLande|$\land$i]{and elimination}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\asfml\land\bsfml}
+                        }{
+                            \lsequent{}{}
+                        }
+                    }{}
+                    \cinferenceRule[FOLnotr|$\land$r]{not elimination}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\bsfml}
+                            &\lsequent{\asfmls}{\lnot\bsfml}
+                        }{
+                            \lsequent{\asfmls}{\asfml}
+                        }
+                    }{}
+                    \cinferenceRule[FOLnotl|$\land$l]{not elimination}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls,\asfml}{\bsfml}
+                            &\lsequent{\asfmls,\lnot\asfml}{\bsfml}
+                        }{
+                            \lsequent{\asfmls}{\bsfml}
+                        }
+                    }{}
+                    \cinferenceRule[FOLalle|$\forall$e]{forall elimination}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\lforall{x}{\asfml}}
+                        }{
+                            \lsequent{\asfmls}{\subst[\asfml]{x}{t}}
+                        }
+                    }{collision free}
+                    \cinferenceRule[FOLalli|$\forall$i]{forall introduction}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\subst[\asfml]{x}{y}}
+                        }{
+                            \lsequent{\asfmls}{\lforall{x}{\asfml}}
+                        }
+                    }{y not in free vars von $\Gamma$ and vars von $\asfml$}
+                \end{calculus}
 
                 % ??? oder mehrere premises (sequents) oben one unten
                 Every line of a proof is a conditional tautology, with zero or more conditions on the left side of the sequent and exactly one asserted proposition on the right hand side.
@@ -376,6 +443,17 @@
 
             \subsubsection{Sequent Calculus}
                 \label{sec:sequent-calculus}
+
+                \begin{calculus}
+                    \cinferenceRule[FOLax|ax]{axiom, initial rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{}{}
+                        }{
+                            \lsequent{\asfmls,\asfml}{\asfml,\bsfmls}
+                        }
+                    }{}
+
+                \end{calculus}
 
                 Gentzen style
                 zero or more asserted propositions
@@ -424,15 +502,7 @@
                     eliminates $\forall$
                     $\lforall{x}{\asfml}$ is true if we can replace quantified variable by any term (side condition, $\astrm$ needs be free for x in $\asfml$) and this remains true
 
-                    \begin{calculus}
-                        \cinferenceRule[FOLforall|$\forall$]{}{
-                            \linferenceRule[sequent]{
-                                \subst[\asfml]{x}{\astrm}
-                            }{
-                                \lforall{x}{\asfml}
-                            }
-                        }{}
-                    \end{calculus}
+
 
                     soundness self-evident, since true for all, also for more concrete instance
 
