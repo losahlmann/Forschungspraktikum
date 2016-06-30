@@ -60,13 +60,15 @@
 \newcommand{\FOLformulas}{\lformulas[\FOL]{\signature}{\varsymbols}}
 \newcommand{\FOL}{\text{FOL}}
 \newcommand{\FOLR}{\FOL$_\R$}
-\renewcommand{\interpretation}{I}
-\newcommand{\interpret}[1]{\interpretation(#1)}
-\newcommand{\universe}{D_{\interpretation}}
+% FIXME: use \mathcal{M}
+\newcommand{\model}{M}
+\newcommand{\interpret}[1][]{\ifthenelse{\equal{#1}{}}{I}{I(#1)}}
+\newcommand{\universe}{D_{\model}}
 \newcommand{\assignment}{\nu}
 %
 % Delay Differential Dynamic Logic
 %
+\newcommand{\csfml}{\chi}
 \newcommand{\diffvars}{\D{\allvars}}
 \newcommand{\delayedvars}{\mathcal{V}_\tau}
 \newcommand{\states}{\mathcal{S}}

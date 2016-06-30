@@ -53,15 +53,14 @@
     simplenames%
     ]{dL}
 
-\let\linterpretation\interpretation
 
 % own symbol definitions
 \input{mathcommands}
 
-\newcommand{\IFOL}{\linterpretation[
-    %algebra=\mathcal{M},
-    const=\interpretation,
-    assign=\assignment,
+\newcommand{\IFOL}{\interpretation[
+    algebra=\model,
+    %const=I,
+    %assign=\assignment,
     % state=\nu,
     universe=\universe
     ]}
