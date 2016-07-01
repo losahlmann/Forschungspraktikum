@@ -4,9 +4,9 @@
     \section{First-Order Logic}
         \label{sec:first-order-logic}
 
-        \textit{First-order logic} (\FOL) is a framework for studying rules of argument (\cite{hodges2001ClassicalLogic}) and will be used a means for the specification of properties of hybrid programs later on.
+        \textit{First-order logic} (\FOL) is a framework for studying rules of argument (\cite{Hodges2001ClassicalLogic}) and will be used a means for the specification of properties of hybrid programs later on.
 
-        We introduce first-order logic similiar to the definitions given in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}. More subtleties are adapted from \cite{hodges2001ClassicalLogic} and \cite{rautenberg10ConciseLogic}.
+        We introduce first-order logic similiar to the definitions given in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}. More subtleties are adapted from \cite{Hodges2001ClassicalLogic} and \cite{rautenberg10ConciseLogic}.
         % though with a different notation/nomenclature
 
         declarative sentences made of atomic, indecomposible sentences
@@ -280,7 +280,7 @@
                 theory of $\model$ is set of sentences satisfied by $\model$
                 generally, theory is set of sentences
                 model class of theory $T$: all interpretations which satisfy $T$ (all sentences given in T)
-                if $K$ (interpretations) is model class of theory $T$, then $T$ is set of axioms for $K$ (\cite{hodges2001ClassicalLogic})
+                if $K$ (interpretations) is model class of theory $T$, then $T$ is set of axioms for $K$ (\cite{Hodges2001ClassicalLogic})
 
                 zero-premise rule
                 \begin{calculus}
@@ -292,7 +292,7 @@
             \subsubsection{Hilbert Calculus}
                 \label{sec:hilbert-calculus}
 
-                \cite{hodges2001ClassicalLogic}
+                \cite{Hodges2001ClassicalLogic}
 
                 selected tautologies with role of axiom
                 selection is rather arbitrary
@@ -357,6 +357,8 @@
                 which relies on only a few axioms but an exhaustive collection of inference rules operating on sequents.
 
                 By applying these rules one infers formulas from formulas and finally deduces a conclusion from the given set of promises.
+
+                \cite{rautenberg10ConciseLogic}
 
                 % TODO: replace \Gamma with \asfmls, \Delta with \bsfmls
                 \begin{calculus}
@@ -444,21 +446,186 @@
             \subsubsection{Sequent Calculus}
                 \label{sec:sequent-calculus}
 
+                \cite{Buss98HandbookProofTheory,Reis2014CutElimination,Bimbo14ProofTheory}
+                partly like \cite{Platzer10HybridSystems}
+
+                first-order sequent calculus called LK, nach Gentzen
+                extension of propositional system PK
+
+                \paragraph{Propositional Rules}
                 \begin{calculus}
-                    \cinferenceRule[FOLax|ax]{axiom, initial rule}{
+                    % same in all sources + WP
+                    \cinferenceRule[LKax|ax]{axiom, initial rule}{
                         \linferenceRule[sequent]{
                             \lsequent{}{}
                         }{
-                            \lsequent{\asfmls,\asfml}{\asfml,\bsfmls}
+                            \lsequent{\asfml}{\asfml}
                         }
                     }{}
-
+                    \cinferenceRule[LKnotl|$\lnot$l]{not left rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\bsfmls,\asfml}
+                        }{
+                            \lsequent{\lnot\asfml,\asfmls}{\bsfmls}
+                        }
+                    }{}
+                    \cinferenceRule[LKnotr|$\lnot$r]{not right rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfml,\asfmls}{\bsfmls}
+                        }{
+                            \lsequent{\asfmls}{\bsfmls,\lnot\asfml}
+                        }
+                    }{}
+                    \cinferenceRule[LKimpr|$\limply$r]{imply right rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfml,\asfmls}{\bsfmls,\bsfml}
+                        }{
+                            \lsequent{\asfmls}{\bsfmls,\asfml\limply\bsfml}
+                        }
+                    }{}
+                    % as in Bimbo14ProofTheory, Platzer10HybridSystems, Buss98HandbookProofTheory
+                    \cinferenceRule[LKorl|$\lor$l]{or left rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfml,\asfmls}{\bsfmls}
+                            &\lsequent{\bsfml,\asfmls}{\bsfmls}
+                        }{
+                            \lsequent{\asfml\lor\bsfml,\asfmls}{\bsfmls}
+                        }
+                    }{}
+                    \cinferenceRule[LKandr|$\land$r]{and right rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\bsfmls,\asfml}
+                            &\lsequent{\asfmls}{\bsfmls,\bsfml}
+                        }{
+                            \lsequent{\asfmls}{\bsfmls,\asfml\land\bsfml}
+                        }
+                    }{}
+                    % as in Buss98HandbookProofTheory, Platzer10HybridSystems
+                    \cinferenceRule[LKandl|$\land$l]{and left rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfml,\bsfml,\asfmls}{\bsfmls}
+                        }{
+                            \lsequent{\asfml\land\bsfml,\asfmls}{\bsfmls}
+                        }
+                    }{}
+                    \cinferenceRule[LKorr|$\lor$r]{or right rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\bsfmls,\asfml,\bsfml}
+                        }{
+                            \lsequent{\asfmls}{\bsfmls,\asfml\lor\bsfml}
+                        }
+                    }{}
+                    % TODO: imply left rule
+                    \cinferenceRule[LKimpl|$\limply$l]{imply left rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{}{}
+                        }{
+                            \lsequent{\asfml\limply\bsfml,\asfmls}{\bsfmls}
+                        }
+                    }{}
                 \end{calculus}
+
+                \paragraph{Quantifier Rules}
+                \begin{calculus}
+                    % as in Buss98HandbookProofTheory, Reis2014CutElimination, WP
+                    % and similiar to Bimbo14ProofTheory
+                    \cinferenceRule[LKalll|$\forall$l]{forall left rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\subst[\asfml]{x}{\astrm},\asfmls}{\bsfmls}
+                        }{
+                            \lsequent{\lforall{x}{\asfml},\asfmls}{\bsfmls}
+                        }
+                    }{arbitrary term $\astrm$?}
+                    \cinferenceRule[LKallr|$\forall$r]{forall right rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\bsfmls,\subst[\asfml]{x}{y}}
+                        }{
+                            \lsequent{\asfmls}{\bsfmls,\lforall{x}{\asfml}}
+                        }
+                    }{$y$ is not a free variable??? in $\asfmls,\bsfmls$}
+                    \cinferenceRule[LKexl|$\exists$l]{exists left rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\subst[\asfml]{x}{y},\asfmls}{\bsfmls}
+                        }{
+                            \lsequent{\lexists{x}{\asfml},\asfmls}{\bsfmls}
+                        }
+                    }{$y$}
+                    \cinferenceRule[LKexr|$\exists$r]{exists right rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\bsfmls,\subst[\asfml]{x}{\astrm}}
+                        }{
+                            \lsequent{\asfmls}{\bsfmls,\lexists{x}{\asfml}}
+                        }
+                    }{arbitrary term $\astrm$? which does not containvariables bound in $\asfml$}
+                \end{calculus}
+
+                \paragraph{Structural Rules}
+                \begin{calculus}
+                    % same in all sources + WP
+                    \cinferenceRule[LKweakl|Wl]{weakening left rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\bsfmls}
+                        }{
+                            \lsequent{\asfml,\asfmls}{\bsfmls}
+                        }
+                    }{}
+                    \cinferenceRule[LKweakr|Wr]{weakening right rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\bsfmls}
+                        }{
+                            \lsequent{\asfmls}{\bsfmls,\asfml}
+                        }
+                    }{}
+                    % as in Buss98HandbookProofTheory, Bimbo14ProofTheory, Reis2014CutElimination, WP
+                    \cinferenceRule[LKcontl|Cl]{contraction left rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfml,\asfml,\asfmls}{\bsfmls}
+                        }{
+                            \lsequent{\asfml,\asfmls}{\bsfmls}
+                        }
+                    }{}
+                    \cinferenceRule[LKcontr|Cr]{contraction right rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\bsfmls,\asfml,\asfml}
+                        }{
+                            \lsequent{\asfmls}{\bsfmls,\asfml}
+                        }
+                    }{}
+                    % as in Buss98HandbookProofTheory, Bimbo14ProofTheory, WP
+                    \cinferenceRule[LKperml|Cl]{permutation left rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls,\asfml,\bsfml,\csfmls}{\bsfmls}
+                        }{
+                            \lsequent{\asfmls,\bsfml,\asfml,\csfmls}{\bsfmls}
+                        }
+                    }{}
+                    \cinferenceRule[LKpermr|Cr]{permutation right rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{\bsfmls,\asfml,\bsfml,\csfmls}
+                        }{
+                            \lsequent{\asfmls}{\bsfmls,\bsfml,\asfml,\csfmls}
+                        }
+                    }{}
+                \end{calculus}
+
+                \paragraph{The Cut Rule}
+                \begin{calculus}
+                    % TODO: Cut-Rule
+                    \cinferenceRule[LKcut|cut]{cut rule}{
+                        \linferenceRule[sequent]{
+                            \lsequent{\asfmls}{}
+                            &\lsequent{\asfmls}{}
+                        }{
+                            \lsequent{\asfmls}{\bsfmls}
+                        }
+                    }{}
+                \end{calculus}
+
 
                 Gentzen style
                 zero or more asserted propositions
 
-                can be regarded as Hilbert-style calculus for deriving finite sequences instead of formulas \cite{hodges2001ClassicalLogic}
+                can be regarded as Hilbert-style calculus for deriving finite sequences instead of formulas \cite{Hodges2001ClassicalLogic}
 
                 sequent is a standard form for logical formulas
                 antecedent $\Gamma$ assumed to be true
@@ -477,13 +644,24 @@
             % Gentzen, Hilbert
             % TODO: Bruch schreibweise, not iff, only if
 
+
             % TODO: free variables
-            free variable: needs an object assigned in order to determine a truth valua for formula
+            free variable: needs an object assigned in order to determine a truth value for formula
             bound variable: no assignment needed
             sentence is formula without free variables, has a determined truth value
             quantifiers bind occurences of variable in formula
             sentence: formula without free formula
+            \begin{definition}[Variable binding]
 
+            variable $x$ occuring in a subformula of form $\lforall{x}{\bsfml}$ or $\lexists{x}{\bsfml}$ is \textit{bound} in the formula $\asfml$.
+            If not it is free
+        \end{definition}
+
+            subst of free variables possible
+            % TODO: is it same subst as in semantics? or better use writing A(x) for free x
+
+            in terms only free variables -> quantifier rules einschrankungen
+            y must not occurr free in $\asfmls,\bsfmls$
 
 
             \subsubsection{Proof Rules}
@@ -546,7 +724,7 @@
         \subsection{Decideability}
             \label{sec:decideability}
 
-            (\cite{hodges2001ClassicalLogic})
+            (\cite{Hodges2001ClassicalLogic})
             language (e.g. FOL) decideable if there is an algorithm which returns for any finite sequent if it is valid or not
 
         \subsection{Correctness}
