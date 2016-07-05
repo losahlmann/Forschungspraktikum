@@ -5,6 +5,8 @@ We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semant
 
 Similiar to first-order logic and essentially as an extension of dL we define delay differential logic
 
+\cite{Platzer12Complete,Platzer15Uniform}
+
 \section{Example}
     \label{example-hp-cars}
     To motivate the need of being able to treat Delayed Differential Equations in hybrid programs, we present some examples.
@@ -16,57 +18,68 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 \section{Syntax}
     \label{sec:syntax}
 
-    $\allvars$ set of \textit{all variables} and $\diffvars\defeq\{\D{x} \with x\in\allvars\}$ set of \textit{differential symbols} and set of \textit{delayed variables} $\delayedvars\defeq\{\xtau \with x\in\allvars\}$
+    The syntax of terms, formula, hp defined inductively by grammar in BNF.
 
-    variables $x,y,z\in\allvars$ with their differential symbols $\D{x},\D{y},\D{z}\in\D{\allvars}$
+    Let $\allvars$ be the set of \textit{all variables} and $\diffvars\defeq\{\D{x} \with x\in\allvars\}$ the corresponding set of \textit{differential symbols}.
+    %and set of \textit{delayed variables} $\delayedvars\defeq\{\xtau \with x\in\allvars\}$
 
-    % TODO: meaning of function, predicate, constant
-    function symbols $f,g,h$
+    The variables will be usually denoted $x,y,z\in\allvars$, with their differential symbols $\D{x},\D{y},\D{z}\in\diffvars$.
 
-    predicate symbols $p,q,r$
+    Function symbols $f,g,h$, constant symbols $a,b,c$ and predicate symbols $p,q,r$ are as in first-order logic (cf. Section \ref{sec:first-order-logic}).
 
-    program constants $\ausprg, \busprg, c$, may be in $\rationals$
-
-    defined inductively
+    % FIXME: what are program constants?
+    program constants $ $, may be in $\rationals$
 
     \begin{definition}[Terms]
         \label{def:syntax-terms}
 
-        We extent the grammar defining \textbf{terms} with a symbol for a \textbf{delayed variable}
+        \textit{Terms} are defined by the following grammar, extending classical \dL with a symbol for a \textbf{delayed variable}:
         \begin{equation}
-            \astrm,\bstrm \Coloneqq x \mid \xtau \mid \D{x} \mid c \mid \astrm+\bstrm \mid \astrm\cdot\bstrm
+            \astrm,\bstrm \Coloneqq
+                %x \mid
+                \xtau[s] \mid
+                \D{x} \mid
+                c \mid
+                f(\range{\istrm{1}}{\istrm{n}}) \mid
+                \astrm+\bstrm \mid
+                \astrm\cdot\bstrm \mid
+                \D{(\astrm)}
         \end{equation}
+        where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
+        The symbol $c$ defines a rational number constant.
+        The delay $s\geq 0$ must be non-negative. For $\xtau[0]$ we write $x$.
 
-        % subtraction and division
+        % TODO: subtraction and division in terms
 
-        The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\xtau$.
+        %The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\xtau$.
 
     \end{definition}
 
-    where $x$ and where $\xtau$?
-    %The grammars for hybrid programs and \dL formulas remain unchanged, but are shown here for completeness.
+    % where $x$ and where $\xtau$?
+    The grammar defining hybrid programs is the same as for classical \dL and shown here for completeness.
 
     \begin{definition}[Hybrid program]
         \label{def:syntax-HP}
 
-        grammar
-        $\asprg, \bsprg$ \HPs, program constants $\ausprg$, variable $x$, term $\astrm$ (possibly containing $x$ or $\xtau$?), formula $\bsfml$ of first-order logic of real arithmetic (\FOLR)
-
+        \textit{Hybrid programs} are defined by
         % TODO: first-order logic of real arithmetic formulas include \xtau?
-        % TODO: difference dL formula and FOLR formula
 
         \begin{equation}
-            % TODO: replace ;
             \asprg, \bsprg \Coloneqq
                 a \mid
                 \hupdate{\humod{x}{\astrm}} \mid
                 \Dupdate{\Dumod{\D{x}}{\astrm}} \mid
                 \htest{\bsfml} \mid
                 \hchoice{\asprg}{\bsprg} \mid
+                % TODO: replace ; in HPs
                 \asprg;\bsprg \mid
                 \hrepeat{\asprg} \mid
                 \hevolvein{\D{x}=\astrm}{\bsfml}
         \end{equation}
+        % TODO: program constant
+        where $\asprg, \bsprg$ denote \HPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\xtau$) and $\ausprg$ a program constant.
+        The formula $\bsfml$ is of first-order logic of real arithmetic (\FOLR$(\allvars)$).
+    \end{definition}
 
         difference to \dL, refer to Section \ref{sec:dynamic-semantics} for meaning of the following, different meaning for formulae
 
@@ -78,9 +91,9 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         delay differential equation with restricted evolution, due to domain constraint $\bsfml$, follow arbitrary amount of time
         ODE still possible
 
-    \end{definition}
 
-    \begin{definition}[(\dL) formula]
+
+    \begin{definition}[\ddL formula]
         \label{def:syntax-formula}
 
         formulas of (differential dynamic logic \dL)
@@ -89,14 +102,25 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         % TODO: replace with command for predicate symbols, quantifier symbol
         predicate symbol $p$, quantifier symbol $C$, variable $x$, \HP $\asprg$
 
-        \begin{equation}
-            \asfml,\bsfml \Coloneqq \astrm\geq\bstrm \mid p(\range{\istrm{1}}{\istrm{k}}) \mid \contextapp{C}{\asfml} \mid \lnot\asfml \mid \asfml\land\bsfml \mid \lforall{x}{\asfml} \mid \lexists{x}{\asfml} \mid \dbox{\asprg}{\asfml} \mid \ddiamond{\asprg}{\asfml}
-        \end{equation}
+        \begin{align}
+            \asfml,\bsfml \Coloneqq
+                &\lforall{s\in[-\tau,s]}{\astrm\geq\bstrm} \mid
+                \lforall{s\in[-\tau,s]}{p(\range{\istrm{1}}{\istrm{k}})} \mid\\
+                &\contextapp{C}{\asfml} \mid
+                \lnot\asfml \mid
+                \asfml\land\bsfml \mid
+                \lforall{x}{\asfml} \mid
+                \lexists{x}{\asfml} \mid
+                \dbox{\asprg}{\asfml} \mid
+                \ddiamond{\asprg}{\asfml}
+        \end{align}
         % TODO: need = in formulas ?
         other operators, such as $>,\leq,<,\lor,\limply,\lbisubjunct$ can be derived from $\land,\lnot$
 
         modal formula $\dbox{\asprg}{\asfml}$ : $\asfml$ holds in the state after all runs of $\asprg$, dual: there is a run
         quantifier symbols $C$, with formula as argument are higher order predicate symbols and bind the variables of $\asfml$
+
+        $\tau$ is a symbolic constant related to the history duration induced by the occurence of a delay-differnetial equation. Its value is set by proof rules.
 
     \end{definition}
 
