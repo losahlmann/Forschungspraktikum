@@ -64,7 +64,18 @@
     % state=\nu,
     universe=\universe
     ]}
-% \newcommand{\IdL}{\dLint[state=\nu]}
+
+\newcommand{\IML}{\interpretation[
+    algebra=\model,
+    %const=I,
+    %assign=\assignment,
+    state=\nu,
+    worlds=W,
+    access=R,
+    universe=\universe
+    ]}
+
+\newcommand{\IdL}{\dLint[state=\nu]}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -91,7 +102,7 @@
 
 \include{intro-logic}
 
-%\include{delay-hybrid-programs}
+\include{delay-hybrid-programs}
 
 %\include{delay-differential-logic}
 % FIXME: put dDL chapter in seperate file

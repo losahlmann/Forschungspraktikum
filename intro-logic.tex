@@ -1,21 +1,39 @@
 \chapter{Introduction to Logic}
     \label{sec:introduction-logic}
 
-    \section{First-Order Logic}
-        \label{sec:first-order-logic}
+    \section{Propositional Logic}
+        \label{sec:propositional-logic}
 
-        \textit{First-order logic} (\FOL) is a framework for studying rules of argument (\cite{Hodges2001ClassicalLogic}) and will be used a means for the specification of properties of hybrid programs later on.
+        \cite{Huth04LogicInCS}
 
-        We introduce first-order logic similiar to the definitions given in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}. More subtleties are adapted from \cite{Hodges2001ClassicalLogic} and \cite{rautenberg10ConciseLogic}.
-        % though with a different notation/nomenclature
 
-        declarative sentences made of atomic, indecomposible sentences
+        Propositional logic only deals with \textit{declarative sentences}, so-called \textit{propositions}, which can be declared as either true or false.
+        Declarative sentences made of atomic sentences, which are indecomposible.
+
+
+        and how these can be connected
+
+
+        logical symbols (and, or, imply, not, forall, exists, equality???) (can partly be expressed by each other)
+        parentheses
 
 
         % it is predicate logic, not propositional
         propositional: no =, no quantifiers, no functions/predicates, only true/false constant symbols (= predicates of arity 0 = propositions)
 
         % TODO: truth values
+        model for a formula: assignment of truth values to each atomic formula
+        such model is called valuation
+
+
+    \section{First-Order Logic}
+        \label{sec:first-order-logic}
+
+        \textit{First-order logic} (\FOL) is a framework for studying rules of argument (\cite{Hodges01ClassicalLogic}) and will be used a means for the specification of properties of hybrid programs later on.
+
+        We introduce first-order logic similiar to the definitions given in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}. More subtleties are adapted from \cite{Hodges01ClassicalLogic} and \cite{Rautenberg10ConciseLogic}.
+        % though with a different notation/nomenclature
+
 
         predicate logic
 
@@ -24,11 +42,6 @@
         and variables
         and functions/predicates of arity $\geq 1$
 
-        Propositional logic only deals with \textit{declarative sentences}, so-called \textit{propositions}, which can be declared as either true or false. and how these can be connected
-
-
-        logical symbols (and, or, imply, not, forall, exists, equality???) (can partly be expressed by each other)
-        parentheses
         extralogical symbols in signature
         logical variables
         all together: alphabet
@@ -280,7 +293,7 @@
                 theory of $\model$ is set of sentences satisfied by $\model$
                 generally, theory is set of sentences
                 model class of theory $T$: all interpretations which satisfy $T$ (all sentences given in T)
-                if $K$ (interpretations) is model class of theory $T$, then $T$ is set of axioms for $K$ (\cite{Hodges2001ClassicalLogic})
+                if $K$ (interpretations) is model class of theory $T$, then $T$ is set of axioms for $K$ (\cite{Hodges01ClassicalLogic})
 
                 zero-premise rule
                 \begin{calculus}
@@ -292,7 +305,7 @@
             \subsubsection{Hilbert Calculus}
                 \label{sec:hilbert-calculus}
 
-                \cite{Hodges2001ClassicalLogic}
+                \cite{Hodges01ClassicalLogic}
 
                 selected tautologies with role of axiom
                 selection is rather arbitrary
@@ -358,7 +371,7 @@
 
                 By applying these rules one infers formulas from formulas and finally deduces a conclusion from the given set of promises.
 
-                \cite{rautenberg10ConciseLogic}
+                \cite{Rautenberg10ConciseLogic}
 
                 % TODO: replace \Gamma with \asfmls, \Delta with \bsfmls
                 \begin{calculus}
@@ -446,7 +459,7 @@
             \subsubsection{Sequent Calculus}
                 \label{sec:sequent-calculus}
 
-                \cite{Buss98HandbookProofTheory,Reis2014CutElimination,Bimbo14ProofTheory}
+                \cite{Buss98HandbookProofTheory,Reis14CutElimination,Bimbo14ProofTheory}
                 partly like \cite{Platzer10HybridSystems}
 
                 first-order sequent calculus called LK, nach Gentzen
@@ -625,7 +638,7 @@
                 Gentzen style
                 zero or more asserted propositions
 
-                can be regarded as Hilbert-style calculus for deriving finite sequences instead of formulas \cite{Hodges2001ClassicalLogic}
+                can be regarded as Hilbert-style calculus for deriving finite sequences instead of formulas \cite{Hodges01ClassicalLogic}
 
                 sequent is a standard form for logical formulas
                 antecedent $\Gamma$ assumed to be true
@@ -724,7 +737,7 @@
         \subsection{Decideability}
             \label{sec:decideability}
 
-            (\cite{Hodges2001ClassicalLogic})
+            (\cite{Hodges01ClassicalLogic})
             language (e.g. FOL) decideable if there is an algorithm which returns for any finite sequent if it is valid or not
 
         \subsection{Correctness}
@@ -742,3 +755,78 @@
         %
         % variables are place holders
         % means of replacing with concrete information
+    \section{Modal Logic}
+        \label{sec:Modal-logic}
+
+        \subsection{Syntax}
+            \label{sec:ML-yntax}
+
+            \cite{Huth04LogicInCS}
+            language of propositional logic with two new unary connectives, called box and diamond whose meaning will be specified by an incarnation of modal logic
+            atomic formulas $\asprop$, set of propositional variables
+            \begin{definition}[Syntax]
+                BNF
+                \begin{equation}
+                    \asfml,\bsfml \Coloneqq
+                        \lfalse \mid
+                        \ltrue \mid
+                        \asprop \mid
+                        \lnot\asfml \mid
+                        \asfml\land\bsfml \mid
+                        \asfml\lor\bsfml \mid
+                        \asfml\limply\bsfml \mid
+                        \asfml\lbisubjunct\bsfml \mid
+                        \lbox{\asfml} \mid
+                        \ldiamond{\asfml}
+                \end{equation}
+            \end{definition}
+
+        \subsection{Semantics}
+            \label{sec:ML-semantics}
+
+            \cite{Huth04LogicInCS}
+            Kripke Model
+            \begin{definition}[Model]
+                A \textit{model} $\model=(W,R,L)$ of modal logic
+                \begin{enumerate}
+                    \item nonempty Set of \textit{worlds/states} $W$
+                    \item relation $R\subseteq W\times w$, accessibility relation
+                    \item labelling function $L:W\to P(atoms)$
+                \end{enumerate}
+                write $R(v,w)$ for $(v,w)\in R$, world $w$ accessible from $v$
+
+            \end{definition}
+            forcing relation $\Vdash$ between worlds and propositional variables (is L),
+            extended to formulas
+
+            \begin{definition}[Valuation of modal formulae]
+                satisfaction relation $ $
+                valuation of formulas
+                inductively
+                \begin{enumerate}
+                    \item box $\lbox{\asfml}$ iff $w$ holds for each $w\in W$ with $R(v,w)$
+                    \item diamond $\ldiamond{\asfml}$ iff there is $w$ holds such that $w\in W$ with $R(v,w)$
+                \end{enumerate}
+                A model satisfies a formula iff each world satisfies formula
+                Write $\imodels{\IML}{\asfml}$
+                say $\asfml$ is valid in $\model$
+            \end{definition}
+
+        \subsection{Axiomatizations}
+            \label{sec:ML-Axiomatizations}
+
+            % cite: Handbook of proof theory, chapter VII
+            modal logic \textbf{K} axiomized by:
+            1. all propositional tautologies in the given modal language
+            2. $\lbox{\asfml\limply\bsfml}\limply (\lbox{\asfml}\limply\lbox{\bsfml})$
+            with rules of modus ponens and necessitation
+
+            modal logic \textbf{L}:
+            adds $\lbox{(\lbox{\asfml}\limply\asfml)\limply\lbox{\asfml}}$
+
+            K4: K + $\lbox{\asfml}\limply\lbox{\lbox{\asfml}}$
+
+            K4 and L are closed under necessitation: called normal modal logics
+
+            accessibility relation R
+            R transitive -> K4
