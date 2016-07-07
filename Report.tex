@@ -48,7 +48,7 @@
 \usepackage[
     %bracketmodalinterpret,% use [[]] for semantics
     bracketmodalinterpret,%
-    %fixformat,%
+    fixformat,%
     %silentconst,% don't show `const' and `algebra'
     precisenames%
     ]{dL}
@@ -75,7 +75,10 @@
     universe=\universe
     ]}
 
-\newcommand{\IdL}{\dLint[state=\nu]}
+\newcommand{\IddL}{\dLint[
+    const=I,
+    state=\nu
+    ]}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

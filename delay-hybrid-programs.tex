@@ -35,7 +35,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \begin{equation}
             \astrm,\bstrm \Coloneqq
                 %x \mid
-                \xtau[\tau] \mid
+                % FIXME: make -\tau standard
+                \xtau[-\tau] \mid
                 \D{x} \mid
                 c \mid
                 f(\range{\istrm{1}}{\istrm{n}}) \mid
@@ -46,7 +47,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \end{equation}
         where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
         The symbol $c$ defines a rational number constant.
-        The delay $\tau\geq 0$ must be non-negative. For $\xtau[0]$ we write $x$.
+        All terms implicitely depend on a time parameter $t\leq 0$, written as $\asfml(t)$. When $t=0$ we abbreviate to $\asfml$. The variable symbol $x$ is the only which allows explicitely mentioning this parameter. It is spelled slightly differently as $\xtau[-t]$. Again, for $\xtau[0]$ we write $x$.
 
         % TODO: subtraction and division in terms
 
@@ -93,6 +94,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         The \emph{formulas} of \emph{delay differential dynamic logic} (\ddL) are defined by
         \begin{align}
             \asfml,\bsfml \Coloneqq
+                % TODO: better abbreviated notation for \delay, make forall only appear in semantics rhs
                 &\delay{\astrm\geq\bstrm} \mid
                 \delay{p(\range{\istrm{1}}{\istrm{k}})} \mid\\
                 &\contextapp{C}{\asfml} \mid
@@ -132,7 +134,9 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     %FIXME: need diff var symbol? can determine derivative from x? need pw diffable?
 
-    rewriting history is not allowed, only values at current time instant can be changed $\modif{\nu}{x}{r}$ denotes state which is equal to state $\nu$ except for the value of variable $x$ at the time $t=0$, which is changed to $r\in\R$. values of $x$ for time before do not change
+    As the discrete part of a hybrid program, we only allow the values at the current time instant to be changed.
+    Rewriting history is not permitted!
+    By $\modif{\asstate}{x}{r}$ we denote the state which is equal to state $\asstate$, except for the value of the variable $x$ which is set to $r\in\R$ at the time $t=0$. The value of $x$ for the time before does not change.
 
     % TODO: Abgrenzung zu Trace Semantics
     % The temporal character of delay differential equations (they depend on their own temporal evolution with limited horizon) suggests the introduction of trace semantics.
@@ -140,92 +144,98 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     % However, we go the way of introducing transition semantics with an augmented state space.
 
     \begin{definition}[Semantics of terms]\label{def:sematic-terms}
-        semantics of a term $\astrm$ in a state $\nu\in\statespace$ (of time instant t) is a value in $\R$????
-        defined inductively as follows
-
-        % The semantics of the variable symbols in terms are given by
-        \begin{itemize}
-            \item $\imodel{\IdL}{x} = \nu(x)(0)$
-            \item $\imodel{\IdL}{\D{x}}=\nu(\D{x})(0)$
-            \item $\imodel{\IdL}{f(\range{\istrm{1}}{\istrm{k}})} = $ for function symbol $f$
-            \item $\imodel{\IdL}{\astrm+\bstrm} = \imodel{\IdL}{\astrm} + \imodel{\IdL}{\bstrm}$
-            \item $\imodel{\IdL}{\astrm\cdot\bstrm} = \imodel{\IdL}{\astrm} \cdot \imodel{\IdL}{\bstrm}$
-            \item $\imodel{\IdL}{\D{(\astrm)}}\nu = \sum_{x\in\allvars} \nu(\D{x})\frac{\partial\imodel{\IdL}{\astrm}}{\partial x}(\nu)$ syntactic (total) derivation, common derivation rules, gives new term, $\astrm$ must not contain $\xtau$
-        \end{itemize}
-        Cannot define the derivative of delayed symbols
-
-        The semantic of the new symbol $\xtau$ depends on the context in which the term occures:
-        \begin{itemize}
-            \item in a hybrid program: $\imodel{\IdL}{\xtau} = \imodel{\IdL}{x(t-\tau)} = \nu(x)(-\tau)\in\R$
-            \item in a formula $\xtau\in\statespace$: \begin{equation}
-                % FIXME: rechte seite noch nicht korrekt
-                \imodel[]{}{\phi(\xtau)} =
-                \{\nu\in\states : \lforall{t\in[-\tau,0]}{\phi(\nu(x)(t))} \}
-            \end{equation}
-            with uniform substitution: $\sigma=\{\xtau\rightarrow\theta_0\}$
-        \end{itemize}
-
-        Meaning differential symbol: defined by state, since time derivative may not be defined in isolated point (different to ODE, where isolated state=value in $\R$)
-        Along a solution of a DDE $\varphi:[0,r]\rightarrow\states$ (continous differentiable), the differential symbols are interpreted as time derivatives, $r>0$ at any $\zeta\in[0,r]$, meaning of symbol is rate of change of value of $x$ over time
-        \begin{equation}
-            % TODO: replace \DD with Andres command
-            \imodel{\IdL}{\D{x}}\varphi(\zeta)=\varphi(\zeta)(\D{x})(0)\defeq\DD{\varphi(t)(x)(0)}{t}(\zeta) = \DD{\imodel{\IdL}{x}\varphi(t)}{t}(\zeta)
-        \end{equation}
-        if $r=0$
-        and what if there is no ODE/DDE given: in a given state should also be real value
-        state assigns real values to all symbols, also differential symbols $\nu(\D{x}=\imodel{\IdL}{f(x)}\nu$
-        in initial state an arbitray value is allowed, will then sync with equation to fullfil $\varphi(\zeta)(\D{x})=\imodel{\IdL}{f(x)}\varphi(r)$
-
-        Like for ODE case, only use last value given in state. Since in $t=0$ could be incontinuity we cannot use history to define derivative.
-
-        \begin{lemma}[Differential Lemma]
-
-        \end{lemma}
-
-        In the precondition, no values are associated to the differential symbols. In general, the initial function is only piecewise continuous.
-        Since for later time instances, the values of the differential symbols derive from the DDE, they become (locally) smooth function.
-
+        The \emph{semantics} of a term $\astrm$ in the state $\asstate\in\statespace$ (at time instant $t$) is a value in $\R$ and defined inductively as follows:
+        \begin{enumerate}
+            \item $\ivaluation{\IddL}{\xtau[s]} = \asstate(x)(-s)$
+            % FIXME: need Cpw for derivatives or only \R?
+            \item $\ivaluation{\IddL}{\D{x}(s)} = \asstate(\D{x})(s)$
+            \item $\ivaluation{\IddL}{c} = \interpret[c]$
+            \item $\ivaluation{\IddL}{f(\range{\istrm{1}}{\istrm{n}})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}}}{\ivaluation{\IddL}{\istrm{n}}})$ for function symbol $f$
+            \item $\ivaluation{\IddL}{\astrm+\bstrm} = \ivaluation{\IddL}{\astrm} + \ivaluation{\IddL}{\bstrm}$
+            \item $\ivaluation{\IddL}{\astrm\cdot\bstrm} = \ivaluation{\IddL}{\astrm} \cdot \ivaluation{\IddL}{\bstrm}$
+            % FIXME: derivation of terms?
+            \item $\ivaluation{\IddL}{\D{(\astrm)}}\asstate = \sum_{x\in\allvars} \asstate(\D{x})\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial x}(\asstate)$ syntactic (total) derivation, common derivation rules, gives new term, $\astrm$ must not contain $\xtau$
+        \end{enumerate}
     \end{definition}
+        % TODO: mention 'interpretation' for semantics.
+        % FIXME: interpretation of $f$ is a smooth function
+
+
+    Cannot define the derivative of delayed symbols
+
+    The semantic of the new symbol $\xtau$ depends on the context in which the term occures:
+    \begin{enumerate}
+        \item in a hybrid program: $\imodel{\IddL}{\xtau} = \imodel{\IddL}{x(t-\tau)} = \nu(x)(-\tau)\in\R$
+        \item in a formula $\xtau\in\statespace$: \begin{equation}
+            % FIXME: rechte seite noch nicht korrekt
+            \imodel[]{}{\phi(\xtau)} =
+            \{\nu\in\states : \lforall{t\in[-\tau,0]}{\phi(\nu(x)(t))} \}
+        \end{equation}
+        with uniform substitution: $\sigma=\{\xtau\rightarrow\theta_0\}$
+    \end{enumerate}
+
+    Meaning differential symbol: defined by state, since time derivative may not be defined in isolated point (different to ODE, where isolated state=value in $\R$)
+
+    Along a solution of a DDE $\varphi:[0,r]\rightarrow\states$ (continous differentiable), the differential symbols are interpreted as time derivatives, $r>0$ at any $\zeta\in[0,r]$, meaning of symbol is rate of change of value of $x$ over time
+    \begin{equation}
+        % TODO: replace \DD with Andres command
+        \imodel{\IddL}{\D{x}}\varphi(\zeta)=\varphi(\zeta)(\D{x})(0)\defeq\DD{\varphi(t)(x)(0)}{t}(\zeta) = \DD{\imodel{\IddL}{x}\varphi(t)}{t}(\zeta)
+    \end{equation}
+    if $r=0$
+    and what if there is no ODE/DDE given: in a given state should also be real value
+    state assigns real values to all symbols, also differential symbols $\nu(\D{x}=\imodel{\IddL}{f(x)}\nu$
+    in initial state an arbitray value is allowed, will then sync with equation to fullfil $\varphi(\zeta)(\D{x})=\imodel{\IddL}{f(x)}\varphi(r)$
+
+    Like for ODE case, only use last value given in state. Since in $t=0$ could be incontinuity we cannot use history to define derivative.
+
+    \begin{lemma}[Differential Lemma]
+
+    \end{lemma}
+
+    In the precondition, no values are associated to the differential symbols. In general, the initial function is only piecewise continuous.
+    Since for later time instances, the values of the differential symbols derive from the DDE, they become (locally) smooth function.
+
+    
 
     When we write $x$ we mean $x(t)$.
 
-    \begin{definition}[Semantics of (\dL) formulae]
-        \label{def:semantic-formulae}
-
-        semantics of (\dL) formula $\asfml$ with set of states $\states$ is the subset of states $\imodel{\IdL}{\asfml}\subset\states$ in which $\asfml$ is true. this set is defined inductively by
-
-        \begin{itemize}
+    \begin{definition}[Semantics of (\ddL) formulae]\label{def:semantic-formulae}
+        The semantics of a \ddL formula $\asfml$ is the subset of all states $\imodel{\IddL}{\asfml}\subseteq\states$ in which $\asfml$ is true. This set is given inductively by
+        % TODO: mention interpretation I
+        % FIXME: wahta is difference between \imodel and \ivaluation?
+        \begin{enumerate}
             % TODO: replace : in set by \with
-            \item $\imodel{\IdL}{\asfml\geq\bsfml} = \{\nu\in\states : \imodel{\IdL}{\asfml}\geq\imodel{\IdL}{\bsfml}\}$
-            \item $\imodel{\IdL}{p(\range{\istrm{1}}{\istrm{k}})} = \{\nu\in\states : \}$
-            \item $\imodel{\IdL}{\contextapp{C}{\asfml}} = $
-            \item $\imodel{\IdL}{\lnot\asfml} = \scomplement{(\imodel{\IdL}{\asfml})} = \states\setminus\imodel{\IdL}{\asfml}$
-            \item $\imodel{\IdL}{\asfml\land\bsfml} = \imodel{\IdL}{\asfml}\cap\imodel{\IdL}{\bsfml}$
-            \item $\imodel{\IdL}{\lforall{x}{\asfml}} = \{\nu\in\states \with \modif{\nu}{x}{r}\in\imodel{\IdL}{\asfml} \text{ for all } r\in\R \}$
-            \item $\imodel{\IdL}{\lexists{x}{\asfml}} = \{\nu\in\states \with \modif{\nu}{x}{r}\in\imodel{\IdL}{\asfml} \text{ for some } r\in\R \}$
-            \item $\imodel{\IdL}{\dbox{\asprg}{\asfml}} = \{\nu\in\states \with \omega\in\imodel{\IdL}{\asfml} \text{ for all $\omega$ such that} (\nu,\omega)\in\imodel{\IdL}{\asprg}\}$
-            \item $\imodel{\IdL}{\ddiamond{\asprg}{\asfml}} = \{\nu\in\states \with \omega\in\imodel{\IdL}{\asfml} \text{ for some $\omega$ such that} (\nu,\omega)\in\imodel{\IdL}{\asprg}\}$
-        \end{itemize}
-        if formula $\asfml$ is true in state $\nu$ we write $\nu\models\asfml$. It is called valid, written as $\models\asfml$ iff $\asfml$ is true in all states.
-
+            \item $\imodel{\IddL}{\delay{\asfml\geq\bsfml}} = \left\{\asstate\in\states \with \delay{\imodel{\IddL}{\asfml(s)}\geq\imodel{\IddL}{\bsfml(s)}}\right\}$
+            \item $\imodel{\IddL}{\delay{p(\range{\istrm{1}}{\istrm{k}})}} = \left\{\asstate\in\states \with \delay{\left(\range{\imodel{\IddL}{\istrm{1}}}{\imodel{\IddL}{\istrm{k}}}\right)\in\interpret[p]}\right\}$
+            \item $\imodel{\IddL}{\contextapp{C}{\asfml}} = \interpret[C](\imodel{\IddL}{\asfml})$
+            \item $\imodel{\IddL}{\lnot\asfml} = \scomplement{\left(\imodel{\IddL}{\asfml}\right)} = \states\setminus\imodel{\IddL}{\asfml}$
+            \item $\imodel{\IddL}{\asfml\land\bsfml} = \imodel{\IddL}{\asfml}\cap\imodel{\IddL}{\bsfml}$
+            \item $\imodel{\IddL}{\lforall{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{r}\in\imodel{\IddL}{\asfml} \text{ for all } r\in\R \}$
+            \item $\imodel{\IddL}{\lexists{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{r}\in\imodel{\IddL}{\asfml} \text{ for some } r\in\R \}$
+            \item $\imodel{\IddL}{\dbox{\asprg}{\asfml}} = \{\asstate\in\states \with \omega\in\imodel{\IddL}{\asfml} \text{ for all $\omega$ such that} (\asstate,\omega)\in\imodel{\IddL}{\asprg}\}$
+            \item $\imodel{\IddL}{\ddiamond{\asprg}{\asfml}} = \{\asstate\in\states \with \omega\in\imodel{\IddL}{\asfml} \text{ for some $\omega$ such that} (\asstate,\omega)\in\imodel{\IddL}{\asprg}\}$
+        \end{enumerate}
+        with set of states $\states$
+        if formula $\asfml$ is true in state $\asstate$ we write $\asstate\models\asfml$. It is called valid, written as $\models\asfml$ iff $\asfml$ is true in all states.
+        % TODO: add interpretation to valid
     \end{definition}
 
+    interpretation of predicate symbol, arity n: relation $I(p)\subseteq\R^n$
+    interpretation of a quantifier symbol: functional $I(C):M\subseteq\states\to P(\states)$ maps subsets of states to subsets of states
 
-        With the semantics of terms if follows for the meaning of $\dbox{\asprg}{\phi}$, that $\phi$ must only hold up to time $\tau$ before leaving the \HP $\asprg$. It is possible, that $\phi$ was not verified before, while \emph{executing} the \HP.
+    With the semantics of terms if follows for the meaning of $\dbox{\asprg}{\phi}$, that $\phi$ must only hold up to time $\tau$ before leaving the \HP $\asprg$. It is possible, that $\phi$ was not verified before, while \emph{executing} the \HP.
 
-        However when we apply the Rule of steps, we get the validity of $\phi$ for the entire trace.
+    However when we apply the Rule of steps, we get the validity of $\phi$ for the entire trace.
 
-        % TODO: is it better to only have xtau and not choice? What if both mentioned?
-        in formulae (such as safety condition or evolution constraint), we have two possibilities: only value at current time instant ($x$) or for entire last $\tau$ time $\xtau$
+    % TODO: is it better to only have xtau and not choice? What if both mentioned?
+    in formulae (such as safety condition or evolution constraint), we have two possibilities: only value at current time instant ($x$) or for entire last $\tau$ time $\xtau$
 
-        $\dbox{}{}$ and $\ddiamond{}{}$ only refer to last state and not intermediate states, as \dTL does.
+    $\dbox{}{}$ and $\ddiamond{}{}$ only refer to last state and not intermediate states, as \dTL does.
 
 
-    \begin{definition}[Transition semantics of \HPs]
-        \label{def:semantic-HP}
-
+    \begin{definition}[Transition semantics of \HPs]\label{def:semantic-HP}
          binary reachability relation $\iaccessibility(\asprg)\subseteq\states\times\states$. Since, with respect to \dL, the state space has been replaced, we need to redefine the semantics:
-        \begin{itemize}
+        \begin{enumerate}
             % TODO: () for iaccessibility
             \item $\iaccessibility{a} = $
             \item $\iaccessibility{\hupdate{\humod{x}{\astrm}}}$
@@ -235,44 +245,43 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\iaccessibility{\asprg;\bsprg} $
             \item $\iaccessibility{\hrepeat{\asprg}} = \hrepeat{(\iaccessibility{\asprg})} = \cupfold_{n\in\N}\iaccessibility{\asprg^n}$ with $\asprg^{n+1}\equiv (\asprg^n;\asprg)$ and $\asprg^0\equiv \htest{\ltrue}$
             \item $\iaccessibility{\hevolvein{\D{x}=\astrm}{\bsfml}}$
-        \end{itemize}
-
+        \end{enumerate}
     \end{definition}
 
-        The transition semantic of a hybrid program $\asprg$ is inductively given by a binary
+    The transition semantic of a hybrid program $\asprg$ is inductively given by a binary
 
-        The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
-        \begin{equation}
-            \iaccessibility(\hupdate{\humod{x}{\theta}}) =
-                \left\{(\nu,\omega): \omega = \nu \text{ except }
-                \omega(x) = \left(s\mapsto\begin{cases}
-                    \imodel{\IdL}{\theta(t)} & s=0\\
-                    \nu(s) & s\in[-\tau,0)
-                \end{cases}\right)\right\}
-        \end{equation}
-        This assignment is the actual reason why we need to consider piecewise continuous evolutions.
+    The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
+    \begin{equation}
+        \iaccessibility(\hupdate{\humod{x}{\theta}}) =
+            \left\{(\nu,\omega): \omega = \nu \text{ except }
+            \omega(x) = \left(s\mapsto\begin{cases}
+                \imodel{\IddL}{\theta(t)} & s=0\\
+                \nu(s) & s\in[-\tau,0)
+            \end{cases}\right)\right\}
+    \end{equation}
+    This assignment is the actual reason why we need to consider piecewise continuous evolutions.
 
-        No functional assignment, which would essentially allow to rewrite history
+    No functional assignment, which would essentially allow to rewrite history
 
-        %TODO: super dense time: multiple assignments, only consider last assignment
+    %TODO: super dense time: multiple assignments, only consider last assignment
 
-        Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
-        \begin{equation}
-            \iaccessibility(\hevolvein{\D{x}=\theta}{\ivr}) = \left\{
-                (\varphi(0),\varphi(s))\,:\,\lforall{0\leq t\leq s}{\varphi(t)\models \D{x}=\theta\,\wedge\,\varphi(t)(0)\models\ivr}\text{ for a solution } \varphi:[0,s]\rightarrow\states \right\}
-        \end{equation}
-        As a solution, $\varphi$ needs to fulfill
-        \begin{equation}
-            \varphi(t)(\D{x})(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel[]{}{\theta}\varphi(t)
-        \end{equation}
-        Along a DDE/ODE, values of differential symbols coincide with time derivative of value of corresponding variable
-        Remember that a $\xtau$ mentioned in $\theta$ here means $\varphi(t)(x)(-\tau)$.
-        And so needs $\ivr$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
+    Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
+    \begin{equation}
+        \iaccessibility(\hevolvein{\D{x}=\theta}{\ivr}) = \left\{
+            (\varphi(0),\varphi(s))\,:\,\lforall{0\leq t\leq s}{\varphi(t)\models \D{x}=\theta\,\wedge\,\varphi(t)(0)\models\ivr}\text{ for a solution } \varphi:[0,s]\rightarrow\states \right\}
+    \end{equation}
+    As a solution, $\varphi$ needs to fulfill
+    \begin{equation}
+        \varphi(t)(\D{x})(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel[]{}{\theta}\varphi(t)
+    \end{equation}
+    Along a DDE/ODE, values of differential symbols coincide with time derivative of value of corresponding variable
+    Remember that a $\xtau$ mentioned in $\theta$ here means $\varphi(t)(x)(-\tau)$.
+    And so needs $\ivr$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
 
-        \begin{lemma}[Differential Lemma]
-            lecture notes L10.20
-            needed for DI proof
-            no changes, except for rewriting $\varphi(t)(x)\rightarrow\varphi(t)(x)(0)$
-        \end{lemma}
+    \begin{lemma}[Differential Lemma]
+        lecture notes L10.20
+        needed for DI proof
+        no changes, except for rewriting $\varphi(t)(x)\rightarrow\varphi(t)(x)(0)$
+    \end{lemma}
 
-        % TODO: what about [a;b]p. is [a][b]p correct?
+    % TODO: what about [a;b]p. is [a][b]p correct?
