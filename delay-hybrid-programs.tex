@@ -20,8 +20,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     The syntax of terms, formula, hp defined inductively by grammar in BNF.
 
-    Let $\allvars$ be the set of \textit{all variables} and $\diffvars\defeq\{\D{x} \with x\in\allvars\}$ the corresponding set of \textit{differential symbols}.
-    %and set of \textit{delayed variables} $\delayedvars\defeq\{\xtau \with x\in\allvars\}$
+    Let $\allvars$ be the set of \emph{all variables} and $\diffvars\defeq\{\D{x} \with x\in\allvars\}$ the corresponding set of \emph{differential symbols}.
+    %and set of \emph{delayed variables} $\delayedvars\defeq\{\xtau \with x\in\allvars\}$
 
     The variables will be usually denoted $x,y,z\in\allvars$, with their differential symbols $\D{x},\D{y},\D{z}\in\diffvars$.
 
@@ -30,57 +30,53 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     % FIXME: what are program constants?
     program constants $ $, may be in $\rationals$
 
-    \begin{definition}[Terms]
-        \label{def:syntax-terms}
-
-        \textit{Terms} are defined by the following grammar, extending classical \dL with a symbol for a \textbf{delayed variable}:
+    \begin{definition}[Terms]\label{def:syntax-terms}
+        \emph{Terms} are defined by the following grammar, extending classical \dL with a symbol for a \textbf{delayed variable}:
         \begin{equation}
             \astrm,\bstrm \Coloneqq
                 %x \mid
-                \xtau[s] \mid
+                \xtau[\tau] \mid
                 \D{x} \mid
                 c \mid
                 f(\range{\istrm{1}}{\istrm{n}}) \mid
                 \astrm+\bstrm \mid
                 \astrm\cdot\bstrm \mid
+                % FIXME: is term' allowed? diff inv is only a FOLR formula? even for dL valid?
                 \D{(\astrm)}
         \end{equation}
         where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
         The symbol $c$ defines a rational number constant.
-        The delay $s\geq 0$ must be non-negative. For $\xtau[0]$ we write $x$.
+        The delay $\tau\geq 0$ must be non-negative. For $\xtau[0]$ we write $x$.
 
         % TODO: subtraction and division in terms
 
         %The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\xtau$.
-
     \end{definition}
 
     % where $x$ and where $\xtau$?
     The grammar defining hybrid programs is the same as for classical \dL and shown here for completeness.
 
-    \begin{definition}[Hybrid program]
-        \label{def:syntax-HP}
-
-        \textit{Hybrid programs} are defined by
+    \begin{definition}[Hybrid program]\label{def:syntax-HP}
+        \emph{Hybrid programs} (\HP) are defined by
         % TODO: first-order logic of real arithmetic formulas include \xtau?
-
         \begin{equation}
             \asprg, \bsprg \Coloneqq
                 a \mid
                 \hupdate{\humod{x}{\astrm}} \mid
                 \Dupdate{\Dumod{\D{x}}{\astrm}} \mid
-                \htest{\bsfml} \mid
+                \htest{\asfmlfolR} \mid
                 \hchoice{\asprg}{\bsprg} \mid
                 % TODO: replace ; in HPs
                 \asprg;\bsprg \mid
                 \hrepeat{\asprg} \mid
-                \hevolvein{\D{x}=\astrm}{\bsfml}
+                \hevolvein{\D{x}=\astrm}{\asfmlfolR}
         \end{equation}
         % TODO: program constant
         where $\asprg, \bsprg$ denote \HPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\xtau$) and $\ausprg$ a program constant.
-        The formula $\bsfml$ is of first-order logic of real arithmetic (\FOLR$(\allvars)$).
+        The formula $\asfmlfolR$ is of first-order logic of real arithmetic (\FOLR$(\allvars)$).
     \end{definition}
 
+        same grammar as in \cite{Platzer15Uniform}
         difference to \dL, refer to Section \ref{sec:dynamic-semantics} for meaning of the following, different meaning for formulae
 
         assignment, discretely at an instant of time
@@ -93,19 +89,12 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
 
 
-    \begin{definition}[\ddL formula]
-        \label{def:syntax-formula}
-
-        formulas of (differential dynamic logic \dL)
-        defined by grammar
-        with \dL formulas $\asfml,\bsfml$, terms $\astrm,\bstrm,\range{\istrm{1}}{\istrm{k}}$,
-        % TODO: replace with command for predicate symbols, quantifier symbol
-        predicate symbol $p$, quantifier symbol $C$, variable $x$, \HP $\asprg$
-
+    \begin{definition}[\ddL formula]\label{def:syntax-formula}
+        The \emph{formulas} of \emph{delay differential dynamic logic} (\ddL) are defined by
         \begin{align}
             \asfml,\bsfml \Coloneqq
-                &\lforall{s\in[-\tau,s]}{\astrm\geq\bstrm} \mid
-                \lforall{s\in[-\tau,s]}{p(\range{\istrm{1}}{\istrm{k}})} \mid\\
+                &\delay{\astrm\geq\bstrm} \mid
+                \delay{p(\range{\istrm{1}}{\istrm{k}})} \mid\\
                 &\contextapp{C}{\asfml} \mid
                 \lnot\asfml \mid
                 \asfml\land\bsfml \mid
@@ -114,34 +103,32 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 \dbox{\asprg}{\asfml} \mid
                 \ddiamond{\asprg}{\asfml}
         \end{align}
+        with terms $\astrm,\bstrm,\range{\istrm{1}}{\istrm{k}}$,
+        % TODO: replace with command for predicate symbols, quantifier symbol
+
+        a predicate symbol $p$, a quantifier symbol $C$, a variable $x$, and a \HP $\asprg$.
         % TODO: need = in formulas ?
-        other operators, such as $>,\leq,<,\lor,\limply,\lbisubjunct$ can be derived from $\land,\lnot$
+        Other operators, such as $>,\leq,<,\lor,\limply,\lbisubjunct$ can be derived from $\land,\lnot$ and are hence not explicitely mentioned in the grammar.
 
         modal formula $\dbox{\asprg}{\asfml}$ : $\asfml$ holds in the state after all runs of $\asprg$, dual: there is a run
+        % TODO: what is a quantifier symbol? (-> US paper)
         quantifier symbols $C$, with formula as argument are higher order predicate symbols and bind the variables of $\asfml$
 
-        $\tau$ is a symbolic constant related to the history duration induced by the occurence of a delay-differnetial equation. Its value is set by proof rules.
-
+        The delay $\tau$ is a symbolic constant related to the history duration induced by the occurence of a delay-differnetial equation. Its value is set by proof rules.
     \end{definition}
 
 \section{Dynamic Semantics}
     \label{sec:dynamic-semantics}
-    % TODO: fix display of semantics [[]]
+
+    Following the remark to the solution of a DDE (cf. \ref{}), we augment the \emph{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $\delayinterval$, as defined in Definition \ref{def:piecewise-continuous}.
+
+    This means that a variables remembers a limited part of its evolution history, what demands hence an implicit notion of a underlying time.
+
+    We denote by $\states$ the set of states. A state $\asstate\in\states$ is a mapping
     \begin{equation}
-        \imodel[dL]{\IdL}{x}
+        \asstate \from \allvars\cup\diffvars \to \statespace
     \end{equation}
-
-    Following $\iget[state]{\IFOL}\lenvelope$ the remark to the solution of a DDE, we augment the \textbf{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $[-\tau,0]$, as defined in Definition \ref{definition-piecewise-continuous}.
-
-    Variables remember limited history
-    hence implicit notion of underlying time/clock
-
-
-    We denote by $\states$ the set of states. A state $\omega\in\states$ is a mapping
-    \begin{equation}
-        \omega : \allvars\cup\diffvars\rightarrow\statespace
-    \end{equation}
-    that assigns a \emph{history} (function) $\xbartau$ to each variable and differential symbol.
+    which assigns a \emph{history} (function) $\xbartau$ to each variable and differential symbol.
 
     %FIXME: need diff var symbol? can determine derivative from x? need pw diffable?
 
@@ -152,8 +139,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     %
     % However, we go the way of introducing transition semantics with an augmented state space.
 
-    \begin{definition}[Semantics of terms]
-        \label{def:sematic-terms}
+    \begin{definition}[Semantics of terms]\label{def:sematic-terms}
         semantics of a term $\astrm$ in a state $\nu\in\statespace$ (of time instant t) is a value in $\R$????
         defined inductively as follows
 
@@ -225,7 +211,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \end{definition}
 
 
-        With the semantics of terms if follows for the meaning of $\dbox{\asprg}{\phi}$, that $\phi$ must only hold up to time $\tau$ before leaving the \HP $\asprg$. It is possible, that $\phi$ was not verified before, while \textit{executing} the \HP.
+        With the semantics of terms if follows for the meaning of $\dbox{\asprg}{\phi}$, that $\phi$ must only hold up to time $\tau$ before leaving the \HP $\asprg$. It is possible, that $\phi$ was not verified before, while \emph{executing} the \HP.
 
         However when we apply the Rule of steps, we get the validity of $\phi$ for the entire trace.
 

@@ -70,6 +70,9 @@
 %
 \newcommand{\csfml}{\chi}
 
+% formula of first-order real arithmetic
+\newcommand{\asfmlfolR}{\chi}
+
 % propositions
 \newcommand{\asprop}{p}
 \newcommand{\bsprop}{q}
@@ -79,10 +82,18 @@
 \newcommand{\bsfmls}{\Delta}
 \newcommand{\csfmls}{\Theta}
 
+% states
+\newcommand{\states}{\mathcal{S}}
+\newcommand{\asstate}{\nu}
+\newcommand{\bsstate}{\omega}
+
+
+\newcommand{\delayinterval}{[-\tau,0]}
+\newcommand{\delay}[1]{\lforall{s\in\delayinterval}{(#1)}}
 
 \newcommand{\diffvars}{\D{\allvars}}
 \newcommand{\delayedvars}{\mathcal{V}_\tau}
-\newcommand{\states}{\mathcal{S}}
+
 \newcommand{\statespace}{\continuouspws[0]{[-\tau,0]}{\R^n}}
 %\newcommand{\xtau}[1][]{\ifthenelse{\equal{#1}{}}{x[\tau]}{x[#1]}}
 \newcommand{\xtau}[1][\tau]{x[#1]}
