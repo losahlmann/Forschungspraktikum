@@ -36,8 +36,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \astrm,\bstrm \Coloneqq
                 %x \mid
                 % FIXME: make -\tau standard
-                \xtau[-\tau] \mid
-                \Dxtau \mid
+                \xtau[s] \mid
+                \Dxtau[s] \mid
                 c \mid
                 f(\range{\istrm{1}}{\istrm{n}}) \mid
                 \astrm+\bstrm \mid
@@ -126,20 +126,20 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 \section{Dynamic Semantics}
     \label{sec:dynamic-semantics}
 
-    Following the remark to the solution of a DDE (cf. \ref{}), we augment the \emph{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $\delayinterval$, as defined in Definition \ref{def:piecewise-continuous}.
+    Following the remark to the solution of a DDE (cf. Section \ref{sec:definition-of-solution}), we augment the \emph{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $\delayinterval$, as defined in Definition \ref{def:piecewise-continuous}.
 
-    This means that a variables remembers a limited part of its evolution history, what demands hence an implicit notion of a underlying time.
+    This means that a variable remembers a limited part of its evolution history, what demands hence an implicit notion of a underlying time.
 
-    We denote by $\states$ the set of states. A state $\asstate\in\states$ is a mapping
+    We denote by $\states$ the \emph{set of states}. A \emph{state} $\asstate\in\states$ is a mapping
     \begin{equation}
         \asstate \from \allvars\cup\diffvars \to \statespace
     \end{equation}
     which assigns a \emph{history} (function) to each variable and differential symbol.
 
-    As the discrete part of a hybrid program, we only allow the values at the current time instant to be changed. Rewriting history is not permitted!
+    By $\modif{\asstate}{x}{r}$ we denote the state which is equal to state $\asstate$, except for the value of the variable $x$ which is set to $r\in\statespace$.
 
     % FIXME: modification of x in state and general specification of pw function associated to x
-    By $\modif{\asstate}{x}{r}$ we denote the state which is equal to state $\asstate$, except for the value of the variable $x$ which is set to $r\in\R$ at the time $t=0$. The value of $x$ for the time before does not change.
+    %at the time $t=0$. The value of $x$ for the time before does not change.
 
     % TODO: Abgrenzung zu Trace Semantics
     % The temporal character of delay differential equations (they depend on their own temporal evolution with limited horizon) suggests the introduction of trace semantics.
@@ -147,7 +147,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     % However, we go the way of introducing transition semantics with an augmented state space.
 
     \begin{definition}[Semantics of terms]\label{def:sematic-terms}
-        The \emph{semantics} of a term $\astrm$ in the state $\asstate\in\statespace[T]$ (at time instant $t$) is a value in $\R$ and defined inductively as follows:
+        The \emph{semantics} of a term $\astrm$ in the state $\asstate\in\statespace$ (at time instant $t$) is a value in $\R$ and defined inductively as follows:
         \begin{enumerate}
             % FIXME: display I as superscript
             \item $\ivaluation{\IddL}{\xtau[s]} = \asstate(x)(s)$ for a variable $x\in\allvars$
@@ -197,6 +197,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     and what if there is no ODE/DDE given: in a given state should also be real value
     state assigns real values to all symbols, also differential symbols $\nu(\D{x}=\imodel{\IddL}{f(x)}\nu$
     in initial state an arbitray value is allowed, will then sync with equation to fullfil $\varphi(\zeta)(\D{x})=\imodel{\IddL}{f(x)}\varphi(r)$
+    initial value $\asstate(\D{x})$ may not be compatible with derivative
+    final values coincide
 
     Like for ODE case, only use last value given in state. Since in $t=0$ could be incontinuity we cannot use history to define derivative.
 
@@ -217,7 +219,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         % FIXME: wahta is difference between \imodel and \ivaluation?
         \begin{enumerate}
             % TODO: replace : in set by \with
-            \item $\imodel{\IddL}{\delay{\asfml\geq\bsfml}} = \left\{\asstate\in\states \with \delay{\imodel{\IddL}{\asfml(s)}\geq\imodel{\IddL}{\bsfml(s)}}\right\}$
+            \item $\imodel{\IddL}{\delay{\asfml\geq\bsfml}} = \left\{\asstate\in\states \with \delay{\ivaluation{\IddL}{\asfml(s)}\geq\ivaluation{\IddL}{\bsfml(s)}}\right\}$
             \item $\imodel{\IddL}{\delay{p(\range{\istrm{1}}{\istrm{k}})}} = \left\{\asstate\in\states \with \delay{\left(\range{\imodel{\IddL}{\istrm{1}(s)}}{\imodel{\IddL}{\istrm{k}(s)}}\right)\in\interpret[p]}\right\}$
             \item $\imodel{\IddL}{\contextapp{C}{\asfml}} = \interpret[C]\left(\imodel{\IddL}{\asfml}\right)$ for a quantifier symbol $C$
             \item $\imodel{\IddL}{\lnot\asfml} = \scomplement{\left(\imodel{\IddL}{\asfml}\right)} = \states\setminus\imodel{\IddL}{\asfml}$
@@ -227,9 +229,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\imodel{\IddL}{\dbox{\asprg}{\asfml}} = \{\asstate\in\states \with \omega\in\imodel{\IddL}{\asfml} \text{ for all $\omega$ such that} (\asstate,\omega)\in\imodel{\IddL}{\asprg}\}$
             \item $\imodel{\IddL}{\ddiamond{\asprg}{\asfml}} = \{\asstate\in\states \with \omega\in\imodel{\IddL}{\asfml} \text{ for some $\omega$ such that} (\asstate,\omega)\in\imodel{\IddL}{\asprg}\}$
         \end{enumerate}
-        with set of states $\states$
-        if formula $\asfml$ is true in state $\asstate$ we write $\asstate\models\asfml$. It is called valid, written as $\models\asfml$ iff $\asfml$ is true in all states.
-        % TODO: add interpretation to valid
+        That formula $\asfml$ is true in state $\asstate$ under interpretation $\interpret$ can also be written as $\interpret,\asstate\models\asfml$. The formula is called valid, written as $\models\asfml$, iff $\asfml$ is true in all states under all interpretations.
     \end{definition}
 
     interpretation of predicate symbol, arity n: relation $I(p)\subseteq\R^n$
@@ -278,17 +278,15 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     $\varphi$ solves the DDE and satisfies $\ivr$ in each time instant
     if $r=0$: 
 
-    The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
+    For the \emph{discrete assignment}, we only allow the values at the current time instant to be changed. A functional assignment would essentially allow to rewrite history, which is not permitted.
 
     This assignment is the actual reason why we need to consider piecewise continuous evolutions.
 
-    No functional assignment, which would essentially allow to rewrite history
+    
 
     %TODO: super dense time: multiple assignments, only consider last assignment
 
     Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
-
-    As a solution, $\varphi$ needs to fulfill
 
     Along a DDE/ODE, values of differential symbols coincide with time derivative of value of corresponding variable
     Remember that a $\xtau$ mentioned in $\theta$ here means $\varphi(t)(x)(-\tau)$.
@@ -301,3 +299,13 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \end{lemma}
 
     % TODO: what about [a;b]p. is [a][b]p correct?
+
+    \begin{definition}[History Horizon]
+        history horizon of a \ddL formula
+        T in forall: comp, pred
+        minimum of T in forall parts of subformulas: quantifier, not and
+        forall, exists?
+        modalities: max $\tau$ in DDE and of formula
+    \end{definition}
+
+    % TODO: feasible history horizon for a HP

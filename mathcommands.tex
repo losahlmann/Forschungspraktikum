@@ -1,11 +1,15 @@
+%
 % Math Environements
-\newtheorem{theorem}{Theorem}
+%
+% italic text
+\newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{example}[theorem]{Example}
+% normal text
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
 
 %
 % General Mathematics
@@ -89,15 +93,16 @@
 \newcommand{\bsstate}{\omega}
 \newcommand{\csstate}{\mu}
 
-\newcommand{\delayinterval}{[-\tau,0]}
+\newcommand{\delayinterval}[1][T]{[-#1,0]}
 \newcommand{\delay}[1]{\lforall{s\in\delayinterval}{\left(#1\right)}}
 
 \newcommand{\diffvars}{\D{\allvars}}
 \newcommand{\delayedvars}{\mathcal{V}_\tau}
 
-\newcommand{\statespace}[1][\tau]{\continuouspws[0]{[-#1,0]}{\R^n}}
+\newcommand{\statespace}[1][T]{\continuouspws[0]{\delayinterval[#1]}{\R^n}}
 %\newcommand{\xtau}[1][]{\ifthenelse{\equal{#1}{}}{x[\tau]}{x[#1]}}
-\newcommand{\xtau}[1][\tau]{x[#1]}
-\newcommand{\Dxtau}[1][\tau]{\D{x}[#1]}
+\newcommand{\xtau}[1][\tau]{x[-#1]}
+\newcommand{\Dxtau}[1][\tau]{\D{x}[-#1]}
+
 \newcommand{\xbartau}{\bar{x}_{\tau}}
 \newcommand{\xbartaut}[1]{\bar{x}_{\tau,#1}}

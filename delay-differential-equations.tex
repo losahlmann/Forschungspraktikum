@@ -20,11 +20,11 @@ The following definition is motivated by capturing the character evolution arisi
 \begin{lemma}[]
     \label{lemma-piecewise-continuous-integrable}
 
-    A piecewise continuous function, as defined in Definition \ref{definition-piecewise-continuous} is (Riemann) integrable.
+    A piecewise continuous function, as defined in Definition \ref{def:piecewise-continuous} is (Riemann) integrable.
 \end{lemma}
 
 \begin{proof}
-    See standard analysis literature, such as \cite{rudin1976principles} or \cite{gathmanngrundlagen}.
+    See standard analysis literature, such as \cite{Rudin76PrinciplesAnalysis} or \cite{gathmanngrundlagen}.
     % ObdA: one subint with jump at end
 \end{proof}
 
@@ -94,7 +94,7 @@ The definition of a DDE can be extended to multiple constant discrete delays. Fo
 %TODO:
 The notion of solution for an autonomous DDE as given above can be lifted to be a trajectory in the statespace
 \begin{equation}
-    \gamma_x:[0,T]\rightarrow\statespace,\\ t\mapsto\xbartaut{t}
+    \gamma_x:[0,T]\rightarrow\statespace[\tau],\\ t\mapsto\xbartaut{t}
 \end{equation}
 
 The \textbf{state} at time $t$ is a function which provides a time limited history up to the current time. This is all information needed to determine (using the DDE) to determine the solution for time $\geq t$. It is defined as $\xbartaut{t}(s)\defeq x(t+s)$ for $s\in [-\tau,0]$. In the case of $t=0$, we simplify the notation to $\xbartau \defeq \xbartaut{0}$.
@@ -113,7 +113,7 @@ This notion of solution is a \emph{dynamical systems} point of view which later 
 
     % Let $x:[\sigma-\tau,\sigma+T] \rightarrow \R^n$ be piecewise continuous (as in Definition \ref{definition-piecewise-continuous}) with the subdivision $\{t_0,\ldots,t_k\}$, i.e. there are $k$ subintervals.
     %
-    % Then $t \mapsto x_t = x(t+\theta)$, where $\theta\in[-\tau,0]$, is a piecewise continuous mapping from $[\sigma,\sigma+T]$ into $\statespace$.
+    % Then $t \mapsto x_t = x(t+\theta)$, where $\theta\in[-\tau,0]$, is a piecewise continuous mapping from $[\sigma,\sigma+T]$ into $\statespace[\tau]$.
 \end{lemma}
 
 \begin{proof}
@@ -219,9 +219,9 @@ $f$ Lipschitz with piecewise continuous initial function have existence and uniq
     % \end{equation}
     % where $\nnorm{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\supnorm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
 
-    Then for each \textbf{initial condition} $x_\sigma\in\statespace$ and start time $\sigma$, there \textbf{exists} a \textbf{unique local solution} of the DDE on a time interval $[\sigma-\tau, \sigma+T]$. $T>0$ depends on in the initial condition, in terms of its bound and discontinuity points.
+    Then for each \textbf{initial condition} $x_\sigma\in\statespace[\tau]$ and start time $\sigma$, there \textbf{exists} a \textbf{unique local solution} of the DDE on a time interval $[\sigma-\tau, \sigma+T]$. $T>0$ depends on in the initial condition, in terms of its bound and discontinuity points.
 \end{theorem}
-The proof is smiliar to the proof of ... given in \cite{smith2010introDDE}.
+The proof is smiliar to the proof of ... given in \cite{Smith10IntroDDE}.
 \begin{proof}
     The initial condition is bounded by $\supnorm{x_\sigma}\leq M$.
     Let $K>0$ be the bound for $f$ from Lemma \ref{lemma-bounded-f} on the set $[\sigma,\sigma+t_1] \times \{x\in R^n: \nnorm{x}\leq 2M\}\times \{y\in R^n: \nnorm{y}\leq M\}$ and $L>0$ the Lipschitz constant for that set. Choose $T=\min\{t_1-\tau ?, \frac{M}{K}\}$
