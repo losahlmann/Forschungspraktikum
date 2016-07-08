@@ -47,8 +47,9 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \end{equation}
         where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
         The symbol $c$ defines a rational number constant.
-        All terms implicitely depend on a time parameter $t\leq 0$, written as $\asfml(t)$. When $t=0$ we abbreviate to $\asfml$. The variable symbol $x$ is the only which allows explicitely mentioning this parameter. It is spelled slightly differently as $\xtau[-t]$. Again, for $\xtau[0]$ we write $x$.
+        All terms implicitely depend on a time parameter $t\leq 0$, written as $\astrm(t)$. When $t=0$ we abbreviate to $\astrm$. The variable symbol $x$ is the only which allows explicitely mentioning this parameter. It is spelled slightly differently as $\xtau[-t]$. Again, for $\xtau[0]$ we write $x$.
         $x=x[0]$
+        parameter is inherited
 
         % TODO: subtraction and division in terms
 
@@ -71,7 +72,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 % TODO: replace ; in HPs
                 \asprg;\bsprg \mid
                 \hrepeat{\asprg} \mid
-                \hevolvein{\D{x}=\astrm}{\asfmlfolR}
+                \hevolvein{\D{x}=\astrm}{\ivr}
         \end{equation}
         % TODO: program constant
         where $\asprg, \bsprg$ denote \HPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\xtau$) and $\ausprg$ a program constant.
@@ -120,6 +121,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         The delay $\tau$ is a symbolic constant related to the history duration induced by the occurence of a delay-differnetial equation. Its value is set by proof rules.
     \end{definition}
 
+    When terms do not depend on quantified parameter, can omit writing down forall in formula
+
 \section{Dynamic Semantics}
     \label{sec:dynamic-semantics}
 
@@ -146,23 +149,28 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \begin{definition}[Semantics of terms]\label{def:sematic-terms}
         The \emph{semantics} of a term $\astrm$ in the state $\asstate\in\statespace[T]$ (at time instant $t$) is a value in $\R$ and defined inductively as follows:
         \begin{enumerate}
-            \item $\ivaluation{\IddL}{\xtau[s]} = \asstate(x)(s)$
+            % FIXME: display I as superscript
+            \item $\ivaluation{\IddL}{\xtau[s]} = \asstate(x)(s)$ for a variable $x\in\allvars$
             % FIXME: need Cpw for derivatives or only \R?
-            \item $\ivaluation{\IddL}{\Dxtau[s]} = \asstate(\D{x})(s)$
-            \item $\ivaluation{\IddL}{c} = \interpret[c]$
-            \item $\ivaluation{\IddL}{f(\range{\istrm{1}}{\istrm{n}})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}}}{\ivaluation{\IddL}{\istrm{n}}})$ for function symbol $f$
+            \item $\ivaluation{\IddL}{\Dxtau[s]} = \asstate(\D{x})(s)$ for a differential symbol $\D{x}\in\diffvars$
+            \item $\ivaluation{\IddL}{c} = \interpret[c]$ for a constant $c$
+            \item $\ivaluation{\IddL}{f(\range{\istrm{1}}{\istrm{n}})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}}}{\ivaluation{\IddL}{\istrm{n}}})$ for a function symbol $f$
             \item $\ivaluation{\IddL}{\astrm+\bstrm} = \ivaluation{\IddL}{\astrm} + \ivaluation{\IddL}{\bstrm}$
             \item $\ivaluation{\IddL}{\astrm\cdot\bstrm} = \ivaluation{\IddL}{\astrm} \cdot \ivaluation{\IddL}{\bstrm}$
             % FIXME: derivation of terms?
-            \item $\ivaluation{\IddL}{\D{(\astrm)}} = \sum_{x\in\allvars} \asstate(\D{x})\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial x}(\asstate)$ syntactic (total) derivation, common derivation rules, gives new term, $\astrm$ must not contain $\xtau$
+            \item $\ivaluation{\IddL}{\D{(\astrm)(s)}} = \displaystyle\sum_{x\in\allvars} \asstate(\D{x})(s)\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial x}(\asstate)$
         \end{enumerate}
         where $s\in [-T,0]$.
+        The  syntactic (total) derivation, defined in \ref{def:derivation}, gives new term
     \end{definition}
         % TODO: mention 'interpretation' for semantics.
         % FIXME: interpretation of $f$ is a smooth function
 
 
     % TODO: total derivative operator for terms
+    \begin{definition}[Derivation]\label{def:derivation}
+        common derivation rules
+    \end{definition}
 
     % The semantic of the new symbol $\xtau$ depends on the context in which the term occures:
     % \begin{enumerate}
@@ -210,8 +218,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \begin{enumerate}
             % TODO: replace : in set by \with
             \item $\imodel{\IddL}{\delay{\asfml\geq\bsfml}} = \left\{\asstate\in\states \with \delay{\imodel{\IddL}{\asfml(s)}\geq\imodel{\IddL}{\bsfml(s)}}\right\}$
-            \item $\imodel{\IddL}{\delay{p(\range{\istrm{1}}{\istrm{k}})}} = \left\{\asstate\in\states \with \delay{\left(\range{\imodel{\IddL}{\istrm{1}}}{\imodel{\IddL}{\istrm{k}}}\right)\in\interpret[p]}\right\}$
-            \item $\imodel{\IddL}{\contextapp{C}{\asfml}} = \interpret[C](\imodel{\IddL}{\asfml})$
+            \item $\imodel{\IddL}{\delay{p(\range{\istrm{1}}{\istrm{k}})}} = \left\{\asstate\in\states \with \delay{\left(\range{\imodel{\IddL}{\istrm{1}(s)}}{\imodel{\IddL}{\istrm{k}(s)}}\right)\in\interpret[p]}\right\}$
+            \item $\imodel{\IddL}{\contextapp{C}{\asfml}} = \interpret[C]\left(\imodel{\IddL}{\asfml}\right)$ for a quantifier symbol $C$
             \item $\imodel{\IddL}{\lnot\asfml} = \scomplement{\left(\imodel{\IddL}{\asfml}\right)} = \states\setminus\imodel{\IddL}{\asfml}$
             \item $\imodel{\IddL}{\asfml\land\bsfml} = \imodel{\IddL}{\asfml}\cap\imodel{\IddL}{\bsfml}$
             \item $\imodel{\IddL}{\lforall{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{r}\in\imodel{\IddL}{\asfml} \text{ for all } r\in\statespace \}$
@@ -236,33 +244,42 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     $\dbox{}{}$ and $\ddiamond{}{}$ only refer to last state and not intermediate states, as \dTL does.
 
-
+    Since, with respect to \dL, the state space has been replaced, we need to redefine the semantics.
+    
     \begin{definition}[Transition semantics of \HPs]\label{def:semantic-HP}
-         binary reachability relation $\ireachability{\IddL}{\asprg}\subseteq\states\times\states$. Since, with respect to \dL, the state space has been replaced, we need to redefine the semantics:
+        The interpretation of a \HP is given by a binary \emph{reachability relation} $\ireachability{\IddL}{\asprg}\subseteq\states\times\states$ between states:
         \begin{enumerate}
-            % TODO: () for iaccessibility
-            \item $\ireachability{\IddL}{a} = $
-            \item $\ireachability{\IddL}{\hupdate{\humod{x}{\astrm}}} = $
-            \item $\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}} = $
-            \item $\ireachability{\IddL}{\htest{\asfmlfolR}} = $
-            \item $\ireachability{\IddL}{\hchoice{\asprg}{\bsprg}} = \hchoice{\ireachability{\IddL}{\asprg}}{\ireachability{\IddL}{\bsprg}} = $
-            \item $\ireachability{\IddL}{\asprg;\bsprg} = $
-            \item $\ireachability{\IddL}{\hrepeat{\asprg}} = \hrepeat{(\ireachability{\IddL}{\asprg})} = \cupfold_{n\in\N}\ireachability{\IddL}{\asprg^n}$ with $\asprg^{n+1}\equiv (\asprg^n;\asprg)$ and $\asprg^0\equiv \htest{\ltrue}$
-            \item $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm}{\asfmlfolR}} = $
+            \item $\ireachability{\IddL}{a} = \interpret[a]$ for a program constant $a$
+            \item $\ireachability{\IddL}{\hupdate{\humod{x}{\astrm}}} =
+                \left\{(\asstate,\bsstate)\with \bsstate = \asstate \text{ except }
+                \bsstate(x) = \left(s\mapsto\begin{cases}
+                    \imodel{\IddL}{\theta(s)} & s=0\\
+                    \asstate(s) & s\in[-T,0)
+                \end{cases}\right)\right\}$
+            \item $\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}} =
+                \left\{(\asstate,\bsstate)\with \bsstate = \asstate \text{ except }
+                \bsstate(\D{x}) = \left(s\mapsto\begin{cases}
+                    \imodel{\IddL}{\theta(s)} & s=0\\
+                    \asstate(s) & s\in[-T,0)
+                \end{cases}\right)\right\}$
+            \item $\ireachability{\IddL}{\htest{\asfmlfolR}} = \left\{(\asstate,\asstate) \with \asstate\in\imodel{\IddL}{\asfmlfolR} \right\}$
+            \item $\ireachability{\IddL}{\hchoice{\asprg}{\bsprg}} = \hchoice{\ireachability{\IddL}{\asprg}}{\ireachability{\IddL}{\bsprg}}$
+            \item $\ireachability{\IddL}{\asprg;\bsprg} = \left\{ (\asstate,\bsstate) \with (\asstate,\csstate)\in\ireachability{\IddL}{\asprg}, (\csstate,\bsstate)\in\ireachability{\IddL}{\bsprg} \right\}$
+            \item $\ireachability{\IddL}{\hrepeat{\asprg}} %= \hrepeat{(\ireachability{\IddL}{\asprg})}
+                = \displaystyle\cupfold_{n\in\N}\ireachability{\IddL}{\asprg^n}$ with $\asprg^{n+1}\equiv (\asprg^n;\asprg)$ and $\asprg^0\equiv \htest{\ltrue}$
+            \item $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm}{\ivr}} = \left\{
+                (\asstate,\bsstate) \with
+                \lforall{t\in[0,r]}{\varphi(t)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm}\land\ivr}}
+                \text{ and } \asstate=\varphi(0) \text{ on } \scomplement{\{\D{x}\}} \text{ and } \bsstate=\varphi(r))
+                \right\}$, i.e. there exists a $r\geq 0$ and a function $\varphi\from [0,r]\to\states$, which fulfills $\varphi(t)(\D{x})(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel{\iconcat[state=\varphi(t)]{\IddL}}{\theta}$
         \end{enumerate}
     \end{definition}
 
-    The transition semantic of a hybrid program $\asprg$ is inductively given by a binary
+    $\varphi$ solves the DDE and satisfies $\ivr$ in each time instant
+    if $r=0$: 
 
     The \emph{discrete assignment} does not rewrite history, but changes only the value at the current time instant:
-    \begin{equation}
-        \ireachability{\IddL}{\hupdate{\humod{x}{\theta}}} =
-            \left\{(\nu,\omega): \omega = \nu \text{ except }
-            \omega(x) = \left(s\mapsto\begin{cases}
-                \imodel{\IddL}{\theta(t)} & s=0\\
-                \nu(s) & s\in[-\tau,0)
-            \end{cases}\right)\right\}
-    \end{equation}
+
     This assignment is the actual reason why we need to consider piecewise continuous evolutions.
 
     No functional assignment, which would essentially allow to rewrite history
@@ -270,14 +287,9 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     %TODO: super dense time: multiple assignments, only consider last assignment
 
     Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
-    \begin{equation}
-        \ireachability{\IddL}{\hevolvein{\D{x}=\theta}{\ivr}} = \left\{
-            (\varphi(0),\varphi(s))\,:\,\lforall{0\leq t\leq s}{\varphi(t)\models \D{x}=\theta\,\wedge\,\varphi(t)(0)\models\ivr}\text{ for a solution } \varphi:[0,s]\rightarrow\states \right\}
-    \end{equation}
+
     As a solution, $\varphi$ needs to fulfill
-    \begin{equation}
-        \varphi(t)(\D{x})(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel[]{}{\theta}\varphi(t)
-    \end{equation}
+
     Along a DDE/ODE, values of differential symbols coincide with time derivative of value of corresponding variable
     Remember that a $\xtau$ mentioned in $\theta$ here means $\varphi(t)(x)(-\tau)$.
     And so needs $\ivr$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
