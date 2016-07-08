@@ -73,6 +73,7 @@
 %
 % Delay Differential Dynamic Logic
 %
+\renewcommand{\ivr}{\chi}
 \newcommand{\csfml}{\chi}
 
 % formula of first-order real arithmetic
@@ -94,15 +95,16 @@
 \newcommand{\csstate}{\mu}
 
 \newcommand{\delayinterval}[1][T]{[-#1,0]}
-\newcommand{\delay}[1]{\lforall{s\in\delayinterval}{\left(#1\right)}}
 
 \newcommand{\diffvars}{\D{\allvars}}
 \newcommand{\delayedvars}{\mathcal{V}_\tau}
 
 \newcommand{\statespace}[1][T]{\continuouspws[0]{\delayinterval[#1]}{\R^n}}
 %\newcommand{\xtau}[1][]{\ifthenelse{\equal{#1}{}}{x[\tau]}{x[#1]}}
+\newcommand{\x}[1][]{x[#1]}
 \newcommand{\xtau}[1][\tau]{x[-#1]}
 \newcommand{\Dxtau}[1][\tau]{\D{x}[-#1]}
+\newcommand{\holdssince}[3][s]{\lforall{#1\in\delayinterval[#2]}{\left(#3\right)}}
 
 \newcommand{\xbartau}{\bar{x}_{\tau}}
 \newcommand{\xbartaut}[1]{\bar{x}_{\tau,#1}}

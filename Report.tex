@@ -657,6 +657,7 @@ it often makes sense to treat the very first initial condition separately, becau
                 \end{cases}
             \end{equation}
             Using the invariant $F\equiv(x^3\geq 0)$ we prove that the solution stays non-negativ for all time $t$.
+            \footnotesize
             \begin{sequentdeduction}
                 \linfer[DDI]{
                     \linfer[]{
@@ -684,9 +685,9 @@ it often makes sense to treat the very first initial condition separately, becau
                         \lsequent{\xtau^3\geq 0}{\xtau\geq 0}
                     }
                 }{
-                    \lsequent{\xtau\geq 0}{\dbox{\D{x}=\xtau}{(\xtau\geq 0)}}
+                    \lsequent{\holdssince{\tau}{\x[s]\geq 0}}{\dbox{\D{x}=\xtau}{(\holdssince{\tau}{\x[s]\geq 0})}}
                 }
-            \end{sequentdeduction}
+            \end{sequentdeduction}\normalsize
             In the same way we can prove that the solution stays negative for all $t$, if the initial condition is non-positive.
 
         \subsubsection{Example 2}

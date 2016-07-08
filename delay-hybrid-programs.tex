@@ -28,7 +28,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     Function symbols $f,g,h$, constant symbols $a,b,c$ and predicate symbols $p,q,r$ are as in first-order logic (cf. Section \ref{sec:first-order-logic}).
 
     % FIXME: what are program constants?
-    program constants $ $, may be in $\rationals$
+    %program constants $ $, may be in $\rationals$
 
     \begin{definition}[Terms]\label{def:syntax-terms}
         \emph{Terms} are defined by the following grammar, extending classical \dL with a symbol for a \textbf{delayed variable}:
@@ -79,16 +79,18 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         The formula $\asfmlfolR$ is of first-order logic of real arithmetic (\FOLR$(\allvars)$).
     \end{definition}
 
-        same grammar as in \cite{Platzer15Uniform}
-        difference to \dL, refer to Section \ref{sec:dynamic-semantics} for meaning of the following, different meaning for formulae
+    % TODO: FOLR is subset of ddL formulae
 
-        assignment, discretely at an instant of time
-        test of formula in current state
-        nondeterministic choice
-        sequential composition
-        nondeterministic repetition
-        delay differential equation with restricted evolution, due to domain constraint $\bsfml$, follow arbitrary amount of time
-        ODE still possible
+    same grammar as in \cite{Platzer15Uniform}
+    difference to \dL, refer to Section \ref{sec:dynamic-semantics} for meaning of the following, different meaning for formulae
+
+    assignment, discretely at an instant of time
+    test of formula in current state
+    nondeterministic choice
+    sequential composition
+    nondeterministic repetition
+    delay differential equation with restricted evolution, due to domain constraint $\bsfml$, follow arbitrary amount of time
+    ODE still possible
 
 
 
@@ -97,8 +99,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \begin{align}
             \asfml,\bsfml \Coloneqq
                 % TODO: better abbreviated notation for \delay, make forall only appear in semantics rhs
-                &\delay{\astrm\geq\bstrm} \mid
-                \delay{p(\range{\istrm{1}}{\istrm{k}})} \mid\\
+                &\holdssince{T}{\astrm\geq\bstrm} \mid
+                \holdssince{T}{p(\range{\istrm{1}}{\istrm{k}})} \mid\\
                 &\contextapp{C}{\asfml} \mid
                 \lnot\asfml \mid
                 \asfml\land\bsfml \mid
@@ -126,7 +128,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 \section{Dynamic Semantics}
     \label{sec:dynamic-semantics}
 
-    Following the remark to the solution of a DDE (cf. Section \ref{sec:definition-of-solution}), we augment the \emph{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $\delayinterval$, as defined in Definition \ref{def:piecewise-continuous}.
+    Following the remark to the solution of a DDE (cf. Section \ref{sec:definition-of-solution}), we augment the \emph{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $\delayinterval$ (its support), as defined in Definition \ref{def:piecewise-continuous}.
 
     This means that a variable remembers a limited part of its evolution history, what demands hence an implicit notion of a underlying time.
 
@@ -219,13 +221,13 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         % FIXME: wahta is difference between \imodel and \ivaluation?
         \begin{enumerate}
             % TODO: replace : in set by \with
-            \item $\imodel{\IddL}{\delay{\asfml\geq\bsfml}} = \left\{\asstate\in\states \with \delay{\ivaluation{\IddL}{\asfml(s)}\geq\ivaluation{\IddL}{\bsfml(s)}}\right\}$
-            \item $\imodel{\IddL}{\delay{p(\range{\istrm{1}}{\istrm{k}})}} = \left\{\asstate\in\states \with \delay{\left(\range{\imodel{\IddL}{\istrm{1}(s)}}{\imodel{\IddL}{\istrm{k}(s)}}\right)\in\interpret[p]}\right\}$
+            \item $\imodel{\IddL}{\holdssince{T}{\asfml\geq\bsfml}} = \left\{\asstate\in\states \with \holdssince{T}{\ivaluation{\IddL}{\asfml(s)}\geq\ivaluation{\IddL}{\bsfml(s)}}\right\}$
+            \item $\imodel{\IddL}{\holdssince{T}{p(\range{\istrm{1}}{\istrm{k}})}} = \left\{\asstate\in\states \with \holdssince{T}{\left(\range{\imodel{\IddL}{\istrm{1}(s)}}{\imodel{\IddL}{\istrm{k}(s)}}\right)\in\interpret[p]}\right\}$
             \item $\imodel{\IddL}{\contextapp{C}{\asfml}} = \interpret[C]\left(\imodel{\IddL}{\asfml}\right)$ for a quantifier symbol $C$
             \item $\imodel{\IddL}{\lnot\asfml} = \scomplement{\left(\imodel{\IddL}{\asfml}\right)} = \states\setminus\imodel{\IddL}{\asfml}$
             \item $\imodel{\IddL}{\asfml\land\bsfml} = \imodel{\IddL}{\asfml}\cap\imodel{\IddL}{\bsfml}$
-            \item $\imodel{\IddL}{\lforall{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{r}\in\imodel{\IddL}{\asfml} \text{ for all } r\in\statespace \}$
-            \item $\imodel{\IddL}{\lexists{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{r}\in\imodel{\IddL}{\asfml} \text{ for some } r\in\statespace \}$
+            \item $\imodel{\IddL}{\lforall{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{y}\in\imodel{\IddL}{\asfml} \text{ for all } y\in\statespace \}$
+            \item $\imodel{\IddL}{\lexists{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{y}\in\imodel{\IddL}{\asfml} \text{ for some } y\in\statespace \}$
             \item $\imodel{\IddL}{\dbox{\asprg}{\asfml}} = \{\asstate\in\states \with \omega\in\imodel{\IddL}{\asfml} \text{ for all $\omega$ such that} (\asstate,\omega)\in\imodel{\IddL}{\asprg}\}$
             \item $\imodel{\IddL}{\ddiamond{\asprg}{\asfml}} = \{\asstate\in\states \with \omega\in\imodel{\IddL}{\asfml} \text{ for some $\omega$ such that} (\asstate,\omega)\in\imodel{\IddL}{\asprg}\}$
         \end{enumerate}
@@ -301,7 +303,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     % TODO: what about [a;b]p. is [a][b]p correct?
 
     \begin{definition}[History Horizon]
-        history horizon of a \ddL formula
+        history horizon of a \ddL formula, depends on all occurences of $\xtau[s]$
         T in forall: comp, pred
         minimum of T in forall parts of subformulas: quantifier, not and
         forall, exists?
