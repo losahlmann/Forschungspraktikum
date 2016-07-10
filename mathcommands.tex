@@ -52,6 +52,8 @@
 %
 % definition domain of right hand side
 \newcommand{\deff}{\R\times\R^n\times\R^n}
+% trajectory
+\newcommand{\trajectory}[1][]{\gamma_{#1}}
 
 %
 % Differential Dynamic Logic
@@ -102,8 +104,8 @@
 \newcommand{\statespace}[1][T]{\continuouspws[0]{\delayinterval[#1]}{\R^n}}
 %\newcommand{\xtau}[1][]{\ifthenelse{\equal{#1}{}}{x[\tau]}{x[#1]}}
 \newcommand{\x}[1][]{x[#1]}
-\newcommand{\xtau}[1][\tau]{x[-#1]}
-\newcommand{\Dxtau}[1][\tau]{\D{x}[-#1]}
+\newcommand{\xtau}[1][-\tau]{x[#1]}
+\newcommand{\Dxtau}[1][-\tau]{\D{x}[#1]}
 \newcommand{\holdssince}[3][s]{\lforall{#1\in\delayinterval[#2]}{\left(#3\right)}}
 
 \newcommand{\xbartau}{\bar{x}_{\tau}}

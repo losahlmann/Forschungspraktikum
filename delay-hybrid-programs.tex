@@ -35,7 +35,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \begin{equation}
             \astrm,\bstrm \Coloneqq
                 %x \mid
-                % FIXME: make -\tau standard
+                % TODO: need extended syntax? x[c] and x[s], for \D resp, c=const, s=var?
                 \xtau[s] \mid
                 \Dxtau[s] \mid
                 c \mid
@@ -50,11 +50,18 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         All terms implicitely depend on a time parameter $t\leq 0$, written as $\astrm(t)$. When $t=0$ we abbreviate to $\astrm$. The variable symbol $x$ is the only which allows explicitely mentioning this parameter. It is spelled slightly differently as $\xtau[-t]$. Again, for $\xtau[0]$ we write $x$.
         $x=x[0]$
         parameter is inherited
+        $\astrm(-\tau)$, all occurences of $s$ have been replaced with $-\tau$
 
         % TODO: subtraction and division in terms
 
         %The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\xtau$.
     \end{definition}
+
+    \begin{example}
+        \begin{equation}
+            \astrm(s) = \underbrace{\xtau[s]}_{\text{var}} + \underbrace{\xtau}_{\text{const}}
+        \end{equation}
+    \end{example}
 
     % where $x$ and where $\xtau$?
     The grammar defining hybrid programs is the same as for classical \dL and shown here for completeness.
@@ -72,7 +79,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 % TODO: replace ; in HPs
                 \asprg;\bsprg \mid
                 \hrepeat{\asprg} \mid
-                \hevolvein{\D{x}=\astrm}{\ivr}
+                \hevolvein{\D{x}=\astrm(-\tau)}{\ivr}
         \end{equation}
         % TODO: program constant
         where $\asprg, \bsprg$ denote \HPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\xtau$) and $\ausprg$ a program constant.
@@ -90,6 +97,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     sequential composition
     nondeterministic repetition
     delay differential equation with restricted evolution, due to domain constraint $\bsfml$, follow arbitrary amount of time
+    DDE with delay tau, term has only $x$ and $\D{x}$ with constant nor var $s$
     ODE still possible
 
 
@@ -151,7 +159,6 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \begin{definition}[Semantics of terms]\label{def:sematic-terms}
         The \emph{semantics} of a term $\astrm$ in the state $\asstate\in\statespace$ (at time instant $t$) is a value in $\R$ and defined inductively as follows:
         \begin{enumerate}
-            % FIXME: display I as superscript
             \item $\ivaluation{\IddL}{\xtau[s]} = \asstate(x)(s)$ for a variable $x\in\allvars$
             % FIXME: need Cpw for derivatives or only \R?
             \item $\ivaluation{\IddL}{\Dxtau[s]} = \asstate(\D{x})(s)$ for a differential symbol $\D{x}\in\diffvars$
@@ -215,10 +222,10 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     When we write $x$ we mean $x(t)$.
 
-    \begin{definition}[Semantics of (\ddL) formulae]\label{def:semantic-formulae}
+    \begin{definition}[Semantics of \ddL formulae]\label{def:semantic-formulae}
         The semantics of a \ddL formula $\asfml$ is the subset of all states $\imodel{\IddL}{\asfml}\subseteq\states$ in which $\asfml$ is true. This set is given inductively by
         % TODO: mention interpretation I
-        % FIXME: wahta is difference between \imodel and \ivaluation?
+        % FIXME: what is difference between \imodel and \ivaluation?
         \begin{enumerate}
             % TODO: replace : in set by \with
             \item $\imodel{\IddL}{\holdssince{T}{\asfml\geq\bsfml}} = \left\{\asstate\in\states \with \holdssince{T}{\ivaluation{\IddL}{\asfml(s)}\geq\ivaluation{\IddL}{\bsfml(s)}}\right\}$
@@ -246,6 +253,16 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     $\dbox{}{}$ and $\ddiamond{}{}$ only refer to last state and not intermediate states, as \dTL does.
 
+    If no dependance on $s$ in terms, $\holdssince{T}{}$ can be dropped in formula.
+
+    \begin{example}
+        \begin{equation}
+            \holdssince{T}{x+\xtau[s]\geq 0}\\
+            \holdssince{T}{x+\xtau\geq 0}\\    
+        \end{equation}
+        can be dropped in second
+    \end{example}
+
     Since, with respect to \dL, the state space has been replaced, we need to redefine the semantics.
     
     \begin{definition}[Transition semantics of \HPs]\label{def:semantic-HP}
@@ -269,15 +286,17 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\ireachability{\IddL}{\asprg;\bsprg} = \left\{ (\asstate,\bsstate) \with (\asstate,\csstate)\in\ireachability{\IddL}{\asprg}, (\csstate,\bsstate)\in\ireachability{\IddL}{\bsprg} \right\}$
             \item $\ireachability{\IddL}{\hrepeat{\asprg}} %= \hrepeat{(\ireachability{\IddL}{\asprg})}
                 = \displaystyle\cupfold_{n\in\N}\ireachability{\IddL}{\asprg^n}$ with $\asprg^{n+1}\equiv (\asprg^n;\asprg)$ and $\asprg^0\equiv \htest{\ltrue}$
-            \item $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm}{\ivr}} = \left\{
+            \item $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}} = \{
                 (\asstate,\bsstate) \with
-                \lforall{t\in[0,r]}{\varphi(t)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm}\land\ivr}}
-                \text{ and } \asstate=\varphi(0) \text{ on } \scomplement{\{\D{x}\}} \text{ and } \bsstate=\varphi(r))
-                \right\}$, i.e. there exists a $r\geq 0$ and a function $\varphi\from [0,r]\to\states$, which fulfills $\varphi(t)(\D{x})(0) \defeq \DD{\varphi(\zeta)(x)(0)}{\zeta}(t) \stackrel{!}{=} \imodel{\iconcat[state=\varphi(t)]{\IddL}}{\theta}$
+                \lforall{\zeta\in[0,r]}{\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm(-\tau)}\land\ivr}}$
+                and $\asstate=\trajectory(0)$ on $\scomplement{\{\D{x}\}}$ and $\bsstate=\trajectory(r)\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(0) \defeq \DD{\trajectory(t)(x)(0)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\theta}$
         \end{enumerate}
     \end{definition}
 
-    $\varphi$ solves the DDE and satisfies $\ivr$ in each time instant
+    $\trajectory$ solves the DDE and satisfies $\ivr$ in each time instant/state
+
+    The formula $\hevolve{\D{x}=\astrm(-\tau)}\land\ivr$ has dropped the $\holdssince{T}{}$, alloccurences of $x$ and $\D{x}$ of form with constant
+
     if $r=0$: 
 
     For the \emph{discrete assignment}, we only allow the values at the current time instant to be changed. A functional assignment would essentially allow to rewrite history, which is not permitted.
@@ -303,7 +322,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     % TODO: what about [a;b]p. is [a][b]p correct?
 
     \begin{definition}[History Horizon]
-        history horizon of a \ddL formula, depends on all occurences of $\xtau[s]$
+        history horizon of a \ddL formula, depends on all occurences of $\xtau[-s]$
         T in forall: comp, pred
         minimum of T in forall parts of subformulas: quantifier, not and
         forall, exists?

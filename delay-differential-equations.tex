@@ -92,9 +92,10 @@ The definition of a DDE can be extended to multiple constant discrete delays. Fo
 \end{definition}
 
 %TODO:
-The notion of solution for an autonomous DDE as given above can be lifted to be a trajectory in the statespace
+The notion of solution for an autonomous DDE as given above can be lifted to be a trajectory $\trajectory[x]$ in the statespace
 \begin{equation}
-    \gamma_x:[0,T]\rightarrow\statespace[\tau],\\ t\mapsto\xbartaut{t}
+    \trajectory[x] \from [0,T] \to \statespace[\tau],\\
+    t \mapsto \xbartaut{t}
 \end{equation}
 
 The \textbf{state} at time $t$ is a function which provides a time limited history up to the current time. This is all information needed to determine (using the DDE) to determine the solution for time $\geq t$. It is defined as $\xbartaut{t}(s)\defeq x(t+s)$ for $s\in [-\tau,0]$. In the case of $t=0$, we simplify the notation to $\xbartau \defeq \xbartaut{0}$.
