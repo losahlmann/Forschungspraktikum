@@ -32,19 +32,21 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     \begin{definition}[Terms]\label{def:syntax-terms}
         \emph{Terms} are defined by the following grammar, extending classical \dL with a symbol for a \textbf{delayed variable}:
-        \begin{equation}
+        \begin{equation*}
             \astrm,\bstrm \Coloneqq
                 %x \mid
                 % TODO: need extended syntax? x[c] and x[s], for \D resp, c=const, s=var?
                 \xtau[s] \mid
                 \Dxtau[s] \mid
+                \xtau[c] \mid
+                \Dxtau[c] \mid
                 c \mid
-                f(\range{\istrm{1}}{\istrm{n}}) \mid
-                \astrm+\bstrm \mid
-                \astrm\cdot\bstrm \mid
+                f(\range{\istrm{1}}{\istrm{k}}) \mid
+                \astrm + \bstrm \mid
+                \astrm \cdot \bstrm \mid
                 % FIXME: is term' allowed? diff inv is only a FOLR formula? even for dL valid?
                 \D{(\astrm)}
-        \end{equation}
+        \end{equation*}
         where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
         The symbol $c$ defines a rational number constant.
         All terms implicitely depend on a time parameter $t\leq 0$, written as $\astrm(t)$. When $t=0$ we abbreviate to $\astrm$. The variable symbol $x$ is the only which allows explicitely mentioning this parameter. It is spelled slightly differently as $\xtau[-t]$. Again, for $\xtau[0]$ we write $x$.
@@ -69,7 +71,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \begin{definition}[Hybrid program]\label{def:syntax-HP}
         \emph{Hybrid programs} (\HP) are defined by
         % TODO: first-order logic of real arithmetic formulas include \xtau?
-        \begin{equation}
+        \begin{equation*}
             \asprg, \bsprg \Coloneqq
                 a \mid
                 \hupdate{\humod{x}{\astrm}} \mid
@@ -80,7 +82,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 \asprg;\bsprg \mid
                 \hrepeat{\asprg} \mid
                 \hevolvein{\D{x}=\astrm(-\tau)}{\ivr}
-        \end{equation}
+        \end{equation*}
         % TODO: program constant
         where $\asprg, \bsprg$ denote \HPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\xtau$) and $\ausprg$ a program constant.
         The formula $\asfmlfolR$ is of first-order logic of real arithmetic (\FOLR$(\allvars)$).
@@ -104,7 +106,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     \begin{definition}[\ddL formula]\label{def:syntax-formula}
         The \emph{formulas} of \emph{delay differential dynamic logic} (\ddL) are defined by
-        \begin{align}
+        \begin{align*}
             \asfml,\bsfml \Coloneqq
                 % TODO: better abbreviated notation for \delay, make forall only appear in semantics rhs
                 &\holdssince{T}{\astrm\geq\bstrm} \mid
@@ -116,7 +118,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 \lexists{x}{\asfml} \mid
                 \dbox{\asprg}{\asfml} \mid
                 \ddiamond{\asprg}{\asfml}
-        \end{align}
+        \end{align*}
         with terms $\astrm,\bstrm,\range{\istrm{1}}{\istrm{k}}$,
         % TODO: replace with command for predicate symbols, quantifier symbol
         a predicate symbol $p$, a quantifier symbol $C$, a variable $x$, and a \HP $\asprg$.
@@ -130,6 +132,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
         The delay $\tau$ is a symbolic constant related to the history duration induced by the occurence of a delay-differnetial equation. Its value is set by proof rules.
     \end{definition}
+
+    \FOLR formulae are a subset of \ddL.
 
     When terms do not depend on quantified parameter, can omit writing down forall in formula
 
@@ -157,17 +161,17 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     % However, we go the way of introducing transition semantics with an augmented state space.
 
     \begin{definition}[Semantics of terms]\label{def:sematic-terms}
-        The \emph{semantics} of a term $\astrm$ in the state $\asstate\in\statespace$ (at time instant $t$) is a value in $\R$ and defined inductively as follows:
+        The \emph{semantics} of a term $\astrm$ in the state $\asstate\in\states$ (at time instant $t$) is a value in $\R$ and defined inductively as follows:
         \begin{enumerate}
             \item $\ivaluation{\IddL}{\xtau[s]} = \asstate(x)(s)$ for a variable $x\in\allvars$
             % FIXME: need Cpw for derivatives or only \R?
             \item $\ivaluation{\IddL}{\Dxtau[s]} = \asstate(\D{x})(s)$ for a differential symbol $\D{x}\in\diffvars$
             \item $\ivaluation{\IddL}{c} = \interpret[c]$ for a constant $c$
-            \item $\ivaluation{\IddL}{f(\range{\istrm{1}}{\istrm{n}})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}}}{\ivaluation{\IddL}{\istrm{n}}})$ for a function symbol $f$
+            \item $\ivaluation{\IddL}{f(\range{\istrm{1}}{\istrm{k}})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}}}{\ivaluation{\IddL}{\istrm{k}}})$ for a function symbol $f$
             \item $\ivaluation{\IddL}{\astrm+\bstrm} = \ivaluation{\IddL}{\astrm} + \ivaluation{\IddL}{\bstrm}$
             \item $\ivaluation{\IddL}{\astrm\cdot\bstrm} = \ivaluation{\IddL}{\astrm} \cdot \ivaluation{\IddL}{\bstrm}$
-            % FIXME: derivation of terms?
-            \item $\ivaluation{\IddL}{\D{(\astrm)(s)}} = \displaystyle\sum_{x\in\allvars} \asstate(\D{x})(s)\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial x}(\asstate)$
+            % FIXME: derivation of terms with x'?
+            \item $\ivaluation{\IddL}{\D{(\astrm)}}(s) = \displaystyle\sum_{x\in\allvars} \asstate(\D{x})(s)\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial x}(s)$
         \end{enumerate}
         where $s\in [-T,0]$.
         The  syntactic (total) derivation, defined in \ref{def:derivation}, gives new term
@@ -192,7 +196,15 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     %     with uniform substitution: $\sigma=\{\xtau\rightarrow\theta_0\}$
     % \end{enumerate}
 
-    Meaning differential symbol: defined by state, since time derivative may not be defined in isolated point (different to ODE, where isolated state=value in $\R$)
+    The meaning of a differential symbol: defined by state, 
+    The time derivative of a variable may not be defined in isolated state, because it might have a discontinuity here and we cannot use its history (provided by the state) to define derivative.
+    However, we can define a state local semantics for a differential $\D{(\astrm)}$.
+
+    Like for ODE case, only use last value given in state. Since in $t=0$ could be incontinuity 
+
+    chain rule for $\astrm(s)$
+    $\asfml$ only mentions finitely many variables, finite sum
+    $\ivaluation{\IddL}{\D{(\astrm)}}(s)$ is smooth as composition of smooth functions, derivatives exist
 
     Along a solution of a DDE $\varphi:[0,r]\rightarrow\states$ (continous differentiable), the differential symbols are interpreted as time derivatives, $r>0$ at any $\zeta\in[0,r]$, meaning of symbol is rate of change of value of $x$ over time
     \begin{equation}
@@ -204,12 +216,12 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \end{equation}
     if $r=0$
     and what if there is no ODE/DDE given: in a given state should also be real value
-    state assigns real values to all symbols, also differential symbols $\nu(\D{x}=\imodel{\IddL}{f(x)}\nu$
+    
     in initial state an arbitray value is allowed, will then sync with equation to fullfil $\varphi(\zeta)(\D{x})=\imodel{\IddL}{f(x)}\varphi(r)$
     initial value $\asstate(\D{x})$ may not be compatible with derivative
     final values coincide
 
-    Like for ODE case, only use last value given in state. Since in $t=0$ could be incontinuity we cannot use history to define derivative.
+    
 
     \begin{lemma}[Differential Lemma]
 
@@ -258,7 +270,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \begin{example}
         \begin{equation}
             \holdssince{T}{x+\xtau[s]\geq 0}\\
-            \holdssince{T}{x+\xtau\geq 0}\\    
+            \holdssince{T}{x+\xtau\geq 0} 
         \end{equation}
         can be dropped in second
     \end{example}
@@ -322,11 +334,69 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     % TODO: what about [a;b]p. is [a][b]p correct?
 
     \begin{definition}[History Horizon]
-        history horizon of a \ddL formula, depends on all occurences of $\xtau[-s]$
+        The \emph{history horizon} is a function
+        \begin{equation*}
+            \HHfml\from \ddLformulas \to \R_{\leq 0}
+        \end{equation*}
+        which assigns to each \ddL formula the earliest point in time it references to. It limits the time interval of the state space $T\in$.
+        The history horizon depends on all occurences of $\xtau[s]$ and $\xtau[c]$ in the formula.
+
+        It is defined inductively for formulas by:
+        \begin{enumerate}
+            \item $\HHfml(\holdssince{T}{\astrm\geq\bstrm}) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
+            \item $\HHfml(\holdssince{T}{p(\range{\istrm{1}}{\istrm{k}})}) = \max\set{\range{\HHtrm(\istrm{1})}{\HHtrm(\istrm{k})}}$
+            \item $\HHfml(\contextapp{C}{\asfml}) = $
+            \item $\HHfml(\lnot\asfml) = \HHfml(\asfml)$
+            \item $\HHfml(\asfml\land\bsfml) = \max\set{\HHfml(\asfml),\HHfml(\bsfml)}$
+            \item $\HHfml(\lforall{x}{\asfml}) = \HHfml(\asfml)$
+            \item $\HHfml(\lexists{x}{\asfml}) = \HHfml(\asfml)$
+            \item $\HHfml(\dbox{\asprg}{\asfml}) = \max\set{\HHprg(\asprg),\HHfml(\asfml)}$
+            \item $\HHfml(\ddiamond{\asprg}{\asfml}) = \max\set{\HHprg(\asprg),\HHfml(\asfml)}$
+        \end{enumerate}
+        depending on terms
+        \begin{enumerate}
+            \item $\HHtrm(\xtau[s]) = 0$
+            \item $\HHtrm(\Dxtau[s]) = 0$
+            \item $\HHtrm(\xtau[c]) = \abs{c}$
+            \item $\HHtrm(\Dxtau[c]) = \abs{c}$
+            \item $\HHtrm(c) = 0$
+            \item $\HHtrm(f(\range{\istrm{1}}{\istrm{k}})) = \max\set{\range{\HHtrm(\istrm{1})}{\HHtrm(\istrm{k})}}$
+            \item $\HHtrm(\astrm + \bstrm) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
+            \item $\HHtrm(\astrm \cdot \bstrm) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
+        \end{enumerate}
+        and \HPs
+        \begin{enumerate}
+            \item $\HHprg(a) = 0$
+            \item $\HHprg(\hupdate{\humod{x}{\astrm}}) = 0$
+            \item $\HHprg(\Dupdate{\Dumod{\D{x}}{\astrm}}) = 0$
+            \item $\HHprg(\htest{\asfmlfolR}) = 0$
+            \item $\HHprg(\hchoice{\asprg}{\bsprg}) = \max\set{\HHprg(\asprg),\HHprg(\bsprg)}$
+            % TODO: replace ; in HPs
+            \item $\HHprg(\asprg;\bsprg) = \max\set{\HHprg(\asprg),\HHprg(\bsprg)}$
+            \item $\HHprg(\hrepeat{\asprg}) = \HHprg(\asprg)$
+            \item $\HHprg(\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}) = \HHtrm(\astrm)$
+        \end{enumerate}
+        For formulae as
+        
         T in forall: comp, pred
         minimum of T in forall parts of subformulas: quantifier, not and
         forall, exists?
         modalities: max $\tau$ in DDE and of formula
     \end{definition}
+    %We need to use $\min$, since $\HH$ is a non-positive number. It is the biggest in absolute value.
+
+    \begin{example}
+        \begin{equation*}
+            % FIXME: notation/syntax: ausgeklammertes forall in formulas
+            \dbox{\hupdate{\humod{x}{\xtau[-3]^2}};\hevolvein{\D{x}=\xtau+2x}{(x\geq 0)}}{\holdssince{T}{0\leq \xtau[s] \land \xtau[s]\leq\xtau[-5]}}
+        \end{equation*}
+        Hence the history horizon needs to be set to
+        \begin{equation*}
+            T=\max\set{\max\set{3,\tau},\max\set{0,5}}.
+        \end{equation*}
+    \end{example}
 
     % TODO: feasible history horizon for a HP
+    \begin{lemma}
+        choosing the statespace according to history horizon of HP determines
+    \end{lemma}
