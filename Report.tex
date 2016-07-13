@@ -107,9 +107,9 @@
 
 %\include{introduction}
 
-\include{delay-differential-equations}
+%\include{delay-differential-equations}
 
-\include{intro-logic}
+%\include{intro-logic}
 
 \include{delay-hybrid-programs}
 
@@ -134,10 +134,13 @@
 
     axioms expressed in $\dbox{\cdot}$, duality to $\ddiamond{\cdot}$ by $\ddiamond{\asprg}{\asfml}\lbisubjunct\lnot\dbox{\asprg}{\lnot\asfml}$
 
+    % TODO: what about [a;b]p. is [a][b]p correct?
+
     % QUESTION: which axioms are needed? in papers differences
     % FIXME: is there a paragraph like calculus environment?
     \begin{calculus}
         % TODO: Diamond-Axiom
+        % TODO: holds iff semantic of not is complement
         \cinferenceRule[testb|$\htest{}$]{test condition}{
             \linferenceRule[equiv]{
                 (\chi\limply\asfml)

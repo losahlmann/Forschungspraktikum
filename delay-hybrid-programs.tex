@@ -1,7 +1,8 @@
 \chapter{Hybrid Programs with DDEs}\label{hybrid-programs-with-ddes}
 
-We extent hybrid programs (\HPs) and formulae of classic \dL with syntax, semantics, axiomatization and proof rules which allow to deal with Delay Differential Equations.
+We extent hybrid programs (\HPs) and formulae of classical \dL with syntax, semantics, axiomatization and proof rules which allow to deal with Delay Differential Equations.
 %Is a super set, \dL is a fragment
+Call obtained \dHPs and \ddL.
 
 Similiar to first-order logic and essentially as an extension of dL we define delay differential logic
 
@@ -18,12 +19,12 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 \section{Syntax}
     \label{sec:syntax}
 
-    The syntax of terms, formula, hp defined inductively by grammar in BNF.
+    The syntax of \ddL terms, formulae as well as of \dHPs is defined inductively by a grammar in Backus-Naur-form (BNF).
 
     Let $\allvars$ be the set of \emph{all variables} and $\diffvars\defeq\{\D{x} \with x\in\allvars\}$ the corresponding set of \emph{differential symbols}.
     %and set of \emph{delayed variables} $\delayedvars\defeq\{\xtau \with x\in\allvars\}$
 
-    The variables will be usually denoted $x,y,z\in\allvars$, with their differential symbols $\D{x},\D{y},\D{z}\in\diffvars$.
+    We will usually denote variables by $x,y,z\in\allvars$ and their differential symbols by $\D{x},\D{y},\D{z}\in\diffvars$.
 
     Function symbols $f,g,h$, constant symbols $a,b,c$ and predicate symbols $p,q,r$ are as in first-order logic (cf. Section \ref{sec:first-order-logic}).
 
@@ -31,15 +32,14 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     %program constants $ $, may be in $\rationals$
 
     \begin{definition}[Terms]\label{def:syntax-terms}
-        \emph{Terms} are defined by the following grammar, extending classical \dL with a symbol for a \textbf{delayed variable}:
+        \emph{Terms} are defined by the following grammar, extending \dL with symbols for \emph{delayed variables}:
         \begin{equation*}
             \astrm,\bstrm \Coloneqq
-                %x \mid
-                % TODO: need extended syntax? x[c] and x[s], for \D resp, c=const, s=var?
                 \xtau[s] \mid
                 \Dxtau[s] \mid
-                \xtau[c] \mid
-                \Dxtau[c] \mid
+                % TODO: maybe dont need x[c], only with s and use t(s) with specified s, as in DDE and extra x[0]=x
+                \xtau[b] \mid
+                \Dxtau[b] \mid
                 c \mid
                 f(\range{\istrm{1}}{\istrm{k}}) \mid
                 \astrm + \bstrm \mid
@@ -48,11 +48,13 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 \D{(\astrm)}
         \end{equation*}
         where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
-        The symbol $c$ defines a rational number constant.
-        All terms implicitely depend on a time parameter $t\leq 0$, written as $\astrm(t)$. When $t=0$ we abbreviate to $\astrm$. The variable symbol $x$ is the only which allows explicitely mentioning this parameter. It is spelled slightly differently as $\xtau[-t]$. Again, for $\xtau[0]$ we write $x$.
-        $x=x[0]$
+        The symbol $c$ defines a rational number constant and $b\in\Q_{\leq 0}$.
+        All terms implicitely depend on a time parameter $s\in\R_{\leq 0}$, written as $\astrm(s)$. When $s=0$ we abbreviate the notation to $\astrm$.
+        The variable symbol $x$ and the differential symbol $\D{x}$ are the only which allow explicitely mentioning this parameter. It is spelled slightly differently as $\xtau[s]$ and $\Dxtau[s]$, respectively. Note that $s\notin\allvars\cup\diffvars$. It is a special variable.
+        Again, for $\xtau[0]$ we write $x$ and $\D{x}$ for $\Dxtau[0]$.
+        Writing $\astrm(-\tau)$ means that all occurences of $s$ in $\astrm$ have been replaced with $-\tau$.
+
         parameter is inherited
-        $\astrm(-\tau)$, all occurences of $s$ have been replaced with $-\tau$
 
         % TODO: subtraction and division in terms
 
@@ -60,22 +62,26 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \end{definition}
 
     \begin{example}
+        Let us consider the \ddL term
         \begin{equation}
-            \astrm(s) = \underbrace{\xtau[s]}_{\text{var}} + \underbrace{\xtau}_{\text{const}}
+            \astrm(s) = \underbrace{\xtau[s]}_{\text{var}} + \underbrace{\xtau}_{\text{const}}.
+        \end{equation}
+        Setting $s=-1$ leads to
+        \begin{equation}
+            \astrm(-1) = \xtau[-1] + \xtau.
         \end{equation}
     \end{example}
 
-    % where $x$ and where $\xtau$?
-    The grammar defining hybrid programs is the same as for classical \dL and shown here for completeness.
+    The grammar defining \emph{delayed hybrid programs} is the same as for classical \HPs (cf. \cite{Platzer15Uniform}) and is shown here for completeness.
 
-    \begin{definition}[Hybrid program]\label{def:syntax-HP}
-        \emph{Hybrid programs} (\HP) are defined by
+    \begin{definition}[(Delay) Hybrid Programs]\label{def:syntax-HP}
+        \emph{(Delay) Hybrid programs} (\dHPs) are defined by
         % TODO: first-order logic of real arithmetic formulas include \xtau?
         \begin{equation*}
             \asprg, \bsprg \Coloneqq
                 a \mid
-                \hupdate{\humod{x}{\astrm}} \mid
-                \Dupdate{\Dumod{\D{x}}{\astrm}} \mid
+                \hupdate{\humod{x}{\astrm(0)}} \mid
+                \Dupdate{\Dumod{\D{x}}{\astrm(0)}} \mid
                 \htest{\asfmlfolR} \mid
                 \hchoice{\asprg}{\bsprg} \mid
                 % TODO: replace ; in HPs
@@ -84,14 +90,17 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 \hevolvein{\D{x}=\astrm(-\tau)}{\ivr}
         \end{equation*}
         % TODO: program constant
-        where $\asprg, \bsprg$ denote \HPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\xtau$) and $\ausprg$ a program constant.
-        The formula $\asfmlfolR$ is of first-order logic of real arithmetic (\FOLR$(\allvars)$).
+        where $\asprg, \bsprg$ denote \dHPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\xtau$) and $\ausprg$ a program constant.
+        The formula $\asfmlfolR$ is of first-order logic of real arithmetic \FOLR$(\allvars)$, containing only normal variable symbols $\allvars$.
+        Note: $s\notin\asprg$.
+        Syntax only allows autonomous DDEs.
     \end{definition}
 
     % TODO: FOLR is subset of ddL formulae
 
-    same grammar as in \cite{Platzer15Uniform}
-    difference to \dL, refer to Section \ref{sec:dynamic-semantics} for meaning of the following, different meaning for formulae
+    The difference between classical \HPs (in the sense of ...) and \dHPs is not syntactically, but only given by their semantics.
+
+    refer to Section \ref{sec:dynamic-semantics} for meaning of the following, different meaning for formulae
 
     assignment, discretely at an instant of time
     test of formula in current state
@@ -103,34 +112,36 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     ODE still possible
 
 
-
-    \begin{definition}[\ddL formula]\label{def:syntax-formula}
-        The \emph{formulas} of \emph{delay differential dynamic logic} (\ddL) are defined by
+    \begin{definition}[\ddL Formulas]\label{def:syntax-formula}
+        The \emph{formulae} of \emph{delay differential dynamic logic} (\ddL) are defined by
         \begin{align*}
-            \asfml,\bsfml \Coloneqq
-                % TODO: better abbreviated notation for \delay, make forall only appear in semantics rhs
-                &\holdssince{T}{\astrm\geq\bstrm} \mid
-                \holdssince{T}{p(\range{\istrm{1}}{\istrm{k}})} \mid\\
-                &\contextapp{C}{\asfml} \mid
+            \asfml,\bsfml \Coloneqq{}& % fixes missing space
+                % TODO: better abbreviated notation for \holdssince, make forall only appear in semantics rhs
+                \astrm\geq\bstrm \mid
+                p(\range{\istrm{1}}{\istrm{k}}) \mid
+                \contextapp{C}{\asfml} \mid
                 \lnot\asfml \mid
-                \asfml\land\bsfml \mid
+                \asfml\land\bsfml \mid\\
+                &\holdssince{T}{\asfml(s)} \mid
                 \lforall{x}{\asfml} \mid
                 \lexists{x}{\asfml} \mid
                 \dbox{\asprg}{\asfml} \mid
                 \ddiamond{\asprg}{\asfml}
         \end{align*}
-        with terms $\astrm,\bstrm,\range{\istrm{1}}{\istrm{k}}$,
-        % TODO: replace with command for predicate symbols, quantifier symbol
-        a predicate symbol $p$, a quantifier symbol $C$, a variable $x$, and a \HP $\asprg$.
+        with \ddL terms $\astrm,\bstrm,\range{\istrm{1}}{\istrm{k}}$,
+        a predicate symbol $p$, a quantifier symbol $C$, a variable $x$, and a \dHP $\asprg$.
         
         % TODO: need = in formulas ?
-        Other operators, such as $>,\leq,<,\lor,\limply,\lbisubjunct$ can be derived from $\land,\lnot$ and are hence not explicitely mentioned in the grammar.
+        Other operators
+        $\sim$ for $=,<,\leq,>,\geq$, such as $\lor,\limply,\lbisubjunct$ can be derived from $\land,\lnot$ and are hence not explicitely mentioned in the grammar.
 
         modal formula $\dbox{\asprg}{\asfml}$ : $\asfml$ holds in the state after all runs of $\asprg$, dual: there is a run
         % TODO: what is a quantifier symbol? (-> US paper)
         quantifier symbols $C$, with formula as argument are higher order predicate symbols and bind the variables of $\asfml$
 
-        The delay $\tau$ is a symbolic constant related to the history duration induced by the occurence of a delay-differnetial equation. Its value is set by proof rules.
+        The quantifiers $\forall$ and $\exists$ quantify over $\statespace$.
+
+        The symbol $T$ is a symbolic constant related to the history duration induced by the occurence of a delay-differnetial equation. Its value is set by proof rules.
     \end{definition}
 
     \FOLR formulae are a subset of \ddL.
@@ -183,6 +194,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     % TODO: total derivative operator for terms
     \begin{definition}[Derivation]\label{def:derivation}
         common derivation rules
+        $\D{(\xtau[b])}=\Dxtau[b]$ need in premise $\D{x}$ on $[t+b,t]$
     \end{definition}
 
     % The semantic of the new symbol $\xtau$ depends on the context in which the term occures:
@@ -238,23 +250,32 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         The semantics of a \ddL formula $\asfml$ is the subset of all states $\imodel{\IddL}{\asfml}\subseteq\states$ in which $\asfml$ is true. This set is given inductively by
         % TODO: mention interpretation I
         % FIXME: what is difference between \imodel and \ivaluation?
+        % terms: ivaluation, formula: imodel, programms: ireachability
         \begin{enumerate}
             % TODO: replace : in set by \with
-            \item $\imodel{\IddL}{\holdssince{T}{\asfml\geq\bsfml}} = \left\{\asstate\in\states \with \holdssince{T}{\ivaluation{\IddL}{\asfml(s)}\geq\ivaluation{\IddL}{\bsfml(s)}}\right\}$
-            \item $\imodel{\IddL}{\holdssince{T}{p(\range{\istrm{1}}{\istrm{k}})}} = \left\{\asstate\in\states \with \holdssince{T}{\left(\range{\imodel{\IddL}{\istrm{1}(s)}}{\imodel{\IddL}{\istrm{k}(s)}}\right)\in\interpret[p]}\right\}$
+            % FIXME: change ':' in sets to '|'
+            % FIXME: use notation forall ... : ...
+            % FIXME: *version for lforall without parentheses
+            %\item $\imodel{\IddL}{\holdssince{T}{\astrm\geq\bstrm}} = \left\{\asstate\in\states \with \holdssince{T}{\ivaluation{\IddL}{\astrm(s)}\geq\ivaluation{\IddL}{\bstrm(s)}}\right\}$
+            %\item $\imodel{\IddL}{\holdssince{T}{p(\range{\istrm{1}}{\istrm{k}})}} = \left\{\asstate\in\states \with \holdssince{T}{\left(\range{\imodel{\IddL}{\istrm{1}(s)}}{\imodel{\IddL}{\istrm{k}(s)}}\right)\in\interpret[p]}\right\}$
+            \item $\imodel{\IddL}{\astrm(s)\geq\bstrm(s)} = \left\{\asstate\in\states \with \ivaluation{\IddL}{\astrm(s)}\geq\ivaluation{\IddL}{\bstrm(s)}\right\}$
+            \item $\imodel{\IddL}{p(\range{\istrm{1}(s)}{\istrm{k}(s)})} = \left\{\asstate\in\states \with \left(\range{\ivaluation{\IddL}{\istrm{1}(s)}}{\ivaluation{\IddL}{\istrm{k}(s)}}\right)\in\interpret[p]\right\}$
             \item $\imodel{\IddL}{\contextapp{C}{\asfml}} = \interpret[C]\left(\imodel{\IddL}{\asfml}\right)$ for a quantifier symbol $C$
             \item $\imodel{\IddL}{\lnot\asfml} = \scomplement{\left(\imodel{\IddL}{\asfml}\right)} = \states\setminus\imodel{\IddL}{\asfml}$
             \item $\imodel{\IddL}{\asfml\land\bsfml} = \imodel{\IddL}{\asfml}\cap\imodel{\IddL}{\bsfml}$
+            \item $\imodel{\IddL}{\holdssince{T}{\asfml(s)}} = \left\{\asstate\in\states \with \holdssince{T}{\asstate\in\imodel{\IddL}{\asfml(s)}} \right\}$
             \item $\imodel{\IddL}{\lforall{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{y}\in\imodel{\IddL}{\asfml} \text{ for all } y\in\statespace \}$
             \item $\imodel{\IddL}{\lexists{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{y}\in\imodel{\IddL}{\asfml} \text{ for some } y\in\statespace \}$
-            \item $\imodel{\IddL}{\dbox{\asprg}{\asfml}} = \{\asstate\in\states \with \omega\in\imodel{\IddL}{\asfml} \text{ for all $\omega$ such that} (\asstate,\omega)\in\imodel{\IddL}{\asprg}\}$
-            \item $\imodel{\IddL}{\ddiamond{\asprg}{\asfml}} = \{\asstate\in\states \with \omega\in\imodel{\IddL}{\asfml} \text{ for some $\omega$ such that} (\asstate,\omega)\in\imodel{\IddL}{\asprg}\}$
+            \item $\imodel{\IddL}{\dbox{\asprg}{\asfml}} = \{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml} \text{ for all $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}\}$, i.e. $\{\asstate\in\states \with \lforall{\bsstate\in\states}{((\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml})}\}$
+            \item $\imodel{\IddL}{\ddiamond{\asprg}{\asfml}} = \{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml} \text{ for some $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}\}$, i.e. $\{\asstate\in\states \with \lexists{\bsstate\in\states}{((\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \land \bsstate\in\imodel{\IddL}{\asfml})}\}$
         \end{enumerate}
         That formula $\asfml$ is true in state $\asstate$ under interpretation $\interpret$ can also be written as $\interpret,\asstate\models\asfml$. The formula is called valid, written as $\models\asfml$, iff $\asfml$ is true in all states under all interpretations.
     \end{definition}
 
     interpretation of predicate symbol, arity n: relation $I(p)\subseteq\R^n$
     interpretation of a quantifier symbol: functional $I(C):M\subseteq\states\to P(\states)$ maps subsets of states to subsets of states
+
+    Atomic formulas (type 1 and 2) need to be combined with the quantification over s (6) in order to make sense. See Section \ref{sec:well-definedness}.
 
     With the semantics of terms if follows for the meaning of $\dbox{\asprg}{\phi}$, that $\phi$ must only hold up to time $\tau$ before leaving the \HP $\asprg$. It is possible, that $\phi$ was not verified before, while \emph{executing} the \HP.
 
@@ -275,6 +296,31 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         can be dropped in second
     \end{example}
 
+    % TODO: do we accept that or restrict formula after modality to not having $s$ free? then, since s\notin\asprg commutes also for diamond
+    \begin{lemma}
+        box and forall-s commute
+        \begin{equation}
+            \imodel{\IddL}{\holdssince{T}{\dbox{\asprg}{\asfml(s)}}} = \imodel{\IddL}{\dbox{\asprg}{(\holdssince{T}{\asfml(s)})}}
+        \end{equation}
+    \end{lemma}
+    \begin{proof}
+        \begin{multline}
+            % FIXME: use \set instead of {}
+            \imodel{\IddL}{\holdssince{T}{\dbox{\asprg}{\asfml(s)}}}\\
+            = \set{\asstate\in\states \with \holdssince{T}{\lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
+            = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{\holdssince{T}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
+            = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \holdssince{T}{\bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
+            = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\holdssince{T}{\asfml(s)}}}}
+            = \imodel{\IddL}{\dbox{\asprg}{(\holdssince{T}{\asfml(s)})}}
+        \end{multline}
+        since $\lforall{x}{p\limply q(x)}\equiv p\limply\lforall{x}{q(x)}$
+    \end{proof}
+    However
+    % TODO: is this a problem? or okay?
+    \begin{equation}
+        \imodel{\IddL}{\holdssince{T}{\ddiamond{\asprg}{\asfml(s)}}} \neq \imodel{\IddL}{\ddiamond{\asprg}{(\holdssince{T}{\asfml(s)})}}
+    \end{equation}
+
     Since, with respect to \dL, the state space has been replaced, we need to redefine the semantics.
     
     \begin{definition}[Transition semantics of \HPs]\label{def:semantic-HP}
@@ -284,13 +330,13 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\ireachability{\IddL}{\hupdate{\humod{x}{\astrm}}} =
                 \left\{(\asstate,\bsstate)\with \bsstate = \asstate \text{ except }
                 \bsstate(x) = \left(s\mapsto\begin{cases}
-                    \imodel{\IddL}{\theta(s)} & s=0\\
+                    \ivaluation{\IddL}{\theta(s)} & s=0\\
                     \asstate(s) & s\in[-T,0)
                 \end{cases}\right)\right\}$
             \item $\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}} =
                 \left\{(\asstate,\bsstate)\with \bsstate = \asstate \text{ except }
                 \bsstate(\D{x}) = \left(s\mapsto\begin{cases}
-                    \imodel{\IddL}{\theta(s)} & s=0\\
+                    \ivaluation{\IddL}{\theta(s)} & s=0\\
                     \asstate(s) & s\in[-T,0)
                 \end{cases}\right)\right\}$
             \item $\ireachability{\IddL}{\htest{\asfmlfolR}} = \left\{(\asstate,\asstate) \with \asstate\in\imodel{\IddL}{\asfmlfolR} \right\}$
@@ -331,72 +377,110 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         no changes, except for rewriting $\varphi(t)(x)\rightarrow\varphi(t)(x)(0)$
     \end{lemma}
 
-    % TODO: what about [a;b]p. is [a][b]p correct?
 
-    \begin{definition}[History Horizon]
-        The \emph{history horizon} is a function
-        \begin{equation*}
-            \HHfml\from \ddLformulas \to \R_{\leq 0}
-        \end{equation*}
-        which assigns to each \ddL formula the earliest point in time it references to. It limits the time interval of the state space $T\in$.
-        The history horizon depends on all occurences of $\xtau[s]$ and $\xtau[c]$ in the formula.
+\section{Static Semantics}
+    \label{sec:static-semantics}
 
-        It is defined inductively for formulas by:
-        \begin{enumerate}
-            \item $\HHfml(\holdssince{T}{\astrm\geq\bstrm}) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
-            \item $\HHfml(\holdssince{T}{p(\range{\istrm{1}}{\istrm{k}})}) = \max\set{\range{\HHtrm(\istrm{1})}{\HHtrm(\istrm{k})}}$
-            \item $\HHfml(\contextapp{C}{\asfml}) = $
-            \item $\HHfml(\lnot\asfml) = \HHfml(\asfml)$
-            \item $\HHfml(\asfml\land\bsfml) = \max\set{\HHfml(\asfml),\HHfml(\bsfml)}$
-            \item $\HHfml(\lforall{x}{\asfml}) = \HHfml(\asfml)$
-            \item $\HHfml(\lexists{x}{\asfml}) = \HHfml(\asfml)$
-            \item $\HHfml(\dbox{\asprg}{\asfml}) = \max\set{\HHprg(\asprg),\HHfml(\asfml)}$
-            \item $\HHfml(\ddiamond{\asprg}{\asfml}) = \max\set{\HHprg(\asprg),\HHfml(\asfml)}$
-        \end{enumerate}
-        depending on terms
-        \begin{enumerate}
-            \item $\HHtrm(\xtau[s]) = 0$
-            \item $\HHtrm(\Dxtau[s]) = 0$
-            \item $\HHtrm(\xtau[c]) = \abs{c}$
-            \item $\HHtrm(\Dxtau[c]) = \abs{c}$
-            \item $\HHtrm(c) = 0$
-            \item $\HHtrm(f(\range{\istrm{1}}{\istrm{k}})) = \max\set{\range{\HHtrm(\istrm{1})}{\HHtrm(\istrm{k})}}$
-            \item $\HHtrm(\astrm + \bstrm) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
-            \item $\HHtrm(\astrm \cdot \bstrm) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
-        \end{enumerate}
-        and \HPs
-        \begin{enumerate}
-            \item $\HHprg(a) = 0$
-            \item $\HHprg(\hupdate{\humod{x}{\astrm}}) = 0$
-            \item $\HHprg(\Dupdate{\Dumod{\D{x}}{\astrm}}) = 0$
-            \item $\HHprg(\htest{\asfmlfolR}) = 0$
-            \item $\HHprg(\hchoice{\asprg}{\bsprg}) = \max\set{\HHprg(\asprg),\HHprg(\bsprg)}$
-            % TODO: replace ; in HPs
-            \item $\HHprg(\asprg;\bsprg) = \max\set{\HHprg(\asprg),\HHprg(\bsprg)}$
-            \item $\HHprg(\hrepeat{\asprg}) = \HHprg(\asprg)$
-            \item $\HHprg(\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}) = \HHtrm(\astrm)$
-        \end{enumerate}
-        For formulae as
-        
-        T in forall: comp, pred
-        minimum of T in forall parts of subformulas: quantifier, not and
-        forall, exists?
-        modalities: max $\tau$ in DDE and of formula
-    \end{definition}
-    %We need to use $\min$, since $\HH$ is a non-positive number. It is the biggest in absolute value.
+    \subsection{History Horizon}
+        \label{sec:history-horizon}
 
-    \begin{example}
-        \begin{equation*}
-            % FIXME: notation/syntax: ausgeklammertes forall in formulas
-            \dbox{\hupdate{\humod{x}{\xtau[-3]^2}};\hevolvein{\D{x}=\xtau+2x}{(x\geq 0)}}{\holdssince{T}{0\leq \xtau[s] \land \xtau[s]\leq\xtau[-5]}}
-        \end{equation*}
-        Hence the history horizon needs to be set to
-        \begin{equation*}
-            T=\max\set{\max\set{3,\tau},\max\set{0,5}}.
-        \end{equation*}
-    \end{example}
+        \begin{definition}[History Horizon]
+            The \emph{history horizon} is a function
+            \begin{equation*}
+                \HHfml\from \ddLformulas \to \R_{\leq 0}
+            \end{equation*}
+            which assigns to each \ddL formula the earliest point in time it references to. It limits the time interval of the state space $T\in$.
+            The history horizon depends on all occurences of $\xtau[s]$ and $\xtau[c]$ in the formula.
 
-    % TODO: feasible history horizon for a HP
-    \begin{lemma}
-        choosing the statespace according to history horizon of HP determines
-    \end{lemma}
+            It is defined inductively for formulas by:
+            \begin{enumerate}
+                \item $\HHfml(\holdssince{T}{\astrm\geq\bstrm}) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
+                \item $\HHfml(\holdssince{T}{p(\range{\istrm{1}}{\istrm{k}})}) = \max\set{\range{\HHtrm(\istrm{1})}{\HHtrm(\istrm{k})}}$
+                \item $\HHfml(\contextapp{C}{\asfml}) = $
+                \item $\HHfml(\lnot\asfml) = \HHfml(\asfml)$
+                \item $\HHfml(\asfml\land\bsfml) = \max\set{\HHfml(\asfml),\HHfml(\bsfml)}$
+                \item $\HHfml(\lforall{x}{\asfml}) = \HHfml(\asfml)$
+                \item $\HHfml(\lexists{x}{\asfml}) = \HHfml(\asfml)$
+                \item $\HHfml(\dbox{\asprg}{\asfml}) = \max\set{\HHprg(\asprg),\HHfml(\asfml)}$
+                \item $\HHfml(\ddiamond{\asprg}{\asfml}) = \max\set{\HHprg(\asprg),\HHfml(\asfml)}$
+            \end{enumerate}
+            depending on terms
+            \begin{enumerate}
+                \item $\HHtrm(\xtau[s]) = 0$
+                \item $\HHtrm(\Dxtau[s]) = 0$
+                \item $\HHtrm(\xtau[c]) = \abs{c}$
+                \item $\HHtrm(\Dxtau[c]) = \abs{c}$
+                \item $\HHtrm(c) = 0$
+                \item $\HHtrm(f(\range{\istrm{1}}{\istrm{k}})) = \max\set{\range{\HHtrm(\istrm{1})}{\HHtrm(\istrm{k})}}$
+                \item $\HHtrm(\astrm + \bstrm) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
+                \item $\HHtrm(\astrm \cdot \bstrm) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
+            \end{enumerate}
+            and \HPs
+            \begin{enumerate}
+                \item $\HHprg(a) = 0$
+                \item $\HHprg(\hupdate{\humod{x}{\astrm}}) = 0$
+                \item $\HHprg(\Dupdate{\Dumod{\D{x}}{\astrm}}) = 0$
+                \item $\HHprg(\htest{\asfmlfolR}) = 0$
+                \item $\HHprg(\hchoice{\asprg}{\bsprg}) = \max\set{\HHprg(\asprg),\HHprg(\bsprg)}$
+                % TODO: replace ; in HPs
+                \item $\HHprg(\asprg;\bsprg) = \max\set{\HHprg(\asprg),\HHprg(\bsprg)}$
+                \item $\HHprg(\hrepeat{\asprg}) = \HHprg(\asprg)$
+                \item $\HHprg(\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}) = \HHtrm(\astrm(-\tau))$
+            \end{enumerate}
+            For formulae as
+            
+            T in forall: comp, pred
+            minimum of T in forall parts of subformulas: quantifier, not and
+            forall, exists?
+            modalities: max $\tau$ in DDE and of formula
+        \end{definition}
+        %We need to use $\min$, since $\HH$ is a non-positive number. It is the biggest in absolute value.
+    
+    \subsection{Variable Binding}
+        \label{sec:variable-binding}
+
+        \begin{definition}[Free variable]
+            for terms: $\freevars{\astrm}\subseteq\allvars\cup\diffvars\cup\set{s}$, variables that occur in term
+            \begin{align*}
+                \freevars{\xtau[s]} &= \set{x,s}\\
+                \freevars{\Dxtau[s]} &= \set{\D{x},s}\\
+                \freevars{\xtau[b]} &= \set{x}\\
+                \freevars{\Dxtau[b]} &= \set{\D{x}}\\
+                \freevars{c} &= \emptyset\\
+                \freevars{f(\range{\istrm{1}}{\istrm{k}})} &= \freevars{\istrm{1}} \cup\cdots\cup \freevars{\istrm{k}}\\
+                \freevars{\astrm + \bstrm} = \freevars{\astrm \cdot \bstrm} &= \freevars{\astrm}\cup\freevars{\bstrm}\\
+                \freevars{\D{(\astrm)}} &= \freevars{\astrm}\cup\D{\freevars{\astrm}}
+            \end{align*}
+                
+        \end{definition}    
+
+    \subsection{Well-defined Formulae}
+        \label{sec:well-definedness}
+    
+        $s$ must not be free
+        and
+
+        \begin{definition}[Well-defined formula]
+            obeys syntactic definition
+            premisse defines element od statespace for all occuring variables and diffs
+        \end{definition}
+
+        \begin{example}
+            \begin{equation*}
+                % FIXME: notation/syntax: ausgeklammertes forall in formulas
+                \dbox{\hupdate{\humod{x}{\xtau[-3]^2}};\hevolvein{\D{x}=\xtau+2x}{(x\geq 0)}}{\holdssince{T}{0\leq \xtau[s] \land \xtau[s]\leq\xtau[-5]}}
+            \end{equation*}
+            Hence the history horizon needs to be set to
+            \begin{equation*}
+                T=\max\set{\max\set{3,\tau},\max\set{0,5}}.
+            \end{equation*}
+        \end{example}
+
+        % TODO: feasible history horizon for a HP
+        \begin{lemma}
+            choosing the statespace according to history horizon of HP determines
+        \end{lemma}
+
+        \begin{example}
+            
+        \end{example}

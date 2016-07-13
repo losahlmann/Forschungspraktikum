@@ -18,6 +18,8 @@
 \newcommand{\N}{\mathbb{N}}
 % real numbers
 \newcommand{\R}{\mathbb{R}}
+% rational numbers
+\newcommand{\Q}{\mathbb{Q}}
 % sets
 \DeclarePairedDelimiter{\braces}{\{}{\}} % \braces* uses \left\right, but without space before
 \renewcommand{\set}[1]{\braces*{#1}} % override def in malgebra.sty
@@ -61,6 +63,11 @@
 %
 % Differential Dynamic Logic
 %
+% hybrid programs
+\newcommand{\dHP}{\text{dHP}\xspace}%
+\newcommand{\dHPs}{\text{dHPs}\xspace}%
+%% redefine notation for HP
+\def\lprogramsname{\dHP}
 % ddL
 \newcommand{\ddL}{\textsf{dd{\kern-0.1em}$\mathcal{L}$ }}
 \newcommand{\ddLformulas}{\lformulasname_{\ddL}}
