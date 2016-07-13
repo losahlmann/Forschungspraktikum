@@ -310,7 +310,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             = \set{\asstate\in\states \with \holdssince{T}{\lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
             = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{\holdssince{T}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
             = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \holdssince{T}{\bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
-            = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\holdssince{T}{\asfml(s)}}}}
+            = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\holdssince{T}{\asfml(s)}}}}\\
             = \imodel{\IddL}{\dbox{\asprg}{(\holdssince{T}{\asfml(s)})}}
         \end{multline}
         since $\lforall{x}{p\limply q(x)}\equiv p\limply\lforall{x}{q(x)}$
