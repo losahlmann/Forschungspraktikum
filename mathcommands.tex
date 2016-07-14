@@ -23,7 +23,9 @@
 % sets
 \DeclarePairedDelimiter{\braces}{\{}{\}} % \braces* uses \left\right, but without space before
 \renewcommand{\set}[1]{\braces*{#1}} % override def in malgebra.sty
-% integer range
+% compact interval [#1,#2]
+\newcommand{\compactum}[2]{[#1,#2]}
+% range
 \newcommand{\range}[2]{#1,\ldots,#2}
 % functions: f\from\R\to\R
 \newcommand*{\from}{\colon}
@@ -45,12 +47,18 @@
 %
 % derivative: Lagrange style
 %\newcommand{\D}[1]{#1'} % ' defined in latex and is same as \prime
-% derivative: Leibniz style
-\renewcommand{\DD}[2]{\frac{\text{d} #1}{\text{d} #2}}
-% differential in integral
-\newcommand{\dx}[1][x]{\text{d}#1}
 
-\newcommand{\continuouspws}[3][]{\ensuremath{C^{#1}_\text{pw}\ifthenelse{\equal{#2}{}}{}{\ifthenelse{\equal{#3}{}}{(#2)}{(#2,#3)}}}}
+% Differential (upface d)
+\DeclareMathOperator{\dif}{d \!}
+
+% derivative: Leibniz style
+\renewcommand{\DD}[2]{\frac{\dif #1}{\dif #2}}
+% differential in integral
+\newcommand{\dx}[1][x]{\dif #1}
+
+\newcommand{\test}[2][]{test #1 #2}
+\newcommand{\Cn}[3][]{\ensuremath{C^{#1}\ifthenelse{\equal{#2}{}}{}{\ifthenelse{\equal{#3}{}}{(#2)}{(#2,#3)}}}}
+\newcommand{\Cnpw}[3][]{\ensuremath{C_\mathrm{pw}^{#1}\ifthenelse{\equal{#2}{}}{}{\ifthenelse{\equal{#3}{}}{(#2)}{(#2,#3)}}}}
 
 %
 % Delay Differential Equation
@@ -113,7 +121,7 @@
 \newcommand{\diffvars}{\D{\allvars}}
 \newcommand{\delayedvars}{\mathcal{V}_\tau}
 
-\newcommand{\statespace}[1][T]{\continuouspws[0]{\delayinterval[#1]}{\R^n}}
+\newcommand{\statespace}[1][T]{\Cnpw[0]{\delayinterval[#1]}{\R^n}}
 %\newcommand{\xtau}[1][]{\ifthenelse{\equal{#1}{}}{x[\tau]}{x[#1]}}
 \newcommand{\x}[1][]{x[#1]}
 \newcommand{\xtau}[1][-\tau]{x[#1]}
