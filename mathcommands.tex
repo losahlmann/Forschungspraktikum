@@ -29,6 +29,13 @@
 \newcommand{\range}[2]{#1,\ldots,#2}
 % functions: f\from\R\to\R
 \newcommand*{\from}{\colon}
+
+% quantifiers
+% FIXME: don't load lmeta.sty
+% FIXME: quantifiers http://tex.stackexchange.com/questions/115432/best-practice-for-typesetting-quantifiers
+\renewcommand{\mexists}[1]{\exists #1}
+\renewcommand{\mforall}[1]{\forall #1}
+
 % define as
 % FIXME: define "def" properly
 %\newcommand{\defeq}{\,\stackrel{\text{def}}{=}\,}
@@ -37,7 +44,7 @@
 % norm
 %\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
 \DeclarePairedDelimiter{\nnorm}{\lVert}{\rVert}
-\DeclarePairedDelimiter{\supnorm}{\lVert}{\rVert_{\text{\scriptsize{sup}}}}
+\DeclarePairedDelimiter{\supnorm}{\lVert}{\rVert_{\sup}}%{\mathrm{\scriptsize{sup}}}}
 
 % exponential function
 \newcommand{\e}[1]{\text{e}^{#1}}
@@ -67,6 +74,8 @@
 \newcommand{\deff}{\R\times\R^n\times\R^n}
 % trajectory
 \newcommand{\trajectory}[1][]{\gamma_{#1}}
+%
+\newcommand{\tzero}{\sigma}
 
 %
 % Differential Dynamic Logic
