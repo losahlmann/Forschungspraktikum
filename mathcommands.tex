@@ -33,9 +33,9 @@
 % quantifiers
 % FIXME: don't load lmeta.sty
 % FIXME: quantifiers http://tex.stackexchange.com/questions/115432/best-practice-for-typesetting-quantifiers
-\renewcommand{\mexists}[1]{\exists #1}
-\renewcommand{\mforall}[1]{\forall #1}
-
+\renewcommand{\mexists}[1]{\exists\mkern2mu #1}
+\renewcommand{\mforall}[1]{\forall\mkern2mu #1}
+\newcommand{\holds}{\colon}
 % define as
 % FIXME: define "def" properly
 %\newcommand{\defeq}{\,\stackrel{\text{def}}{=}\,}

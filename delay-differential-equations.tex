@@ -24,7 +24,7 @@
         \end{equation}
         as well as the right sided limits
         \begin{equation}
-            \lim_{\substack{t\downto t_{i}\\ t\in(t_i,t_{i+1})}} \D[k]{x}(t) = \D[k]{x}(t_i)
+            \lim_{\substack{t\downto t_{i}\\ t\in(t_i,t_{i+1})}} \D[k]{x}(t) =: \D[k]{x}(t_i)
         \end{equation}
         which are supposed to coincide with the value of $\D[k]{x}$ at $t_i$.
         Hence $x(b)$ can be an isolated point and this right interval limit $b$ is the only spot where such is allowed.
@@ -118,23 +118,30 @@
     \begin{definition}[Solution of DDE]\label{def:solution-dde}
         A function $x\from\compactum{\tzero-\tau}{\tzero+T}\to\R^n$ is called \emph{(local) solution} of the initial value problem~\eqref{eq:ivp}, if and only if
         %there exists a $T>0$ such that
-        $\restrict{x}{(\tzero,\tzero+T)}\in \Cn[1]{(\tzero,\tzero+T)}{\R^n}$ with
+        % FIXME: restrict to each subdivision interval, fullfills deriv there
+        % FIXME: and is continuous
+        % FIXME: local solution is on a single subdiv int only -> cont diffable
+        $\restrict{x}{(\tzero,\tzero+T)}\in \Cn[1]{\compactum{\tzero}{\tzero+T}}{\R^n}$ with
         \begin{equation*}
             \D{x}(t) = f(t,x(t),x(t-\tau))
         \end{equation*}
-        for all $t\in (\tzero,\tzero+T)$ and in $t=\tzero$, it holds for the right-hand derivative
+        for all $t\in (\tzero,\tzero+T)$ and in $t=\tzero$, it holds
+        % TODO: for the right-hand derivative?
         \begin{equation*}
-            \lim_{h\downto \tzero}\frac{x(h)-x(\tzero)}{h}=f(\tzero,x(\tzero),x(\tzero-\tau))
+            \lim_{s\downto \tzero}\D{x}(s)=f(\tzero,x(\tzero),x(\tzero-\tau))
         \end{equation*}
         and obeys the initial condition:
         \begin{equation*}
             x(t) = x_{\tzero}(t) \quad\text{for } t\in [\tzero-\tau,\tzero].
         \end{equation*}
+        % FIXME: global solution should allow knicks
         If the function $x$ is a solution for all $T>0$, it is called \emph{global}.
 
         %TODO: differentiable in right rand point? need not derivative in right hand point
         %TODO: Fortsetzbarkeit For example initial condition has jump, this point is limit for local solution.
     \end{definition}
+
+    
 
 % \begin{figure}[h]\centering
 %     \includegraphics[width=\textwidth]{figures/multiple.png}
@@ -193,6 +200,7 @@
 
     \begin{definition}[Lipschitz Continuity]\label{def:lipschitz}
         % similar to \cite{pruesswilke10GewDiffGl,Smith10IntroDDE}
+        % FIXME: dont I need xtau in right side ??? L(\nnorm*{x-x}+\nnorm*{y-y})
         A function $f\from\deff\to\R^n$ is called \emph{(locally) Lipschitz continuous} in its second argument if and only if for all $a,b\in\R$ and $M>0$ there is a $L>0$ such that
         \begin{equation}
             \nnorm{f(t,x,y) - f(t,\bar{x},y)} \leq L\nnorm{x - \bar{x}}
@@ -222,15 +230,29 @@
     \end{proof}
 
     \begin{lemma}\label{lm:integral-equation}
-        %TODO: solving dde equiv to solving integral equation??? (-\textgreater{} Lemma) and compare with ODE lecture notes
+        %TODO: compare with ODE lecture notes
         Finding a solution of the initial value problem~\eqref{eq:ivp} is equivalent to solving the integral equation
-        integral componentwise, f vector valued
-        \begin{equation}
-            x(t) = x_{\tzero}(\tzero) + \int_{\tzero}^t f(s,x(s),x(s-\tau))\dx[s]
+        \begin{equation}\label{eq:integral-equation}
+            \begin{cases}
+                x(t) = x_{\tzero}(\tzero) + \int_{\tzero}^t f(s,x(s),x(s-\tau))\dx[s] & \text{for } t\geq\tzero\\
+                x(t) = x_{\tzero}(t) & \text{for } t\in [\tzero-\tau,\tzero]
+            \end{cases}
         \end{equation}
+        where ... (same as for ivp)
         and is continuous in t.
+        integral componentwise, f vector valued
     \end{lemma}
     \begin{proof}
+        => x solution of DDE, ie pw cont, hence f(x) integrable
+
+        <= x solution of int eq
+        Let $x\from [\tzero-\tau,\tzero+T]$ be a solution of the integral equation~\eqref{eq:integral-equation}, i.e. $x(t)=x_{\tzero}(t)$ for all $t\in\compactum{\tzero-\tau}{\tzero}$ and $x(t) = x_{\tzero}(\tzero) + \int_{\tzero}^t f(s,x(s),x(s-\tau))\dx[s]$ for $t\in\compactum{\tzero}{\tzero+T}$ for a $T>0$.
+        HS -> continuous
+        since f cont, x cont -> integrand cont iff xtau cont
+        let t_0<...<tm be the subdivision of init cond
+        HS -> F diffbar on (t_i,t_{i+1}) with x'=F'=f()
+
+
         integrate from discontinuity of $\xbartaut{t}$ to discontinuity and proof stetige fortsetzbarkeit at these points
     \end{proof}
 
@@ -248,19 +270,22 @@
         % where $\nnorm{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\supnorm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
 
         Then for each \emph{initial condition} $x_{\tzero}\in\statespace[\tau]$ and start time $\tzero$, there \textbf{exists} a \textbf{unique local solution} of the IVP on a time interval $[\tzero-\tau, \tzero+T]$. The duration $T>0$ depends on the sup-norm and discontinuity points of the initial condition. (?)
+        This solution is continuous and differentiable on $\compactum{\tzero}{\tzero+T}$
     \end{theorem}
 
     The proof is smiliar to the proof of the existence theorem (Theorem 3.7) given in~\cite{Smith10IntroDDE}.
     \begin{proof}
+        % FIXME: where sup-norm?
         As a piecewise continuous function, the initial condition can bounded by $M\geq \supnorm{x_\tzero}$ on $\delayinterval[\tau]$.
         
+        % FIXME: do I need t_0+tau or is just \tau okay? do I need x not to be pw, just cont in proof?
         If $\set{\range{-\tau=t_0}{t_k=0}}$ is the subdivision of $x_{\tzero}$, we choose $T=\min\set{t_0+\tau,\frac{M}{K}}$.
         
         % FIXME: M or 2M?
         Let $K>0$ be the upper bound for $f$ from Lemma~\ref{lm:bounded-lipschitz} on the set $S=[\tzero,\tzero+T] \times \{x\in R^n: \nnorm{x}\leq 2M\}\times \{y\in R^n: \nnorm{y}\leq 2M\}$ and $L>0$ the Lipschitz constant of $f$ for that set.
 
-        % FIXME: why continuous? its pw cont?
-        We construct a series $(x_{(m)})_{m\in\N_0}$ of continuous(?) functions which approximates the solution.
+        % FIXME: why continuous? its pw cont? cont in tzero
+        We construct a series $(x_{(m)})_{m\in\N_0}$ of piecewise continuous functions which approximates the solution of the initial value problem.
         Set
         \begin{equation}
             x_{(0)}(t)= \begin{cases}
@@ -275,7 +300,7 @@
                 x_\tzero(t-\tzero) & t\in [\tzero-\tau,\tzero]
             \end{cases}
         \end{equation}
-        % FIXME: why exists integral?
+        % FIXME: why exists integral? f cont, x in int even cont
         Integral exists
         It holds for all $m>0$ and $t\in \compactum{\tzero-\tau}{\tzero}$ by definition of the series
         \begin{equation}
@@ -289,14 +314,17 @@
         \begin{equation}
             \nnorm{x_{(1)}(t)-x_{(0)}(t)} = \nnorm*{\int_\tzero^t f(s,x_{(0)}(s),x_{(0)}(s-\tau))\dx[s]} \leq K(t-\tzero)
         \end{equation}
-        Since for any $m>0$, it holds by the triangle inequality
+        In the inductive step we can apply
+        Since for any $m>0$, it holds by the triangle inequality and by the choice of $T$
         % FIXME: why x(m)(t) smaller than 2M, such that K holds?
-        \begin{align}
-            \nnorm*{x_{(m)}} &\leq \nnorm*{x_\tzero(0)} + \int_\tzero^t \nnorm*{f(s,x_{(m)}(s),x_{(m)}(s-\tau))}\dx[s]\\
+        % TODO: why do integral and norm commute? once integral over vectors, once over scalars
+        \begin{align}\label{eq:bounded-xm}
+            \nnorm*{x_{(m)}} &\leq \nnorm*{x_\tzero(0)} + \int_\tzero^t \nnorm*{f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau))}\dx[s]\\
             &\leq M + K(t-\tzero) \leq M+KT\\
             &\leq 2M
         \end{align}
-        In the inductive step we can apply the Lipschitz property of $f$
+        if $\nnorm{x_{(m-1)}(t)}\leq 2M$.
+        It follows by the Lipschitz property of $f$
         \begin{multline*}
             \nnorm*{x_{(m+1)}(t)-x_{(m)}(t)}=\\
             = \nnorm*{\int_\tzero^t f(s,x_{(m)}(s),x_{(m)}(s-\tau)) - f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau))\dx[s]}\\
@@ -304,29 +332,57 @@
             \leq \frac{L^m K}{m!} \int_\tzero^t (s-\tzero)^m\dx[s]
             = \frac{L^m K}{(m+1)!}(t-\tzero)^{m+1}
         \end{multline*}
-        We use this bound and the triangle inequality in
-        \begin{multline*}
-            \nnorm{x^{(m)}(t)-x^{(k)}(t)}\leq \nnorm*{x^{(m)}(t)-x^{(m-1)}(t)} + \nnorm*{x^{(m-1)}(t)-x^{(m-2)}(t)} +\ldots + \nnorm*{x^{(k+1)}(t)-x^{(k)}(t)}\\
-            \leq \frac{K}{L}\frac{L^m (t-\tzero)^m}{m!} + \frac{K}{L}\frac{L^{m-1} (t-\tzero)^{m-1}}{(m-1)!} +\ldots +\frac{K}{L}\frac{L^{k+1} (t-\tzero)^{k+1}}{(k+1)!}\\
-            \leq \frac{K}{L}\sum_{i=k+1}^\infty \frac{(LT)^i}{i!}
-        \end{multline*}
-        for any $k\in\N$ and $m\geq k$ and $t\in [\tzero,\tzero+T]$.
-        This is the tail of the convergent exponential series and hence it converges to zero for $k\rightarrow\infty$.
-        Since $x^{(m)}$ is continuous on $[\tzero,\tzero+T]$, this Cauchy sequence admits a limit $x$ in the Banach space $\continuouss[0]{[\tzero,\tzero+T]}{\R^n}$. Extend again to $[\tzero-\tau,\tzero]$ with $x_\tzero$, so $x\in\Cnpw[0]{[\tzero-\tau,\tzero]}{\R^n}$.
+        %We use this bound and the triangle inequality in
+        The Cauchy criterion for convergent series (\cite{Gathmann12GDM} 6.13, \cite{Rudin76PrinciplesAnalysis} 3.22) applied to the exponential series states that
+        \begin{equation*}
+            % "\ " needed for space
+            \mforall{\epsilon>0}\ \mexists{n_0\in\N_0}\ \mforall{m\geq k\geq n_0}\holds \sum_{i=k+1}^m \frac{(LT)^i}{i!} <\epsilon
+        \end{equation*}
+        So for any $\epsilon>0$ exist $k\in\N_0$ and $m\geq k$, such that
+        \begin{align*}
+            \nnorm*{x_{(m)}(t)-x_{(k)}(t)} \leq{} & \nnorm*{x_{(m)}(t)-x_{(m-1)}(t)} + \nnorm*{x_{(m-1)}(t)-x_{(m-2)}(t)} + {}\\
+            & + \ldots + \nnorm*{x^{(k+1)}(t)-x^{(k)}(t)}\\
+            \leq{} & \frac{K}{L}\frac{L^m (t-\tzero)^m}{m!} + \frac{K}{L}\frac{L^{m-1} (t-\tzero)^{m-1}}{(m-1)!} + {}\\
+            & + \ldots +\frac{K}{L}\frac{L^{k+1} (t-\tzero)^{k+1}}{(k+1)!}\\
+            \leq{} & \frac{K}{L}\sum_{i=k+1}^m \frac{(LT)^i}{i!} < \varepsilon
+        \end{align*}
+        for all $t\in [\tzero,\tzero+T]$, i.e. $x_{(m)}$ is a Cauchy sequence
+
+    
+        % FIXME: show that this a Cauchy series
+        %This is the tail of the convergent exponential series and hence it converges to zero for $k\to\infty$ (boundedness and positivity of summands, monotonicity crit).
+
+        % FIXME: why continuous? since integral exists
+        Since $x_{(m)}$ is continuous on $[\tzero,\tzero+T]$, this Cauchy
+        sequence admits a limit $x$ in the Banach space $\continuouss[0]{[\tzero,\tzero+T]}{\R^n}$ in terms of the supremum-norm.
+
+        Again, we extend $x$ to $[\tzero-\tau,\tzero]$ with $x_\tzero$, such that $x\in\Cnpw[0]{[\tzero-\tau,\tzero]}{\R^n}$.
 
 
-        Due to the uniform convergence of $x^(m)\rightarrow x$, we get uniform convergence of
-        \begin{equation}
-            f(s,x^{(m)}(s),x^{(m)}(s-\tau)) \rightarrow^{m\rightarrow\infty} f(s,x(s),x(s-\tau))
-        \end{equation}
+        
+
+        Since by the continuity of the supremum norm it follows from~\eqref{eq:bounded-xm} that
+        \begin{equation*}
+            \supnorm*{x}=\lim_{m\to\infty}\supnorm*{x_m}\leq 2M
+        \end{equation*}
+        can apply Lipschitz property of $f$
+        \begin{equation*}
+            \sup_{t\in\compactum{\tzero}{\tzero+T}}\nnorm*{f(s,x_m(s),x_m(s-\tau))-f(s,x(s),x(s-\tau))} \leq \sup_{t\in\compactum{\tzero}{\tzero+T}}\nnorm*{x_m(t)-x(t)}
+        \end{equation*}
+        Due to the uniform convergence (conv in sup-norm) of $x_{(m)}\to x$, we get the uniform convergence
+        \begin{equation*}
+            f(s,x_m(s),x_m(s-\tau)) \xrightarrow{m\to\infty} f(s,x(s),x(s-\tau))
+        \end{equation*}
         and hence the integral and the limit process swap and by
-        \begin{equation}
-            x(t) = \lim_{m\rightarrow\infty} x^{(m+1)} = x_\tzero(0) + \lim_{m\rightarrow\infty}\int_\tzero^t f(s,x^{(m)}(s),x^{(m)}(s-\tau))\dx[s] = \int_\tzero^t f(s,x(s),x(s-\tau))\dx[s]
-        \end{equation}
+        \begin{align*}
+            x(t) = \lim_{m\to\infty} x^{(m+1)} &= x_\tzero(0) + \lim_{m\to\infty}\int_\tzero^t f(s,x^{(m)}(s),x^{(m)}(s-\tau))\dx[s]\\
+            &= x_\tzero(0) + \int_\tzero^t f(s,x(s),x(s-\tau))\dx[s]
+        \end{align*}
         it follows that $x$ solves the integral equation.
-        This proofs the existence of a solution to the DDE. It remains to show uniqueness.
+        This proofs the existence of a solution to the DDE.
 
         % TODO: can one solution be on [\tzero, T_2] with T_2<T ?
+        It remains to show uniqueness.
         Let $x$ and $\bar{x}$ be two solutions of the DDE on $[\tzero,\tzero+T]$.
         By Lemma \ref{lemma-integral-equation} they are equivalent to solutions of the integral equations
         \begin{equation}
@@ -363,7 +419,13 @@
 % -> ex unique sol on [\tzero, t_1]
 % -> ex unique sol on [\tzero,\tau] (glob Lip of f on [tzero,tau])
 % -> ex unique sol on [\tzero,2\tau] (continuous?, diffable?)
-
+% show continuity and pw diffable (nth to show)
+    % \begin{lemma}[cont]\label{lm:c}
+    %     $x_1$ loc sol on $\compactum{\tzero-\tau}{\tzero+t_1}$ for init cond $x_{\tzero}$
+    %     $x_2$ and loc sol on $\compactum{\tzero+t_1-\tau}{\t_1+T}$ for init cond $x_1$
+    %     then $x_1(\tzero+t_1)=x_2(\tzero+t_1)$
+    %     follows from initial cond $x_1$
+    % \end{lemma}
 \begin{corollary}
     \label{cor:continuability-of-solution}
 
