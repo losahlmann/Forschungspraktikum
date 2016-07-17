@@ -39,17 +39,17 @@
         A \emph{piecewise continuous function}, as defined in Definition~\ref{def:pw-cont-diff} is (Riemann) integrable.
     \end{lemma}
     \begin{proof}
-        See standard analysis literature, such as \cite{Rudin76PrinciplesAnalysis} or \cite{Gathmann12GDM}.
+        See standard analysis literature, such as \cite{Rudin76PrinciplesAnalysis} () or \cite{Gathmann12GDM} (Example 11.16b).
         % ObdA: one subint with jump at end
     \end{proof}
 
     The following lemma generalizes the fundamental theorem of calculus to piecewise continuous derivatives.
 
     \begin{lemma}[]\label{lm:pc-hauptsatz}
-        Let $F\in\Cn[0]{\compactum{a}{b}}{}\cap\Cnpw[1]{\compactum{a}{b}}{}$ on the subdivision $\set{\range{t_0=a}{t_m=b}}$ of $\compactum{a}{b}\subset\R$.
+        Let $F\in\Cn[0]{\compactum{a}{b}}{} \cap \Cnpw[1]{\compactum{a}{b}}{}$ on the subdivision $\subdivision{a=t_0}{t_m=b}$ of $\compactum{a}{b}\subset\R$.
         For all $s\in\compactum{a}{b}$ it holds
         \begin{equation*}
-            F(s)-F(a) = \sum_{i=0}^k\int_{t_i}^{t_{i+1}}f(t)\dx[t] + \int_{t_k}^s f(t)\dx[t]
+            F(s)-F(a) = \sum_{i=0}^k\int\limits_{t_i}^{t_{i+1}}f(t)\dx[t] + \int\limits_{t_k}^s f(t)\dx[t]
         \end{equation*}
         where $t_k\leq s < t_{k+1}$.
         % FIXME: what about a=-inf or b=inf?
@@ -57,16 +57,16 @@
     \begin{proof}
         On each interval $\compactum{t_i}{t_{i+1}}$ of the subdivision, $F$ is continuously differentiable. Hence, by the the fundamental theorem of calculus (cf. standard analysis literature, e.g. \cite{Gathmann12GDM,Rudin76PrinciplesAnalysis}) it follows for all $i=\range{0}{m-1}$:
         \begin{equation*}
-            F(t_{i+1})-F(t_i) = \int_{t_i}^{t_{i+1}}\D{F}(t)\dx[t]
+            F(t_{i+1})-F(t_i) = \int\limits_{t_i}^{t_{i+1}}\D{F}(t)\dx[t]
         \end{equation*}
         and
         \begin{equation*}
-            F(s)-F(t_k) = \int_{t_k}^{s}\D{F}(t)\dx[t]
+            F(s)-F(t_k) = \int\limits_{t_k}^{s}\D{F}(t)\dx[t]
         \end{equation*}
         % TODO: by continuity, F(t_i)=F(t_i)
         Summation over $i=\range{0}{k}$ gives the ... as a telescope sum (since $F$ continuous on $\compactum{a}{b}$)
         \begin{equation*}
-            F(s)-F(a) = \sum_{i=0}^k\int_{t_i}^{t_{i+1}}f(t)\dx[t] + \int_{t_k}^s f(t)\dx[t]
+            F(s)-F(a) = \sum_{i=0}^k\int\limits_{t_i}^{t_{i+1}}f(t)\dx[t] + \int\limits_{t_k}^s f(t)\dx[t]
         \end{equation*}
     \end{proof}
 
@@ -200,11 +200,12 @@
 
     \begin{definition}[Lipschitz Continuity]\label{def:lipschitz}
         % similar to \cite{pruesswilke10GewDiffGl,Smith10IntroDDE}
-        % FIXME: dont I need xtau in right side ??? L(\nnorm*{x-x}+\nnorm*{y-y})
+        % FIXME: dont I need xtau in right side ??? 
         A function $f\from\deff\to\R^n$ is called \emph{(locally) Lipschitz continuous} in its second argument if and only if for all $a,b\in\R$ and $M>0$ there is a $L>0$ such that
-        \begin{equation}
-            \nnorm{f(t,x,y) - f(t,\bar{x},y)} \leq L\nnorm{x - \bar{x}}
-        \end{equation}
+        \begin{equation*}
+            % TODO: is L(\nnorm*{x-x}+\nnorm*{y-y}) better? is equiv, with different L
+            \nnorm*{f(t,x,y) - f(t,\bar{x},y)} \leq L\max\left\{\nnorm*{x - \bar{x}},\nnorm*{y - \bar{y}}\right\}
+        \end{equation*}
         for all $t\in [a,b]$ and $x,\bar{x},y\in\R^n$ with $\nnorm{x},\nnorm{\bar{x}},\nnorm{y}\leq M$.
     \end{definition}
 
@@ -243,14 +244,27 @@
         integral componentwise, f vector valued
     \end{lemma}
     \begin{proof}
-        => x solution of DDE, ie pw cont, hence f(x) integrable
+        Let $x$ be a solution of the IVP. Thus $x$ is (by definition) continuous on $\compactum{\tzero}{\tzero+T}$ and piecewise continuous on $\compactum{\tzero-\tau}{\tzero}$. This means that the chain $f(t,x(t),x(t-\tau))$ is piecewise continuous and hence integrable on $\compactum{\tzero}{\tzero+T}$. Furthermore, $x$ is (by definition) piecewise differentiable.
+        The fundamental theorem of calculus states
+        \begin{equation*}
+            x(t) = x_{\tzero}(\tzero) + \int_{\tzero}^t f(s,x(s),x(s-\tau))\dx[s]
+        \end{equation*}
+        for $t\geq\tzero$.
 
-        <= x solution of int eq
-        Let $x\from [\tzero-\tau,\tzero+T]$ be a solution of the integral equation~\eqref{eq:integral-equation}, i.e. $x(t)=x_{\tzero}(t)$ for all $t\in\compactum{\tzero-\tau}{\tzero}$ and $x(t) = x_{\tzero}(\tzero) + \int_{\tzero}^t f(s,x(s),x(s-\tau))\dx[s]$ for $t\in\compactum{\tzero}{\tzero+T}$ for a $T>0$.
+        Conversely, let $x\from [\tzero-\tau,\tzero+T]$ be a solution of the integral equation~\eqref{eq:integral-equation}, i.e. $x(t)=x_{\tzero}(t)$ for all $t\in\compactum{\tzero-\tau}{\tzero}$ and $x(t) = x_{\tzero}(\tzero) + \int_{\tzero}^t f(s,x(s),x(s-\tau))\dx[s] =: F(t)$ for $t\in\compactum{\tzero}{\tzero+T}$ for a $T>0$.
         HS -> continuous
-        since f cont, x cont -> integrand cont iff xtau cont
-        let t_0<...<tm be the subdivision of init cond
-        HS -> F diffbar on (t_i,t_{i+1}) with x'=F'=f()
+        % FIXME: f cont uberall in Voraussetzung?
+        Since $f$ is by the precondition continuous, x cont -> integrand cont iff xtau cont
+        Let $\set{t_0-\tau < \ldots < t_m-\tau}$ be the subdivision of the initial condition $\x_{\tzero}\in\statespace$.
+        Since $f$ is integrable on and continuous on ..., the fundamental theorem of calculus states the differntiability of F on $(t_i,t_{i+1})$ with
+        \begin{equation}
+            x'=F'=f()
+        \end{equation}
+        % FIXME: t_i is jumppoint of init cond, can be x_sigma or x
+        show $\D{F}$ is continuable in jump point $t_i$
+        $\lim_{t\downto t_i}\D{F}(t)=\lim_{t\downto t_i}f(t,x(t),x(t-\tau))=f(t_i,x(t_i),x(t_i-\tau))$ by continuity of $f$, $x|(t_i,t_{i+1})$ and def of pw cont $x|(t_i-\tau,t_{i+1}-\tau)$
+        same way: limit exists for $t\upto t_{i+1}$
+
 
 
         integrate from discontinuity of $\xbartaut{t}$ to discontinuity and proof stetige fortsetzbarkeit at these points
@@ -378,37 +392,38 @@
             x(t) = \lim_{m\to\infty} x^{(m+1)} &= x_\tzero(0) + \lim_{m\to\infty}\int_\tzero^t f(s,x^{(m)}(s),x^{(m)}(s-\tau))\dx[s]\\
             &= x_\tzero(0) + \int_\tzero^t f(s,x(s),x(s-\tau))\dx[s]
         \end{align*}
-        it follows that $x$ solves the integral equation.
-        This proofs the existence of a solution to the DDE.
+        it follows that $x$ solves the integral equation and hence, by Lemma~\ref{lm:integral-equation},
+        this proves the existence of a solution to the DDE.
 
         % TODO: can one solution be on [\tzero, T_2] with T_2<T ?
         It remains to show uniqueness.
         Let $x$ and $\bar{x}$ be two solutions of the DDE on $[\tzero,\tzero+T]$.
-        By Lemma \ref{lemma-integral-equation} they are equivalent to solutions of the integral equations
+        By Lemma \ref{lm:integral-equation} they are equivalent to solutions of the integral equations
         \begin{equation}
-            x(t) = x_\tzero + \int_\tzero^t f(s,x(s,\xtau{s}))\dx[s]
+            x(t) = x_\tzero(0) + \int_\tzero^t f(s,x(s),x(s-\tau))\dx[s]
         \end{equation}
         and
         \begin{equation}
-            \bar{x}(t) = x_\tzero + \int_\tzero^t f(s,\bar{x}(s,x_0{\tzero-s}))\dx[s]
+            \bar{x}(t) = x_\tzero(0) + \int_\tzero^t f(s,\bar{x}(s),\bar{x}(s-\tau))\dx[s]
         \end{equation}
-
         For $t\in [\tzero,T]$, we set
         \begin{align*}
-            \rho(t) &= \nnorm{x(t)-\bar{x}(t)} \leq \int_\tzero^t \nnorm{f()-f()}\dx[s]\\
-            & \leq L \int_\tzero^t \nnorm{x(s)-\bar{x}(s)}\dx[s] = L \int_\tzero^t \rho(s)\dx(s)\\
-            & L \int_\tzero^t \e{-\alpha s}\rho(s)\e{\alpha s}\dx[s] \leq L \sup_{s\in [\tzero,T]}(\e{-\alpha s}\rho(s))\int_\tzero^t \e{\alpha s}\dx[s]\\
-            & \leq\frac{L}{\alpha}\e{\alpha s} \sup_{s\in [\tzero,T]}(\e{-\alpha s}\rho(s))
+            \rho(t) &:= \nnorm*{x(t)-\bar{x}(t)} \leq \int_\tzero^t \nnorm*{f(s,x(s),x(s-\tau))-f(s,\bar{x}(s),\bar{x}(s-\tau))}\dx[s]\\
+            & \leq L \int_\tzero^t \nnorm*{x(s)-\bar{x}(s)}\dx[s] = L \int_\tzero^t \rho(s)\dx(s)\\
+            &= L \int_\tzero^t \e{-\alpha s}\rho(s)\e{\alpha s}\dx[s] \leq L \sup_{s\in [\tzero,\tzero+T]}\left(\e{-\alpha s}\rho(s)\right)\int_\tzero^t \e{\alpha s}\dx[s]\\
+            & \leq\frac{L}{\alpha}\e{\alpha t} \sup_{s\in [\tzero,\tzero+T]}\left(\e{-\alpha s}\rho(s)\right)
         \end{align*}
+        with $L$ the Lipschitz constant of $f$ on the set ...
+        and $\rho$ is continuous, since $x$ continuous
         Choosing $\alpha=2L$ and multiplying with $\e{-\alpha t}>0$ leads to
         \begin{equation}
-            \rho(t)\e{-2Lt} \leq \frac{1}{2}\sup_{s\in [\tzero,T]}(\e{-\alpha s}\rho(s))
+            \rho(t)\e{-2Lt} \leq \frac{1}{2}\sup_{s\in [\tzero,\tzero+T]}\left(\e{-2L s}\rho(s)\right)
         \end{equation}
-        for all $t\in [\tzero,T]$
+        for all $t\in [\tzero,\tzero+T]$
         \begin{equation}
-            0 \leq sup_{t\in [\tzero,T]}(\rho(t)\e{-2Lt}) \leq \frac{1}{2}\sup_{s\in [\tzero,T]}(\e{-\alpha s}\rho(s))
+            0 \leq \sup_{t\in [\tzero,\tzero+T]}\left(\rho(t)\e{-2Lt}\right) \leq \frac{1}{2}\sup_{s\in [\tzero,\tzero+T]}\left(\e{-2L s}\rho(s)\right)
         \end{equation}
-        and hence $\rho(t)=0$ for all $t\in [\tzero,T]$, which means $x(t)=\bar{x}(t)$.
+        That is only possible if $\rho(t)=0$ for all $t\in [\tzero,\tzero+T]$, which means $x(t)=\bar{x}(t)$.
 
         % TODO: still needed?
         just proof existence/uniqueness on each peace of continuity proof continuity at knots with Lemma of integral equ
@@ -492,4 +507,3 @@ has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can comp
 	\label{fig:not-allowed}
 \end{figure}
 
-\section{Definition}\label{definition}
