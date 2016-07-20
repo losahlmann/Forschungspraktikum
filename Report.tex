@@ -260,6 +260,20 @@
 
     \end{calculus}
 
+    \subsection{Differential Axioms}
+        \label{sec:differential-axioms}
+    
+        \begin{calculus}
+            \cinferenceRule[DI|DI]{differential invariant}{
+                \linferenceRule[lpmi]{
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}
+                }{
+                    \left(\ivr\limply\asfml\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\asfml)}}\right)
+                }
+            }{}
+        
+        \end{calculus}
+
     % TODO: proofs, do not change, since only mention states?
     \begin{theorem}[Soundness of \dL]
         \label{thm:dL-soundness}
@@ -271,6 +285,13 @@
         Exceptions: [:=] (->substitution lemma), ['] (-> new PL)
 
         [\&]???
+        DI: 
+        Without loss of generality restrict to case of invariants of form $\asfml\equiv(g(x)\geq 0)$. Then $\D{(\asfml)}\equiv(\D{(g(x))}\geq 0)$
+        Consider a $\asstate\in\states$ with $\asstate\in\imodel{\IddL}{A}$. We need to distinguish two cases. If $\asstate\notin\imodel{\IddL}{\ivr}$, then their is no solution of the DDE and hence $\asstate\in\imodel{\IddL}{B}$ vacuously.
+
+        If $\asstate\notin\imodel{\IddL}{\ivr}$, then $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\asfml)}}}$. Let $\gamma$ be the trajectory of the solution of the DDE for some time $r\geq 0$.
+        If $r=0$
+        If $r>0$
     \end{proof}
 
     \subsection{Box-Assignment Axiom}

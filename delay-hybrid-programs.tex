@@ -22,7 +22,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     The syntax of \ddL terms, formulae as well as of \dHPs is defined inductively by a grammar in Backus-Naur-form (BNF).
 
     Let $\allvars$ be the set of \emph{all variables} and $\diffvars\defeq\{\D{x} \with x\in\allvars\}$ the corresponding set of \emph{differential symbols}.
-    %and set of \emph{delayed variables} $\delayedvars\defeq\{\xtau \with x\in\allvars\}$
+    Let $\constants$ be the set of \emph{all constants}. We denote $\delayvars\defeq\{\xtau[c] \with x\in\allvars, c\in\constants\}$ the set of \emph{delayed variables} and $\diffvars\times\constants\defeq\{\Dxtau[c] \with \D{x}\in\diffvars, c\in\constants\}$ the set of \emph{delayed differentials}.
 
     We will usually denote variables by $x,y,z\in\allvars$ and their differential symbols by $\D{x},\D{y},\D{z}\in\diffvars$.
 
@@ -32,7 +32,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     %program constants $ $, may be in $\rationals$
 
     \begin{definition}[Terms]\label{def:syntax-terms}
-        \emph{Terms} are defined by the following grammar, extending \dL with symbols for \emph{delayed variables}:
+        \emph{Terms} are defined by the following grammar, extending \dL with symbols for \emph{delayed variables} and \emph{differentials}:
         \begin{equation*}
             \astrm,\bstrm \Coloneqq
                 \xtau[s] \mid
@@ -47,13 +47,18 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 % FIXME: is term' allowed? diff inv is only a FOLR formula? even for dL valid?
                 \D{(\astrm)}
         \end{equation*}
+        % TODO: line breaks and explination text in syntax
+        % \begin{align}
+        %     \astrm\Coloneqq{}&\\
+        %     &\mid \astrm+\bstrm\hfill\text{test}
+        % \end{align}
         where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
-        The symbol $c$ defines a rational number constant and $b\in\Q_{\leq 0}$.
+        The symbol $c\in\constants$ defines a rational number constant and $b\in\Q_{\leq 0}$.
         All terms implicitely depend on a time parameter $s\in\R_{\leq 0}$, written as $\astrm(s)$. When $s=0$ we abbreviate the notation to $\astrm$.
-        The variable symbol $x$ and the differential symbol $\D{x}$ are the only which allow explicitely mentioning this parameter. It is spelled slightly differently as $\xtau[s]$ and $\Dxtau[s]$, respectively. Note that $s\notin\allvars\cup\diffvars$. It is a special variable.
-        Again, for $\xtau[0]$ we write $x$ and $\D{x}$ for $\Dxtau[0]$.
-        Writing $\astrm(-\tau)$ means that all occurences of $s$ in $\astrm$ have been replaced with $-\tau$.
+        The variable symbol $x$ and the differential symbol $\D{x}$ are the only ones which allow explicitely mentioning this parameter. They are spelled slightly differently using square brackets as $\xtau[s]$ and $\Dxtau[s]$, respectively. Note that $s\notin\allvars\cup\diffvars\cup\constants$. It is a special variable.
+        In particular, for $\xtau[0]$ we write $x$ and $\D{x}$ for $\Dxtau[0]$.
 
+        Writing $\astrm(-\tau)$ means that all occurences of $s$ in $\astrm$ have been replaced with $-\tau$.
         parameter is inherited
 
         % TODO: subtraction and division in terms
@@ -66,7 +71,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \begin{equation}
             \astrm(s) = \underbrace{\xtau[s]}_{\text{var}} + \underbrace{\xtau}_{\text{const}}.
         \end{equation}
-        Setting $s=-1$ leads to
+        Setting $s=-1$ gives the term
         \begin{equation}
             \astrm(-1) = \xtau[-1] + \xtau.
         \end{equation}
@@ -80,6 +85,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \begin{equation*}
             \asprg, \bsprg \Coloneqq
                 a \mid
+                % FIXME: do I need theta(0), or can I later just say, s not free in theta ?
                 \hupdate{\humod{x}{\astrm(0)}} \mid
                 \Dupdate{\Dumod{\D{x}}{\astrm(0)}} \mid
                 \htest{\asfmlfolR} \mid
@@ -89,6 +95,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 \hrepeat{\asprg} \mid
                 \hevolvein{\D{x}=\astrm(-\tau)}{\ivr}
         \end{equation*}
+        % TODO: ddes with mult const delay
         % TODO: program constant
         where $\asprg, \bsprg$ denote \dHPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\xtau$) and $\ausprg$ a program constant.
         The formula $\asfmlfolR$ is of first-order logic of real arithmetic \FOLR$(\allvars)$, containing only normal variable symbols $\allvars$.
@@ -96,7 +103,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         Syntax only allows autonomous DDEs.
     \end{definition}
 
-    % TODO: FOLR is subset of ddL formulae
+    
 
     The difference between classical \HPs (in the sense of ...) and \dHPs is not syntactically, but only given by their semantics.
 
@@ -144,6 +151,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         The symbol $T$ is a symbolic constant related to the history duration induced by the occurence of a delay-differnetial equation. Its value is set by proof rules.
     \end{definition}
 
+    % TODO: FOLR is subset of ddL formulae
     \FOLR formulae are a subset of \ddL.
 
     When terms do not depend on quantified parameter, can omit writing down forall in formula
@@ -151,7 +159,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 \section{Dynamic Semantics}
     \label{sec:dynamic-semantics}
 
-    Following the remark to the solution of a DDE (cf. Section \ref{sec:definition-of-solution}), we augment the \emph{state space} in \dL to $\statespace$, the set of piecewise continuous functions on $\delayinterval$ (its support), as defined in Definition \ref{def:piecewise-continuous}.
+    % TODO: state space pw diffable
+    Following the remark to the solution of a DDE (cf. Section \ref{sec:definition-of-solution}), we define the \emph{state space} in \ddL to $\statespace$, the set of piecewise continuous functions on $\delayinterval$, as defined in Definition~\ref{def:piecewise-continuous}.
 
     This means that a variable remembers a limited part of its evolution history, what demands hence an implicit notion of a underlying time.
 
@@ -177,14 +186,16 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\ivaluation{\IddL}{\xtau[s]} = \asstate(x)(s)$ for a variable $x\in\allvars$
             % FIXME: need Cpw for derivatives or only \R?
             \item $\ivaluation{\IddL}{\Dxtau[s]} = \asstate(\D{x})(s)$ for a differential symbol $\D{x}\in\diffvars$
-            \item $\ivaluation{\IddL}{c} = \interpret[c]$ for a constant $c$
+            \item $\ivaluation{\IddL}{\xtau[b]} = \asstate(x)(b)$ for a variable $x\in\allvars$ and a constant $b\in\constants$ with $\interpret[b]\in\Q_{\leq 0}$
+            \item $\ivaluation{\IddL}{\Dxtau[b]} = \asstate(\D{x})(b)$ for a differential symbol $\D{x}\in\diffvars$ and a constant $b\in\constants$ with $\interpret[b]\in\Q_{\leq 0}$
+            \item $\ivaluation{\IddL}{c} = \interpret[c]$ for a constant $c\in\constants$
             \item $\ivaluation{\IddL}{f(\range{\istrm{1}}{\istrm{k}})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}}}{\ivaluation{\IddL}{\istrm{k}}})$ for a function symbol $f$
             \item $\ivaluation{\IddL}{\astrm+\bstrm} = \ivaluation{\IddL}{\astrm} + \ivaluation{\IddL}{\bstrm}$
             \item $\ivaluation{\IddL}{\astrm\cdot\bstrm} = \ivaluation{\IddL}{\astrm} \cdot \ivaluation{\IddL}{\bstrm}$
             % FIXME: derivation of terms with x'?
-            \item $\ivaluation{\IddL}{\D{(\astrm)}}(s) = \displaystyle\sum_{x\in\allvars} \asstate(\D{x})(s)\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial x}(s)$
+            \item $\ivaluation{\IddL}{\D{(\astrm)}} = \displaystyle\sum_{c\in\constants\cup\set{s}} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial \xtau[c]}$
         \end{enumerate}
-        where $s\in [-T,0]$.
+        %where $s\in [-T,0]$.
         The  syntactic (total) derivation, defined in \ref{def:derivation}, gives new term
     \end{definition}
         % TODO: mention 'interpretation' for semantics.
@@ -233,18 +244,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     initial value $\asstate(\D{x})$ may not be compatible with derivative
     final values coincide
 
-    
-
-    \begin{lemma}[Differential Lemma]
-
-    \end{lemma}
-
     In the precondition, no values are associated to the differential symbols. In general, the initial function is only piecewise continuous.
     Since for later time instances, the values of the differential symbols derive from the DDE, they become (locally) smooth function.
-
-    
-
-    When we write $x$ we mean $x(t)$.
 
     \begin{definition}[Semantics of \ddL formulae]\label{def:semantic-formulae}
         The semantics of a \ddL formula $\asfml$ is the subset of all states $\imodel{\IddL}{\asfml}\subseteq\states$ in which $\asfml$ is true. This set is given inductively by
@@ -269,7 +270,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\imodel{\IddL}{\dbox{\asprg}{\asfml}} = \{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml} \text{ for all $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}\}$, i.e. $\{\asstate\in\states \with \lforall{\bsstate\in\states}{((\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml})}\}$
             \item $\imodel{\IddL}{\ddiamond{\asprg}{\asfml}} = \{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml} \text{ for some $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}\}$, i.e. $\{\asstate\in\states \with \lexists{\bsstate\in\states}{((\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \land \bsstate\in\imodel{\IddL}{\asfml})}\}$
         \end{enumerate}
-        That formula $\asfml$ is true in state $\asstate$ under interpretation $\interpret$ can also be written as $\interpret,\asstate\models\asfml$. The formula is called valid, written as $\models\asfml$, iff $\asfml$ is true in all states under all interpretations.
+        The fact that formula $\asfml$ is true in state $\asstate$ under the interpretation $\interpret$, i.e. $\asstate\in\imodel{\IddL}{\asfml}$ can also be written as $\imodels{\IddL}{\asfml}$.
+        A formula $\asfml$ is called valid, written as $\models\asfml$, if and only if $\asfml$ is true in all states under all interpretations.
     \end{definition}
 
     interpretation of predicate symbol, arity n: relation $I(p)\subseteq\R^n$
@@ -286,25 +288,28 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     $\dbox{}{}$ and $\ddiamond{}{}$ only refer to last state and not intermediate states, as \dTL does.
 
+    % TODO: Move to static semantics
     If no dependance on $s$ in terms, $\holdssince{T}{}$ can be dropped in formula.
 
     \begin{example}
-        \begin{equation}
-            \holdssince{T}{x+\xtau[s]\geq 0}\\
-            \holdssince{T}{x+\xtau\geq 0} 
-        \end{equation}
-        can be dropped in second
+        Consider the two well-formed \ddL formulae:
+        \begin{align*}
+            &\holdssince{T}{x+\xtau[s]\geq 0}\\
+            &\holdssince{T}{x+\xtau\geq 0} 
+        \end{align*}
+        The quantification over $s$ in the second formula can be dropped.
     \end{example}
 
     % TODO: do we accept that or restrict formula after modality to not having $s$ free? then, since s\notin\asprg commutes also for diamond
     \begin{lemma}
-        box and forall-s commute
-        \begin{equation}
+        The box modality and the quantification over $s$ commute
+        \begin{equation*}
             \imodel{\IddL}{\holdssince{T}{\dbox{\asprg}{\asfml(s)}}} = \imodel{\IddL}{\dbox{\asprg}{(\holdssince{T}{\asfml(s)})}}
-        \end{equation}
+        \end{equation*}
     \end{lemma}
     \begin{proof}
-        \begin{multline}
+        Since $\lforall{x}{p\limply q(x)}\equiv p\limply\lforall{x}{q(x)}$, it holds
+        \begin{multline*}
             % FIXME: use \set instead of {}
             \imodel{\IddL}{\holdssince{T}{\dbox{\asprg}{\asfml(s)}}}\\
             = \set{\asstate\in\states \with \holdssince{T}{\lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
@@ -312,10 +317,10 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \holdssince{T}{\bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
             = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\holdssince{T}{\asfml(s)}}}}\\
             = \imodel{\IddL}{\dbox{\asprg}{(\holdssince{T}{\asfml(s)})}}
-        \end{multline}
-        since $\lforall{x}{p\limply q(x)}\equiv p\limply\lforall{x}{q(x)}$
+        \end{multline*}
     \end{proof}
-    However
+    
+    However, the diamond modality does not commute with the s-quantification.
     % TODO: is this a problem? or okay?
     \begin{equation}
         \imodel{\IddL}{\holdssince{T}{\ddiamond{\asprg}{\asfml(s)}}} \neq \imodel{\IddL}{\ddiamond{\asprg}{(\holdssince{T}{\asfml(s)})}}
@@ -347,7 +352,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}} = \{
                 (\asstate,\bsstate) \with
                 \lforall{\zeta\in[0,r]}{\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm(-\tau)}\land\ivr}}$
-                and $\asstate=\trajectory(0)$ on $\scomplement{\{\D{x}\}}$ and $\bsstate=\trajectory(r)\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(0) \defeq \DD{\trajectory(t)(x)(0)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\theta}$
+                and $\asstate=\trajectory(0)$ on $\scomplement{\{\D{x}\}}$ and $\bsstate=\trajectory(r)\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\theta}(s)$ (?) for all $s\in(-\min\{\zeta,T\},0]$
         \end{enumerate}
     \end{definition}
 
@@ -371,12 +376,88 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     Remember that a $\xtau$ mentioned in $\theta$ here means $\varphi(t)(x)(-\tau)$.
     And so needs $\ivr$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
 
-    \begin{lemma}[Differential Lemma]
+    \begin{definition}\label{def:termvars}
+        define
+        \begin{equation*}
+            % FIXME: another symbol for defeq
+            % TODO: what if x'[] in term ?
+            \constants[\astrm] \defeq \set{c\in\constants \with \mexists{\xtau[c]\in\delayvars}\holds\xtau[c]\in\astrm}
+        \end{equation*}
+        does not contain $s$, since not in $\constants$
+        Since a term only depends on a finite number of atomic terms for a fixed s
+        can see valuation as a mapping from values of these symbols to reals
+        instead of from functional space
+        $\augtrajectory[s]{\astrm}\from\compactum{0}{r}\to\R^{\abs{\delayvars[\astrm]}}$
+        \begin{equation*}
+            \augtrajectory[s]{\astrm}(t) \defeq \colvec{\trajectory(t)(x)(c_1)\\ \vdots\\ \trajectory(t)(x)(c_n)}
+        \end{equation*}
+    \end{definition}
+    % TODO: alternatively, could maybe have \trajectory Fréchet-diffable
+
+    for formula not possible, since it depends possibly on infinitely many different values for s
+
+    \begin{lemma}[Differential Lemma]\label{lm:differential-lemma}
         lecture notes L10.20
         needed for DI proof
         no changes, except for rewriting $\varphi(t)(x)\rightarrow\varphi(t)(x)(0)$
+        [eta] is diffable with d/dt[eta]=[(eta)']
     \end{lemma}
+    \begin{proof}
+        % TODO: what if x'[] in term ?
+        % TODO: in init cond: x and x' need to match, ie d/ds x[s] = x'[s], same subdivision, specification of x' in init cond only needed when referenced to it later
+        % FIXME: oBdA: t_0=0
+        Let $\trajectory\from\compactum{0}{r}$
+        % FIXME: new statespace C^1_pw
+        and $\subdivision{-T=t_0}{t_m=0}$ the subdivision of $\trajectory(0)(x)\in\statespace$.
+        We show that value of a term is piecewise differentiable with subdivision $\mathcal{Z}$.
 
+        Let $s\in\compactum{-T}{0}$ beliebig aber fest. Means $s$ is in the following a constant, like $c$.
+        Let $\mathcal{Z}_\bstrm^s=\subdivision{\hat{t}_0}{\hat{t}_k}$ be the subdivision of the term $\bstrm$
+        is subdivision of $\compactum{0}{r}$
+        % FIXME: what when r>T ? Z={0,r}
+        \begin{equation*}
+            \mathcal{Z}_\bstrm^s := \set{0,r}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in\constants[\astrm]\cup\set{s}\\ t_i\geq c}}\set{t_i-c}
+        \end{equation*}
+        where $\constants[\bstrm]$ is the set of constant symbols (or their interpretations/valuations) appeaering in the term $\bstrm$, as defined in Definition~\ref{def:termvars}.
+        This set is finite and non-empty, since it contains at least $0$ and $r$.
+        On each $\zeta\in(\hat{t}_k,\hat{t}_{k+1})$ is each $\ivaluation{\iconcat[state={\trajectory(\zeta)},assign=s]{\IddL}}{\xtau[c]}$ diffable in $\zeta$
+
+        f in terms smooth, hence each term on this open interval diffable
+
+        along sol of DDE: $\trajectory(\zeta)(\D{x})(c) = \DD{\trajectory(t)(x)(c)}{t}(\zeta)$, ie iff $\zeta+c\geq 0$, when $\zeta+c\geq 0$ init cond
+
+        \begin{align*}
+            \DD{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{t}(\zeta)
+                &= \D{\left(\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}\compose\augtrajectory[s]{\bstrm}(\zeta)\right)} = \gradient{\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}}(\augtrajectory[s]{\bstrm}(\zeta))\cdot\DD{\augtrajectory[s]{\bstrm}(\zeta)}{t}\\
+            &= \sum_{\xtau[c]\in\delayvarss}\DD{\trajectory(t)(\xtau[c])(s)}{t}(\zeta) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
+            &= \sum_{\xtau[c]\in\delayvarss}\trajectory(\zeta)(\Dxtau[c])(s) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
+            &= \sum_{\xtau[c]\in\delayvarss}\trajectory(\zeta)(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
+            &= \sum_{\xtau[c]\in\delayvarss}\asstate(\Dxtau[c])(s) \Dp[{(\xtau[c])}]{\ivaluation{\IddL}{\bstrm}}{(s)}\\
+            &= \ivaluation{\iconcat[state=\trajectory(\cdot),assign=s]{\IddL}}{\D{(\theta)}}(\zeta)
+        \end{align*}
+        finitely many summands
+    \end{proof}
+
+    \begin{example}
+        \begin{equation*}
+            \D{\left(\holdssince{T}{x+\xtau[c]+\xtau[s]\geq 0}\right)} \equiv \holdssince{T}{\D{x}+\Dxtau[c]+\Dxtau[s]\geq 0}
+        \end{equation*}
+        where $c=-3.5$ and $s=-2$
+        \begin{equation}
+            \mathcal{Z}_\bstrm^s = \set{0,0.5,1,2.5,3.5,r}
+        \end{equation}
+        then $g_s\in\Cnpw[1]{\compactum{0}{r}}{\R}$ along traj de dde
+        \begin{equation*}
+            g_s(t)=\ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\bstrm} = \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\xtau[0]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\xtau[c]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\xtau[s]}
+        \end{equation*}
+        each summand diffable in $(\hat{t}_j,\hat{t}_{j+1})$ and
+        \begin{equation*}
+            \D{g}_s(t)= \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dxtau[0]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dxtau[c]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dxtau[s]}
+        \end{equation*}
+        \begin{equation*}
+            \lim_{\zeta\downto\hat{t}_j} \D{g}_s(\zeta)=
+        \end{equation*}
+    \end{example}
 
 \section{Static Semantics}
     \label{sec:static-semantics}
