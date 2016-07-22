@@ -56,16 +56,47 @@
 	%\draw[thick] (\x,-0.06) -- (\x,0.06);
 	
 	% initial condition
-	\draw[curve] (-4,1.3) .. controls (-3.5,2) and (-3.5,0.5) .. (-3.25,0.5);
+	%\draw[curve] (-4,1.3) .. controls (-3.5,2) and (-3.5,0.5) .. (-3.25,0.5);
+	\newcommand{\ta}{-4}
+	\newcommand{\tb}{-3.25}
+	\newcommand{\ca}{1.3}
+	\newcommand{\cb}{1.5}
+	\newcommand{\cc}{-4.9}
+	\newcommand{\cd}{2.6}
+	\draw[thick] plot[samples=50, smooth, domain=\ta:\tb] (\x, {\ca+\cb*((\x-\ta)/(\tb-\ta))+\cc*((\x-\ta)/(\tb-\ta))^2+\cd*((\x-\ta)/(\tb-\ta))^3});
 	\filldraw[leftpoint] (-4,1.3) circle (0.04);
 	\filldraw[rightpoint] (-3.25,0.5) circle (0.04);
-	\draw[curve] (-3.25,2) .. controls (-2.75,1.5) and (-2.75,0.6) .. (-2,1.1);
+
+	%\draw[curve] (-3.25,2) .. controls (-2.75,1.5) and (-2.75,0.6) .. (-2,1.1);
+	\renewcommand{\ta}{-3.25}
+	\renewcommand{\tb}{-2.0}
+	\renewcommand{\ca}{2.0}
+	\renewcommand{\cb}{-1.125}
+	\renewcommand{\cc}{-1.2}
+	\renewcommand{\cd}{1.425}
+	\draw[thick] plot[samples=50, smooth, domain=\ta:\tb] (\x, {\ca+\cb*((\x-\ta)/(\tb-\ta))+\cc*((\x-\ta)/(\tb-\ta))^2+\cd*((\x-\ta)/(\tb-\ta))^3});
 	\filldraw[leftpoint] (-3.25,2) circle (0.04);
 	\filldraw[rightpoint] (-2,1.1) circle (0.04);
-	\draw[curve] (-2,2) .. controls (-1.5,2) and (-1.3,2.5) .. (-1.2,3);
+	
+	%\draw[curve] (-2,2) .. controls (-1.5,2) and (-1.3,2.5) .. (-1.2,3);
+	\renewcommand{\ta}{-2.0}
+	\renewcommand{\tb}{-1.2}
+	\renewcommand{\ca}{2.0}
+	\renewcommand{\cb}{-0.24}
+	\renewcommand{\cc}{-0.52}
+	\renewcommand{\cd}{1.76}
+	\draw[thick] plot[samples=50, smooth, domain=\ta:\tb] (\x, {\ca+\cb*((\x-\ta)/(\tb-\ta))+\cc*((\x-\ta)/(\tb-\ta))^2+\cd*((\x-\ta)/(\tb-\ta))^3});
 	\filldraw[leftpoint] (-2,2) circle (0.04);
 	\filldraw[rightpoint] (-1.2,3) circle (0.04);
-	\draw[curve] (-1.2,2) .. controls (-0.5,2) and (-0.5,1) .. (0,0.8);
+	
+	%\draw[curve] (-1.2,2) .. controls (-0.5,2) and (-0.5,1) .. (0,0.8);
+	\renewcommand{\ta}{-1.2}
+	\renewcommand{\tb}{0.0}
+	\renewcommand{\ca}{2.0}
+	\renewcommand{\cb}{0.2}
+	\renewcommand{\cc}{-3.52}
+	\renewcommand{\cd}{2.12}
+	\draw[thick] plot[samples=50, smooth, domain=\ta:\tb] (\x, {\ca+\cb*((\x-\ta)/(\tb-\ta))+\cc*((\x-\ta)/(\tb-\ta))^2+\cd*((\x-\ta)/(\tb-\ta))^3});
 	\filldraw[leftpoint] (-1.2,2) circle (0.04);
 	\filldraw[rightpoint] (0,0.8) circle (0.04);
 
@@ -79,21 +110,13 @@
 
 
 	%\draw[thick, domain=-5:0, samples=50] plot (\x, {-1.5*sqrt(pow(\x,2))*sin(\x r)/(\x-3)+cos(\x r)});
-	\newcommand{\ta}{-4}
-	\newcommand{\tb}{-3.25}
-	\newcommand{\ca}{1.3}
-	\newcommand{\cb}{1.05}
-	\newcommand{\cc}{-3.75}
-	\newcommand{\cd}{1.9}
-	\draw[thick] plot[samples=50, smooth, domain=\ta:\tb] (\x, {\ca+\cb*((\x-\ta)/(\tb-\ta))+\cc*((\x-\ta)/(\tb-\ta))^2+\cd*((\x-\ta)/(\tb-\ta))^3});
 
-	\renewcommand{\ta}{-3.25}
-	\renewcommand{\tb}{-2.0}
-	\renewcommand{\ca}{2.0}
-	\renewcommand{\cb}{-1.125}
-	\renewcommand{\cc}{-1.2}
-	\renewcommand{\cd}{1.425}
-	\draw[thick] plot[samples=50, smooth, domain=\ta:\tb] (\x, {\ca+\cb*((\x-\ta)/(\tb-\ta))+\cc*((\x-\ta)/(\tb-\ta))^2+\cd*((\x-\ta)/(\tb-\ta))^3});
-%\draw[thick] plot[samples=100, smooth, domain=-4.47:6] (\x, {.02*(\x+3)*(\x-1)*(\x-6)*(\x+1.5)});
+
+	
+
+	
+
+	
+
 \end{tikzpicture}
 \end{document}
