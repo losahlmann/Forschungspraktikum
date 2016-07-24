@@ -22,7 +22,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     The syntax of \ddL terms, formulae as well as of \dHPs is defined inductively by a grammar in Backus-Naur-form (BNF).
 
     Let $\allvars$ be the set of \emph{all variables} and $\diffvars\defeq\{\D{x} \with x\in\allvars\}$ the corresponding set of \emph{differential symbols}.
-    Let $\constants$ be the set of \emph{all constants}. We denote $\delayvars\defeq\{\xtau[c] \with x\in\allvars, c\in\constants\}$ the set of \emph{delayed variables} and $\diffvars\times\constants\defeq\{\Dxtau[c] \with \D{x}\in\diffvars, c\in\constants\}$ the set of \emph{delayed differentials}.
+    Let $\constants$ be the set of \emph{all constants}. We denote $\delayvars\defeq\{\xtau[c] \with x\in\allvars, c\in\constants\}$ the set of \emph{delayed variables} and $\delaydiffvars\defeq\{\Dxtau[c] \with \D{x}\in\diffvars, c\in\constants\}$ the set of \emph{delayed differentials}.
 
     We will usually denote variables by $x,y,z\in\allvars$ and their differential symbols by $\D{x},\D{y},\D{z}\in\diffvars$.
 
@@ -349,13 +349,12 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\ireachability{\IddL}{\asprg;\bsprg} = \left\{ (\asstate,\bsstate) \with (\asstate,\csstate)\in\ireachability{\IddL}{\asprg}, (\csstate,\bsstate)\in\ireachability{\IddL}{\bsprg} \right\}$
             \item $\ireachability{\IddL}{\hrepeat{\asprg}} %= \hrepeat{(\ireachability{\IddL}{\asprg})}
                 = \displaystyle\cupfold_{n\in\N}\ireachability{\IddL}{\asprg^n}$ with $\asprg^{n+1}\equiv (\asprg^n;\asprg)$ and $\asprg^0\equiv \htest{\ltrue}$
-            \item $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}} = \{
-                (\asstate,\bsstate) \with
-                \lforall{\zeta\in[0,r]}{\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm(-\tau)}\land\ivr}}$
-                and $\asstate=\trajectory(0)$ on $\scomplement{\{\D{x}\}}$ and $\bsstate=\trajectory(r)\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\theta}(s)$ (?) for all $s\in(-\min\{\zeta,T\},0]$
+            \item \label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}} = \{(\asstate,\bsstate) \with \mforall{\zeta\in[0,r]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm(-\tau)}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\{\D{x}\}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,r]\to\states\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\theta}(s)$ and satisfies $\ivr$ for all $s\in(-\min\{\zeta,T\},0]$. On $[-T,-\min\{\zeta,T\}]$ (open closed?) $\bsstate(\cdot)(s)=\asstate(\cdot)(s+r)$
+                % FIXME: rest from init cond: traj(0)
         \end{enumerate}
     \end{definition}
 
+    semantics of DDE motivated by definition of solution of DDE
     $\trajectory$ solves the DDE and satisfies $\ivr$ in each time instant/state
 
     The formula $\hevolve{\D{x}=\astrm(-\tau)}\land\ivr$ has dropped the $\holdssince{T}{}$, alloccurences of $x$ and $\D{x}$ of form with constant
@@ -377,30 +376,42 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     And so needs $\ivr$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
 
     \begin{definition}\label{def:termvars}
-        define
+        We define by
         \begin{equation*}
             % FIXME: another symbol for defeq
             % TODO: what if x'[] in term ?
             \constants[\astrm] \defeq \set{c\in\constants \with \mexists{\xtau[c]\in\delayvars}\holds\xtau[c]\in\astrm}
         \end{equation*}
-        does not contain $s$, since not in $\constants$
+        the set of constant symbols occuring in the term $\astrm$.
+        Note that this set does not contain $s$, since it is, as a special purpose symbol, not in $\constants$.
         Since a term only depends on a finite number of atomic terms for a fixed s
-        can see valuation as a mapping from values of these symbols to reals
-        instead of from functional space
-        $\augtrajectory[s]{\astrm}\from\compactum{0}{r}\to\R^{\abs{\delayvars[\astrm]}}$
+        
+        The valuation of a concrete term can hence also be seen as a mapping from the values of $\delayvars$ and $\delaydiffvars$ into the reals
+        instead of using a functional state space.
+        This gives rise to the definition of the \emph{augmented trajectory} $\augtrajectory[s]{\astrm}\from\compactum{0}{r}\to\R^{\abs{\delayvars[\astrm]}}$
+        % FIXME: differnt vars possible, not just x
         \begin{equation*}
             \augtrajectory[s]{\astrm}(t) \defeq \colvec{\trajectory(t)(x)(c_1)\\ \vdots\\ \trajectory(t)(x)(c_n)}
         \end{equation*}
     \end{definition}
     % TODO: alternatively, could maybe have \trajectory Fréchet-diffable
 
-    for formula not possible, since it depends possibly on infinitely many different values for s
+    %for formula not possible, since it possibly depends on infinitely many different values of s.
 
+    The following lemma shows the consistency of the semantics for differentials
+    with the definition of the evolution of a DDE
     \begin{lemma}[Differential Lemma]\label{lm:differential-lemma}
-        lecture notes L10.20
-        needed for DI proof
-        no changes, except for rewriting $\varphi(t)(x)\rightarrow\varphi(t)(x)(0)$
-        [eta] is diffable with d/dt[eta]=[(eta)']
+        %lecture notes L10.20
+        %needed for DI proof
+        % FIXME: check if everywhere correctly used: \states=(\statespace)^n
+        The value of a term $\bstrm$ along a trajectory $\trajectory\from\compactum{0}{r}\to\states$ satisfying a DDE for any duration $r>0$, i.e.
+        % FIXME:doFormatList does not work with iconcat $\imodels{\iconcat[state=\trajectory]{\IddL}}{\D{x}=\asfml\land\ivr}$
+        $\interpret,\trajectory\models(\D{x}=\asfml\land\ivr)$,
+        is piecewise continuously differentiable and for all $\zeta\in\compactum{0}{r}$ it holds:
+        \begin{equation*}
+            \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(\bstrm)}} = \DD{\ivaluation{\iconcat[state=\trajectory(\cdot)]{\IddL}}{\bstrm}}{t}(\zeta)
+        \end{equation*}
+        % FIXME: where do I need this satisfaction in proof, relation to DDE: semantics of DDE
     \end{lemma}
     \begin{proof}
         % TODO: what if x'[] in term ?
@@ -408,34 +419,47 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         % FIXME: oBdA: t_0=0
         Let $\trajectory\from\compactum{0}{r}$
         % FIXME: new statespace C^1_pw
-        and $\subdivision{-T=t_0}{t_m=0}$ the subdivision of $\trajectory(0)(x)\in\statespace$.
-        We show that value of a term is piecewise differentiable with subdivision $\mathcal{Z}$.
+        and $\subdivision{-T=t_0}{t_m=0}$ the subdivision of the initial condition $\trajectory(0)(x)\in\statespace$.
+        %We show that value of a term is piecewise differentiable with subdivision $\mathcal{Z}$.
 
-        Let $s\in\compactum{-T}{0}$ beliebig aber fest. Means $s$ is in the following a constant, like $c$.
-        Let $\mathcal{Z}_\bstrm^s=\subdivision{\hat{t}_0}{\hat{t}_k}$ be the subdivision of the term $\bstrm$
-        is subdivision of $\compactum{0}{r}$
+        Let in the following $s\in\compactum{-T}{0}$ be arbitray but fixed, such that $s$ can be treated as a constant, in the same way like any $c\in\constants$.
+        Depending on the term $\bstrm$ we define a subdivision $\mathcal{Z}_\bstrm^s=\subdivision{\hat{t}_0}{\hat{t}_k}$ of $\compactum{0}{r}$ by
         % FIXME: what when r>T ? Z={0,r}
         \begin{equation*}
-            \mathcal{Z}_\bstrm^s := \set{0,r}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in\constants[\astrm]\cup\set{s}\\ t_i\geq c}}\set{t_i-c}
+            \mathcal{Z}_\bstrm^s \defeq \set{0,r}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i-c}
         \end{equation*}
-        where $\constants[\bstrm]$ is the set of constant symbols (or their interpretations/valuations) appeaering in the term $\bstrm$, as defined in Definition~\ref{def:termvars}.
-        This set is finite and non-empty, since it contains at least $0$ and $r$.
-        On each $\zeta\in(\hat{t}_k,\hat{t}_{k+1})$ is each $\ivaluation{\iconcat[state={\trajectory(\zeta)},assign=s]{\IddL}}{\xtau[c]}$ diffable in $\zeta$
+        where $\mathcal{K}\defeq\constants[\bstrm]\cup\set{s}$ is the set of constant symbols (or their interpretations/valuations) appeaering in the term $\bstrm$.
+        The set $\mathcal{K}$ is finite and non-empty, since it contains at least the values $0$ and $r$.
+        
+        We show first that $\trajectory(t)(x)(c)$ is piecewise continuously differentiable in $t$ for all $c\in\mathcal{K}$ with subdivision $\mathcal{Z}_\bstrm^s$:
 
-        f in terms smooth, hence each term on this open interval diffable
+        Let $c\in\mathcal{K}$, $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ and $c+\zeta<0$. By definition, $\hat{t}_j=t_i-\hat{c}$ for some $i$ and $\hat{c}\in\mathcal{K}$.
+        If $c\geq\hat{c}$, $\zeta>\hat{t}_j$ implies $c+\zeta > c+t_i-\hat{c}\geq t_i$.
+        If $c<\hat{c}$, then $\zeta < \hat{t}_{j+1} \leq t_i-c$ (needs explanation: tjp1 is smallest next point, construct one, must be greater or equal) and hence $\zeta+c<t_i$.
+        So whenever $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ for all $\hat{c}\in\mathcal{K}$ is $c+\zeta\neq t_i$.
+        % FIXME: why holds this equality: should be by definition of semantics DDE
+        In this case $\trajectory(\zeta)(x)(c)=\trajectory(0)(x)(c+\zeta)$ is continuously differentiable and $\DD{\trajectory(t)(x)(c)}{t}(\zeta)=\trajectory(\zeta)(\D{x})(c)$
+        % FIXME: limits zeta->hat t_i
+        Let $c+\zeta\geq 0$: by def of semantics of DDE
 
-        along sol of DDE: $\trajectory(\zeta)(\D{x})(c) = \DD{\trajectory(t)(x)(c)}{t}(\zeta)$, ie iff $\zeta+c\geq 0$, when $\zeta+c\geq 0$ init cond
+        %On each $\zeta\in(\hat{t}_k,\hat{t}_{k+1})$ is each $\ivaluation{\iconcat[state={\trajectory(\zeta)},assign=s]{\IddL}}{\xtau[c]}$ diffable in $\zeta$
+
+        %f in terms smooth, hence each term on this open interval diffable
+        Let $\augtrajectory[s]{\astrm}$ be the $\bstrm$-augmented trajectory for the considered delay differential equation.
+        By the transition semantics of DDEs (Definition~\ref{def:semantic-HP}\,(\ref{itm:sem-HP-DDE})), it holds for $\zeta+c\geq 0$ (along sol of DDE)
+        $\trajectory(\zeta)(\D{x})(c) = \DD{\trajectory(t)(x)(c)}{t}(\zeta)$, and for $\zeta+c\leq 0$ (init cond, match demanded)
 
         \begin{align*}
             \DD{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{t}(\zeta)
-                &= \D{\left(\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}\compose\augtrajectory[s]{\bstrm}(\zeta)\right)} = \gradient{\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}}(\augtrajectory[s]{\bstrm}(\zeta))\cdot\DD{\augtrajectory[s]{\bstrm}(\zeta)}{t}\\
-            &= \sum_{\xtau[c]\in\delayvarss}\DD{\trajectory(t)(\xtau[c])(s)}{t}(\zeta) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
-            &= \sum_{\xtau[c]\in\delayvarss}\trajectory(\zeta)(\Dxtau[c])(s) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
+            &= \D{\left(\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}\compose\augtrajectory[s]{\bstrm}(\zeta)\right)} = \gradient{\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}}(\augtrajectory[s]{\bstrm}(\zeta))\cdot\DD{\augtrajectory[s]{\bstrm}}{t}(\zeta)\\
+            &= \sum_{\xtau[c]\in\delayvarss}\DD{\trajectory(t)(x)(c)}{t}(\zeta) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
+            % &= \sum_{\xtau[c]\in\delayvarss}\trajectory(\zeta)(\Dxtau[c])(s) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
             &= \sum_{\xtau[c]\in\delayvarss}\trajectory(\zeta)(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
-            &= \sum_{\xtau[c]\in\delayvarss}\asstate(\Dxtau[c])(s) \Dp[{(\xtau[c])}]{\ivaluation{\IddL}{\bstrm}}{(s)}\\
+            &= \sum_{\xtau[c]\in\delayvarss}\asstate(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\IddL}{\bstrm}}{(s)}\\
             &= \ivaluation{\iconcat[state=\trajectory(\cdot),assign=s]{\IddL}}{\D{(\theta)}}(\zeta)
         \end{align*}
-        finitely many summands
+        % FIXME: limits
+        where each sum only consits of finitely many summands.
     \end{proof}
 
     \begin{example}

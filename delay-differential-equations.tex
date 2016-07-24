@@ -17,7 +17,7 @@
 
     \begin{definition}[Piecewise Continuously Differentiable]\label{def:pw-cont-diff}
         % FIXME: find better word for 'subdivision'. partition?
-        Let $D=[a,b]\subseteq\R$ be a closed interval (this includes the cases when $a=-\infty$ or $b=\infty$, or both). The mapping $x:D\rightarrow\R^n$ is called $n$-times \emph{piecewise continuously differentiable} if and only if there is a finite subdivision $\{t_i:i=\range{0}{m}\}$ of $D$ (i.e.\ $a=t_0<t_1<\ldots<t_m=b$) such that $x$ is $n$-times continuously differentiable on each interval piece $(t_i,t_{i+1})$ with continuable derivatives on $\compactum{t_i}{t_{i+1}}$.
+        Let $D=[a,b]\subseteq\R$ be a closed interval (this includes the cases when $a=-\infty$ or $b=\infty$, or both). The mapping $x:D\rightarrow\R^n$ is called $n$-times \emph{piecewise continuously differentiable} if and only if there is a finite subdivision (ordered set) $\{t_i:i=\range{0}{m}\}$ of $D$ (i.e.\ $a=t_0<t_1<\ldots<t_m=b$) such that $x$ is $n$-times continuously differentiable on each interval piece $(t_i,t_{i+1})$ with continuable derivatives on $\compactum{t_i}{t_{i+1}}$.
 
         This means, for all $i=\range{0}{m-1}$ and for all $k=\range{0}{n}$ exist the left sided limits
         \begin{equation}
@@ -207,6 +207,7 @@
         A function $f\from\deff\to\R^n$ is called \emph{(locally) Lipschitz continuous} in its second argument if and only if for all $a,b\in\R$ and $M>0$ there is a $L>0$ such that
         \begin{equation*}
             % TODO: is L(\nnorm*{x-x}+\nnorm*{y-y}) better? is equiv, with different L
+            % FIXME: or just say Lipschitz in each component, once for x once for y -> compare proof
             \nnorm*{f(t,x,y) - f(t,\bar{x},y)} \leq L\max\left\{\nnorm*{x - \bar{x}},\nnorm*{y - \bar{y}}\right\}
         \end{equation*}
         for all $t\in [a,b]$ and $x,\bar{x},y\in\R^n$ with $\nnorm{x},\nnorm{\bar{x}},\nnorm{y}\leq M$.
@@ -287,7 +288,7 @@
         % where $\nnorm{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\supnorm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
 
         Then for each \emph{initial condition} $x_{\tzero}\in\statespace[\tau]$ and start time $\tzero$, there \textbf{exists} a \textbf{unique local solution} of the IVP on a time interval $[\tzero-\tau, \tzero+T]$. The duration $T>0$ depends on the sup-norm and discontinuity points of the initial condition. (?)
-        This solution is continuous and differentiable on $\compactum{\tzero}{\tzero+T}$
+        This solution is continuous and piecewise differentiable on $\compactum{\tzero}{\tzero+T}$
     \end{theorem}
 
     The proof is smiliar to the proof of the existence theorem (Theorem 3.7) given in~\cite{Smith10IntroDDE}.

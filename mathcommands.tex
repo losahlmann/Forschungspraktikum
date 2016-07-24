@@ -114,8 +114,10 @@
 % Delay Differential Dynamic Logic
 %
 \newcommand{\constants}[1][]{\mathcal{C}_{#1}}
+\newcommand{\diffvars}{\D{\allvars}}
 \newcommand{\delayvars}[1][]{\allvars\times\constants[#1]}
 \newcommand{\delayvarss}{\allvars\times\constants\cup\set{s}}
+\newcommand{\delaydiffvars}{\diffvars\times\constants}
 
 \renewcommand{\ivr}{\chi}
 \newcommand{\csfml}{\chi}
@@ -142,8 +144,6 @@
 
 \newcommand{\delayinterval}[1][T]{[-#1,0]}
 
-\newcommand{\diffvars}{\D{\allvars}}
-\newcommand{\delayedvars}{\mathcal{V}_\tau}
 
 \newcommand{\statespace}[1][T]{\Cnpw[0]{\delayinterval[#1]}{\R^n}}
 %\newcommand{\xtau}[1][]{\ifthenelse{\equal{#1}{}}{x[\tau]}{x[#1]}}
