@@ -26,7 +26,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     We will usually denote variables by $x,y,z\in\allvars$ and their differential symbols by $\D{x},\D{y},\D{z}\in\diffvars$.
 
-    Function symbols $f,g,h$, constant symbols $a,b,c$ and predicate symbols $p,q,r$ are as in first-order logic (cf. Section \ref{sec:first-order-logic}).
+    \emph{Function symbols} $f,g,h$, \emph{constant symbols} $a,b,c$ and \emph{predicate symbols} $p,q,r$ are as in first-order logic (cf. Section \ref{sec:first-order-logic}).
 
     % FIXME: what are program constants?
     %program constants $ $, may be in $\rationals$
@@ -99,11 +99,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         % TODO: program constant
         where $\asprg, \bsprg$ denote \dHPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\xtau$) and $\ausprg$ a program constant.
         The formula $\asfmlfolR$ is of first-order logic of real arithmetic \FOLR$(\allvars)$, containing only normal variable symbols $\allvars$.
-        Note: $s\notin\asprg$.
-        Syntax only allows autonomous DDEs.
+        Note that $s\notin\asprg$ and that the syntax only allows autonomous DDEs.
     \end{definition}
-
-    
 
     The difference between classical \HPs (in the sense of ...) and \dHPs is not syntactically, but only given by their semantics.
 
@@ -193,7 +190,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\ivaluation{\IddL}{\astrm+\bstrm} = \ivaluation{\IddL}{\astrm} + \ivaluation{\IddL}{\bstrm}$
             \item $\ivaluation{\IddL}{\astrm\cdot\bstrm} = \ivaluation{\IddL}{\astrm} \cdot \ivaluation{\IddL}{\bstrm}$
             % FIXME: derivation of terms with x'?
-            \item $\ivaluation{\IddL}{\D{(\astrm)}} = \displaystyle\sum_{c\in\constants\cup\set{s}} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial \xtau[c]}$
+            \item $\ivaluation{\IddL}{\D{(\astrm)}} = \displaystyle\sum_{\xtau[c]\in\delayvarss} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial \xtau[c]}$
         \end{enumerate}
         %where $s\in [-T,0]$.
         The  syntactic (total) derivation, defined in \ref{def:derivation}, gives new term
@@ -349,8 +346,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\ireachability{\IddL}{\asprg;\bsprg} = \left\{ (\asstate,\bsstate) \with (\asstate,\csstate)\in\ireachability{\IddL}{\asprg}, (\csstate,\bsstate)\in\ireachability{\IddL}{\bsprg} \right\}$
             \item $\ireachability{\IddL}{\hrepeat{\asprg}} %= \hrepeat{(\ireachability{\IddL}{\asprg})}
                 = \displaystyle\cupfold_{n\in\N}\ireachability{\IddL}{\asprg^n}$ with $\asprg^{n+1}\equiv (\asprg^n;\asprg)$ and $\asprg^0\equiv \htest{\ltrue}$
-            \item \label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}} = \{(\asstate,\bsstate) \with \mforall{\zeta\in[0,r]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm(-\tau)}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\{\D{x}\}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,r]\to\states\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\theta}(s)$ and satisfies $\ivr$ for all $s\in(-\min\{\zeta,T\},0]$. On $[-T,-\min\{\zeta,T\}]$ (open closed?) $\bsstate(\cdot)(s)=\asstate(\cdot)(s+r)$
-                % FIXME: rest from init cond: traj(0)
+            \item \label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}} = \{(\asstate,\bsstate) \with \mforall{\zeta\in[0,r]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm(-\tau)}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\{\D{x}\}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,r]\to\states\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\theta}(s)$ and satisfies $\ivr$ for all $s\in[-\min\{\zeta,T\},0]$. On $(-T,-\min\{\zeta,T\}]$ it holds $\trajectory(\zeta)(\cdot)(s)=\asstate(\cdot)(s+\zeta)$ for all variables.
+            % TODO: case r=0
         \end{enumerate}
     \end{definition}
 
@@ -386,12 +383,15 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         Note that this set does not contain $s$, since it is, as a special purpose symbol, not in $\constants$.
         Since a term only depends on a finite number of atomic terms for a fixed s
         
-        The valuation of a concrete term can hence also be seen as a mapping from the values of $\delayvars$ and $\delaydiffvars$ into the reals
-        instead of using a functional state space.
-        This gives rise to the definition of the \emph{augmented trajectory} $\augtrajectory[s]{\astrm}\from\compactum{0}{r}\to\R^{\abs{\delayvars[\astrm]}}$
+        % TODO: what about x'
+        The valuation of a concrete term can hence also be seen as a mapping from the values of $\delayvars$
+        %and $\delaydiffvars$
+        into $\R$, instead of using the functional state space as domain.
+
+        This gives rise to the definition of the \emph{augmented trajectory} $\augtrajectory[s]{\astrm}\from\compactum{0}{r}\to\R^{\abs{\delayvars[\astrm]}}$ for a fixed $s\in\delayinterval$ and term $\astrm$ with
         % FIXME: differnt vars possible, not just x
         \begin{equation*}
-            \augtrajectory[s]{\astrm}(t) \defeq \colvec{\trajectory(t)(x)(c_1)\\ \vdots\\ \trajectory(t)(x)(c_n)}
+            \augtrajectory[s]{\astrm}(t) \defeq \colvec{\trajectory(t)(x_1)(c_1)\\ \vdots\\ \trajectory(t)(x_1)(c_n)\\ \vdots\\ \trajectory(t)(x_m)(c_1)\\ \vdots\\ \trajectory(t)(x_m)(c_n)}
         \end{equation*}
     \end{definition}
     % TODO: alternatively, could maybe have \trajectory Fréchet-diffable
@@ -407,7 +407,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         The value of a term $\bstrm$ along a trajectory $\trajectory\from\compactum{0}{r}\to\states$ satisfying a DDE for any duration $r>0$, i.e.
         % FIXME:doFormatList does not work with iconcat $\imodels{\iconcat[state=\trajectory]{\IddL}}{\D{x}=\asfml\land\ivr}$
         $\interpret,\trajectory\models(\D{x}=\asfml\land\ivr)$,
-        is piecewise continuously differentiable and for all $\zeta\in\compactum{0}{r}$ it holds:
+        is piecewise continuously differentiable and for all $\zeta\in\compactum{0}{r}$ and $s\in\delayinterval$ it holds:
+        % FIXME: equality holds also in jump points?
         \begin{equation*}
             \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(\bstrm)}} = \DD{\ivaluation{\iconcat[state=\trajectory(\cdot)]{\IddL}}{\bstrm}}{t}(\zeta)
         \end{equation*}
@@ -421,7 +422,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         % FIXME: new statespace C^1_pw
         and $\subdivision{-T=t_0}{t_m=0}$ the subdivision of the initial condition $\trajectory(0)(x)\in\statespace$.
         %We show that value of a term is piecewise differentiable with subdivision $\mathcal{Z}$.
-
+        % FIXME: c used for symbol and its interpretation
         Let in the following $s\in\compactum{-T}{0}$ be arbitray but fixed, such that $s$ can be treated as a constant, in the same way like any $c\in\constants$.
         Depending on the term $\bstrm$ we define a subdivision $\mathcal{Z}_\bstrm^s=\subdivision{\hat{t}_0}{\hat{t}_k}$ of $\compactum{0}{r}$ by
         % FIXME: what when r>T ? Z={0,r}
@@ -436,9 +437,19 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         Let $c\in\mathcal{K}$, $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ and $c+\zeta<0$. By definition, $\hat{t}_j=t_i-\hat{c}$ for some $i$ and $\hat{c}\in\mathcal{K}$.
         If $c\geq\hat{c}$, $\zeta>\hat{t}_j$ implies $c+\zeta > c+t_i-\hat{c}\geq t_i$.
         If $c<\hat{c}$, then $\zeta < \hat{t}_{j+1} \leq t_i-c$ (needs explanation: tjp1 is smallest next point, construct one, must be greater or equal) and hence $\zeta+c<t_i$.
-        So whenever $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ for all $\hat{c}\in\mathcal{K}$ is $c+\zeta\neq t_i$.
+        So whenever $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ for all $\hat{c}\in\mathcal{K}$ is $c+\zeta\neq t_i$ for all $i=\range{0}{m}$.
         % FIXME: why holds this equality: should be by definition of semantics DDE
-        In this case $\trajectory(\zeta)(x)(c)=\trajectory(0)(x)(c+\zeta)$ is continuously differentiable and $\DD{\trajectory(t)(x)(c)}{t}(\zeta)=\trajectory(\zeta)(\D{x})(c)$
+        In this case, it holds by the definition of the DDE semantics that $\trajectory(\zeta)(x)(c)=\trajectory(0)(x)(c+\zeta)$, which is continuously differentiable as initial condition and $\DD{\trajectory(t)(x)(c)}{t}(\zeta)=\DD{\trajectory(0)(x)(s)}{s}(c+\zeta)=\trajectory(0)(\D{x})(c+\zeta)=\trajectory(\zeta)(\D{x})(c)$.
+        For the limits it holds
+        only interesting when $\hat{c}=c$
+        \begin{align*}
+            \lim_{\zeta\downto\hat{t}_j} \DD{\trajectory(t)(x)(c)}{t}(\zeta)
+                & = \lim_{\zeta\downto t_i-c} \DD{\trajectory(0)(x)(s)}{s}(c+\zeta)\\
+                & = \lim_{\zeta\downto t_i} \DD{\trajectory(0)(x)(s)}{s}(\zeta)
+                %=\lim_{s\downto t_i}\trajectory(0)(\D{x})(s)
+                = \trajectory(0)(\D{x})(t_i)
+        \end{align*}
+        And analogously for the existence of the limit for $\zeta\upto\hat{t}_{j+1}$
         % FIXME: limits zeta->hat t_i
         Let $c+\zeta\geq 0$: by def of semantics of DDE
 
@@ -454,9 +465,9 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             &= \D{\left(\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}\compose\augtrajectory[s]{\bstrm}(\zeta)\right)} = \gradient{\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}}(\augtrajectory[s]{\bstrm}(\zeta))\cdot\DD{\augtrajectory[s]{\bstrm}}{t}(\zeta)\\
             &= \sum_{\xtau[c]\in\delayvarss}\DD{\trajectory(t)(x)(c)}{t}(\zeta) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
             % &= \sum_{\xtau[c]\in\delayvarss}\trajectory(\zeta)(\Dxtau[c])(s) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
-            &= \sum_{\xtau[c]\in\delayvarss}\trajectory(\zeta)(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
-            &= \sum_{\xtau[c]\in\delayvarss}\asstate(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\IddL}{\bstrm}}{(s)}\\
-            &= \ivaluation{\iconcat[state=\trajectory(\cdot),assign=s]{\IddL}}{\D{(\theta)}}(\zeta)
+            &= \sum_{\xtau[c]\in\delayvarss}\trajectory(\zeta)(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
+            %&= \sum_{\xtau[c]\in\delayvarss}\asstate(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\IddL}{\bstrm}}{(s)}\\
+            &= \ivaluation{\iconcat[state=\trajectory(\cdot),assign=s]{\IddL}}{\D{(\bstrm)}}(\zeta)
         \end{align*}
         % FIXME: limits
         where each sum only consits of finitely many summands.
