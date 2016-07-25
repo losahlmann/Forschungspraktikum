@@ -495,7 +495,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \end{equation*}
     \end{example}
 
-    \begin{lemma}[Differential assignment]
+    \begin{lemma}[Differential assignment]\label{lm:diff-assignment}
         Let $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory satisfying a DDE for any duration $r\geq 0$, i.e.
         $\interpret,\trajectory\models(\D{x}=\asfml\land\ivr)$.
         Then it holds:
@@ -511,7 +511,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \begin{align*}
             \trajectory(\zeta)\in\imodel{\IddL}{\asfml} &\lbisubjunct
             \mforall{\bsstate\in\states}\holds((\trajectory(\zeta),\bsstate)\in\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}} \limply \bsstate\in\imodel{\IddL}{\asfml})\\
-            &\lbisubjunct \trajectory(\zeta)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}  
+            &\lbisubjunct \trajectory(\zeta)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}
         \end{align*}
     \end{proof}
 

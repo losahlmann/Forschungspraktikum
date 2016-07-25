@@ -267,14 +267,20 @@
     \subsection{Differential Axioms}
         \label{sec:differential-axioms}
     
-        \newcommand{\A}{\left(\ivr\limply\asfml\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\asfml)}}\right)}
-        \newcommand{\B}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}
         \begin{calculus}
             \cinferenceRule[DI|DI]{differential invariant}{
                 \linferenceRule[lpmi]{
-                    \B%\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}
                 }{
-                    \A%\left(\ivr\limply\asfml\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\asfml)}}\right)
+                    \left(\ivr\limply\asfml\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\asfml)}}\right)
+                }
+            }{}
+
+            \cinferenceRule[DE|DE]{differential effect}{
+                \linferenceRule[equiv]{
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(x,\D{x})}}
+                }{
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(x,\D{x})}
                 }
             }{}
         
@@ -293,10 +299,10 @@
         [\&]???
 
         % adaption of \cite{Platzer15Uniform}
-        DI:
-        Without loss of generality we restrict to the case of invariants of the form $\asfml\equiv(g(x)\geq 0)$. Then $\D{(\asfml)}\equiv(\D{(g(x))}\geq 0)$ (by ??)
+    \begin{description}
+        \item[DI] Without loss of generality we restrict to the case of invariants of the form $\asfml\equiv(g(x)\geq 0)$. Then $\D{(\asfml)}\equiv(\D{(g(x))}\geq 0)$ (by ??)
 
-        Consider a state $\asstate\in\states$ with $\asstate\in\imodel{\IddL}{\A}$. We need to distinguish two cases. If $\asstate\notin\imodel{\IddL}{\ivr}$, then their is no solution of the DDE and hence $\asstate\in\imodel{\IddL}{\B}$ vacuously.
+        Consider a state $\asstate\in\states$ with $\asstate\in\imodel{\IddL}{\left(\ivr\limply\asfml\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\asfml)}}\right)}$. We need to distinguish two cases. If $\asstate\notin\imodel{\IddL}{\ivr}$, then their is no solution of the DDE and hence $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$ vacuously.
 
         If $\asstate\notin\imodel{\IddL}{\ivr}$, then $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\asfml)}}}$. Let $\trajectory\from\compactum{0}{r}\to\states$ be the trajectory of the DDE for some time $r\geq 0$, i.e.\ $\interpret,\trajectory\models(\hevolvein{\D{x}=\astrm}{\ivr})$.
         % FIXME: r=0 in DI proof
@@ -311,7 +317,12 @@
         \begin{equation*}
             \ivaluation{\iconcat[state=\trajectory(z)]{\IddL}}{g(x)}= \ivaluation{\iconcat[state=\trajectory(0)]{\IddL}}{g(x)} + \sum_{i=0}^k\int\limits_{t_i}^{t_{i+1}}\DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{g(x)}}{t}(\zeta)\dx[\zeta] + \int\limits_{t_k}^z \DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{g(x)}}{t}(\zeta)\dx[\zeta] \geq 0
         \end{equation*}
-        hence $\mforall{z\in\compactum{0}{r}}\trajectory(z)\in\imodel{\IddL}{\asfml}$ and hence $\asstate\in\imodel{\IddL}{\B}$
+        hence $\mforall{z\in\compactum{0}{r}}\trajectory(z)\in\imodel{\IddL}{\asfml}$ and hence $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$
+
+        \item[DE] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$ and $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory of duration $r\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dxtau[0]=\asfml\land\ivr}$ for all $\zeta\in\compactum{0}{r}$.
+        Since $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, we have $\trajectory(r)\in\imodel{\IddL}{\asfml}$ which, by the Differential Assignment Lemma~\ref{lm:diff-assignment}, is equivalent to $\trajectory(r)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}$. Hence $\asstate\in\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}$.
+        The inverse implication is shown in the same way.
+    \end{description}
     \end{proof}
 
     \subsection{Box-Assignment Axiom}
