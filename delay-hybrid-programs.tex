@@ -264,8 +264,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\imodel{\IddL}{\holdssince{T}{\asfml(s)}} = \left\{\asstate\in\states \with \holdssince{T}{\asstate\in\imodel{\IddL}{\asfml(s)}} \right\}$
             \item $\imodel{\IddL}{\lforall{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{y}\in\imodel{\IddL}{\asfml} \text{ for all } y\in\statespace \}$
             \item $\imodel{\IddL}{\lexists{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{y}\in\imodel{\IddL}{\asfml} \text{ for some } y\in\statespace \}$
-            \item $\imodel{\IddL}{\dbox{\asprg}{\asfml}} = \{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml} \text{ for all $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}\}$, i.e. $\{\asstate\in\states \with \lforall{\bsstate\in\states}{((\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml})}\}$
-            \item $\imodel{\IddL}{\ddiamond{\asprg}{\asfml}} = \{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml} \text{ for some $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}\}$, i.e. $\{\asstate\in\states \with \lexists{\bsstate\in\states}{((\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \land \bsstate\in\imodel{\IddL}{\asfml})}\}$
+            \item $\imodel{\IddL}{\dbox{\asprg}{\asfml}} = \{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml} \text{ for all $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}\}$, i.e. $\{\asstate\in\states \with \mforall{\bsstate\in\states}\holds((\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml})\}$
+            \item $\imodel{\IddL}{\ddiamond{\asprg}{\asfml}} = \{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml} \text{ for some $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}\}$, i.e. $\{\asstate\in\states \with \mexists{\bsstate\in\states}\holds((\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \land \bsstate\in\imodel{\IddL}{\asfml})\}$
         \end{enumerate}
         The fact that formula $\asfml$ is true in state $\asstate$ under the interpretation $\interpret$, i.e. $\asstate\in\imodel{\IddL}{\asfml}$ can also be written as $\imodels{\IddL}{\asfml}$.
         A formula $\asfml$ is called valid, written as $\models\asfml$, if and only if $\asfml$ is true in all states under all interpretations.
@@ -406,7 +406,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         % FIXME: check if everywhere correctly used: \states=(\statespace)^n
         The value of a term $\bstrm$ along a trajectory $\trajectory\from\compactum{0}{r}\to\states$ satisfying a DDE for any duration $r>0$, i.e.
         % FIXME:doFormatList does not work with iconcat $\imodels{\iconcat[state=\trajectory]{\IddL}}{\D{x}=\asfml\land\ivr}$
-        $\interpret,\trajectory\models(\D{x}=\asfml\land\ivr)$,
+        $\interpret,\trajectory\models(
+        )$,
         is piecewise continuously differentiable and for all $\zeta\in\compactum{0}{r}$ and $s\in\delayinterval$ it holds:
         % FIXME: equality holds also in jump points?
         \begin{equation*}
@@ -493,6 +494,26 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \lim_{\zeta\downto\hat{t}_j} \D{g}_s(\zeta)=
         \end{equation*}
     \end{example}
+
+    \begin{lemma}[Differential assignment]
+        Let $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory satisfying a DDE for any duration $r\geq 0$, i.e.
+        $\interpret,\trajectory\models(\D{x}=\asfml\land\ivr)$.
+        Then it holds:
+        \begin{equation*}
+            \interpret,\trajectory\models\asfml \lbisubjunct \trajectory(\zeta)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}  
+        \end{equation*}
+    \end{lemma}
+    \begin{proof}
+        Let $\zeta\in\compactum{0}{r}$. It is $\trajectory(\zeta)\in\imodel{\IddL}{\Dxtau[0]=\asfml}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\ivr}$, which means $\trajectory(\zeta)(\D{x})(0)=\ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\astrm}$, since $\astrm$ is independent of $s$.
+        By the definition of the semantics (??)
+        this is implies $(\trajectory(\zeta),\bsstate)\in\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}}$ if and only if $\bsstate=\trajectory(\zeta)$.
+        Finally, this implies the equivalence
+        \begin{align*}
+            \trajectory(\zeta)\in\imodel{\IddL}{\asfml} &\lbisubjunct
+            \mforall{\bsstate\in\states}\holds((\trajectory(\zeta),\bsstate)\in\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}} \limply \bsstate\in\imodel{\IddL}{\asfml})\\
+            &\lbisubjunct \trajectory(\zeta)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}  
+        \end{align*}
+    \end{proof}
 
 \section{Static Semantics}
     \label{sec:static-semantics}
