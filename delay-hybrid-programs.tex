@@ -329,7 +329,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         The interpretation of a \HP is given by a binary \emph{reachability relation} $\ireachability{\IddL}{\asprg}\subseteq\states\times\states$ between states:
         \begin{enumerate}
             \item $\ireachability{\IddL}{a} = \interpret[a]$ for a program constant $a$
-            \item $\ireachability{\IddL}{\hupdate{\humod{x}{\astrm}}} =
+            \item\label{itm:sem-HP-assgn} $\ireachability{\IddL}{\hupdate{\humod{x}{\astrm}}} =
                 \left\{(\asstate,\bsstate)\with \bsstate = \asstate \text{ except }
                 \bsstate(x) = \left(s\mapsto\begin{cases}
                     \ivaluation{\IddL}{\theta(s)} & s=0\\
@@ -346,7 +346,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\ireachability{\IddL}{\asprg;\bsprg} = \left\{ (\asstate,\bsstate) \with (\asstate,\csstate)\in\ireachability{\IddL}{\asprg}, (\csstate,\bsstate)\in\ireachability{\IddL}{\bsprg} \right\}$
             \item $\ireachability{\IddL}{\hrepeat{\asprg}} %= \hrepeat{(\ireachability{\IddL}{\asprg})}
                 = \displaystyle\cupfold_{n\in\N}\ireachability{\IddL}{\asprg^n}$ with $\asprg^{n+1}\equiv (\asprg^n;\asprg)$ and $\asprg^0\equiv \htest{\ltrue}$
-            \item \label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}} = \{(\asstate,\bsstate) \with \mforall{\zeta\in[0,r]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm(-\tau)}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\{\D{x}\}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,r]\to\states\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\theta}(s)$ and satisfies $\ivr$ for all $s\in[-\min\{\zeta,T\},0]$. On $(-T,-\min\{\zeta,T\}]$ it holds $\trajectory(\zeta)(\cdot)(s)=\asstate(\cdot)(s+\zeta)$ for all variables.
+            \item\label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}} = \{(\asstate,\bsstate) \with \mforall{\zeta\in[0,r]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm(-\tau)}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\{\D{x}\}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,r]\to\states\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\theta}(s)$ and satisfies $\ivr$ for all $s\in[-\min\{\zeta,T\},0]$. On $[-T,-\min\{\zeta,T\})$ it holds $\trajectory(\zeta)(\cdot)(s)=\asstate(\cdot)(s+\zeta)$ for all variables.
             % TODO: case r=0
         \end{enumerate}
     \end{definition}
@@ -497,16 +497,15 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     \begin{lemma}[Differential assignment]\label{lm:diff-assignment}
         Let $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory satisfying a DDE for any duration $r\geq 0$, i.e.
-        $\interpret,\trajectory\models(\D{x}=\asfml\land\ivr)$.
+        $\interpret,\trajectory\models(\D{x}=\astrm\land\ivr)$.
         Then it holds:
         \begin{equation*}
             \interpret,\trajectory\models\asfml \lbisubjunct \trajectory(\zeta)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}  
         \end{equation*}
     \end{lemma}
     \begin{proof}
-        Let $\zeta\in\compactum{0}{r}$. It is $\trajectory(\zeta)\in\imodel{\IddL}{\Dxtau[0]=\asfml}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\ivr}$, which means $\trajectory(\zeta)(\D{x})(0)=\ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\astrm}$, since $\astrm$ is independent of $s$.
-        By the definition of the semantics (??)
-        this is implies $(\trajectory(\zeta),\bsstate)\in\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}}$ if and only if $\bsstate=\trajectory(\zeta)$.
+        Let $\zeta\in\compactum{0}{r}$. It is $\trajectory(\zeta)\in\imodel{\IddL}{\Dxtau[0]=\astrm}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\ivr}$, which means $\trajectory(\zeta)(\D{x})(0)=\ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\astrm}$, since $\astrm$ is independent of $s$.
+        By Definition~\ref{def:semantic-HP}(\ref{itm:sem-HP-assgn}) of the assignment's semantics, this implies $(\trajectory(\zeta),\bsstate)\in\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}}$ if and only if $\bsstate=\trajectory(\zeta)$.
         Finally, this implies the equivalence
         \begin{align*}
             \trajectory(\zeta)\in\imodel{\IddL}{\asfml} &\lbisubjunct

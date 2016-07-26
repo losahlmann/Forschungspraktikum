@@ -314,7 +314,8 @@
 
         % adaption of \cite{Platzer15Uniform}
     \begin{description}
-        \item[DC] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\varrho}}$ and $\trajectory\from\compactum{0}{\bar{r}}\to\states$ be an arbitrary trajectory of duration $\bar{r}\geq 0$, solving the DDE and having $\asstate$ as initial condition.
+        \item[DW] Proof as for \dL.
+        \item[DC] For a formula $\varrho$ of \FOLR, let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\varrho}}$ and $\trajectory\from\compactum{0}{\bar{r}}\to\states$ be an arbitrary trajectory of duration $\bar{r}\geq 0$, solving the DDE and having $\asstate$ as initial condition.
 
         Suppose $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, i.e.\ there exists a $r\leq\bar{r}$, such that $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr}$ for all $\zeta\in\compactum{0}{r}$ and $\trajectory(r)\in\imodel{\IddL}{\asfml}$. Since $\zeta\leq\bar{r}$ it is also $\trajectory(\zeta)\in\imodel{\IddL}{\varrho}$. This is equivalent to $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr\land\varrho}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\varrho}$ for all $\zeta\in\compactum{0}{r}$, which is the same as $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\varrho}}{\asfml}}$.
 
@@ -337,7 +338,7 @@
         \end{equation*}
         hence $\mforall{z\in\compactum{0}{r}}\trajectory(z)\in\imodel{\IddL}{\asfml}$ and hence $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$
 
-        \item[DE] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$ and $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory of duration $r\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dxtau[0]=\asfml\land\ivr}$ for all $\zeta\in\compactum{0}{r}$.
+        \item[DE] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$ and $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory of duration $r\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dxtau[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{r}$.
         Since $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, we have $\trajectory(r)\in\imodel{\IddL}{\asfml}$ which, by the Differential Assignment Lemma~\ref{lm:diff-assignment}, is equivalent to $\trajectory(r)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}$. Hence $\asstate\in\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}$.
         The inverse implication is shown in the same way.
     \end{description}
