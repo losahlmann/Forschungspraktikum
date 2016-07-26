@@ -10,6 +10,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
+\newtheorem{convention}[theorem]{Convention}
 
 %
 % General Mathematics
@@ -89,11 +90,13 @@
 %
 % Differential Dynamic Logic
 %
+
 % hybrid programs
 \newcommand{\dHP}{\text{dHP}\xspace}%
 \newcommand{\dHPs}{\text{dHPs}\xspace}%
-%% redefine notation for HP
+% redefine notation for HP
 \def\lprogramsname{\dHP}
+
 % ddL
 \newcommand{\ddL}{\textsf{dd{\kern-0.1em}$\mathcal{L}$ }}
 \newcommand{\ddLformulas}{\lformulasname_{\ddL}}
@@ -104,26 +107,29 @@
 \newcommand{\FOLformulas}{\lformulas[\FOL]{\signature}{\varsymbols}}
 \newcommand{\FOL}{\text{FOL}}
 \newcommand{\FOLR}{\FOL$_\R$}
+
 % FIXME: use \mathcal{M}
 \newcommand{\model}{M}
 \newcommand{\interpret}[1][]{\ifthenelse{\equal{#1}{}}{I}{I(#1)}}
 \newcommand{\universe}{D_{\model}}
 \newcommand{\assignment}{\nu}
 \newcommand{\ireachability}[2]{\rho\left(#2\right)}
+
 %
 % Delay Differential Dynamic Logic
 %
 \newcommand{\constants}[1][]{\mathcal{C}_{#1}}
 \newcommand{\diffvars}{\D{\allvars}}
 \newcommand{\delayvars}[1][]{\allvars\times\constants[#1]}
-\newcommand{\delayvarss}{\allvars\times\constants\cup\set{s}}
+\newcommand{\delayvarswiths}{\allvars\times\constants\cup\set{s}}
 \newcommand{\delaydiffvars}{\diffvars\times\constants}
 
 \renewcommand{\ivr}{\chi}
-\newcommand{\csfml}{\chi}
+\newcommand{\csfml}{\varphi}
 
 % formula of first-order real arithmetic
 \newcommand{\asfmlfolR}{\chi}
+\newcommand{\bsfmlfolR}{\varphi}
 
 % propositions
 \newcommand{\asprop}{p}
@@ -140,20 +146,29 @@
 \newcommand{\bsstate}{\omega}
 \newcommand{\csstate}{\mu}
 
-\newcommand{\subdivision}[2]{\{#1<\ldots<#2\}}
+\newcommand{\subdivision}[2]{\set{#1<\ldots<#2}}
 
-\newcommand{\delayinterval}[1][T]{[-#1,0]}
+%\newcommand{\delayinterval}[1][T]{[-#1,0]}
+\newcommand{\closeddelayinterval}[1][T]{[-#1,0]}
+\newcommand{\delayinterval}[1][T]{[-#1,0)}
+\newcommand{\holdssince}[3][s]{\lforall{#1\in\delayinterval[#2]}{\left(#3\right)}}
+\newcommand{\holdssinceclosed}[3][s]{\lforall{#1\in\closeddelayinterval[#2]}{\left(#3\right)}}
 
-
-\newcommand{\statespace}[1][T]{\Cnpw[0]{\delayinterval[#1]}{\R^n}}
+\newcommand{\statespace}[1][T]{\Cnpw[0]{\closeddelayinterval[#1]}{\R^n}}
 %\newcommand{\xtau}[1][]{\ifthenelse{\equal{#1}{}}{x[\tau]}{x[#1]}}
+% FIXME: \x and \xtau
 \newcommand{\x}[1][]{x[#1]}
 \newcommand{\xtau}[1][-\tau]{x[#1]}
 \newcommand{\Dxtau}[1][-\tau]{\D{x}[#1]}
-\newcommand{\holdssince}[3][s]{\lforall{#1\in\delayinterval[#2]}{\left(#3\right)}}
+
+
+
+% History Horizon
 \DeclareMathOperator{\HHtrm}{HH_{\ltermsname}}
 \DeclareMathOperator{\HHfml}{HH_{\lformulasname}}
 \DeclareMathOperator{\HHprg}{HH_{\lprogramsname}}
 
+% Deprecated
+% FIXME: make sure not used any more
 \newcommand{\xbartau}{\bar{x}_{\tau}}
 \newcommand{\xbartaut}[1]{\bar{x}_{\tau,#1}}

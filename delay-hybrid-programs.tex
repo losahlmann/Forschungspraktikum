@@ -26,7 +26,9 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     We will usually denote variables by $x,y,z\in\allvars$ and their differential symbols by $\D{x},\D{y},\D{z}\in\diffvars$.
 
-    \emph{Function symbols} $f,g,h$, \emph{constant symbols} $a,b,c$ and \emph{predicate symbols} $p,q,r$ are as in first-order logic (cf. Section \ref{sec:first-order-logic}).
+    \emph{Function symbols} $f,g,h$, \emph{constant symbols} $a,b,c$ and \emph{predicate symbols} $p,q,r$ are as in first-order logic (cf.\ Section~\ref{sec:first-order-logic}).
+
+    We use $\astrm,\bstrm$ for \ddL terms, $\asfml,\bsfml$ for \ddL formulae, $\asprg,\bsprg$ for \dHPs and $\asfmlfolR,\bsfmlfolR$ for formulae of first-order logic of real arithmetic.
 
     % FIXME: what are program constants?
     %program constants $ $, may be in $\rationals$
@@ -157,7 +159,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \label{sec:dynamic-semantics}
 
     % TODO: state space pw diffable
-    Following the remark to the solution of a DDE (cf. Section \ref{sec:definition-of-solution}), we define the \emph{state space} in \ddL to $\statespace$, the set of piecewise continuous functions on $\delayinterval$, as defined in Definition~\ref{def:piecewise-continuous}.
+    Following the remark to the solution of a DDE (cf. Section \ref{sec:definition-of-solution}), we define the \emph{state space} in \ddL to $\statespace$, the set of piecewise continuous functions on $\closeddelayinterval$, as defined in Definition~\ref{def:piecewise-continuous}.
 
     This means that a variable remembers a limited part of its evolution history, what demands hence an implicit notion of a underlying time.
 
@@ -190,7 +192,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\ivaluation{\IddL}{\astrm+\bstrm} = \ivaluation{\IddL}{\astrm} + \ivaluation{\IddL}{\bstrm}$
             \item $\ivaluation{\IddL}{\astrm\cdot\bstrm} = \ivaluation{\IddL}{\astrm} \cdot \ivaluation{\IddL}{\bstrm}$
             % FIXME: derivation of terms with x'?
-            \item $\ivaluation{\IddL}{\D{(\astrm)}} = \displaystyle\sum_{\xtau[c]\in\delayvarss} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial \xtau[c]}$
+            \item $\ivaluation{\IddL}{\D{(\astrm)}} = \displaystyle\sum_{\xtau[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial \xtau[c]}$
         \end{enumerate}
         %where $s\in [-T,0]$.
         The  syntactic (total) derivation, defined in \ref{def:derivation}, gives new term
@@ -284,6 +286,19 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     in formulae (such as safety condition or evolution constraint), we have two possibilities: only value at current time instant ($x$) or for entire last $\tau$ time $\xtau$
 
     $\dbox{}{}$ and $\ddiamond{}{}$ only refer to last state and not intermediate states, as \dTL does.
+
+    \begin{convention}
+        The frequently appearing fact that $\asfml(s)$ not only holds for $s\in\delayinterval$ but also in $s=0$
+        \begin{equation*}
+            \holdssince{T}{\asfml(s)}\land\asfml(0)
+        \end{equation*}
+        can also be written as
+        \begin{equation*}
+            \holdssinceclosed{T}{\asfml(s)}
+        \end{equation*}
+        For convenience, we allow the latter, abbreviated notation, which is implicitely replaced by the former, syntactically correct version.
+    \end{convention}
+    
 
     % TODO: Move to static semantics
     If no dependance on $s$ in terms, $\holdssince{T}{}$ can be dropped in formula.
@@ -388,7 +403,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         %and $\delaydiffvars$
         into $\R$, instead of using the functional state space as domain.
 
-        This gives rise to the definition of the \emph{augmented trajectory} $\augtrajectory[s]{\astrm}\from\compactum{0}{r}\to\R^{\abs{\delayvars[\astrm]}}$ for a fixed $s\in\delayinterval$ and term $\astrm$ with
+        This gives rise to the definition of the \emph{augmented trajectory} $\augtrajectory[s]{\astrm}\from\compactum{0}{r}\to\R^{\abs{\delayvars[\astrm]}}$ for a fixed $s\in\closeddelayinterval$ and term $\astrm$ with
         % FIXME: differnt vars possible, not just x
         \begin{equation*}
             \augtrajectory[s]{\astrm}(t) \defeq \colvec{\trajectory(t)(x_1)(c_1)\\ \vdots\\ \trajectory(t)(x_1)(c_n)\\ \vdots\\ \trajectory(t)(x_m)(c_1)\\ \vdots\\ \trajectory(t)(x_m)(c_n)}
@@ -408,7 +423,8 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         % FIXME:doFormatList does not work with iconcat $\imodels{\iconcat[state=\trajectory]{\IddL}}{\D{x}=\asfml\land\ivr}$
         $\interpret,\trajectory\models(
         )$,
-        is piecewise continuously differentiable and for all $\zeta\in\compactum{0}{r}$ and $s\in\delayinterval$ it holds:
+        % FIXME: do I need case s=0?
+        is piecewise continuously differentiable and for all $\zeta\in\compactum{0}{r}$ and $s\in\closeddelayinterval$ it holds:
         % FIXME: equality holds also in jump points?
         \begin{equation*}
             \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(\bstrm)}} = \DD{\ivaluation{\iconcat[state=\trajectory(\cdot)]{\IddL}}{\bstrm}}{t}(\zeta)
@@ -464,10 +480,10 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \begin{align*}
             \DD{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{t}(\zeta)
             &= \D{\left(\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}\compose\augtrajectory[s]{\bstrm}(\zeta)\right)} = \gradient{\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}}(\augtrajectory[s]{\bstrm}(\zeta))\cdot\DD{\augtrajectory[s]{\bstrm}}{t}(\zeta)\\
-            &= \sum_{\xtau[c]\in\delayvarss}\DD{\trajectory(t)(x)(c)}{t}(\zeta) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
-            % &= \sum_{\xtau[c]\in\delayvarss}\trajectory(\zeta)(\Dxtau[c])(s) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
-            &= \sum_{\xtau[c]\in\delayvarss}\trajectory(\zeta)(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
-            %&= \sum_{\xtau[c]\in\delayvarss}\asstate(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\IddL}{\bstrm}}{(s)}\\
+            &= \sum_{\xtau[c]\in\delayvarswiths}\DD{\trajectory(t)(x)(c)}{t}(\zeta) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
+            % &= \sum_{\xtau[c]\in\delayvarswiths}\trajectory(\zeta)(\Dxtau[c])(s) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
+            &= \sum_{\xtau[c]\in\delayvarswiths}\trajectory(\zeta)(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
+            %&= \sum_{\xtau[c]\in\delayvarswiths}\asstate(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\IddL}{\bstrm}}{(s)}\\
             &= \ivaluation{\iconcat[state=\trajectory(\cdot),assign=s]{\IddL}}{\D{(\bstrm)}}(\zeta)
         \end{align*}
         % FIXME: limits
@@ -604,7 +620,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         \begin{example}
             \begin{equation*}
                 % FIXME: notation/syntax: ausgeklammertes forall in formulas
-                \dbox{\hupdate{\humod{x}{\xtau[-3]^2}};\hevolvein{\D{x}=\xtau+2x}{(x\geq 0)}}{\holdssince{T}{0\leq \xtau[s] \land \xtau[s]\leq\xtau[-5]}}
+                \dbox{\hupdate{\humod{x}{\xtau[-3]^2}};\hevolvein{\D{x}=\xtau+2x}{(x\geq 0)}}{\holdssinceclosed{T}{0\leq \xtau[s] \land \xtau[s]\leq\xtau[-5]}}
             \end{equation*}
             Hence the history horizon needs to be set to
             \begin{equation*}
