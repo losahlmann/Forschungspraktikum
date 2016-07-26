@@ -371,21 +371,20 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     The formula $\hevolve{\D{x}=\astrm(-\tau)}\land\ivr$ has dropped the $\holdssince{T}{}$, alloccurences of $x$ and $\D{x}$ of form with constant
 
-    if $r=0$: 
+    % TODO: if $r=0$: 
 
     For the \emph{discrete assignment}, we only allow the values at the current time instant to be changed. A functional assignment would essentially allow to rewrite history, which is not permitted.
 
     This assignment is the actual reason why we need to consider piecewise continuous evolutions.
 
-    
-
     %TODO: super dense time: multiple assignments, only consider last assignment
 
-    Using the extended syntax, we can write down both a delay differential equation and an ordinary differential equation in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
+    Using this, in comparison to \dL extended syntax, we can write down both delay differential equations and ordinary differential equations in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
 
-    Along a DDE/ODE, values of differential symbols coincide with time derivative of value of corresponding variable
-    Remember that a $\xtau$ mentioned in $\theta$ here means $\varphi(t)(x)(-\tau)$.
-    And so needs $\ivr$ always just hold at the current time instant (and not over the entire interval $[-\tau,0]$). The same case for $\ptest\psi$.
+    % TODO: how to specify initial condition, for x and x', which need additionally coincide, have same subdivision
+    % in general, we do not write expression explicitely, just give possible intervals in precondition
+    
+    As a \FOLR formula, $\ivr$ do not contain any delayed variables and thus only depend of the values at the current time instant (and not over the entire interval $\delayinterval$).
 
     \begin{definition}\label{def:termvars}
         We define by
@@ -395,7 +394,12 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \constants[\astrm] \defeq \set{c\in\constants \with \mexists{\xtau[c]\in\delayvars}\holds\xtau[c]\in\astrm}
         \end{equation*}
         the set of constant symbols occuring in the term $\astrm$.
+
         Note that this set does not contain $s$, since it is, as a special purpose symbol, not in $\constants$.
+    \end{definition}
+
+    % TODO: find better name for 'augmented trajectory'
+    \begin{definition}[Augmented trajectory]\label{def:aug-trajectory}
         Since a term only depends on a finite number of atomic terms for a fixed s
         
         % TODO: what about x'
@@ -411,50 +415,57 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \end{definition}
     % TODO: alternatively, could maybe have \trajectory Fréchet-diffable
 
-    %for formula not possible, since it possibly depends on infinitely many different values of s.
+    The following lemma shows the consistency of the semantics for differentials with the semantics of the evolution of a delay differential equation.
+    This means that along a DDE, the values of differential symbols coincide with time derivative of the value of the corresponding variable.
 
-    The following lemma shows the consistency of the semantics for differentials
-    with the definition of the evolution of a DDE
     \begin{lemma}[Differential Lemma]\label{lm:differential-lemma}
-        %lecture notes L10.20
-        %needed for DI proof
         % FIXME: check if everywhere correctly used: \states=(\statespace)^n
         The value of a term $\bstrm$ along a trajectory $\trajectory\from\compactum{0}{r}\to\states$ satisfying a DDE for any duration $r>0$, i.e.
         % FIXME:doFormatList does not work with iconcat $\imodels{\iconcat[state=\trajectory]{\IddL}}{\D{x}=\asfml\land\ivr}$
-        $\interpret,\trajectory\models(
-        )$,
+        $\interpret,\trajectory\models(\D{x}=\asfml\land\ivr)$,
         % FIXME: do I need case s=0?
         is piecewise continuously differentiable and for all $\zeta\in\compactum{0}{r}$ and $s\in\closeddelayinterval$ it holds:
         % FIXME: equality holds also in jump points?
         \begin{equation*}
-            \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(\bstrm)}} = \DD{\ivaluation{\iconcat[state=\trajectory(\cdot)]{\IddL}}{\bstrm}}{t}(\zeta)
+            \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(\bstrm)}} = \DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{\bstrm}}{t}(\zeta)
         \end{equation*}
+        At discontinuity point stetige fortsetzung of/right hand side derivative.
         % FIXME: where do I need this satisfaction in proof, relation to DDE: semantics of DDE
     \end{lemma}
     \begin{proof}
         % TODO: what if x'[] in term ?
         % TODO: in init cond: x and x' need to match, ie d/ds x[s] = x'[s], same subdivision, specification of x' in init cond only needed when referenced to it later
         % FIXME: oBdA: t_0=0
-        Let $\trajectory\from\compactum{0}{r}$
+        %Let $\trajectory\from\compactum{0}{r}$
+
         % FIXME: new statespace C^1_pw
-        and $\subdivision{-T=t_0}{t_m=0}$ the subdivision of the initial condition $\trajectory(0)(x)\in\statespace$.
+        % FIXME: more possible variables, common subdivision is cup
+        Let $\subdivision{-T=t_0}{t_m=0}$ be the subdivision of the initial condition $\trajectory(0)(x)\in\statespacenew$.
         %We show that value of a term is piecewise differentiable with subdivision $\mathcal{Z}$.
         % FIXME: c used for symbol and its interpretation
         Let in the following $s\in\compactum{-T}{0}$ be arbitray but fixed, such that $s$ can be treated as a constant, in the same way like any $c\in\constants$.
-        Depending on the term $\bstrm$ we define a subdivision $\mathcal{Z}_\bstrm^s=\subdivision{\hat{t}_0}{\hat{t}_k}$ of $\compactum{0}{r}$ by
+        Depending on the term $\bstrm$ and the fixed $s$, we define a subdivision $\mathcal{Z}_\bstrm^s=\subdivision{\hat{t}_0}{\hat{t}_k}$ of $\compactum{0}{r}$ by
         % FIXME: what when r>T ? Z={0,r}
         \begin{equation*}
             \mathcal{Z}_\bstrm^s \defeq \set{0,r}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i-c}
         \end{equation*}
-        where $\mathcal{K}\defeq\constants[\bstrm]\cup\set{s}$ is the set of constant symbols (or their interpretations/valuations) appeaering in the term $\bstrm$.
+        where $\mathcal{K}\defeq\constants[\bstrm]\cup\constants[\astrm]\cup\set{s}$ is the set of constant symbols (or their interpretations/valuations) appeaering in the term $\bstrm$ and the right hand side of the DDE.
         The set $\mathcal{K}$ is finite and non-empty, since it contains at least the values $0$ and $r$.
         
         We show first that $\trajectory(t)(x)(c)$ is piecewise continuously differentiable in $t$ for all $c\in\mathcal{K}$ with subdivision $\mathcal{Z}_\bstrm^s$:
 
-        Let $c\in\mathcal{K}$, $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ and $c+\zeta<0$. By definition, $\hat{t}_j=t_i-\hat{c}$ for some $i$ and $\hat{c}\in\mathcal{K}$.
-        If $c\geq\hat{c}$, $\zeta>\hat{t}_j$ implies $c+\zeta > c+t_i-\hat{c}\geq t_i$.
+        Let $c\in\mathcal{K}$ and $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$. By definition, $\hat{t}_j=t_i-\hat{c}$ for some $i\in\set{\range{0}{m}}$ and $\hat{c}\in\mathcal{K}$.
+        If $c\geq\hat{c}$ then $\zeta>\hat{t}_j$ implies $c+\zeta > c+t_i-\hat{c}\geq t_i$.
         If $c<\hat{c}$, then $\zeta < \hat{t}_{j+1} \leq t_i-c$ (needs explanation: tjp1 is smallest next point, construct one, must be greater or equal) and hence $\zeta+c<t_i$.
-        So whenever $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ for all $\hat{c}\in\mathcal{K}$ is $c+\zeta\neq t_i$ for all $i=\range{0}{m}$.
+        So whenever $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ is $c+\zeta\neq t_i$ for all $i=\range{0}{m}$ and $c\in\mathcal{K}$
+
+        We need to distinguish two cases.
+
+        If $c+\zeta\geq 0$, then $\trajectory(\zeta)(x)(s)$ is differentiable in $\zeta$ with $\trajectory(\zeta)(\D{x})(s) = \DD{\trajectory(t)(x)(s)}{t}(\zeta)$ by the semantics of DDEs (Definition~\ref{def:semantic-HP}(\ref{itm:sem-HP-DDE})).
+        % FIXME: jumppoints and pw conitnuity
+
+        If $c+\zeta<0$. 
+        
         % FIXME: why holds this equality: should be by definition of semantics DDE
         In this case, it holds by the definition of the DDE semantics that $\trajectory(\zeta)(x)(c)=\trajectory(0)(x)(c+\zeta)$, which is continuously differentiable as initial condition and $\DD{\trajectory(t)(x)(c)}{t}(\zeta)=\DD{\trajectory(0)(x)(s)}{s}(c+\zeta)=\trajectory(0)(\D{x})(c+\zeta)=\trajectory(\zeta)(\D{x})(c)$.
         For the limits it holds

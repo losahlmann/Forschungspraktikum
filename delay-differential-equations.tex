@@ -207,7 +207,7 @@
         A function $f\from\deff\to\R^n$ is called \emph{(locally) Lipschitz continuous} in its second argument if and only if for all $a,b\in\R$ and $M>0$ there is a $L>0$ such that
         \begin{equation*}
             % TODO: is L(\nnorm*{x-x}+\nnorm*{y-y}) better? is equiv, with different L
-            % FIXME: or just say Lipschitz in each component, once for x once for y -> compare proof
+            % FIXME: or just say Lipschitz continuous with respect to two other arguments, once for x once for y -> compare proof
             \nnorm*{f(t,x,y) - f(t,\bar{x},y)} \leq L\max\left\{\nnorm*{x - \bar{x}},\nnorm*{y - \bar{y}}\right\}
         \end{equation*}
         for all $t\in [a,b]$ and $x,\bar{x},y\in\R^n$ with $\nnorm{x},\nnorm{\bar{x}},\nnorm{y}\leq M$.
@@ -288,7 +288,7 @@
         % where $\nnorm{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\supnorm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
 
         Then for each \emph{initial condition} $x_{\tzero}\in\statespace[\tau]$ and start time $\tzero$, there \textbf{exists} a \textbf{unique local solution} of the IVP on a time interval $[\tzero-\tau, \tzero+T]$. The duration $T>0$ depends on the sup-norm and discontinuity points of the initial condition. (?)
-        This solution is continuous and piecewise differentiable on $\compactum{\tzero}{\tzero+T}$
+        This solution is continuous and piecewise differentiable on $\compactum{\tzero}{\tzero+T}$ with subdivision $t_i+\tau$.
     \end{theorem}
 
     The proof is smiliar to the proof of the existence theorem (Theorem 3.7) given in~\cite{Smith10IntroDDE}.
@@ -398,6 +398,7 @@
         \end{align*}
         it follows that $x$ solves the integral equation and hence, by Lemma~\ref{lm:integral-equation},
         this proves the existence of a solution to the DDE.
+        % TODO: continuous because limit in Banach space, diffable and subdiv see integral equiv lemma
 
         % TODO: can one solution be on [\tzero, T_2] with T_2<T ?
         It remains to show uniqueness.

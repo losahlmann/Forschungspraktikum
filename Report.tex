@@ -111,7 +111,7 @@
 
 %\include{introduction}
 
-%\include{delay-differential-equations}
+\include{delay-differential-equations}
 
 %\include{intro-logic}
 
@@ -308,10 +308,9 @@
         
         \end{calculus}
 
-    % TODO: proofs, do not change, since only mention states?
     \begin{theorem}[Soundness of \ddL]
         \label{thm:dL-soundness}
-        The \dL calculus adapted to delay differential equations is sound.
+        The \ddL calculus is sound.
 
     \end{theorem}
     \begin{proof}
@@ -320,16 +319,16 @@
 
         [\&]???
 
-        % adaption of \cite{Platzer15Uniform}
+        % 
     \begin{description}
         % FIXME: assignment symbol
         \item[$\dbox{:=}$] (->substitution lemma in book)
         \item[DW] Proof as for \dL.
-        \item[DC] For a formula $\varrho$ of \FOLR, let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\varrho}}$ and $\trajectory\from\compactum{0}{\bar{r}}\to\states$ be an arbitrary trajectory of duration $\bar{r}\geq 0$, solving the DDE and having $\asstate$ as initial condition.
+        \item[DC] For a formula $\bsfmlfolR$ of \FOLR, let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\bsfmlfolR}}$ and $\trajectory\from\compactum{0}{\bar{r}}\to\states$ be an arbitrary trajectory of duration $\bar{r}\geq 0$, solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\xi)\in\imodel{\IddL}{\Dxtau[0]=\astrm\land\ivr}$ for all $\xi\in\compactum{0}{\bar{r}}$.
 
-        Suppose $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, i.e.\ there exists a $r\leq\bar{r}$, such that $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr}$ for all $\zeta\in\compactum{0}{r}$ and $\trajectory(r)\in\imodel{\IddL}{\asfml}$. Since $\zeta\leq\bar{r}$ it is also $\trajectory(\zeta)\in\imodel{\IddL}{\varrho}$. This is equivalent to $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr\land\varrho}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\varrho}$ for all $\zeta\in\compactum{0}{r}$, which is the same as $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\varrho}}{\asfml}}$.
+        Suppose $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, i.e.\ there exists a $0\leq r\leq\bar{r}$, such that $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr}$ for all $\zeta\in\compactum{0}{r}$ and $\trajectory(r)\in\imodel{\IddL}{\asfml}$. Since $\zeta\leq\bar{r}$ it is also $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$. This is equivalent to $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr\land\bsfmlfolR}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$ for all $\zeta\in\compactum{0}{r}$, which is the same as $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\bsfmlfolR}}{\asfml}}$.
 
-        \item[DI] Without loss of generality we restrict to the case of invariants of the form $\asfml\equiv(g(x)\geq 0)$. Then $\D{(\asfml)}\equiv(\D{(g(x))}\geq 0)$ (by ??)
+        \item[DI] This proof is an adaption of the \dL proof for DI given in~\cite{Platzer15Uniform}. Without loss of generality we restrict to the case of invariants of the form $\asfml\equiv(g(x)\geq 0)$. Then $\D{(\asfml)}\equiv(\D{(g(x))}\geq 0)$ (by ??)
 
         Consider a state $\asstate\in\states$ with $\asstate\in\imodel{\IddL}{\left(\ivr\limply\asfml\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\asfml)}}\right)}$. We need to distinguish two cases. If $\asstate\notin\imodel{\IddL}{\ivr}$, then their is no solution of the DDE and hence $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$ vacuously.
 
