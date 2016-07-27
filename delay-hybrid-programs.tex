@@ -361,7 +361,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\ireachability{\IddL}{\asprg;\bsprg} = \left\{ (\asstate,\bsstate) \with (\asstate,\csstate)\in\ireachability{\IddL}{\asprg}, (\csstate,\bsstate)\in\ireachability{\IddL}{\bsprg} \right\}$
             \item $\ireachability{\IddL}{\hrepeat{\asprg}} %= \hrepeat{(\ireachability{\IddL}{\asprg})}
                 = \displaystyle\cupfold_{n\in\N}\ireachability{\IddL}{\asprg^n}$ with $\asprg^{n+1}\equiv (\asprg^n;\asprg)$ and $\asprg^0\equiv \htest{\ltrue}$
-            \item\label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}} = \{(\asstate,\bsstate) \with \mforall{\zeta\in[0,r]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm(-\tau)}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\{\D{x}\}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,r]\to\states\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\theta}(s)$ and satisfies $\ivr$ for all $s\in[-\min\{\zeta,T\},0]$. On $[-T,-\min\{\zeta,T\})$ it holds $\trajectory(\zeta)(\cdot)(s)=\asstate(\cdot)(s+\zeta)$ for all variables.
+            \item\label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm(-\tau)}{\ivr}} = \{(\asstate,\bsstate) \with \mforall{\zeta\in[0,r]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm(-\tau)}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\{\D{x}\}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,r]\to\states\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta+s)]{\IddL}}{\theta(-\tau)}$ and satisfies $\ivr$ for all $s\in[-\min\{\zeta,T\},0]$. On $[-T,-\min\{\zeta,T\})$ it holds $\trajectory(\zeta)(\cdot)(s)=\asstate(\cdot)(s+\zeta)$ for all variables.
             % TODO: case r=0
         \end{enumerate}
     \end{definition}
@@ -447,29 +447,26 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         Depending on the term $\bstrm$ and the fixed $s$, we define a subdivision $\mathcal{Z}_\bstrm^s=\subdivision{\hat{t}_0}{\hat{t}_k}$ of $\compactum{0}{r}$ by
         % FIXME: what when r>T ? Z={0,r}
         \begin{equation*}
-            \mathcal{Z}_\bstrm^s \defeq \set{0,r}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i-c}
+            \mathcal{Z}_\bstrm^s \defeq \set{0,r}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i-c}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i+\tau-c}
         \end{equation*}
         where $\mathcal{K}\defeq\constants[\bstrm]\cup\constants[\astrm]\cup\set{s}$ is the set of constant symbols (or their interpretations/valuations) appeaering in the term $\bstrm$ and the right hand side of the DDE.
         The set $\mathcal{K}$ is finite and non-empty, since it contains at least the values $0$ and $r$.
         
         We show first that $\trajectory(t)(x)(c)$ is piecewise continuously differentiable in $t$ for all $c\in\mathcal{K}$ with subdivision $\mathcal{Z}_\bstrm^s$:
 
-        Let $c\in\mathcal{K}$ and $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$. By definition, $\hat{t}_j=t_i-\hat{c}$ for some $i\in\set{\range{0}{m}}$ and $\hat{c}\in\mathcal{K}$.
-        If $c\geq\hat{c}$ then $\zeta>\hat{t}_j$ implies $c+\zeta > c+t_i-\hat{c}\geq t_i$.
-        If $c<\hat{c}$, then $\zeta < \hat{t}_{j+1} \leq t_i-c$ (needs explanation: tjp1 is smallest next point, construct one, must be greater or equal) and hence $\zeta+c<t_i$.
-        So whenever $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ is $c+\zeta\neq t_i$ for all $i=\range{0}{m}$ and $c\in\mathcal{K}$
+        Let $c\in\mathcal{K}$ and $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$.
+        Assume that $\zeta+c=t_i$ for some $i$. That is $\zeta=t_i-c=\hat{t}_k$ for some $k$. This is not possible by the choice of $\zeta$ lying between two consequtive $\hat{t}_j$.
+        In the same way for $\zeta+c=t_i+\tau$.
+        Hence for $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ it holds that $\zeta+c\neq t_i$ and $\zeta+c\neq t_i+\tau$ for all $c\in\mathcal{K}$ and for all $i\in\set{\range{0}{m}}$.
 
         We need to distinguish two cases.
 
-        If $c+\zeta\geq 0$, then $\trajectory(\zeta)(x)(s)$ is differentiable in $\zeta$ with $\trajectory(\zeta)(\D{x})(s) = \DD{\trajectory(t)(x)(s)}{t}(\zeta)$ by the semantics of DDEs (Definition~\ref{def:semantic-HP}(\ref{itm:sem-HP-DDE})).
-        % FIXME: jumppoints and pw conitnuity
-
-        If $c+\zeta<0$. 
-        
-        % FIXME: why holds this equality: should be by definition of semantics DDE
-        In this case, it holds by the definition of the DDE semantics that $\trajectory(\zeta)(x)(c)=\trajectory(0)(x)(c+\zeta)$, which is continuously differentiable as initial condition and $\DD{\trajectory(t)(x)(c)}{t}(\zeta)=\DD{\trajectory(0)(x)(s)}{s}(c+\zeta)=\trajectory(0)(\D{x})(c+\zeta)=\trajectory(\zeta)(\D{x})(c)$.
+        % FIXME: which cases includes =0 ?
+        If $c+\zeta<0$, it holds by the definition of the DDE semantics that $\trajectory(\zeta)(x)(c)=\trajectory(0)(x)(c+\zeta)$, which is continuously differentiable as initial condition, if $\zeta+c\neq t_i$. Then
+        \begin{equation*}
+            \DD{\trajectory(t)(x)(c)}{t}(\zeta)=\DD{\trajectory(0)(x)(s)}{s}(c+\zeta)=\trajectory(0)(\D{x})(c+\zeta)=\trajectory(\zeta)(\D{x})(c)
+        \end{equation*}
         For the limits it holds
-        only interesting when $\hat{c}=c$
         \begin{align*}
             \lim_{\zeta\downto\hat{t}_j} \DD{\trajectory(t)(x)(c)}{t}(\zeta)
                 & = \lim_{\zeta\downto t_i-c} \DD{\trajectory(0)(x)(s)}{s}(c+\zeta)\\
@@ -478,8 +475,15 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 = \trajectory(0)(\D{x})(t_i)
         \end{align*}
         And analogously for the existence of the limit for $\zeta\upto\hat{t}_{j+1}$
-        % FIXME: limits zeta->hat t_i
-        Let $c+\zeta\geq 0$: by def of semantics of DDE
+
+        If $c+\zeta\geq 0$, then $\trajectory(\zeta)(x)(s)=\trajectory(\zeta+c)(x)(0)$ is differentiable in $\zeta$ with $\trajectory(\zeta)(\D{x})(s) = \DD{\trajectory(t)(x)(s)}{t}(\zeta)$ by the semantics of DDEs (Definition~\ref{def:semantic-HP}(\ref{itm:sem-HP-DDE})), if $\zeta+c\neq t_i+\tau$.
+        % FIXME: jumppoints and pw conitnuity/diffable
+        By Theorem~\ref{thm:solution-existence}: continuous and pw diffable with subdivision $Z$.
+
+        % By definition, $\hat{t}_j=t_i-\hat{c}$ for some $i\in\set{\range{0}{m}}$ and $\hat{c}\in\mathcal{K}$.
+        % If $c\geq\hat{c}$ then $\zeta>\hat{t}_j$ implies $c+\zeta > c+t_i-\hat{c}\geq t_i$.
+        % If $c<\hat{c}$, then $\zeta < \hat{t}_{j+1} \leq t_i-c$ (needs explanation: tjp1 is smallest next point, construct one, must be greater or equal) and hence $\zeta+c<t_i$.
+        % So whenever $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ is $c+\zeta\neq t_i$ for all $i=\range{0}{m}$ and $c\in\mathcal{K}$
 
         %On each $\zeta\in(\hat{t}_k,\hat{t}_{k+1})$ is each $\ivaluation{\iconcat[state={\trajectory(\zeta)},assign=s]{\IddL}}{\xtau[c]}$ diffable in $\zeta$
 
