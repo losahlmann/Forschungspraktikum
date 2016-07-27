@@ -101,52 +101,53 @@
     \label{sec:definition-dde}
 
     \begin{definition}[Delay Differential Equation]\label{def:dde}
-        Let $f\from\deff\to\R^n$ and $\tau > 0$.
+        Let $f\from\deff\to\R^n$ and $\tau_j > 0$ for $j=\range{1}{k}$. Put $\taumax\defeq\max_j\set{\tau_j}$.
+
         A functional equation of the form
         \begin{equation}\label{eq:dde}
-            \D{x}(t) = f(t,x(t),x(t-\tau))
+            \D{x}(t) = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))
         \end{equation}
-        is called \emph{Delay Differential Equation (DDE)} with \emph{constant, discrete delay $\tau$}.
-        It is \emph{autonomous} if its right hand side $f$ is time independent and \emph{pure} if the right hand side only depends on $x(t-\tau)$ and not on $x(t)$.
+        is called \emph{delay differential equation} (DDE) with \emph{multiple constant, discrete delays $\tau_j$}.
+        It is \emph{autonomous} if its right hand side $f$ is time independent and \emph{pure} if the right hand side only depends on $x(t-\tau_i)$ and not on $x(t)$.
 
-        A DDE can be equipped with an \emph{initial condition} $x_{\tzero}$. It specifies the values of $x$ on $[\tzero-\tau, \tzero]$ on which the right hand side depends.
+        A DDE can be equipped with an \emph{initial condition} $x_{\tzero}$. It specifies the values of $x$ on $[\tzero-\taumax, \tzero]$ on which the right hand side depends.
         Such a pair is called \emph{initial value problem (IVP)}:
         \begin{equation}\label{eq:ivp}
             \begin{cases}
-                \D{x}(t) = f(t,x(t),x(t-\tau)) & \text{for } t\geq\tzero\\
-                x(t) = x_{\tzero}(t) & \text{for } t\in [\tzero-\tau,\tzero]
+                \D{x}(t) = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k)) & \text{for } t\geq\tzero\\
+                x(t) = x_{\tzero}(t) & \text{for } t\in [\tzero-\taumax,\tzero]
             \end{cases}
         \end{equation}
     \end{definition}
 
     % Since we only consider autonomous DDEs, we can without loss of generality restrict to the case of initial time $t_0=0$.
 
-    The definition of a DDE can be extended to multiple constant discrete delays. For simplicity, we restrict here to a single delay.
+    % The definition of a DDE can be extended to multiple constant discrete delays. For simplicity, we restrict here to a single delay.
 
 
 \section{Definition of Solution}
     \label{sec:definition-of-solution}
 
     \begin{definition}[Solution of DDE]\label{def:solution-dde}
-        A function $x\from\compactum{\tzero-\tau}{\tzero+T}\to\R^n$ is called \emph{(local) solution} of the initial value problem~\eqref{eq:ivp}, if and only if
-        $x$ is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$ with subdivision $\Delta$.
-        This means, when $\Delta=\subdivision{\tzero=t_0}{t_m=\tzero+T}$, $x$ is continuously differentiable on each sub interval $(t_i,t_{i+1})$
+        A function $x\from\compactum{\tzero-\taumax}{\tzero+T}\to\R^n$ is called \emph{(local) solution} of the initial value problem~\eqref{eq:ivp}, if and only if
+        $x$ is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$ (in the sense of Def.~\ref{def:piecewise-continuous}) with subdivision $\Delta$.
+        This means, when $\Delta=\subdivision{\tzero=t_0}{t_m=\tzero+T}$, $x$ is continuously differentiable on each interval $(t_i,t_{i+1})$
         %there exists a $T>0$ such that
         % FIXME: local solution is on a single subdiv int only -> cont diffable
         %$\restrict{x}{(t_i,t_{i+1})}\in \Cn[1]{\compactum{\tzero}{\tzero+T}}{\R^n}$ with
         with
         \begin{equation*}
-            \D{x}(t) = f(t,x(t),x(t-\tau))
+            \D{x}(t) = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))
         \end{equation*}
         for all $t\in (\tzero,\tzero+T)$ and in $t=t_i$, it holds
         % TODO: for the right-hand derivative?
         % cf ODE sol
         \begin{equation*}
-            \lim_{s\downto t_i}\D{x}(s)=f(t_i,x(t_i),x(t_i-\tau))
+            \lim_{s\downto t_i}\D{x}(s) = f(t_i,x(t_i),x(t_i-\tau_1),\ldots,x(t_i-\tau_k))
         \end{equation*}
-        On $[\tzero-\tau,\tzero]$, $x$ obeys the initial condition:
+        and $x$ obeys the initial condition:
         \begin{equation*}
-            x(t) = x_{\tzero}(t) \quad\text{for } t\in [\tzero-\tau,\tzero].
+            x(t) = x_{\tzero}(t) \quad\text{for } t\in [\tzero-\taumax,\tzero].
         \end{equation*}
         % FIXME: global solution should allow knicks
         If the function $x$ is a solution for all $T>0$, it is called \emph{global}.
