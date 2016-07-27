@@ -40,34 +40,45 @@
         A \emph{piecewise continuous function}, as defined in Definition~\ref{def:pw-cont-diff} is (Riemann) integrable.
     \end{lemma}
     \begin{proof}
-        See standard analysis literature, such as \cite{Rudin76PrinciplesAnalysis} () or \cite{Gathmann12GDM} (Example 11.16b).
+        See standard analysis literature, such as \cite{Rudin76PrinciplesAnalysis} (Theorem~6.10) or \cite{Gathmann12GDM} (Example~11.16b).
         % ObdA: one subint with jump at end
     \end{proof}
 
     The following lemma generalizes the fundamental theorem of calculus to piecewise continuous derivatives.
 
     \begin{lemma}[]\label{lm:pc-hauptsatz}
-        Let $F\in\Cn[0]{\compactum{a}{b}}{} \cap \Cnpw[1]{\compactum{a}{b}}{}$ on the subdivision $\subdivision{a=t_0}{t_m=b}$ of $\compactum{a}{b}\subset\R$.
-        For all $s\in\compactum{a}{b}$ it holds
+        Let $F\in\Cn[0]{\compactum{a}{b}}{} \cap \Cnpw[1]{\compactum{a}{b}}{}$ with the subdivision $\subdivision{a=t_0}{t_m=b}$ and piecewise derivative $f$.
+        %of $\compactum{a}{b}\subset\R$. 
+        For all $t\in\compactum{a}{b}$ it holds
         \begin{equation*}
-            F(s)-F(a) = \sum_{i=0}^k\int\limits_{t_i}^{t_{i+1}}f(t)\dx[t] + \int\limits_{t_k}^s f(t)\dx[t]
+            F(t)-F(a) = \integral{a}{t} f(s)\dx[s]
+            %\sum_{i=0}^k\int\limits_{t_i}^{t_{i+1}}f(t)\dx[t] + \int\limits_{t_k}^s f(t)\dx[t]
         \end{equation*}
-        where $t_k\leq s < t_{k+1}$.
+        %where $t_k\leq s < t_{k+1}$.
         % FIXME: what about a=-inf or b=inf?
     \end{lemma}
     \begin{proof}
-        On each interval $\compactum{t_i}{t_{i+1}}$ of the subdivision, $F$ is continuously differentiable. Hence, by the the fundamental theorem of calculus (cf. standard analysis literature, e.g. \cite{Gathmann12GDM,Rudin76PrinciplesAnalysis}) it follows for all $i=\range{0}{m-1}$:
+        On each interval $\compactum{t_{i-1}}{t_i}$ of the subdivision, $f$ is piecewise continuous and hence integrable.
+
+        For all $\zeta\in\open{t_{i-1}}{t_i}$ is $F$ differentiable on $\compactum{t_{i-1}}{\zeta}$ with $\D{F}=f$.
+        By the fundamental theorem of calculus (cf.\ standard analysis literature, e.g.~\cite{Gathmann12GDM,Rudin76PrinciplesAnalysis}), it follows
         \begin{equation*}
-            F(t_{i+1})-F(t_i) = \int\limits_{t_i}^{t_{i+1}}\D{F}(t)\dx[t]
+            \denseintegral{t_{i-1}}{\zeta} f(s)\dx[s] = F(\zeta)-F(t_{i-1})
         \end{equation*}
-        and
+        and by the continuity of $F$ that
         \begin{equation*}
-            F(s)-F(t_k) = \int\limits_{t_k}^{s}\D{F}(t)\dx[t]
+            \denseintegral{t_{i-1}}{t_i} f(s)\dx[s]
+            = \lim_{\zeta\to t_i}\denseintegral{t_{i-1}}{\zeta} f(s)\dx[s]
+            = \lim_{\zeta\to t_i} F(\zeta)-F(t_{i-1})
+            = F(t_i)-F(t_{i-1})
         \end{equation*}
-        % TODO: by continuity, F(t_i)=F(t_i)
-        Summation over $i=\range{0}{k}$ gives the ... as a telescope sum (since $F$ continuous on $\compactum{a}{b}$)
+        For any $t\in\compactum{a}{b}$, there is a $k\in\set{\range{1}{m}}$ such that $t\in\closedopen{t_{k-1}}{t_k}$ (in the case $t=b$, set $k=m$), summation over $i=\range{1}{k}$ yields the telescoping series
         \begin{equation*}
-            F(s)-F(a) = \sum_{i=0}^k\int\limits_{t_i}^{t_{i+1}}f(t)\dx[t] + \int\limits_{t_k}^s f(t)\dx[t]
+            F(t)-F(a) = \sum_{i=1}^{k} \denseintegral{t_{i-1}}{t_i} f(s)\dx[s] + \integral{t_j}{t} f(s)\dx[s]
+        \end{equation*}
+        which is by the additivity of the integral
+        \begin{equation*}
+            F(t)-F(a) = \integral{a}{t} f(s)\dx[s]
         \end{equation*}
     \end{proof}
 
