@@ -216,33 +216,33 @@
     \begin{definition}[Lipschitz Continuity]\label{def:lipschitz}
         % similar to \cite{pruesswilke10GewDiffGl,Smith10IntroDDE}
         % FIXME: dont I need xtau in right side ??? 
-        A function $f\from\deff\to\R^n$ is called \emph{(locally) Lipschitz continuous} in its second argument if and only if for all $a,b\in\R$ and $M>0$ there is a $L>0$ such that
+        A function $f\from\deff\to\R^n$ is called \emph{(locally) Lipschitz continuous} (in its $i$-th argument) if and only if for all $a,b\in\R$ and $M>0$ there is a $L>0$ such that
         \begin{equation*}
             % TODO: is L(\nnorm*{x-x}+\nnorm*{y-y}) better? is equiv, with different L
             % FIXME: or just say Lipschitz continuous with respect to two other arguments, once for x once for y -> compare proof
-            \nnorm*{f(t,x,y) - f(t,\bar{x},y)} \leq L\max\left\{\nnorm*{x - \bar{x}},\nnorm*{y - \bar{y}}\right\}
+            \nnorm*{f(t,x_1,\ldots,x_i,\ldots,x_k) - f(t,x_1,\ldots,y_i,\ldots,x_k)} \leq L\nnorm*{x_i - y_i}
         \end{equation*}
-        for all $t\in [a,b]$ and $x,\bar{x},y\in\R^n$ with $\nnorm{x},\nnorm{\bar{x}},\nnorm{y}\leq M$.
+        for all $t\in [a,b]$ and $x_j,y_i\in\R^n$ with $\nnorm{x_j},\nnorm{y_i},\leq M$.
     \end{definition}
 
     \begin{lemma}\label{lm:bounded-lipschitz}
-        Let $f\from\deff\to\R^n$ be continuous and Lipschitz continuous in its second argument.
+        Let $f\from\deff\to\R^n$ be continuous and Lipschitz continuous in all but its first argument.
 
         For any given compact interval $\compactum{a}{b}$ and $M>0$ there exists a bound $K>0$ such that
         \begin{equation}
-            \nnorm{f(t,x,y)}\leq K
+            \nnorm{f(t,x_1,\ldots,x_k)}\leq K
         \end{equation}
-        for all $t\in\compactum{a}{b}$ and $x,y\in\R^n$ with $\nnorm{x},\nnorm{y}\leq M$.
+        for all $t\in\compactum{a}{b}$ and $x_j\in\R^n$ with $\nnorm{x_j}\leq M$.
     \end{lemma}
     \begin{proof}
-        Let $L$ be the Lipschitz constant of $f$ for the given $\compactum{a}{b}$ and $M$. Then
+        Let $L_i$ be the Lipschitz constant for the $i$-th argument of $f$ on the given $\compactum{a}{b}$ and $M$. Set $L\eqdef\max_i\set{L_i}$. Then
         \begin{multline*}
-            \nnorm{f(t,x,y)} \leq \nnorm{f(t,x,y) - f(t,0,y)} + \nnorm{f(t,0,y)}\\
-            \leq L\nnorm{x-0} + \nnorm{f(t,0,y)} \leq LM+P = K
+            \nnorm{f(t,x_1,\ldots,x_k)} \leq \nnorm{f(t,x_1,\ldots,x_k) - f(t,0,\ldots,0)} + \nnorm{f(t,0,\ldots,0)}\\
+            \leq L_i\nnorm{x_i-0} + \nnorm{f(t,0,\ldots,0)} \leq LM+P = K
         \end{multline*}
-        for $t\in\compactum{a}{b}$ and $x,y\in\R^n$ with $\nnorm{x},\nnorm{y}\leq M$. We used the continuity of $f$ on the compact set $S=\compactum{a}{b}\times\set{z\in\R^n\with\nnorm{z}\leq M}$ for the existence of
+        for $t\in\compactum{a}{b}$ and $x_j\in\R^n$ with $\nnorm{x_j}\leq M$. We used the continuity of $f$ on the compact set $\compactum{a}{b}$ for the existence of
         \begin{equation*}
-            P = \max_{(s,z)\in S}\nnorm{f(s,0,z)}
+            P = \max_{s\in\compactum{a}{b}}\nnorm{f(s,0,0)}
         \end{equation*}
     \end{proof}
 
@@ -251,7 +251,7 @@
         Finding a solution of the initial value problem~\eqref{eq:ivp} is equivalent to solving the integral equation
         \begin{equation}\label{eq:integral-equation}
             \begin{cases}
-                x(t) = x_{\tzero}(\tzero) + \int_{\tzero}^t f(s,x(s),x(s-\tau))\dx[s] & \text{for } t\geq\tzero\\
+                x(t) = x_{\tzero}(\tzero) + \integral{\tzero}{t} f(s,x(s),x(s-\tau))\dx[s] & \text{for } t\geq\tzero\\
                 x(t) = x_{\tzero}(t) & \text{for } t\in [\tzero-\tau,\tzero]
             \end{cases}
         \end{equation}
