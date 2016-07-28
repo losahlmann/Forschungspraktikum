@@ -381,7 +381,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     Using this, in comparison to \dL extended syntax, we can write down both delay differential equations and ordinary differential equations in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
 
-    % TODO: how to specify initial condition, for x and x', which need additionally coincide, have same subdivision
+    % TODO: how to specify initial condition, for x and x', which need additionally coincide, have same partition
     % in general, we do not write expression explicitely, just give possible intervals in precondition
     
     As a \FOLR formula, $\ivr$ do not contain any delayed variables and thus only depend of the values at the current time instant (and not over the entire interval $\delayinterval$).
@@ -434,17 +434,17 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \end{lemma}
     \begin{proof}
         % TODO: what if x'[] in term ?
-        % TODO: in init cond: x and x' need to match, ie d/ds x[s] = x'[s], same subdivision, specification of x' in init cond only needed when referenced to it later
+        % TODO: in init cond: x and x' need to match, ie d/ds x[s] = x'[s], same partition, specification of x' in init cond only needed when referenced to it later
         % FIXME: oBdA: t_0=0
         %Let $\trajectory\from\compactum{0}{r}$
 
         % FIXME: new statespace C^1_pw
-        % FIXME: more possible variables, common subdivision is cup
-        Let $\subdivision{-T=t_0}{t_m=0}$ be the subdivision of the initial condition $\trajectory(0)(x)\in\statespacenew$.
-        %We show that value of a term is piecewise differentiable with subdivision $\mathcal{Z}$.
+        % FIXME: more possible variables, common partition is cup
+        Let $\partition{-T=t_0}{t_m=0}$ be the partition of the initial condition $\trajectory(0)(x)\in\statespacenew$.
+        %We show that value of a term is piecewise differentiable with partition $\mathcal{Z}$.
         % FIXME: c used for symbol and its interpretation
         Let in the following $s\in\compactum{-T}{0}$ be arbitray but fixed, such that $s$ can be treated as a constant, in the same way like any $c\in\constants$.
-        Depending on the term $\bstrm$ and the fixed $s$, we define a subdivision $\mathcal{Z}_\bstrm^s=\subdivision{\hat{t}_0}{\hat{t}_k}$ of $\compactum{0}{r}$ by
+        Depending on the term $\bstrm$ and the fixed $s$, we define a partition $\mathcal{Z}_\bstrm^s=\partition{\hat{t}_0}{\hat{t}_k}$ of $\compactum{0}{r}$ by
         % FIXME: what when r>T ? Z={0,r}
         \begin{equation*}
             \mathcal{Z}_\bstrm^s \defeq \set{0,r}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i-c}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i+\tau-c}
@@ -452,7 +452,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         where $\mathcal{K}\defeq\constants[\bstrm]\cup\constants[\astrm]\cup\set{s}$ is the set of constant symbols (or their interpretations/valuations) appeaering in the term $\bstrm$ and the right hand side of the DDE.
         The set $\mathcal{K}$ is finite and non-empty, since it contains at least the values $0$ and $r$.
         
-        We show first that $\trajectory(t)(x)(c)$ is piecewise continuously differentiable in $t$ for all $c\in\mathcal{K}$ with subdivision $\mathcal{Z}_\bstrm^s$:
+        We show first that $\trajectory(t)(x)(c)$ is piecewise continuously differentiable in $t$ for all $c\in\mathcal{K}$ with partition $\mathcal{Z}_\bstrm^s$:
 
         Let $c\in\mathcal{K}$ and $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$.
         Assume that $\zeta+c=t_i$ for some $i$. That is $\zeta=t_i-c=\hat{t}_k$ for some $k$. This is not possible by the choice of $\zeta$ lying between two consequtive $\hat{t}_j$.
@@ -478,7 +478,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
         If $c+\zeta\geq 0$, then $\trajectory(\zeta)(x)(s)=\trajectory(\zeta+c)(x)(0)$ is differentiable in $\zeta$ with $\trajectory(\zeta)(\D{x})(s) = \DD{\trajectory(t)(x)(s)}{t}(\zeta)$ by the semantics of DDEs (Definition~\ref{def:semantic-HP}(\ref{itm:sem-HP-DDE})), if $\zeta+c\neq t_i+\tau$.
         % FIXME: jumppoints and pw conitnuity/diffable
-        By Theorem~\ref{thm:solution-existence}: continuous and pw diffable with subdivision $Z$.
+        By Theorem~\ref{thm:solution-existence}: continuous and pw diffable with partition $Z$.
 
         % By definition, $\hat{t}_j=t_i-\hat{c}$ for some $i\in\set{\range{0}{m}}$ and $\hat{c}\in\mathcal{K}$.
         % If $c\geq\hat{c}$ then $\zeta>\hat{t}_j$ implies $c+\zeta > c+t_i-\hat{c}\geq t_i$.
