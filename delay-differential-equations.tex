@@ -36,6 +36,10 @@
 
     % TODO: sup-norm for pw
 
+    \begin{lemma}
+        chain of continuous and piecewise-continuous is again piecewise-continuous with same subdivision
+    \end{lemma}
+
     \begin{lemma}[]\label{lm:pc-integrable}
         A \emph{piecewise continuous function}, as defined in Definition~\ref{def:pw-cont-diff} is (Riemann) integrable.
     \end{lemma}
@@ -242,48 +246,54 @@
         \end{multline*}
         for $t\in\compactum{a}{b}$ and $x_j\in\R^n$ with $\nnorm{x_j}\leq M$. We used the continuity of $f$ on the compact set $\compactum{a}{b}$ for the existence of
         \begin{equation*}
-            P = \max_{s\in\compactum{a}{b}}\nnorm{f(s,0,0)}
+            P = \max_{s\in\compactum{a}{b}}\nnorm{f(s,0,\ldots,0)}
         \end{equation*}
     \end{proof}
 
     \begin{lemma}\label{lm:integral-equation}
         %TODO: compare with ODE lecture notes
         Finding a solution of the initial value problem~\eqref{eq:ivp} is equivalent to solving the integral equation
-        \begin{equation}\label{eq:integral-equation}
+        \begin{equation*}\label{eq:integral-equation}
             \begin{cases}
-                x(t) = x_{\tzero}(\tzero) + \integral{\tzero}{t} f(s,x(s),x(s-\tau))\dx[s] & \text{for } t\geq\tzero\\
-                x(t) = x_{\tzero}(t) & \text{for } t\in [\tzero-\tau,\tzero]
+                x(t) = x_{\tzero}(\tzero) + \integral{\tzero}{t} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))\dx[s] & \text{for } t\geq\tzero\\
+                x(t) = x_{\tzero}(t) & \text{for } t\in [\tzero-\taumax,\tzero]
             \end{cases}
-        \end{equation}
+        \end{equation*}
         where ... (same as for ivp)
         and is continuous in t.
         integral componentwise, f vector valued
     \end{lemma}
     \begin{proof}
-        Let $x$ be a solution of the IVP. Thus $x$ is (by definition) continuous on $\compactum{\tzero}{\tzero+T}$ and piecewise continuous on $\compactum{\tzero-\tau}{\tzero}$. This means that the chain $f(t,x(t),x(t-\tau))$ is piecewise continuous and hence integrable on $\compactum{\tzero}{\tzero+T}$. Furthermore, $x$ is (by definition) piecewise differentiable.
-        The fundamental theorem of calculus states
+        Let $x$ be a solution of the IVP. Thus $x$ is (by definition) piecewise continuous on $\compactum{\tzero-\taumax}{\tzero}$ andcontinuous and piecewise continuous differentiable on $\compactum{\tzero}{\tzero+T}$ with piecewise derivative $f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))$. This chain of a piecewise continuous and continuous function is piecewise continuous and hence by Lemma~\ref{lm:pc-integrable} integrable on $\compactum{\tzero}{\tzero+T}$.
+
+        By Lemma~\ref{lm:pc-hauptsatz} it follows
         \begin{equation*}
-            x(t) = x_{\tzero}(\tzero) + \int_{\tzero}^t f(s,x(s),x(s-\tau))\dx[s]
+            x(t) = x_{\tzero}(\tzero) + \integral{\tzero}{t} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))\dx[s]
         \end{equation*}
         for $t\geq\tzero$.
 
-        Conversely, let $x\from [\tzero-\tau,\tzero+T]$ be a solution of the integral equation~\eqref{eq:integral-equation}, i.e. $x(t)=x_{\tzero}(t)$ for all $t\in\compactum{\tzero-\tau}{\tzero}$ and $x(t) = x_{\tzero}(\tzero) + \int_{\tzero}^t f(s,x(s),x(s-\tau))\dx[s] =: F(t)$ for $t\in\compactum{\tzero}{\tzero+T}$ for a $T>0$.
-        HS -> continuous
+        Conversely, let $x$ be a solution of the integral equation~\eqref{eq:integral-equation}.
+        By the the fundamental theorem of calculus is $x$ continuous on $\compactum{\tzero}{\tzero+T}$ and differentiable in $t\in\compactum{\tzero}{\tzero+T}$ if $s\mapsto f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))$ is continuous in $s=t$.
+
+         has the subdivision
+        We define a subdivision of $\compactum{\tzero}{\tzero+T}$ by
+        \begin{equation*}
+            \mathcal{Z}\defeq\set{\tzero,\tzero+T}\cup\bigcup_{j=1}^{k}\bigcup_{\substack{i=1\\t_i\geq\tau_j}}^{m}\set{t_i-\tau_j}\defeq\subdivision{\hat{t}_0}{\hat{t}_p}
+        \end{equation*}
+        If $s\in\open{\hat{t}_{l-1}}{\hat{t}_l}$ then is $s-\tau_j\neq t_i$ for all $j$ and $i$. Hence the mapping $t\mapsto f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))$ is continuous in $t=s$, what implies that $x$ is differentiable in $s$ and that $\D{x}(s)=f(s)$.
+
+        \begin{align*}
+            \lim_{s\downto\hat{t}_l} \D{x}(s)
+            &= \lim_{s\downto\hat{t}_l} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))\\
+            &= f(\hat{t}_l,x(\hat{t}_l),x(\hat{t}_l-\tau_1),\ldots,x(\hat{t}_l-\tau_k))
+        \end{align*}
+        by the continuity of $f$ and $\lim_{s\downto\hat{t}_l} x(s-\tau_j) = x(\hat{t}_l-\tau_j)$
+        the limits exist
+        \begin{equation*}
+            \lim_{s\upto\hat{t}_l} \D{x}(s) = \lim_{s\upto\hat{t}_l} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k)) = 
+        \end{equation*}
+        Obviously, it obeys the initial condition, i.e. $x(t)=x_{\tzero}(t)$ for all $t\in\compactum{\tzero-\tau}{\tzero}$.
         % FIXME: f cont uberall in Voraussetzung?
-        Since $f$ is by the precondition continuous, x cont -> integrand cont iff xtau cont
-        Let $\set{t_0-\tau < \ldots < t_m-\tau}$ be the subdivision of the initial condition $\x_{\tzero}\in\statespace$.
-        Since $f$ is integrable on and continuous on ..., the fundamental theorem of calculus states the differntiability of F on $(t_i,t_{i+1})$ with
-        \begin{equation}
-            x'=F'=f()
-        \end{equation}
-        % FIXME: t_i is jumppoint of init cond, can be x_sigma or x
-        show $\D{F}$ is continuable in jump point $t_i$
-        $\lim_{t\downto t_i}\D{F}(t)=\lim_{t\downto t_i}f(t,x(t),x(t-\tau))=f(t_i,x(t_i),x(t_i-\tau))$ by continuity of $f$, $x|(t_i,t_{i+1})$ and def of pw cont $x|(t_i-\tau,t_{i+1}-\tau)$
-        same way: limit exists for $t\upto t_{i+1}$
-
-
-
-        integrate from discontinuity of $\xbartaut{t}$ to discontinuity and proof stetige fortsetzbarkeit at these points
     \end{proof}
 
     \begin{theorem}[Existence of unique solution]\label{thm:solution-existence}
