@@ -1,10 +1,27 @@
 \chapter{Hybrid Programs with DDEs}\label{hybrid-programs-with-ddes}
 
-We extent hybrid programs (\HPs) and formulae of classical \dL with syntax, semantics, axiomatization and proof rules which allow to deal with Delay Differential Equations.
+
+We extent classical differential dynamic logic (\dL) with syntax, semantics, axiomatization and proof rules to support reasoning about hybrid programs with Delay Differential Equations.
 %Is a super set, \dL is a fragment
-Call obtained \dHPs and \ddL.
+
+As \dL
+\ddL is modal logic
+specify and verify reachability properties about the state of a hybrid program
 
 Similiar to first-order logic and essentially as an extension of dL we define delay differential logic
+
+present semantic model
+of hybrid dynamical systems with delay
+called \dHPs
+
+safety and liveness properties specify
+
+\dL in \cite{Platzer15Uniform} no axiom schemata, but finite number of axioms and proof rules (sets of formulas)
+proof rule for substitution on axiom preserving soundness
+
+here for simplicity: axioms in infinite sense
+
+also differential form axiomatization of differential equations
 
 \cite{Platzer12Complete,Platzer15Uniform}
 
@@ -23,6 +40,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     Let $\allvars$ be the set of \emph{all variables} and $\diffvars\defeq\{\D{x} \with x\in\allvars\}$ the corresponding set of \emph{differential symbols}.
     Let $\constants$ be the set of \emph{all constants}. We denote $\delayvars\defeq\{\xtau[c] \with x\in\allvars, c\in\constants\}$ the set of \emph{delayed variables} and $\delaydiffvars\defeq\{\Dxtau[c] \with \D{x}\in\diffvars, c\in\constants\}$ the set of \emph{delayed differentials}.
+    finite sets
 
     We will usually denote variables by $x,y,z\in\allvars$ and their differential symbols by $\D{x},\D{y},\D{z}\in\diffvars$.
 
@@ -152,7 +170,10 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     \end{definition}
 
     % TODO: FOLR is subset of ddL formulae
+    \ddL formulae contain formulas of first-order logic of real-closed fields
     \FOLR formulae are a subset of \ddL.
+    connectives of propositional logic
+    two modalities
 
     When terms do not depend on quantified parameter, can omit writing down forall in formula
 
@@ -383,6 +404,8 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     For the \emph{discrete assignment}, we only allow the values at the current time instant to be changed. A functional assignment would essentially allow to rewrite history, which is not permitted.
 
     This assignment is the actual reason why we need to consider piecewise continuous evolutions.
+
+    nondeterministic period of time
 
     %TODO: super dense time: multiple assignments, only consider last assignment
 
