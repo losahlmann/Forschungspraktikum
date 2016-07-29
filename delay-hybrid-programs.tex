@@ -32,9 +32,9 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     % FIXME: what are program constants?
     %program constants $ $, may be in $\rationals$
-
+extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     \begin{definition}[Terms]\label{def:syntax-terms}
-        \emph{Terms} are defined by the following grammar, extending \dL with symbols for \emph{delayed variables} and \emph{differentials}:
+        The syntax of \emph{terms} of \emph{delay differential dynamic logic} is defined by the following grammar:
         \begin{equation*}
             \astrm,\bstrm \Coloneqq
                 \xtau[s] \mid
@@ -82,11 +82,12 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     The grammar defining \emph{delayed hybrid programs} is the same as for classical \HPs (cf. \cite{Platzer15Uniform}) and is shown here for completeness.
 
     \begin{definition}[(Delay) Hybrid Programs]\label{def:syntax-HP}
-        \emph{(Delay) Hybrid programs} (\dHPs) are defined by
+        The syntax of\emph{(delay) hybrid programs} (\dHPs) is defined by
         % TODO: first-order logic of real arithmetic formulas include \xtau?
         \begin{equation*}
             \asprg, \bsprg \Coloneqq
-                a \mid
+                % program constants?
+                %a \mid
                 % FIXME: do I need theta(0), or can I later just say, s not free in theta ?
                 \hupdate{\humod{x}{\astrm(0)}} \mid
                 \Dupdate{\Dumod{\D{x}}{\astrm(0)}} \mid
@@ -95,7 +96,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 % TODO: replace ; in HPs
                 \asprg;\bsprg \mid
                 \hrepeat{\asprg} \mid
-                \hevolvein{\D{x}=\astrm(-\tau)}{\ivr}
+                \hevolvein{\D{x}=\astrm(0)}{\ivr}
         \end{equation*}
         % TODO: ddes with mult const delay
         % TODO: program constant
@@ -119,13 +120,13 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
 
     \begin{definition}[\ddL Formulas]\label{def:syntax-formula}
-        The \emph{formulae} of \emph{delay differential dynamic logic} (\ddL) are defined by
+        The the syntax for \emph{formulae} of \emph{delay differential dynamic logic} is defined by
         \begin{align*}
             \asfml,\bsfml \Coloneqq{}& % fixes missing space
                 % TODO: better abbreviated notation for \holdssince, make forall only appear in semantics rhs
                 \astrm\geq\bstrm \mid
                 p(\range{\istrm{1}}{\istrm{k}}) \mid
-                \contextapp{C}{\asfml} \mid
+                %\contextapp{C}{\asfml} \mid
                 \lnot\asfml \mid
                 \asfml\land\bsfml \mid\\
                 &\holdssince{T}{\asfml(s)} \mid
@@ -143,7 +144,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
         modal formula $\dbox{\asprg}{\asfml}$ : $\asfml$ holds in the state after all runs of $\asprg$, dual: there is a run
         % TODO: what is a quantifier symbol? (-> US paper)
-        quantifier symbols $C$, with formula as argument are higher order predicate symbols and bind the variables of $\asfml$
+        % quantifier symbols $C$, with formula as argument are higher order predicate symbols and bind the variables of $\asfml$
 
         The quantifiers $\forall$ and $\exists$ quantify over $\statespace$.
 
@@ -155,11 +156,23 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     When terms do not depend on quantified parameter, can omit writing down forall in formula
 
+    \begin{convention}
+        The frequently appearing fact that $\asfml(s)$ not only holds for $s\in\delayinterval$ but also in $s=0$
+        \begin{equation*}
+            \holdssince{T}{\asfml(s)}\land\asfml(0)
+        \end{equation*}
+        can also be written as
+        \begin{equation*}
+            \holdssinceclosed{T}{\asfml(s)}
+        \end{equation*}
+        For convenience, we allow the latter, abbreviated notation, which is implicitely replaced by the former, syntactically correct version.
+    \end{convention}
+
 \section{Dynamic Semantics}
     \label{sec:dynamic-semantics}
 
     % TODO: state space pw diffable
-    Following the remark to the solution of a DDE (cf. Section \ref{sec:definition-of-solution}), we define the \emph{state space} in \ddL to $\statespace$, the set of piecewise continuous functions on $\closeddelayinterval$, as defined in Definition~\ref{def:piecewise-continuous}.
+    Following the remark to the solution of a DDE (cf. Section \ref{sec:definition-of-solution}), we define the \emph{state space} in \ddL to $\statespace$, the set of piecewise continuously differentiable functions on $\closeddelayinterval$, as defined in Definition~\ref{def:piecewise-continuous}.
 
     This means that a variable remembers a limited part of its evolution history, what demands hence an implicit notion of a underlying time.
 
@@ -187,6 +200,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
             \item $\ivaluation{\IddL}{\Dxtau[s]} = \asstate(\D{x})(s)$ for a differential symbol $\D{x}\in\diffvars$
             \item $\ivaluation{\IddL}{\xtau[b]} = \asstate(x)(b)$ for a variable $x\in\allvars$ and a constant $b\in\constants$ with $\interpret[b]\in\Q_{\leq 0}$
             \item $\ivaluation{\IddL}{\Dxtau[b]} = \asstate(\D{x})(b)$ for a differential symbol $\D{x}\in\diffvars$ and a constant $b\in\constants$ with $\interpret[b]\in\Q_{\leq 0}$
+            \item $\ivaluation{\IddL}{\Dxtau[b]} = \lim_{s\downto \interpret[b]} \frac{\asstate(x)(s)-\asstate(x)(\interpret[b])}{s-\interpret[b]}$
             \item $\ivaluation{\IddL}{c} = \interpret[c]$ for a constant $c\in\constants$
             \item $\ivaluation{\IddL}{f(\range{\istrm{1}}{\istrm{k}})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}}}{\ivaluation{\IddL}{\istrm{k}}})$ for a function symbol $f$
             \item $\ivaluation{\IddL}{\astrm+\bstrm} = \ivaluation{\IddL}{\astrm} + \ivaluation{\IddL}{\bstrm}$
@@ -274,7 +288,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \end{definition}
 
     interpretation of predicate symbol, arity n: relation $I(p)\subseteq\R^n$
-    interpretation of a quantifier symbol: functional $I(C):M\subseteq\states\to P(\states)$ maps subsets of states to subsets of states
+    %interpretation of a quantifier symbol: functional $I(C):M\subseteq\states\to P(\states)$ maps subsets of states to subsets of states
 
     Atomic formulas (type 1 and 2) need to be combined with the quantification over s (6) in order to make sense. See Section \ref{sec:well-definedness}.
 
@@ -287,21 +301,11 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
     $\dbox{}{}$ and $\ddiamond{}{}$ only refer to last state and not intermediate states, as \dTL does.
 
-    \begin{convention}
-        The frequently appearing fact that $\asfml(s)$ not only holds for $s\in\delayinterval$ but also in $s=0$
-        \begin{equation*}
-            \holdssince{T}{\asfml(s)}\land\asfml(0)
-        \end{equation*}
-        can also be written as
-        \begin{equation*}
-            \holdssinceclosed{T}{\asfml(s)}
-        \end{equation*}
-        For convenience, we allow the latter, abbreviated notation, which is implicitely replaced by the former, syntactically correct version.
-    \end{convention}
+
     
 
     % TODO: Move to static semantics
-    If no dependance on $s$ in terms, $\holdssince{T}{}$ can be dropped in formula.
+    If no dependence on $s$ in terms, $\holdssince{T}{}$ can be dropped in formula.
 
     \begin{example}
         Consider the two well-formed \ddL formulae:
@@ -313,27 +317,30 @@ Similiar to first-order logic and essentially as an extension of dL we define de
     \end{example}
 
     % TODO: do we accept that or restrict formula after modality to not having $s$ free? then, since s\notin\asprg commutes also for diamond
-    \begin{lemma}
+    \begin{lemma}[Barcan formula]
         The box modality and the quantification over $s$ commute
         \begin{equation*}
             \imodel{\IddL}{\holdssince{T}{\dbox{\asprg}{\asfml(s)}}} = \imodel{\IddL}{\dbox{\asprg}{(\holdssince{T}{\asfml(s)})}}
         \end{equation*}
     \end{lemma}
     \begin{proof}
-        Since $\lforall{x}{p\limply q(x)}\equiv p\limply\lforall{x}{q(x)}$, it holds
+        Since $\mforall{x}\holds(p\mimply q(x))\equiv p\mimply\mforall{x}\holds q(x)$, it holds
         \begin{multline*}
             % FIXME: use \set instead of {}
-            \imodel{\IddL}{\holdssince{T}{\dbox{\asprg}{\asfml(s)}}}\\
-            = \set{\asstate\in\states \with \holdssince{T}{\lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
-            = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{\holdssince{T}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
-            = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \holdssince{T}{\bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
-            = \set{\asstate\in\states \with \lforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\holdssince{T}{\asfml(s)}}}}\\
-            = \imodel{\IddL}{\dbox{\asprg}{(\holdssince{T}{\asfml(s)})}}
+            % FIXME: proper use of lforall and mforall
+            \imodel{\IddL}{\holdssince{T}{\dbox{\asprg}{\asfml(s)}}} =\\
+            \begin{split}
+                &= \set{\asstate\in\states \with \holdssince{T}{\mforall{\bsstate\in\states}\holds (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\asfml(s)}}}\\
+                &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{\holdssince{T}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
+                &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \holdssince{T}{\bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
+                &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\holdssince{T}{\asfml(s)}}}}\\
+                &= \imodel{\IddL}{\dbox{\asprg}{(\holdssince{T}{\asfml(s)})}}
+            \end{split}
         \end{multline*}
     \end{proof}
     
     However, the diamond modality does not commute with the s-quantification.
-    % TODO: is this a problem? or okay?
+    % TODO: counterexample for not commuting diamond and forall-s
     \begin{equation}
         \imodel{\IddL}{\holdssince{T}{\ddiamond{\asprg}{\asfml(s)}}} \neq \imodel{\IddL}{\ddiamond{\asprg}{(\holdssince{T}{\asfml(s)})}}
     \end{equation}
@@ -348,13 +355,13 @@ Similiar to first-order logic and essentially as an extension of dL we define de
                 \left\{(\asstate,\bsstate)\with \bsstate = \asstate \text{ except }
                 \bsstate(x) = \left(s\mapsto\begin{cases}
                     \ivaluation{\IddL}{\theta(s)} & s=0\\
-                    \asstate(s) & s\in[-T,0)
+                    \asstate(x)(s) & s\in[-T,0)
                 \end{cases}\right)\right\}$
             \item $\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}} =
                 \left\{(\asstate,\bsstate)\with \bsstate = \asstate \text{ except }
                 \bsstate(\D{x}) = \left(s\mapsto\begin{cases}
                     \ivaluation{\IddL}{\theta(s)} & s=0\\
-                    \asstate(s) & s\in[-T,0)
+                    \asstate(x)(s) & s\in[-T,0)
                 \end{cases}\right)\right\}$
             \item $\ireachability{\IddL}{\htest{\asfmlfolR}} = \left\{(\asstate,\asstate) \with \asstate\in\imodel{\IddL}{\asfmlfolR} \right\}$
             \item $\ireachability{\IddL}{\hchoice{\asprg}{\bsprg}} = \hchoice{\ireachability{\IddL}{\asprg}}{\ireachability{\IddL}{\bsprg}}$
@@ -427,7 +434,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
         is piecewise continuously differentiable and for all $\zeta\in\compactum{0}{r}$ and $s\in\closeddelayinterval$ it holds:
         % FIXME: equality holds also in jump points?
         \begin{equation*}
-            \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(\bstrm)}} = \DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{\bstrm}}{t}(\zeta)
+            \ivaluation{\iconcat[state=\trajectory(\zeta),assign=s]{\IddL}}{\D{(\bstrm)}} = \DD{\ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\bstrm}}{t}(\zeta)
         \end{equation*}
         At discontinuity point stetige fortsetzung of/right hand side derivative.
         % FIXME: where do I need this satisfaction in proof, relation to DDE: semantics of DDE
@@ -440,7 +447,7 @@ Similiar to first-order logic and essentially as an extension of dL we define de
 
         % FIXME: new statespace C^1_pw
         % FIXME: more possible variables, common partition is cup
-        Let $\partition{-T=t_0}{t_m=0}$ be the partition of the initial condition $\trajectory(0)(x)\in\statespacenew$.
+        Let $\partition{-T=t_0}{t_m=0}$ be the partition of the initial condition $\trajectory(0)(x)\in\statespace$.
         %We show that value of a term is piecewise differentiable with partition $\mathcal{Z}$.
         % FIXME: c used for symbol and its interpretation
         Let in the following $s\in\compactum{-T}{0}$ be arbitray but fixed, such that $s$ can be treated as a constant, in the same way like any $c\in\constants$.
