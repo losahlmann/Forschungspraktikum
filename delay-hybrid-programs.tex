@@ -393,7 +393,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
             % TODO: case r=0
         \end{enumerate}
     \end{definition}
-
+    % TODO: satisfaction relation: trajectory (set of states) fulfills DDE
     semantics of DDE motivated by definition of solution of DDE
     $\trajectory$ solves the DDE and satisfies $\ivr$ in each time instant/state
 
@@ -447,12 +447,13 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
 
     The following lemma shows the consistency of the semantics for differentials with the semantics of the evolution of a delay differential equation.
     This means that along a DDE, the values of differential symbols coincide with time derivative of the value of the corresponding variable.
+    Derivative means right-hand in points of partition.
 
     \begin{lemma}[Differential Lemma]\label{lm:differential-lemma}
         % FIXME: check if everywhere correctly used: \states=(\statespace)^n
         The value of a term $\bstrm$ along a trajectory $\trajectory\from\compactum{0}{r}\to\states$ satisfying a DDE for any duration $r>0$, i.e.
         % FIXME:doFormatList does not work with iconcat $\imodels{\iconcat[state=\trajectory]{\IddL}}{\D{x}=\asfml\land\ivr}$
-        $\interpret,\trajectory\models(\D{x}=\asfml\land\ivr)$,
+        $\interpret,\trajectory\models(\D{x}=\astrm\land\ivr)$,
         % FIXME: do I need case s=0?
         is piecewise continuously differentiable and for all $\zeta\in\compactum{0}{r}$ and $s\in\closeddelayinterval$ it holds:
         % FIXME: equality holds also in jump points?
