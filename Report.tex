@@ -307,7 +307,7 @@
 
         
         \end{calculus}
-        
+
         $\D{x}$ and $\xtau[c]$ are not allowed in invariant (leads to discontinuities). Invariants must be \FOLR
 
     \begin{theorem}[Soundness of \ddL]
@@ -406,9 +406,9 @@ it often makes sense to treat the very first initial condition separately, becau
         \begin{calculus}
             \cinferenceRule[stepsb|stpsb]{method of steps axiom}{
                 \linferenceRule[equiv]{
-                    \dbox[]{\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\rho(x,\xtau)}{(\ivr\land 0\leq t\leq\tau)})}}{\phi}
+                    \dbox{\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin(\astrm)})}}{\asfml}
                 }{
-                    \dbox[]{\hevolvein{\D{x}=\rho(x,\xtau)}{\ivr}}{\phi}
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi}
                 }
             }{}
 
@@ -583,10 +583,10 @@ it often makes sense to treat the very first initial condition separately, becau
             \cinferenceRule[DDI|DDI]{delay differential induction proof rule}{
                 \linferenceRule[sequent]{
                     \lsequent{\Gamma}{\inv(\xtau),\Delta}
-                    &\lsequent{\ivr,0\leq t\leq\tau,\inv(\theta)}{\dbox[]{\hevolve{\Dupdate{\Dumod{\D{x}}{\rho(x,\theta)}}}}{\der{\inv(x)}}}
+                    &\lsequent{\ivr,0\leq t\leq\tau,\inv(\theta)}{\dbox{\hevolve{\Dupdate{\Dumod{\D{x}}{\rho(x,\theta)}}}}{\der{\inv(x)}}}
                     &\lsequent{\inv(\xtau)}{\asfml}
                 }{
-                    \lsequent{\Gamma}{\dbox[]{\hevolvein{\D{x}=\rho(x,\xtau)}{\ivr}}{\asfml,\Delta}}
+                    \lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=\rho(x,\xtau)}{\ivr}}{\asfml,\Delta}}
                 }
             }{}
         \end{calculus}
@@ -607,27 +607,27 @@ it often makes sense to treat the very first initial condition separately, becau
                                 \linfer[DC]{
                                     (1)
                                 }{
-                                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau\land \inv(x(t-\tau)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
+                                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau\land \inv(x(t-\tau)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
                                 }
                                 &\linfer[dW]{
                                     (2)
                                 }{
-                                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
+                                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
                                 }
                             }{
-                                \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
+                                \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
                             }
                         }{
-                            \lsequent{\inv(\xtau),t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\xtau)}}
+                            \lsequent{\inv(\xtau),t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\xtau)}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\xtau)}}
                         }
                     }{
-                        \lsequent{\inv(\xtau)}{\dbox[]{\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\xtau)}}
+                        \lsequent{\inv(\xtau)}{\dbox[]{\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\xtau)}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\xtau)}}
                     }
                     \lsequent{\inv(\xtau)}{\asfml(\xtau)}
                 }{
-                \lsequent{\Gamma(\xtau)}{\dbox{\hrepeat{(\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\eta(x,\xtau)}{(\ivr\land 0\leq t\leq\tau))}}}{\asfml(\xtau),\Delta}}}
+                \lsequent{\Gamma(\xtau)}{\dbox{\hrepeat{(\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\xtau)}{(\ivr\land 0\leq t\leq\tau))}}}{\asfml(\xtau),\Delta}}}
             }
-            {\lsequent{\Gamma(\xtau)}{\dbox{\hevolvein{\D{x}=\eta(x,\xtau)}{\ivr}}{\asfml(\xtau),\Delta}}}
+            {\lsequent{\Gamma(\xtau)}{\dbox{\hevolvein{\D{x}=\astrm(x,\xtau)}{\ivr}}{\asfml(\xtau),\Delta}}}
         \end{sequentdeduction}
 
         % TODO: ref to here: (2)
