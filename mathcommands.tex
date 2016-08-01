@@ -160,8 +160,9 @@
 \newcommand{\partition}[2]{\set{#1<\ldots<#2}}
 
 %\newcommand{\delayinterval}[1][T]{[-#1,0]}
-\newcommand{\closeddelayinterval}[1][T]{[-#1,0]}
-\newcommand{\delayinterval}[1][T]{[-#1,0)}
+\newcommand{\closeddelayinterval}[1][-T]{\compactum{#1}{0}}
+\newcommand{\delayinterval}[1][-T]{\closedopen{#1}{0}}
+\newcommand{\hs}[2][-T]{\lforall{[#1]}{#2}}
 \newcommand{\holdssince}[3][s]{\lforall{#1\in\delayinterval[#2]}{\left(#3\right)}}
 \newcommand{\holdssinceclosed}[3][s]{\lforall{#1\in\closeddelayinterval[#2]}{\left(#3\right)}}
 

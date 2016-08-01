@@ -431,12 +431,13 @@ can be implemented in software
         \begin{calculus}
             \cinferenceRule[hist|hist]{history axiom}{
                 \linferenceRule[equiv]{
-                    \lforall{s\in[-\tau,0]}{\asfml(x(t+s))}
+                    \holdssince{-T}{\asfml(s)}
                 }{
-                    \asfml(\x[-\tau])
+                    \hs[-T]{\asfml}
                 }
             }{}
         \end{calculus}
+        
         and $t\rightarrow t+s$
 
         for a piecewise continuous function $\theta\in\statespace$.
@@ -789,11 +790,12 @@ it often makes sense to treat the very first initial condition separately, becau
             Consider the non-linear first-order delay differential equation
             \begin{equation}
                 \begin{cases}
-                    \D{x}(t) = x(t-\tau) & t \geq \sigma\\
-                    x(t) = \theta(t)\geq 0 & t \in [\sigma-\tau,\sigma]
+                    \D{x}(t) = x(t-\tau) & t \geq \tzero\\
+                    x(t) = \theta(t)\geq 0 & t \in [\tzero-\tau,\tzero]
                 \end{cases}
             \end{equation}
             Using the invariant $F\equiv(x^3\geq 0)$ we prove that the solution stays non-negativ for all time $t$.
+            DDE is autonomous, can assume $\tzero=0$.
             \footnotesize
             \begin{sequentdeduction}
                 \linfer[DDI]{
@@ -822,7 +824,7 @@ it often makes sense to treat the very first initial condition separately, becau
                         \lsequent{\x[-\tau]^3\geq 0}{\x[-\tau]\geq 0}
                     }
                 }{
-                    \lsequent{\holdssinceclosed{\tau}{\x[s]\geq 0}}{\dbox{\D{x}=\x[-\tau]}{(\holdssinceclosed{\tau}{\x[s]\geq 0})}}
+                    \lsequent{\holdssinceclosed{-\tau}{\x[s]\geq 0}}{\dbox{\D{x}=\x[-\tau]}{(\holdssinceclosed{-\tau}{\x[s]\geq 0})}}
                 }
             \end{sequentdeduction}\normalsize
             In the same way we can prove that the solution stays negative for all $t$, if the initial condition is non-positive.

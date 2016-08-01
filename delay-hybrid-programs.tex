@@ -157,7 +157,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
                 %\contextapp{C}{\asfml} \mid
                 \lnot\asfml \mid
                 \asfml\land\bsfml \mid\\
-                &\holdssince{T}{\asfml(s)} \mid
+                &\holdssince{-T}{\asfml(s)} \mid
                 \lforall{x}{\asfml} \mid
                 \lexists{x}{\asfml} \mid
                 \dbox{\asprg}{\asfml} \mid
@@ -207,11 +207,11 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     \begin{convention}
         The frequently appearing fact that $\asfml(s)$ not only holds for $s\in\delayinterval$ but also in $s=0$
         \begin{equation*}
-            \holdssince{T}{\asfml(s)}\land\asfml(0)
+            \holdssince{-T}{\asfml(s)}\land\asfml(0)
         \end{equation*}
         can also be written as
         \begin{equation*}
-            \holdssinceclosed{T}{\asfml(s)}
+            \holdssinceclosed{-T}{\asfml(s)}
         \end{equation*}
         For convenience, we allow the latter, abbreviated notation, which is implicitely replaced by the former, syntactically correct version.
     \end{convention}
@@ -328,7 +328,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
             %\item $\imodel{\IddL}{\contextapp{C}{\asfml}} = \interpret[C]\left(\imodel{\IddL}{\asfml}\right)$ for a quantifier symbol $C$
             \item $\imodel{\IddL}{\lnot\asfml} = \scomplement{\left(\imodel{\IddL}{\asfml}\right)} = \states\setminus\imodel{\IddL}{\asfml}$
             \item $\imodel{\IddL}{\asfml\land\bsfml} = \imodel{\IddL}{\asfml}\cap\imodel{\IddL}{\bsfml}$
-            \item $\imodel{\IddL}{\holdssince{T}{\asfml(s)}} = \left\{\asstate\in\states \with \holdssince{T}{\asstate\in\imodel{\IddL}{\asfml(s)}} \right\}$
+            \item $\imodel{\IddL}{\holdssince{-T}{\asfml(s)}} = \left\{\asstate\in\states \with \holdssince{-T}{\asstate\in\imodel{\IddL}{\asfml(s)}} \right\}$
             \item $\imodel{\IddL}{\lforall{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{y}\in\imodel{\IddL}{\asfml} \text{ for all } y\in\statespace \}$
             \item $\imodel{\IddL}{\lexists{x}{\asfml}} = \{\asstate\in\states \with \modif{\asstate}{x}{y}\in\imodel{\IddL}{\asfml} \text{ for some } y\in\statespace \}$
             \item $\imodel{\IddL}{\dbox{\asprg}{\asfml}} = \{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml} \text{ for all $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}\}$, i.e. $\{\asstate\in\states \with \mforall{\bsstate\in\states}\holds((\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \limply \bsstate\in\imodel{\IddL}{\asfml})\}$
@@ -356,13 +356,13 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     
 
     % TODO: Move to static semantics
-    If no dependence on $s$ in terms, $\holdssince{T}{}$ can be dropped in formula.
+    If no dependence on $s$ in terms, $\holdssince{-T}{}$ can be dropped in formula.
 
     \begin{example}
         Consider the two well-formed \ddL formulae:
         \begin{align*}
-            &\holdssince{T}{x+\x[s]\geq 0}\\
-            &\holdssince{T}{x+\x[-\tau]\geq 0} 
+            &\holdssince{-T}{x+\x[s]\geq 0}\\
+            &\holdssince{-T}{x+\x[-\tau]\geq 0} 
         \end{align*}
         The quantification over $s$ in the second formula can be dropped.
     \end{example}
@@ -371,7 +371,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     \begin{lemma}[Barcan formula]
         The box modality and the quantification over $s$ commute
         \begin{equation*}
-            \imodel{\IddL}{\holdssince{T}{\dbox{\asprg}{\asfml(s)}}} = \imodel{\IddL}{\dbox{\asprg}{(\holdssince{T}{\asfml(s)})}}
+            \imodel{\IddL}{\holdssince{-T}{\dbox{\asprg}{\asfml(s)}}} = \imodel{\IddL}{\dbox{\asprg}{(\holdssince{-T}{\asfml(s)})}}
         \end{equation*}
     \end{lemma}
     \begin{proof}
@@ -379,13 +379,13 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         \begin{multline*}
             % FIXME: use \set instead of {}
             % FIXME: proper use of lforall and mforall
-            \imodel{\IddL}{\holdssince{T}{\dbox{\asprg}{\asfml(s)}}} =\\
+            \imodel{\IddL}{\holdssince{-T}{\dbox{\asprg}{\asfml(s)}}} =\\
             \begin{split}
-                &= \set{\asstate\in\states \with \holdssince{T}{\mforall{\bsstate\in\states}\holds (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\asfml(s)}}}\\
-                &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{\holdssince{T}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
-                &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \holdssince{T}{\bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
-                &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\holdssince{T}{\asfml(s)}}}}\\
-                &= \imodel{\IddL}{\dbox{\asprg}{(\holdssince{T}{\asfml(s)})}}
+                &= \set{\asstate\in\states \with \holdssince{-T}{\mforall{\bsstate\in\states}\holds (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\asfml(s)}}}\\
+                &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{\holdssince{-T}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
+                &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \holdssince{-T}{\bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
+                &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\holdssince{-T}{\asfml(s)}}}}\\
+                &= \imodel{\IddL}{\dbox{\asprg}{(\holdssince{-T}{\asfml(s)})}}
             \end{split}
         \end{multline*}
     \end{proof}
@@ -393,7 +393,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     However, the diamond modality does not commute with the s-quantification.
     % TODO: counterexample for not commuting diamond and forall-s
     \begin{equation}
-        \imodel{\IddL}{\holdssince{T}{\ddiamond{\asprg}{\asfml(s)}}} \neq \imodel{\IddL}{\ddiamond{\asprg}{(\holdssince{T}{\asfml(s)})}}
+        \imodel{\IddL}{\holdssince{-T}{\ddiamond{\asprg}{\asfml(s)}}} \neq \imodel{\IddL}{\ddiamond{\asprg}{(\holdssince{-T}{\asfml(s)})}}
     \end{equation}
 
     Since, with respect to \dL, the state space has been replaced, we need to redefine the semantics.
@@ -427,7 +427,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     semantics of DDE motivated by definition of solution of DDE
     $\trajectory$ solves the DDE and satisfies $\ivr$ in each time instant/state
 
-    The formula $\hevolve{\D{x}=\astrm(-\tau)}\land\ivr$ has dropped the $\holdssince{T}{}$, alloccurences of $x$ and $\D{x}$ of form with constant
+    The formula $\hevolve{\D{x}=\astrm(-\tau)}\land\ivr$ has dropped the $\holdssince{-T}{}$, alloccurences of $x$ and $\D{x}$ of form with constant
 
     % TODO: if $r=0$: 
 
@@ -570,7 +570,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
 
     \begin{example}
         \begin{equation*}
-            \D{\left(\holdssince{T}{x+\x[c]+\x[s]\geq 0}\right)} \equiv \holdssince{T}{\D{x}+\Dx[c]+\Dx[s]\geq 0}
+            \D{\left(\holdssince{-T}{x+\x[c]+\x[s]\geq 0}\right)} \equiv \holdssince{-T}{\D{x}+\Dx[c]+\Dx[s]\geq 0}
         \end{equation*}
         where $c=-3.5$ and $s=-2$
         \begin{equation}
@@ -624,8 +624,8 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
 
             It is defined inductively for formulas by:
             \begin{enumerate}
-                \item $\HHfml(\holdssince{T}{\astrm\geq\bstrm}) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
-                \item $\HHfml(\holdssince{T}{p(\range{\istrm{1}}{\istrm{k}})}) = \max\set{\range{\HHtrm(\istrm{1})}{\HHtrm(\istrm{k})}}$
+                \item $\HHfml(\holdssince{-T}{\astrm\geq\bstrm}) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
+                \item $\HHfml(\holdssince{-T}{p(\range{\istrm{1}}{\istrm{k}})}) = \max\set{\range{\HHtrm(\istrm{1})}{\HHtrm(\istrm{k})}}$
                 \item $\HHfml(\contextapp{C}{\asfml}) = $
                 \item $\HHfml(\lnot\asfml) = \HHfml(\asfml)$
                 \item $\HHfml(\asfml\land\bsfml) = \max\set{\HHfml(\asfml),\HHfml(\bsfml)}$
@@ -700,7 +700,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         \begin{example}
             \begin{equation*}
                 % FIXME: notation/syntax: ausgeklammertes forall in formulas
-                \dbox{\hupdate{\humod{x}{\x[-3]^2}};\hevolvein{\D{x}=\x[-\tau]+2x}{(x\geq 0)}}{\holdssinceclosed{T}{0\leq \x[s] \land \x[s]\leq\x[-5]}}
+                \dbox{\hupdate{\humod{x}{\x[-3]^2}};\hevolvein{\D{x}=\x[-\tau]+2x}{(x\geq 0)}}{\holdssinceclosed{-T}{0\leq \x[s] \land \x[s]\leq\x[-5]}}
             \end{equation*}
             Hence the history horizon needs to be set to
             \begin{equation*}
