@@ -1,38 +1,93 @@
 \chapter{Introduction}
 
-	cyber-physical systems
-	combine computation, control of physical processes
+	dynamical systems
+	mathematical model
+	describing evolvement of state of as system over time
+	modeling of embedded systems and cyber-physical systems
+    discrete dynamical systems: difference equations, discrete state transition relations
+    continuous dynamical systems: state evolves continuously, differential equation
+    hybrid (dynamical) systems: combine discrete and continuous dynamics
+    can capture very complex behaviour
+
+
+	cyber-physical systems (CPS)
+	combine computation, communication, control of physical processes/effects
 	discrete and continuous dynamics
-	often safety-critical
+	often safety-critical, performance-critical
+    safe control choices
+    possible states accessible after control choice
 	(prone to) software verification
+    proof that always chooses safe control
+
+    dynamical systems usually (uncountably) infinite state space
+    finite number of tests cannot prove safety
+    systematically obtain proofs
+
+    classical safety, liveness, controllability, reactivity, quantified parametrized properties
 
 	hybrid systems: mathematical model to describe CPS
-	combine discrete computation
+	combine discrete dynamics/computation
 	continuous dynamics: differential equations
+    conditional switching
+    nondeterminism
+    repetition
 	infinite state space
 
 	examples:
-	self-driving cars
-	aircraft collision-avoidance systems
-	train control
+    robotics, medical surgery robots
+    electrical circuits
+	automotive, self-driving cars (lane controllers for highway car traffic, controllers for intersections)
+    speed limit control
+	aviation, aircraft collision-avoidance systems (flyable roundabout maneuvers)
+	railway, European train control system (ETCS)
+    power plants
+    chemical, biological processes
+    medical models (events which can be seen as discrete with relation to continuous evolution)
 
+	study logic of dynamical systems
+    analyze and predict behaviour
+    logics and proof principles
 
+    differential dynamic logic (\dL)
+    a concise overview and introduction is given in~\cite{Platzer12LogicsDynSys}
+    a dynamic logic for hybrid systems
+    logic/language for specify, verify safety and liveness properties
+    of hybrid systems
+    based on first-order modal logic and dynamic logic, first-order real arithmetic
+    models of cyber-physical systems
+    ordinary differential equations
 
-	differential dynamic logic
-	logic for specify, verify safety and liveness properties
-	of hybrid systems
-	models of cyber-physical systems
-	ordinary differential equations
+    (nonlinear) real arithmetic
+
+    transition behaviour as formulas
+
+    differential invariants
+    induction principle for differential equations
+
+    theoretical results
+    \emph{soundness} (everything provable is true)
+    \emph{completeness} (everything true is provable)
+    compositionality (denotational semantics, semantics (of models and formuals) functions of their parts, proofs structural decomposition, split complex systems in their parts, completeness: decomposition always successful)
+    extendability (rules can be added to proof calculus)
+    deductive power
 
 	tutorial with examples modeled in \dL
 	\cite{Quesel16Tutorial}
 
 	mechanized proofs
-	theorem proving
+	automatic and interactive theorem proving
 	KeYmaeraX
+    used successfully
+
 	several formulations of dL
-	earliest: sequent calculus \cite{Platzer10HybridSystems}
+	earliest: sequent calculus \cite{Platzer10HybridSystems}, tuned for automatic proof search, KeYmaera
+    automatically find (differential) invariants
 	axiomatic formulation \cite{Platzer15Uniform}, implemented in KeYmaeraX
+
+    extensions to \dL
+    \emph{differential-algebraic dynamic logic} \DAL: differential-algebraic equations and constraints
+    \emph{differential temporal dynamic logic} \dTL: temporal properties, trace semantics
+
 
 	capture non-deterministic
 	not known a priori

@@ -105,6 +105,8 @@
     This results in a superset of \dL which we call \textbf{Delay Differential Dynamic Logic}.
 
     the resulting logics extends
+
+    provide a program notation for hybrid systems with delay
 \end{abstract}
 
 % TODO: Acknowledgements
@@ -122,19 +124,33 @@
 \chapter{Delay Differential Dynamic Logic}
 \label{sec:delay-differential-dynamic-logic}
 
-\section{Axioms}
+verification purposes
+\ddL formulas to specify properties, such as
+and verify them with proof calculus
+rules based on axioms
+
+allow manipulations on a syntcatic level, which can be realized in software
+syntactic
+do not need to consider semantics
+can be implemented in software
+
+\section{Axiomatization}
     \label{sec:axioms}
+
 
     provide syntactic operations, verify properties without going back to their mathematical semantics
     important for automatization of proofs
 
-    \dL axiomatization, as given in \cite{Platzer12Complete}
+    based on \dL axiomatization, as given in \cite{Platzer12Complete}
 
     use first-order Hilbert calculus, modus ponens and forall-generalization as basis
 
     all instances of valid formulas of first-order real arithmetic are allowed as axiom
 
     first-order real arithmetic is decideable by quantifier elimination ($\QE$)
+
+    If the \ddL formula $\asfml$ can be derived by \ddL proof rules from \ddL axioms, we say it is provable and write $|-\asfml$
+    (includes first-order axioms and rules)
 
     axioms expressed in $\dbox{\cdot}$, duality to $\ddiamond{\cdot}$ by $\ddiamond{\asprg}{\asfml}\lbisubjunct\lnot\dbox{\asprg}{\lnot\asfml}$
 
@@ -272,6 +288,40 @@
 
     \end{calculus}
 
+    discrete assignment axiom, substitution
+    substitute $x$ by $\astrm$, needs $x$ not to be ... (admissibility condition)
+
+    solution axiom
+    solution of symbolic initial-value problem (conv. IVP is numerical)
+
+    iteration axiom
+    partially unwind a loop
+
+    induction axioms I and C for unbounded repetitions of loops
+
+    axiom I
+
+    axiom C
+    variant of Harel's convergence rule
+
+    axiom K
+    modal modus ponens
+
+    axiom B
+    Barcan formula for first-order modal logic
+
+    axiom V
+
+    proof rules
+
+    Gödel's necessitation rule G of modal logic
+
+    modus ponens
+
+    $\forall$-generalization
+
+    % TODO: axiom [&] in combination with [steps]
+
     \subsection{Differential Axioms}
         \label{sec:differential-axioms}
     
@@ -310,9 +360,18 @@
 
         $\D{x}$ and $\xtau[c]$ are not allowed in invariant (leads to discontinuities). Invariants must be \FOLR
 
+\section{Soundness}
+    \label{sec:soundness}
+
+    obviously fundamental for the thoery in order to make sense
+
     \begin{theorem}[Soundness of \ddL]
         \label{thm:dL-soundness}
         The \ddL calculus is sound.
+
+        every formula provable from \ddL axioms by \ddL proof rules
+        valid (true in all states)
+        $|-\asfml$ implies $|=\asfml$
 
     \end{theorem}
     \begin{proof}
@@ -399,10 +458,11 @@ it often makes sense to treat the very first initial condition separately, becau
     \subsection{Axiom of Steps}
         \label{sec:axiom-of-steps}
 
-        The \emph{Method of Steps} presented above translates into an axiom.
+        The \emph{method of steps} presented in Section~\ref{sec:method-of-steps} translates into an axiom.
         %It allows to partially unwind an autonomous DDE given a analytic representation of its solution.
 
         % Let $\theta_0$ and $\theta$
+        Introduce a fresh variable $t$ for tracking time
         \begin{calculus}
             \cinferenceRule[stepsb|stpsb]{method of steps axiom}{
                 \linferenceRule[equiv]{
@@ -414,6 +474,7 @@ it often makes sense to treat the very first initial condition separately, becau
 
 
         \end{calculus}
+        differential equation on right hand side is not longer a DDE, but of \emph{ordinary} type. 
 
         What if $T=t_{max} < \tau$?
         Step character of DDE gives partition of continuous time
@@ -845,6 +906,7 @@ it often makes sense to treat the very first initial condition separately, becau
 
 \chapter{Conclusions}
     \section{Future Work}
+    compute invariants and differential invariants
 
 
 % TODO: choose good citation style. Chicago?
