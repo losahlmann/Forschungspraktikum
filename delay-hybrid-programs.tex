@@ -42,7 +42,7 @@ also differential form axiomatization of differential equations
     The syntax of \ddL terms, formulae as well as of \dHPs is defined inductively by a grammar in Backus-Naur-form (BNF).
 
     Let $\allvars$ be the set of \emph{all variables} and $\diffvars\defeq\{\D{x} \with x\in\allvars\}$ the corresponding set of \emph{differential symbols}.
-    Let $\constants$ be the set of \emph{all constants}. We denote $\delayvars\defeq\{\xtau[c] \with x\in\allvars, c\in\constants\}$ the set of \emph{delayed variables} and $\delaydiffvars\defeq\{\Dxtau[c] \with \D{x}\in\diffvars, c\in\constants\}$ the set of \emph{delayed differentials}.
+    Let $\constants$ be the set of \emph{all constants}. We denote $\delayvars\defeq\{\x[c] \with x\in\allvars, c\in\constants\}$ the set of \emph{delayed variables} and $\delaydiffvars\defeq\{\Dx[c] \with \D{x}\in\diffvars, c\in\constants\}$ the set of \emph{delayed differentials}.
     finite sets
 
     We will usually denote variables by $x,y,z\in\allvars$ and their differential symbols by $\D{x},\D{y},\D{z}\in\diffvars$.
@@ -58,11 +58,11 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         The syntax of \emph{terms} of \emph{delay differential dynamic logic} is defined by the following grammar:
         \begin{equation*}
             \astrm,\bstrm \Coloneqq
-                \xtau[s] \mid
-                \Dxtau[s] \mid
+                \x[s] \mid
+                \Dx[s] \mid
                 % TODO: maybe dont need x[c], only with s and use t(s) with specified s, as in DDE and extra x[0]=x
-                \xtau[b] \mid
-                \Dxtau[b] \mid
+                \x[b] \mid
+                \Dx[b] \mid
                 c \mid
                 f(\range{\istrm{1}}{\istrm{k}}) \mid
                 \astrm + \bstrm \mid
@@ -78,8 +78,8 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
         The symbol $c\in\constants$ defines a rational number constant and $b\in\Q_{\leq 0}$.
         All terms implicitely depend on a time parameter $s\in\R_{\leq 0}$, written as $\astrm(s)$. When $s=0$ we abbreviate the notation to $\astrm$.
-        The variable symbol $x$ and the differential symbol $\D{x}$ are the only ones which allow explicitely mentioning this parameter. They are spelled slightly differently using square brackets as $\xtau[s]$ and $\Dxtau[s]$, respectively. Note that $s\notin\allvars\cup\diffvars\cup\constants$. It is a special variable.
-        In particular, for $\xtau[0]$ we write $x$ and $\D{x}$ for $\Dxtau[0]$.
+        The variable symbol $x$ and the differential symbol $\D{x}$ are the only ones which allow explicitely mentioning this parameter. They are spelled slightly differently using square brackets as $\x[s]$ and $\Dx[s]$, respectively. Note that $s\notin\allvars\cup\diffvars\cup\constants$. It is a special variable.
+        In particular, for $\x[0]$ we write $x$ and $\D{x}$ for $\Dx[0]$.
 
         Writing $\astrm(-\tau)$ means that all occurences of $s$ in $\astrm$ have been replaced with $-\tau$.
         parameter is inherited
@@ -88,17 +88,17 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         allows polynomials,
         division theoretically possible, when can exclude division by zero
 
-        %The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\xtau$.
+        %The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\x$.
     \end{definition}
 
     \begin{example}
         Let us consider the \ddL term
         \begin{equation}
-            \astrm(s) = \underbrace{\xtau[s]}_{\text{var}} + \underbrace{\xtau}_{\text{const}}.
+            \astrm(s) = \underbrace{\x[s]}_{\text{var}} + \underbrace{\x[-\tau]}_{\text{const}}.
         \end{equation}
         Setting $s=-1$ gives the term
         \begin{equation}
-            \astrm(-1) = \xtau[-1] + \xtau.
+            \astrm(-1) = \x[-1] + \x[-\tau].
         \end{equation}
     \end{example}
 
@@ -107,7 +107,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
 
     \begin{definition}[(Delay) Hybrid Programs]\label{def:syntax-HP}
         The syntax of\emph{(delay) hybrid programs} (\dHPs) is defined by
-        % TODO: first-order logic of real arithmetic formulas include \xtau?
+        % TODO: first-order logic of real arithmetic formulas include \x?
         \begin{equation*}
             \asprg, \bsprg \Coloneqq
                 % program constants?
@@ -124,7 +124,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         \end{equation*}
         % TODO: ddes with mult const delay
         % TODO: program constant
-        where $\asprg, \bsprg$ denote \dHPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\xtau$) and $\ausprg$ a program constant.
+        where $\asprg, \bsprg$ denote \dHPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\x[-\tau]$) and $\ausprg$ a program constant.
         The formula $\asfmlfolR$ is of first-order logic of real arithmetic \FOLR$(\allvars)$, containing only normal variable symbols $\allvars$.
         Note that $s\notin\asprg$ and that the syntax only allows autonomous DDEs.
     \end{definition}
@@ -245,18 +245,18 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     \begin{definition}[Semantics of terms]\label{def:sematic-terms}
         The \emph{semantics} of a term $\astrm$ in the state $\asstate\in\states$ (at time instant $t$) is a value in $\R$ and defined inductively as follows:
         \begin{enumerate}
-            \item $\ivaluation{\IddL}{\xtau[s]} = \asstate(x)(s)$ for a variable $x\in\allvars$
+            \item $\ivaluation{\IddL}{\x[s]} = \asstate(x)(s)$ for a variable $x\in\allvars$
             % FIXME: need Cpw for derivatives or only \R?
-            \item $\ivaluation{\IddL}{\Dxtau[s]} = \asstate(\D{x})(s)$ for a differential symbol $\D{x}\in\diffvars$
-            \item $\ivaluation{\IddL}{\xtau[b]} = \asstate(x)(b)$ for a variable $x\in\allvars$ and a constant $b\in\constants$ with $\interpret[b]\in\Q_{\leq 0}$
-            \item $\ivaluation{\IddL}{\Dxtau[b]} = \asstate(\D{x})(b)$ for a differential symbol $\D{x}\in\diffvars$ and a constant $b\in\constants$ with $\interpret[b]\in\Q_{\leq 0}$
-            \item $\ivaluation{\IddL}{\Dxtau[b]} = \lim_{s\downto \interpret[b]} \frac{\asstate(x)(s)-\asstate(x)(\interpret[b])}{s-\interpret[b]}$
+            \item $\ivaluation{\IddL}{\Dx[s]} = \asstate(\D{x})(s)$ for a differential symbol $\D{x}\in\diffvars$
+            \item $\ivaluation{\IddL}{\x[b]} = \asstate(x)(b)$ for a variable $x\in\allvars$ and a constant $b\in\constants$ with $\interpret[b]\in\Q_{\leq 0}$
+            \item $\ivaluation{\IddL}{\Dx[b]} = \asstate(\D{x})(b)$ for a differential symbol $\D{x}\in\diffvars$ and a constant $b\in\constants$ with $\interpret[b]\in\Q_{\leq 0}$
+            \item $\ivaluation{\IddL}{\Dx[b]} = \lim_{s\downto \interpret[b]} \frac{\asstate(x)(s)-\asstate(x)(\interpret[b])}{s-\interpret[b]}$
             \item $\ivaluation{\IddL}{c} = \interpret[c]$ for a constant $c\in\constants$
             \item $\ivaluation{\IddL}{f(\range{\istrm{1}}{\istrm{k}})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}}}{\ivaluation{\IddL}{\istrm{k}}})$ for a function symbol $f$
             \item $\ivaluation{\IddL}{\astrm+\bstrm} = \ivaluation{\IddL}{\astrm} + \ivaluation{\IddL}{\bstrm}$
             \item $\ivaluation{\IddL}{\astrm\cdot\bstrm} = \ivaluation{\IddL}{\astrm} \cdot \ivaluation{\IddL}{\bstrm}$
             % FIXME: derivation of terms with x'?
-            \item $\ivaluation{\IddL}{\D{(\astrm)}} = \displaystyle\sum_{\xtau[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial \xtau[c]}$
+            \item $\ivaluation{\IddL}{\D{(\astrm)}} = \displaystyle\sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial \x[c]}$
         \end{enumerate}
         %where $s\in [-T,0]$.
         The  syntactic (total) derivation, defined in \ref{def:derivation}, gives new term
@@ -268,18 +268,18 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     % TODO: total derivative operator for terms
     \begin{definition}[Derivation]\label{def:derivation}
         common derivation rules
-        $\D{(\xtau[b])}=\Dxtau[b]$ need in premise $\D{x}$ on $[t+b,t]$
+        $\D{(\x[b])}=\Dx[b]$ need in premise $\D{x}$ on $[t+b,t]$
     \end{definition}
 
-    % The semantic of the new symbol $\xtau$ depends on the context in which the term occures:
+    % The semantic of the new symbol $\x$ depends on the context in which the term occures:
     % \begin{enumerate}
-    %     \item in a hybrid program: $\imodel{\IddL}{\xtau} = \imodel{\IddL}{x(t-\tau)} = \nu(x)(-\tau)\in\R$
-    %     \item in a formula $\xtau\in\statespace$: \begin{equation}
+    %     \item in a hybrid program: $\imodel{\IddL}{\x} = \imodel{\IddL}{x(t-\tau)} = \nu(x)(-\tau)\in\R$
+    %     \item in a formula $\x\in\statespace$: \begin{equation}
     %         % FIXME: rechte seite noch nicht korrekt
-    %         \imodel[]{}{\phi(\xtau)} =
+    %         \imodel[]{}{\phi(\x)} =
     %         \{\nu\in\states : \lforall{t\in[-\tau,0]}{\phi(\nu(x)(t))} \}
     %     \end{equation}
-    %     with uniform substitution: $\sigma=\{\xtau\rightarrow\theta_0\}$
+    %     with uniform substitution: $\sigma=\{\x\rightarrow\theta_0\}$
     % \end{enumerate}
 
     The meaning of a differential symbol: defined by state, 
@@ -348,7 +348,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     However when we apply the Rule of steps, we get the validity of $\phi$ for the entire trace.
 
     % TODO: is it better to only have xtau and not choice? What if both mentioned?
-    in formulae (such as safety condition or evolution constraint), we have two possibilities: only value at current time instant ($x$) or for entire last $\tau$ time $\xtau$
+    in formulae (such as safety condition or evolution constraint), we have two possibilities: only value at current time instant ($x$) or for entire last $\tau$ time $\x[-\tau]$
 
     $\dbox{}{}$ and $\ddiamond{}{}$ only refer to last state and not intermediate states, as \dTL does.
 
@@ -361,8 +361,8 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     \begin{example}
         Consider the two well-formed \ddL formulae:
         \begin{align*}
-            &\holdssince{T}{x+\xtau[s]\geq 0}\\
-            &\holdssince{T}{x+\xtau\geq 0} 
+            &\holdssince{T}{x+\x[s]\geq 0}\\
+            &\holdssince{T}{x+\x[-\tau]\geq 0} 
         \end{align*}
         The quantification over $s$ in the second formula can be dropped.
     \end{example}
@@ -441,7 +441,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
 
     %TODO: super dense time: multiple assignments, only consider last assignment
 
-    Using this, in comparison to \dL extended syntax, we can write down both delay differential equations and ordinary differential equations in the form $\D{x}=\theta$, where $\theta=f(x,\xtau)$ with a polynomial $f$.
+    Using this, in comparison to \dL extended syntax, we can write down both delay differential equations and ordinary differential equations in the form $\D{x}=\theta$, where $\theta=f(x,\x[-\tau])$ with a polynomial $f$.
 
     % TODO: how to specify initial condition, for x and x', which need additionally coincide, have same partition
     % in general, we do not write expression explicitely, just give possible intervals in precondition
@@ -453,7 +453,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         \begin{equation*}
             % FIXME: another symbol for defeq
             % TODO: what if x'[] in term ?
-            \constants[\astrm] \defeq \set{c\in\constants \with \mexists{\xtau[c]\in\delayvars}\holds\xtau[c]\in\astrm}
+            \constants[\astrm] \defeq \set{c\in\constants \with \mexists{\x[c]\in\delayvars}\holds\x[c]\in\astrm}
         \end{equation*}
         the set of constant symbols occuring in the term $\astrm$.
 
@@ -548,7 +548,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         % If $c<\hat{c}$, then $\zeta < \hat{t}_{j+1} \leq t_i-c$ (needs explanation: tjp1 is smallest next point, construct one, must be greater or equal) and hence $\zeta+c<t_i$.
         % So whenever $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ is $c+\zeta\neq t_i$ for all $i=\range{0}{m}$ and $c\in\mathcal{K}$
 
-        %On each $\zeta\in(\hat{t}_k,\hat{t}_{k+1})$ is each $\ivaluation{\iconcat[state={\trajectory(\zeta)},assign=s]{\IddL}}{\xtau[c]}$ diffable in $\zeta$
+        %On each $\zeta\in(\hat{t}_k,\hat{t}_{k+1})$ is each $\ivaluation{\iconcat[state={\trajectory(\zeta)},assign=s]{\IddL}}{\x[c]}$ diffable in $\zeta$
 
         %f in terms smooth, hence each term on this open interval diffable
         Let $\augtrajectory[s]{\astrm}$ be the $\bstrm$-augmented trajectory for the considered delay differential equation.
@@ -558,10 +558,10 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         \begin{align*}
             \DD{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{t}(\zeta)
             &= \D{\left(\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}\compose\augtrajectory[s]{\bstrm}(\zeta)\right)} = \gradient{\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm}}(\augtrajectory[s]{\bstrm}(\zeta))\cdot\DD{\augtrajectory[s]{\bstrm}}{t}(\zeta)\\
-            &= \sum_{\xtau[c]\in\delayvarswiths}\DD{\trajectory(t)(x)(c)}{t}(\zeta) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
-            % &= \sum_{\xtau[c]\in\delayvarswiths}\trajectory(\zeta)(\Dxtau[c])(s) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
-            &= \sum_{\xtau[c]\in\delayvarswiths}\trajectory(\zeta)(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
-            %&= \sum_{\xtau[c]\in\delayvarswiths}\asstate(\D{x})(c) \Dp[{(\xtau[c])}]{\ivaluation{\IddL}{\bstrm}}{(s)}\\
+            &= \sum_{\x[c]\in\delayvarswiths}\DD{\trajectory(t)(x)(c)}{t}(\zeta) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
+            % &= \sum_{\x[c]\in\delayvarswiths}\trajectory(\zeta)(\Dx[c])(s) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
+            &= \sum_{\x[c]\in\delayvarswiths}\trajectory(\zeta)(\D{x})(c) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\augtrajectory[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
+            %&= \sum_{\x[c]\in\delayvarswiths}\asstate(\D{x})(c) \Dp[{(\x[c])}]{\ivaluation{\IddL}{\bstrm}}{(s)}\\
             &= \ivaluation{\iconcat[state=\trajectory(\cdot),assign=s]{\IddL}}{\D{(\bstrm)}}(\zeta)
         \end{align*}
         % FIXME: limits
@@ -570,7 +570,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
 
     \begin{example}
         \begin{equation*}
-            \D{\left(\holdssince{T}{x+\xtau[c]+\xtau[s]\geq 0}\right)} \equiv \holdssince{T}{\D{x}+\Dxtau[c]+\Dxtau[s]\geq 0}
+            \D{\left(\holdssince{T}{x+\x[c]+\x[s]\geq 0}\right)} \equiv \holdssince{T}{\D{x}+\Dx[c]+\Dx[s]\geq 0}
         \end{equation*}
         where $c=-3.5$ and $s=-2$
         \begin{equation}
@@ -578,11 +578,11 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         \end{equation}
         then $g_s\in\Cnpw[1]{\compactum{0}{r}}{\R}$ along traj de dde
         \begin{equation*}
-            g_s(t)=\ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\bstrm} = \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\xtau[0]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\xtau[c]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\xtau[s]}
+            g_s(t)=\ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\bstrm} = \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[0]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[c]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[s]}
         \end{equation*}
         each summand diffable in $(\hat{t}_j,\hat{t}_{j+1})$ and
         \begin{equation*}
-            \D{g}_s(t)= \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dxtau[0]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dxtau[c]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dxtau[s]}
+            \D{g}_s(t)= \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dx[0]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dx[c]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dx[s]}
         \end{equation*}
         \begin{equation*}
             \lim_{\zeta\downto\hat{t}_j} \D{g}_s(\zeta)=
@@ -598,7 +598,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         \end{equation*}
     \end{lemma}
     \begin{proof}
-        Let $\zeta\in\compactum{0}{r}$. It is $\trajectory(\zeta)\in\imodel{\IddL}{\Dxtau[0]=\astrm}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\ivr}$, which means $\trajectory(\zeta)(\D{x})(0)=\ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\astrm}$, since $\astrm$ is independent of $s$.
+        Let $\zeta\in\compactum{0}{r}$. It is $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\ivr}$, which means $\trajectory(\zeta)(\D{x})(0)=\ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\astrm}$, since $\astrm$ is independent of $s$.
         By Definition~\ref{def:semantic-HP}(\ref{itm:sem-HP-assgn}) of the assignment's semantics, this implies $(\trajectory(\zeta),\bsstate)\in\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}}$ if and only if $\bsstate=\trajectory(\zeta)$.
         Finally, this implies the equivalence
         \begin{align*}
@@ -620,7 +620,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
                 \HHfml\from \ddLformulas \to \R_{\leq 0}
             \end{equation*}
             which assigns to each \ddL formula the earliest point in time it references to. It limits the time interval of the state space $T\in$.
-            The history horizon depends on all occurences of $\xtau[s]$ and $\xtau[c]$ in the formula.
+            The history horizon depends on all occurences of $\x[s]$ and $\x[c]$ in the formula.
 
             It is defined inductively for formulas by:
             \begin{enumerate}
@@ -636,10 +636,10 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
             \end{enumerate}
             depending on terms
             \begin{enumerate}
-                \item $\HHtrm(\xtau[s]) = 0$
-                \item $\HHtrm(\Dxtau[s]) = 0$
-                \item $\HHtrm(\xtau[c]) = \abs{c}$
-                \item $\HHtrm(\Dxtau[c]) = \abs{c}$
+                \item $\HHtrm(\x[s]) = 0$
+                \item $\HHtrm(\Dx[s]) = 0$
+                \item $\HHtrm(\x[c]) = \abs{c}$
+                \item $\HHtrm(\Dx[c]) = \abs{c}$
                 \item $\HHtrm(c) = 0$
                 \item $\HHtrm(f(\range{\istrm{1}}{\istrm{k}})) = \max\set{\range{\HHtrm(\istrm{1})}{\HHtrm(\istrm{k})}}$
                 \item $\HHtrm(\astrm + \bstrm) = \max\set{\HHtrm(\astrm),\HHtrm(\bstrm)}$
@@ -672,10 +672,10 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         \begin{definition}[Free variable]
             for terms: $\freevars{\astrm}\subseteq\allvars\cup\diffvars\cup\set{s}$, variables that occur in term
             \begin{align*}
-                \freevars{\xtau[s]} &= \set{x,s}\\
-                \freevars{\Dxtau[s]} &= \set{\D{x},s}\\
-                \freevars{\xtau[b]} &= \set{x}\\
-                \freevars{\Dxtau[b]} &= \set{\D{x}}\\
+                \freevars{\x[s]} &= \set{x,s}\\
+                \freevars{\Dx[s]} &= \set{\D{x},s}\\
+                \freevars{\x[b]} &= \set{x}\\
+                \freevars{\Dx[b]} &= \set{\D{x}}\\
                 \freevars{c} &= \emptyset\\
                 \freevars{f(\range{\istrm{1}}{\istrm{k}})} &= \freevars{\istrm{1}} \cup\cdots\cup \freevars{\istrm{k}}\\
                 \freevars{\astrm + \bstrm} = \freevars{\astrm \cdot \bstrm} &= \freevars{\astrm}\cup\freevars{\bstrm}\\
@@ -700,7 +700,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         \begin{example}
             \begin{equation*}
                 % FIXME: notation/syntax: ausgeklammertes forall in formulas
-                \dbox{\hupdate{\humod{x}{\xtau[-3]^2}};\hevolvein{\D{x}=\xtau+2x}{(x\geq 0)}}{\holdssinceclosed{T}{0\leq \xtau[s] \land \xtau[s]\leq\xtau[-5]}}
+                \dbox{\hupdate{\humod{x}{\x[-3]^2}};\hevolvein{\D{x}=\x[-\tau]+2x}{(x\geq 0)}}{\holdssinceclosed{T}{0\leq \x[s] \land \x[s]\leq\x[-5]}}
             \end{equation*}
             Hence the history horizon needs to be set to
             \begin{equation*}

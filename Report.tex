@@ -358,7 +358,7 @@ can be implemented in software
         
         \end{calculus}
 
-        $\D{x}$ and $\xtau[c]$ are not allowed in invariant (leads to discontinuities). Invariants must be \FOLR
+        $\D{x}$ and $\x[c]$ are not allowed in invariant (leads to discontinuities). Invariants must be \FOLR
 
 \section{Soundness}
     \label{sec:soundness}
@@ -385,7 +385,7 @@ can be implemented in software
         % FIXME: assignment symbol
         \item[$\dbox{:=}$] (->substitution lemma in book)
         \item[DW] Proof as for \dL.
-        \item[DC] For a formula $\bsfmlfolR$ of \FOLR, let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\bsfmlfolR}}$ and $\trajectory\from\compactum{0}{\bar{r}}\to\states$ be an arbitrary trajectory of duration $\bar{r}\geq 0$, solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\xi)\in\imodel{\IddL}{\Dxtau[0]=\astrm\land\ivr}$ for all $\xi\in\compactum{0}{\bar{r}}$.
+        \item[DC] For a formula $\bsfmlfolR$ of \FOLR, let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\bsfmlfolR}}$ and $\trajectory\from\compactum{0}{\bar{r}}\to\states$ be an arbitrary trajectory of duration $\bar{r}\geq 0$, solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\xi)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\xi\in\compactum{0}{\bar{r}}$.
 
         Suppose $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, i.e.\ there exists a $0\leq r\leq\bar{r}$, such that $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr}$ for all $\zeta\in\compactum{0}{r}$ and $\trajectory(r)\in\imodel{\IddL}{\asfml}$. Since $\zeta\leq\bar{r}$ it is also $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$. This is equivalent to $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr\land\bsfmlfolR}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$ for all $\zeta\in\compactum{0}{r}$, which is the same as $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\bsfmlfolR}}{\asfml}}$.
 
@@ -406,14 +406,14 @@ can be implemented in software
             0 \leq \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(g(x))}}=\DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{g(x)}}{t}(\zeta)
         \end{equation*}
         $\freevars{\inv}\cap\set{\D{x}}=\emptyset$ (means no $\D{x}$ in invariant) implies $\trajectory(0)=\asstate\in\imodel{\IddL}{g(x)\geq 0}$.
-        no $\xtau[c]$ in invariant, hence continuous
+        no $\x[c]$ in invariant, hence continuous
         Lemma~\ref{lm:pc-integrable} yields for any $z\in\compactum{0}{r}$
         \begin{equation*}
             \ivaluation{\iconcat[state=\trajectory(z)]{\IddL}}{g(x)}= \ivaluation{\iconcat[state=\trajectory(0)]{\IddL}}{g(x)} + \integral{0}{z} \DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{g(x)}}{t}(\zeta)\dx[\zeta] \geq 0
         \end{equation*}
         hence $\trajectory(z)\in\imodel{\IddL}{\inv}$ and hence $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}}$
 
-        \item[DE] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$ and $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory of duration $r\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dxtau[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{r}$.
+        \item[DE] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$ and $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory of duration $r\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{r}$.
         Since $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, we have $\trajectory(r)\in\imodel{\IddL}{\asfml}$ which, by the Differential Assignment Lemma~\ref{lm:diff-assignment}, is equivalent to $\trajectory(r)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}$. Hence $\asstate\in\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}$.
         The inverse implication is shown in the same way.
     \end{description}
@@ -423,9 +423,9 @@ can be implemented in software
         \label{history-axiom}
 
         Just replace symbol by its semantical meaning
-        The occurence of $\xtau$ in expressions can be replaced by turning the (implicitely existing) time variable explicit, i.e.\
+        The occurence of $\x[-\tau]$ in expressions can be replaced by turning the (implicitely existing) time variable explicit, i.e.\
         uniform substitution $\sigma$
-        allows substitution of $\xtau$ by, depending on context, $x(t-\tau)$ or $\forall{s\in[0,\tau]}{x(t-\tau)}$
+        allows substitution of $\x[-\tau]$ by, depending on context, $x(t-\tau)$ or $\forall{s\in[0,\tau]}{x(t-\tau)}$
         allows substitution of x, +quantifier from semantics in certain contexts
 
         \begin{calculus}
@@ -433,7 +433,7 @@ can be implemented in software
                 \linferenceRule[equiv]{
                     \lforall{s\in[-\tau,0]}{\asfml(x(t+s))}
                 }{
-                    \asfml(\xtau)
+                    \asfml(\x[-\tau])
                 }
             }{}
         \end{calculus}
@@ -616,13 +616,13 @@ it often makes sense to treat the very first initial condition separately, becau
                     &\lsequent{t=0,\inv(\theta(t-\tau))}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\rho(x,\theta(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv}}
                     &\lsequent{\inv}{\asfml}
                 }{
-                    \lsequent{\Gamma}{\dbox[]{\hevolvein{\D{x}=\rho(x,\xtau)}{\ivr}}{\asfml},\Delta}
+                    \lsequent{\Gamma}{\dbox[]{\hevolvein{\D{x}=\rho(x,\x[-\tau])}{\ivr}}{\asfml},\Delta}
                 }
             }{}
         \end{calculus}
         %\end{small}
 
-        Formulas of the form $\Gamma(\xtau)$ implicitely also include a statement about $x$.
+        Formulas of the form $\Gamma(\x[-\tau])$ implicitely also include a statement about $x$.
 
     \subsection{Delay Differential Induction}
         \label{sec:delay-differential-induction}
@@ -643,11 +643,11 @@ it often makes sense to treat the very first initial condition separately, becau
         \begin{calculus}
             \cinferenceRule[DDI|DDI]{delay differential induction proof rule}{
                 \linferenceRule[sequent]{
-                    \lsequent{\Gamma}{\inv(\xtau),\Delta}
+                    \lsequent{\Gamma}{\inv(\x[-\tau]),\Delta}
                     &\lsequent{\ivr,0\leq t\leq\tau,\inv(\theta)}{\dbox{\hevolve{\Dupdate{\Dumod{\D{x}}{\rho(x,\theta)}}}}{\der{\inv(x)}}}
-                    &\lsequent{\inv(\xtau)}{\asfml}
+                    &\lsequent{\inv(\x[-\tau])}{\asfml}
                 }{
-                    \lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=\rho(x,\xtau)}{\ivr}}{\asfml,\Delta}}
+                    \lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=\rho(x,\x[-\tau])}{\ivr}}{\asfml,\Delta}}
                 }
             }{}
         \end{calculus}
@@ -660,7 +660,7 @@ it often makes sense to treat the very first initial condition separately, becau
             \linfer[stepsb]{
                 \linfer[loop]{
                     % FIXME: formel zu hoch
-                    \lsequent{\Gamma(\xtau)}{\inv(\xtau),\Delta}
+                    \lsequent{\Gamma(\x[-\tau])}{\inv(\x[-\tau]),\Delta}
                     % FIXME: multiple rules at once
                     &\linfer[assignb+composeb]{
                         \linfer[hist]{
@@ -679,16 +679,16 @@ it often makes sense to treat the very first initial condition separately, becau
                                 \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
                             }
                         }{
-                            \lsequent{\inv(\xtau),t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\xtau)}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\xtau)}}
+                            \lsequent{\inv(\x[-\tau]),t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\x[-\tau])}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\x[-\tau])}}
                         }
                     }{
-                        \lsequent{\inv(\xtau)}{\dbox[]{\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\xtau)}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\xtau)}}
+                        \lsequent{\inv(\x[-\tau])}{\dbox[]{\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\x[-\tau])}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\x[-\tau])}}
                     }
-                    \lsequent{\inv(\xtau)}{\asfml(\xtau)}
+                    \lsequent{\inv(\x[-\tau])}{\asfml(\x[-\tau])}
                 }{
-                \lsequent{\Gamma(\xtau)}{\dbox{\hrepeat{(\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\xtau)}{(\ivr\land 0\leq t\leq\tau))}}}{\asfml(\xtau),\Delta}}}
+                \lsequent{\Gamma(\x[-\tau])}{\dbox{\hrepeat{(\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\x[-\tau])}{(\ivr\land 0\leq t\leq\tau))}}}{\asfml(\x[-\tau]),\Delta}}}
             }
-            {\lsequent{\Gamma(\xtau)}{\dbox{\hevolvein{\D{x}=\astrm(x,\xtau)}{\ivr}}{\asfml(\xtau),\Delta}}}
+            {\lsequent{\Gamma(\x[-\tau])}{\dbox{\hevolvein{\D{x}=\astrm(x,\x[-\tau])}{\ivr}}{\asfml(\x[-\tau]),\Delta}}}
         \end{sequentdeduction}
 
         % TODO: ref to here: (2)
@@ -770,9 +770,9 @@ it often makes sense to treat the very first initial condition separately, becau
         loop and differential invariants are of form $\lforall{s\in[-\tau,0]}{\inv(x(s))}$
         can they have $x$?
 
-        Meaning of derivative $\der{\inv(\xtau)}=\lforall{s\in[-\tau,0]}{\der{\inv(x(t+s))}}$ would lead to occurrence of derivative of init cond, which we don't know
+        Meaning of derivative $\der{\inv(\x[-\tau])}=\lforall{s\in[-\tau,0]}{\der{\inv(x(t+s))}}$ would lead to occurrence of derivative of init cond, which we don't know
 
-        Mentioning $\xtau$ in the invariant differential invariant is not permitted, since derivation would lead to the occurrence of the symbol $x_{2\tau}$, whose properties are out of the scope of the current state.
+        Mentioning $\x[-\tau]$ in the invariant differential invariant is not permitted, since derivation would lead to the occurrence of the symbol $x_{2\tau}$, whose properties are out of the scope of the current state.
 
         % TODO: ref to DDI
         As for ODEs in \dL, we cannot have $x(t)$ in the premise in DDI. Would permit to prove wrong statements.
@@ -788,9 +788,9 @@ it often makes sense to treat the very first initial condition separately, becau
 
             Consider the non-linear first-order delay differential equation
             \begin{equation}
-                \D{x}(t) = \begin{cases}
-                     x(t-\tau) & t \geq \sigma\\
-                     \theta(t)\geq 0 & t \in [\sigma-\tau,\sigma]
+                \begin{cases}
+                    \D{x}(t) = x(t-\tau) & t \geq \sigma\\
+                    x(t) = \theta(t)\geq 0 & t \in [\sigma-\tau,\sigma]
                 \end{cases}
             \end{equation}
             Using the invariant $F\equiv(x^3\geq 0)$ we prove that the solution stays non-negativ for all time $t$.
@@ -800,7 +800,7 @@ it often makes sense to treat the very first initial condition separately, becau
                     \linfer[]{
                         \lclose
                     }{
-                        \lsequent{\xtau\geq 0}{\xtau^3\geq 0}
+                        \lsequent{\x[-\tau]\geq 0}{\x[-\tau]^3\geq 0}
                     }
                     &\linfer[]{
                         \linfer[]{
@@ -819,10 +819,10 @@ it often makes sense to treat the very first initial condition separately, becau
                     &\linfer[]{
                         \lclose
                     }{
-                        \lsequent{\xtau^3\geq 0}{\xtau\geq 0}
+                        \lsequent{\x[-\tau]^3\geq 0}{\x[-\tau]\geq 0}
                     }
                 }{
-                    \lsequent{\holdssinceclosed{\tau}{\x[s]\geq 0}}{\dbox{\D{x}=\xtau}{(\holdssinceclosed{\tau}{\x[s]\geq 0})}}
+                    \lsequent{\holdssinceclosed{\tau}{\x[s]\geq 0}}{\dbox{\D{x}=\x[-\tau]}{(\holdssinceclosed{\tau}{\x[s]\geq 0})}}
                 }
             \end{sequentdeduction}\normalsize
             In the same way we can prove that the solution stays negative for all $t$, if the initial condition is non-positive.
@@ -830,11 +830,12 @@ it often makes sense to treat the very first initial condition separately, becau
         \subsubsection{Example 2}
             \label{sec:ddi-example-2}
 
+            % FIXME: it's not autonomous ?
             Consider the non-linear first-order delay differential equation with explicitely given initial condition
             \begin{equation}
-                \D{x}(t) = \begin{cases}
-                     -x(t-1)^2 & t \geq 0\\
-                     t & t \in [-1,0]
+                \begin{cases}
+                    \D{x}(t) = -x(t-1)^2 & t \geq 0\\
+                    x(t) = t & t \in [-1,0]
                 \end{cases}
             \end{equation}
             Using $F\equiv(x^3\leq 0)$ we prove that the solution stays non-positiv.
@@ -850,7 +851,7 @@ it often makes sense to treat the very first initial condition separately, becau
                                 \lsequent{t=0,\lforall{s\in[-1,0]}{x(t+s)=t+s}}{\lforall{s\in[-1,0]}{x(t+s)^3\leq 0}}
                             }
                         }{
-                            \lsequent{t=0,\xtau[1]=t}{\xtau[1]^3\leq 0}
+                            \lsequent{t=0,\x[-1]=t}{\x[-1]^3\leq 0}
                         }
                         &\linfer[]{
                             \linfer[]{
@@ -869,15 +870,15 @@ it often makes sense to treat the very first initial condition separately, becau
                         &\linfer[]{
                             \lclose
                         }{
-                            \lsequent{\xtau[1]^3\leq 0}{\xtau[1]\leq 0}
+                            \lsequent{\x[-1]^3\leq 0}{\x[-1]\leq 0}
                         }
                     }{
-                        \lsequent{t=0,\xtau[1]=t}{\dbox{\D{x}=-\xtau[1]^2}{(\xtau[1]\leq 0)}}
+                        \lsequent{t=0,\x[-1]=t}{\dbox{\D{x}=-\x[-1]^2}{(\x[1]\leq 0)}}
                     }
                 \end{sequentdeduction}
             \end{small}
 
-            This proof doesn't even need any premisse about $\xtau$ in the induction step.
+            This proof doesn't even need any premisse about $\x[-\tau]$ in the induction step.
 
         \subsubsection{Example 3}
             \label{sec:ddi-example-3}
@@ -886,11 +887,11 @@ it often makes sense to treat the very first initial condition separately, becau
             \begin{equation}
                 \forall\,t\in[-\tau,0]:\,-1\leq\xbartaut{0}(t)\wedge\xbartaut{0}(t)\leq 1
                 \rightarrow
-                [\D{x}=-\xtau] (\forall\,s\in[-\tau,0]:\,-1\leq\xbartaut{t}(s)\wedge\xbartaut{t}(s)\leq 1)
+                [\D{x}=-\x[-\tau]] (\forall\,s\in[-\tau,0]:\,-1\leq\xbartaut{t}(s)\wedge\xbartaut{t}(s)\leq 1)
             \end{equation}
-            in explicit quantified representation. It can be simplified by using an implicit time variable and a context depending meaning of $\xtau$
+            in explicit quantified representation. It can be simplified by using an implicit time variable and a context depending meaning of $\x[-\tau]$
             \begin{equation}
-                -1\leq\xtau\leq 1 \rightarrow [\D{x}=-\xtau]\asfml.
+                -1\leq\x[-\tau]\leq 1 \rightarrow [\D{x}=-\x[-\tau]]\asfml.
             \end{equation}
 
             We apply the rule of steps using the safety condition $\phi$ as step condition $F(x)\equiv(\forall\,t\in[-\tau,0]:\,-1\leq x(t)\wedge x(t)\leq 1)$.
@@ -899,7 +900,7 @@ it often makes sense to treat the very first initial condition separately, becau
 
             Use the algebraic differential invariant $F\equiv(-1\leq x^3\wedge x^3\leq1)$, which is valid for the initial condition. Differentiation leads to the inequalities, which needs to be shown $\forall t\in[0,\tau]$
             \begin{equation}
-                0\leq 3\,x(t)^2 \D{x}(t) = -3\,x(t)^2 \xtau(t)
+                0\leq 3\,x(t)^2 \D{x}(t) = -3\,x(t)^2 \x[-\tau](t)
             \end{equation}
 
             This holds since
