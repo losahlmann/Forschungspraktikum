@@ -184,6 +184,7 @@ methods to solve analytically \cite{Falbo06FDEs}
         If the function $x$ is a solution for all $T>0$, it is called \emph{global}.
 
         %TODO: differentiable in right rand point? need not derivative in right hand point
+        in knots: right sided derivative
         %TODO: Fortsetzbarkeit For example initial condition has jump, this point is limit for local solution.
     \end{definition}
 
@@ -529,10 +530,10 @@ derivative not necessarily continuous at knots
         t \mapsto \xbartaut{t}
     \end{equation}
 
-    The \textbf{state} at time $t$ is a function which provides a time limited history up to the current time. This is all information needed to determine (using the DDE) to determine the solution for time $\geq t$. It is defined as $\xbartaut{t}(s)\defeq x(t+s)$ for $s\in [-\tau,0]$. In the case of $t=0$, we simplify the notation to $\xbartau \defeq \xbartaut{0}$.
+    The \emph{state} at time $t$ is a function which provides a time limited history up to the current time. This is all information needed to determine (using the DDE) to determine the solution for time $\geq t$. It is defined as $\xbartaut{t}(s)\defeq x(t+s)$ for $s\in [-\tau,0]$. In the case of $t=0$, we simplify the notation to $\xbartau \defeq \xbartaut{0}$.
     This notion of solution is a \emph{dynamical systems} point of view which later turns out to be useful.
 
-    
+  Other results know from ordinary differential equations can be adapted to delay differential equations, such as continuous (or even differentiable) dependence of the solution on initial data and, see \cite{Dads06DDEs} % TODO: add other cites
 
 %TODO: can write DDE (eq??) from definition as
 
@@ -550,22 +551,25 @@ derivative not necessarily continuous at knots
 
 % TODO: non-autonomous -> autonomous
 
-\section{Example}\label{example}
-The basic ODE IVP
-\begin{equation}
-    \begin{cases}
-        \D{x}(t) = -x(t)\\
-        x(0) = x_0
-    \end{cases}
-\end{equation}
-has the solution $x(t)=x_0 e^{-t}$. However the similiar DDE
-\begin{equation}
-    \begin{cases}
-        \D{x}(t) = -x(t-\tau) & t\geq 0\\
-        x(t) = x_0(t) & -\tau\leq t\leq 0
-    \end{cases}
-\end{equation}
-has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can compute first solutions by method of steps. \ldots{}
+\begin{example}
+    Delay differential equations can often incorporate a much richer behaviour than ordinary differetial equations.
+    The basic ODE IVP
+    \begin{equation}
+        \begin{cases}
+            \D{x}(t) = -x(t)\\
+            x(0) = x_0
+        \end{cases}
+    \end{equation}
+    has the solution $x(t)=x_0 e^{-t}$. However the similiar DDE
+    \begin{equation}
+        \begin{cases}
+            \D{x}(t) = -x(t-\tau) & t\geq 0\\
+            x(t) = x_0(t) & -\tau\leq t\leq 0
+        \end{cases}
+    \end{equation}
+    has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can compute first solutions by method of steps. \ldots{}    
+\end{example}
+
 
 \begin{figure}[h]\centering
     \includegraphics[width=\textwidth]{figures/piecewise-initial-function.png}
