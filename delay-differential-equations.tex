@@ -1,4 +1,24 @@
-\chapter{Delay Differential Equations}\label{sec:delay-differential-equations}
+\chapter{Delay Differential Equations}
+
+special case of more general functional differential equations (FDEs)
+
+often arise in automatic control
+controller montitor state of systems
+control decision to adjust state
+delay between observation and control action
+
+depends on earlier values
+depends on current value and past
+need to specify in initial condition
+at least for the time of longest delay
+
+Examples
+epidemics
+traffic flow
+vibrations, chattering
+-> ref in \cite{Falbo06FDEs}
+
+methods to solve analytically \cite{Falbo06FDEs}
 
 \section{Piecewise Continuous Functions}
     \label{sec:piecewise-continuous-functions}
@@ -19,6 +39,7 @@
         % FIXME: find better word for 'partition'. partition?
         Let $D=[a,b]\subseteq\R$ be a closed interval (this includes the cases when $a=-\infty$ or $b=\infty$, or both). The mapping $x:D\rightarrow\R^n$ is called $n$-times \emph{piecewise continuously differentiable} if and only if there is a finite partition (ordered set) $\{t_i:i=\range{0}{m}\}$ of $D$ (i.e.\ $a=t_0<t_1<\ldots<t_m=b$) such that $x$ is $n$-times continuously differentiable on each interval piece $(t_i,t_{i+1})$ with continuable derivatives on $\compactum{t_i}{t_{i+1}}$ right continuous with left limits.
         \emph{càdlàg} (``continue à droite, limite à gauche'')
+        knots
 
         This means, for all $i=\range{0}{m-1}$ and for all $k=\range{0}{n}$ exist the left sided limits
         \begin{equation}
@@ -104,7 +125,11 @@
 
 \section{Definition DDE}
     \label{sec:definition-dde}
-    % TODO: bounded delay
+    % TODO: fixed, discrete, bounded delay
+
+    % TODO: also, but not here: state-dependent delay, distributed delay
+
+    \cite{Roussel04DDEs}
 
     \begin{definition}[Delay Differential Equation]\label{def:dde}
         Let $f\from\deff\to\R^n$ and $0<\tau_1<\ldots<\tau_k$ $\tau_j > 0$ for $j=\range{1}{k}$. Put $\taumax\defeq\tau_k\max_j\set{\tau_j}$ and $\taumin\defeq\tau_1$.
@@ -113,10 +138,10 @@
         \begin{equation}\label{eq:dde}
             \D{x}(t) = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))
         \end{equation}
-        is called \emph{delay differential equation} (DDE) with \emph{multiple constant, discrete delays $\tau_j$}.
+        is called (first order) \emph{delay differential equation} (DDE) with \emph{multiple constant, discrete delays $\tau_j$}.
         It is \emph{autonomous} if its right hand side $f$ is time independent and \emph{pure} if the right hand side only depends on $x(t-\tau_i)$ and not on $x(t)$.
 
-        A DDE can be equipped with an \emph{initial condition} $x_{\tzero}$. It specifies the values of $x$ on $[\tzero-\taumax, \tzero]$ on which the right hand side depends.
+        A DDE can be equipped with an \emph{initial condition} $x_{\tzero}$. It specifies the state, i.e.\ the values of $x$ on $[\tzero-\taumax, \tzero]$ on which the right hand side depends.
         Such a pair is called \emph{initial value problem (IVP)}:
         \begin{equation}\label{eq:ivp}
             \begin{cases}
@@ -162,7 +187,10 @@
         %TODO: Fortsetzbarkeit For example initial condition has jump, this point is limit for local solution.
     \end{definition}
 
-    
+\cite{Roussel04DDEs}
+solution of equation is operator mapping from functions on $\compactum{t-\taumax}{t}$ to functions on $\compactum{t}{t+\taumax}$
+then solution of initial value problem sequence of these functions
+derivative not necessarily continuous at knots
 
 % \begin{figure}[h]\centering
 %     \includegraphics[width=\textwidth]{figures/multiple.png}
@@ -205,6 +233,12 @@
 \section{Method of Steps}
     \label{sec:method-of-steps}
     
+    See \cite{Falbo06FDEs}
+    by restricting the IVP onto an interval
+    actually have an ODE IVP
+    convert DDE into a ODE on a certain interval, by plugging the given initial condition into the delay differential equation, eliminating the explicit dependance on the past
+    can be repeated on next interval by inserting the previously computed solution instead of the initial condition
+
     for $t\in [0,\tau]$, $x$ must satisfy the following ordinary initial value problem obtained by plugging the initial function into equation (??). For suitable $f$ and $x_0$, the existence (and uniqueness) of a solution on $[0,\tau]$ is guaranteed by ODE theory (\ldots{} or Picard-Lindelöf theorems).
 
     This procedure can then be applied repeatedly to extend the obtained solution by steps of length $\tau$.
@@ -215,6 +249,9 @@
 
 \section{Existence and Uniqueness of Solutions}
     \label{solutions-existence-uniqueness}
+
+    cannot have more than one solution
+    under certain conditions, there is such 
 
     will consider rhs cont and lip
     $f$ Lipschitz with piecewise continuous initial function have existence and uniqueness ???? smoothing
