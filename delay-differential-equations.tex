@@ -107,7 +107,7 @@
     % TODO: bounded delay
 
     \begin{definition}[Delay Differential Equation]\label{def:dde}
-        Let $f\from\deff\to\R^n$ and $\tau_j > 0$ for $j=\range{1}{k}$. Put $\taumax\defeq\max_j\set{\tau_j}$.
+        Let $f\from\deff\to\R^n$ and $0<\tau_1<\ldots<\tau_k$ $\tau_j > 0$ for $j=\range{1}{k}$. Put $\taumax\defeq\tau_k\max_j\set{\tau_j}$ and $\taumin\defeq\tau_1$.
 
         A functional equation of the form
         \begin{equation}\label{eq:dde}

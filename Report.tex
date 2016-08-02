@@ -437,20 +437,28 @@ can be implemented in software
                 }
             }{}
         \end{calculus}
-        
+
         and $t\rightarrow t+s$
 
         for a piecewise continuous function $\theta\in\statespace$.
 
     \subsection{Solution Axiom}
         \label{sec:solution-axiom}
-        \begin{equation}
-            \xbartau = \theta_0 \rightarrow [\D{x}=\theta(\xbartaut{t})]\phi
-            \leftrightarrow
-            \left(\forall 0\leq t\leq\tau: [x:= y(t)]\phi \right)
-            \wedge \xbartaut{\tau} = y \rightarrow [\D{x}=\theta (\xbartaut{t})]\phi
-        \end{equation}
-        where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, i.e.\ $y$ is a local solution of the DDE. The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
+
+        \begin{calculus}
+            \cinferenceRule[solb|solb]{solution axiom}{
+                \linferenceRule[equiv]{
+                    (\lforall{0\leq t\leq\taumin}{\dbox{\hupdate{\humod{x}{y(t)}}}{\phi}})
+                    \land
+                    (\holdssince{-T}{x=y(s+\taumin)} \limply \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi})
+                }{
+                    \holdssince{-T}{x=\bstrm(s)} \limply \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi}
+                }
+            }{}
+        \end{calculus}
+
+        where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, i.e.\ $y$ is a local solution of the symbolic initial value problem. The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
+        However, only a very little class of delay differential equations has such solutions.
         need to reposition time, so that each step begins at $t=0$, no problem for autonomous ddes
         (Since the DDE is autonomous, we can emit the time index.)
 
@@ -464,6 +472,11 @@ it often makes sense to treat the very first initial condition separately, becau
 
         % Let $\theta_0$ and $\theta$
         Introduce a fresh variable $t$ for tracking time
+
+        can go taumin, right hand side only depends on initial cond, not on solution yet
+        right hand side is in general pw continuous
+        theorem shows existence of unique solution in this case
+
         \begin{calculus}
             \cinferenceRule[stepsb|stpsb]{method of steps axiom}{
                 \linferenceRule[equiv]{
@@ -472,9 +485,8 @@ it often makes sense to treat the very first initial condition separately, becau
                     \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi}
                 }
             }{}
-
-
         \end{calculus}
+
         differential equation on right hand side is not longer a DDE, but of \emph{ordinary} type. 
 
         What if $T=t_{max} < \tau$?
