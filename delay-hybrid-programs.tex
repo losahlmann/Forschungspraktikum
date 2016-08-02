@@ -31,10 +31,52 @@ also differential form axiomatization of differential equations
 \ddL not only allows DDEs for plant but also difference equations in controller, e.g. to approximate a derivative by differential-quotient
 
 \section{Example}
-    \label{example-hp-cars}
+    \label{example-hp}
+
     To motivate the need of being able to treat Delayed Differential Equations in hybrid programs, we present some examples.
 
-    \subsection{Leading and Following Car}
+    \subsection{Car Following Model}
+
+        ref
+
+        We want to model a controller for a car
+        trying to keep a constant distance between
+        considering a reaction time $\tau$, causing a delay in control decision
+        controller is ideal continuous, not discrete
+
+        Given the speed pattern of a leading car, the systems models the position and velocity of a following car.
+
+        \begin{equation*}
+            \begin{cases}
+                \D[2]{x_{n+1}}(t) = \alpha (\D{x_n}(t-\tau)-\D{x_{n+1}}(t-\tau))\\
+                \D{x_n}(t) = v(t)
+            \end{cases}
+        \end{equation*}
+
+        The coefficient $\alpha$ can be seen as a sport or fun factor, describing the strengh of acceleration and deacceleration applied to the following car.
+
+        By introducing $v_{n+1}$ for $x_{n+1}$, we reduce the system to first order.
+
+        Preconditions (for all $t\in\closeddelayinterval{-\tau}$):
+        \begin{align*}
+            d(t) &= x_n(t)-x_{n+1}(t) \in\compactum{D-m}{D+m}\\
+            \D{x_{n+1}}(t) &\in\compactum{V-l}{V+l}\\
+            \D{x_n}(t) &= v(t) = 
+        \end{align*}
+        Both $\alpha$ and $\tau$ are considered to be constant.
+
+        Model
+        \begin{equation*}
+            \dbox{\hevolve{
+                \D{v_{n+1}} = \alpha(\D{x_n}[-\tau]-\D{x_{n+1}}[-\tau])\syssep
+                \D{x_{n+1}} = v_{n+1}\syssep
+                \D{x_n} = v
+            }}{d\geq\delta}
+        \end{equation*}
+
+        too strong reactions of the following car lead to damped oscillations
+
+        Of practical interest would be to prove the safety condition that the cars always keep a certain minimal distance, i.e.\ $d\geq\delta$.
 
     \subsection{Network Induced Delay in Control Loops}
 
