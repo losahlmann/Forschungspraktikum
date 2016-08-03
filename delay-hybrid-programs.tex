@@ -62,6 +62,8 @@ time-invariant
 
     We use $\astrm,\bstrm$ for \ddL terms, $\asfml,\bsfml$ for \ddL formulae, $\asprg,\bsprg$ for \dHPs and $\asfmlfolR,\bsfmlfolR$ for formulae of first-order logic of real arithmetic.
 
+    % TODO: parentheses
+
     % FIXME: what are program constants?
     %program constants $ $, may be in $\rationals$
 extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
@@ -95,6 +97,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         Writing $\astrm(-\tau)$ means that all occurences of $s$ in $\astrm$ have been replaced with $-\tau$.
         parameter is inherited
 
+        differentials
         total derivation
         derivation follows standard rules, they hold, shown in Lemma~\ref{lm:derivations}, gives a new term
         The syntactic (total) derivation, defined in \ref{def:derivation}, gives new term
@@ -121,10 +124,10 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     The grammar defining \emph{delayed hybrid programs} is the same as for classical \HPs (cf. \cite{Platzer15Uniform}) and is shown here for completeness.
 
     \begin{definition}[(Delay) Hybrid Programs]\label{def:syntax-HP}
-        The syntax of\emph{(delay) hybrid programs} (\dHPs) is defined by
+        The syntax of \emph{(delay) hybrid programs} (\dHPs) is defined by
         % TODO: first-order logic of real arithmetic formulas include \x?
         \begin{equation*}
-            \asprg, \bsprg \Coloneqq
+            \asprg,\bsprg \Coloneqq
                 % program constants?
                 %a \mid
                 % FIXME: do I need theta(0), or can I later just say, s not free in theta ?
@@ -139,27 +142,20 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         \end{equation*}
         % TODO: ddes with mult const delay
         % TODO: program constant
-        where $\asprg, \bsprg$ denote \dHPs, with a variable $x$, a term $\astrm$ (possibly containing $x$ or $\x[-\tau]$) and $\ausprg$ a program constant.
-        The formula $\asfmlfolR$ is of first-order logic of real arithmetic \FOLR$(\allvars)$, containing only normal variable symbols $\allvars$.
+        where $\asprg,\bsprg$ denote \dHPs, $x$ a variable and $\astrm$ a term (possibly containing $x$ or $\x[b]$, but no $\x[s]$).
+        %and $\ausprg$ a program constant.
+        The formula $\asfmlfolR$ is of \FOLR, containing only normal variable symbols $\allvars$.
+        % FIXME: s\notin\asprg means what?
         Note that $s\notin\asprg$ and that the syntax only allows autonomous DDEs.
     \end{definition}
 
-    atomic \dHPs: instantaneous discrete jump assignments, tests of a first-order formula of real arithmetic, delay differential equations systems
-    compound \dHPs: from atomic, nondeterministic choice, sequential composition, nondeterministic repetition
+    Atomic \dHPs are given by instantaneous discrete \emph{assignments} $\hupdate{\humod{x}{\astrm(0)}}$ and \emph{differential assignments} $\Dupdate{\Dumod{\D{x}}{\astrm(0)}}$, which change the value of the given variable only at the current time instant, not the past, \emph{tests} $\htest{\asfmlfolR}$, which pass only if the current state satisfies first-order formula $\asfmlfolR$ of real arithmetic and abords the program execution if not, as well as evolutions along \emph{delay differential equation} systems $\hevolvein{\D{x}=\astrm(0)}{\ivr}$ of an arbitrary amount of time, but restricted by the evolution domain constraint $\ivr$.
 
-    The difference between classical \HPs (in the sense of ...) and \dHPs is not syntactically, but only given by their semantics.
+    Compound \dHPs combine atomic programs, and comprise \emph{nondeterministic choices} $\hchoice{\asprg}{\bsprg}$, running either $\asprg$ or $\bsprg$, \emph{sequential compositions} $\asprg;\bsprg$, executing $\bsprg$ after $\asprg$ and \emph{nondeterministic repetitions} $\hrepeat{\asprg}$, repeating $\asprg$ any number of times, zero times included.
 
-    refer to Section \ref{sec:dynamic-semantics} for meaning of the following, different meaning for formulae
-
-    assignment, discretely at an instant of time
-    test of formula in current state, does not change state, can only continue if test passes, abord program execution if not
-    nondeterministic choice of either running program ... or ...
-    sequential composition: ... after ...
-    nondeterministic repetition: any number of times, zero times also possible
-    delay differential equation with restricted evolution, due to domain constraint $\bsfml$, follow arbitrary amount of time
-    DDE with delay tau, term has only $x$ and $\D{x}$ with constant nor var $s$
-    ODE still possible
-
+    The difference between classical \HPs (as defined in \dL, cf.~\cite{Platzer10HybridSystems,Platzer12LogicsDynSys,Platzer15Uniform}) and \emph{delay hybrid programs} is not syntactical, but only given by their semantics.
+    
+    Observe that ODEs are still expressible by this syntax and that  hybrid programs are hence only delayed hybrid programs of zero delay.
 
     \begin{definition}[\ddL Formulas]\label{def:syntax-formula}
         The syntax for \emph{formulae} of \emph{delay differential dynamic logic} is defined by the grammar
@@ -172,39 +168,29 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
                 %\contextapp{C}{\asfml} \mid
                 \lnot\asfml \mid
                 \asfml\land\bsfml \mid\\
-                &\holdssince{-T}{\asfml(s)} \mid
+                &\hs{-T}{\asfml(s)} \mid
                 \lforall{x}{\asfml} \mid
                 \lexists{x}{\asfml} \mid
                 \dbox{\asprg}{\asfml} \mid
                 \ddiamond{\asprg}{\asfml}
         \end{align*}
-        with \ddL terms $\astrm,\bstrm,\range{\istrm{1}}{\istrm{k}}$,
-        a predicate symbol $p$, a quantifier symbol $C$, a variable $x$, and a \dHP $\asprg$.
-        
-        % TODO: need = in formulas ?
-        Other operators $<,\leq,>$, such as $\lor,\limply,\lbisubjunct$ can be defined using $=,\land,\lnot$ and are hence not explicitely mentioned in the grammar.
-        Analogoulsy, we could also express $\lexists{x}{\asfml}$ as $\lnot\lforall{x}{\lnot\asfml}$
-
-        modal formula $\dbox{\asprg}{\asfml}$ : $\asfml$ holds in the state after all runs of $\asprg$, dual: there is a run
-        $\ddiamond{\asprg}{\asfml}\equiv\lnot\dbox{\asprg}{\lnot\asfml}$
-        % TODO: what is a quantifier symbol? (-> US paper)
-        % quantifier symbols $C$, with formula as argument are higher order predicate symbols and bind the variables of $\asfml$
-
-        The quantifiers $\forall$ and $\exists$ quantify over $\statespace$.
-
-        The symbol $T$ is a symbolic constant related to the history duration induced by the occurence of a delay-differnetial equation. Its value is set by proof rules.
+        with $\astrm,\bstrm,\range{\istrm{1}}{\istrm{k}}$ as \ddL terms, $p$ as predicate symbol, $x$ as variable, and $\asprg$ as \dHP.
     \end{definition}
 
-    % TODO: FOLR is subset of ddL formulae
-    \ddL formulae contain formulas of first-order logic of real-closed fields
-    \FOLR formulae are a subset of \ddL.
-    connectives of propositional logic
-    two modalities
-    all states reachable
-    at least one state reachable
-    necessary and possible properties
+    These formulae combine connectives of propositional logic with first-order quantifiers (which both have standard meaning) and two modalities, describing \emph{necessary} and \emph{possible} properties.
+    This combination makes it possible to express rather complex properties of delay hybrid programs.
 
-    nested properties and quantifiers possible
+    The other comparison operators $<,\leq,>$ and logic connectives $\lor,\limply,\lbisubjunct$ can be defined using $=,\land,\lnot$ and are hence not explicitely mentioned in the grammar.
+    Analogoulsy is $\lexists{x}{\asfml}$ expressible as $\lnot\lforall{x}{\lnot\asfml}$ and the modal formula $\dbox{\asprg}{\asfml}$ ($\asfml$ holds in the state after all runs of $\asprg$) by its dual $\ddiamond{\asprg}{\asfml}\equiv\lnot\dbox{\asprg}{\lnot\asfml}$ (there is at least one state reachable by $\asprg$ such that $\asfml$ holds).
+    The quantifiers $\forall$ and $\exists$ quantify over $\statespace$.
+
+    % TODO: proof rule/axiom to set T?
+    The symbol $T$ is a symbolic constant related to the length of the domain of the state space, which is induced by the occurence of delay symbols. Its value is defined by the static semantics and set by proof rules.
+
+    % TODO: on variables \allvars (signature)
+    Formulas of first-order logic of real arithmetic constitute a subset of \ddL, i.e.\ every \FOLR formula is also a formula of delay differential dynamic logic.
+
+    In order to simplify notation by eliminating parentheses, we agree on the following
 
     \begin{convention}
         quantifiers, modal operators bind strongest
@@ -217,7 +203,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         example
     \end{convention}
 
-    When terms do not depend on quantified parameter, can omit writing down forall in formula
+    Additionally, when terms do not depend on quantified parameter, we can omit writing down forall in formula:
 
     \begin{convention}
         The frequently appearing fact that $\asfml(s)$ not only holds for $s\in\delayinterval$ but also in $s=0$
@@ -337,6 +323,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
             % FIXME: forall quantifies over state space or over possible values (reals) for system parameters?
             %\item $\imodel{\IddL}{\holdssince{T}{\astrm\geq\bstrm}} = \left\{\asstate\in\states \with \holdssince{T}{\ivaluation{\IddL}{\astrm(s)}\geq\ivaluation{\IddL}{\bstrm(s)}}\right\}$
             %\item $\imodel{\IddL}{\holdssince{T}{p(\range{\istrm{1}}{\istrm{k}})}} = \left\{\asstate\in\states \with \holdssince{T}{\left(\range{\imodel{\IddL}{\istrm{1}(s)}}{\imodel{\IddL}{\istrm{k}(s)}}\right)\in\interpret[p]}\right\}$
+            % TODO: need = in formulas 
             \item $\imodel{\IddL}{\astrm(s)\geq\bstrm(s)} = \left\{\asstate\in\states \with \ivaluation{\IddL}{\astrm(s)}\geq\ivaluation{\IddL}{\bstrm(s)}\right\}$
             \item $\imodel{\IddL}{p(\range{\istrm{1}(s)}{\istrm{k}(s)})} = \left\{\asstate\in\states \with \left(\range{\ivaluation{\IddL}{\istrm{1}(s)}}{\ivaluation{\IddL}{\istrm{k}(s)}}\right)\in\interpret[p]\right\}$
             %\item $\imodel{\IddL}{\contextapp{C}{\asfml}} = \interpret[C]\left(\imodel{\IddL}{\asfml}\right)$ for a quantifier symbol $C$
