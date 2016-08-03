@@ -42,8 +42,7 @@
 \renewcommand{\mforall}[1]{\forall\mkern2mu #1}
 \newcommand{\holds}{\colon}
 % define as
-% FIXME: define "def" properly
-%\newcommand{\defeq}{\,\stackrel{\text{def}}{=}\,}
+\renewcommand{\defeq}{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}}
 % defined by
 \newcommand\logeq{\mathrel{\vcentcolon\Longleftrightarrow}}
 % norm
@@ -107,15 +106,15 @@
 \def\lprogramsname{\dHP}
 
 % ddL
-\newcommand{\ddL}{\textsf{d{\kern-0.07em}d{\kern-0.1em}$\mathcal{L}$ }}
+\newcommand{\ddL}{\textsf{d{\kern-0.07em}d{\kern-0.1em}$\mathcal{L}$}\xspace}
 \newcommand{\ddLformulas}{\lformulasname_{\ddL}}
 \newcommand{\ddLterms}{\ltermsname_{\ddL}}
 \newcommand{\signature}{\Sigma}
 \newcommand{\varsymbols}{V}
 \newcommand{\terms}{\lterms{\signature}{\varsymbols}}
 \newcommand{\FOLformulas}{\lformulas[\FOL]{\signature}{\varsymbols}}
-\newcommand{\FOL}{\text{FOL}}
-\newcommand{\FOLR}{\FOL$_\R$}
+\newcommand{\FOL}{\textnormal{FOL}\xspace}
+\newcommand{\FOLR}{\textnormal{FOL}$_\R$\xspace}
 
 % FIXME: use \mathcal{M}
 \newcommand{\model}{M}

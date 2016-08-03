@@ -50,23 +50,20 @@ time-invariant
 \section{Syntax}
     \label{sec:syntax}
 
-    The syntax of \ddL terms, formulae as well as of \dHPs is defined inductively by a grammar in Backus-Naur-form (BNF).
+    The syntax of \ddL terms, formulae as well as of \dHPs is defined inductively by grammars in Backus-Naur-form (BNF).
 
-    Let $\allvars$ be the set of \emph{all variables} and $\diffvars\defeq\{\D{x} \with x\in\allvars\}$ the corresponding set of \emph{differential symbols}.
-    Let $\constants$ be the set of \emph{all constants}. We denote $\delayvars\defeq\{\x[c] \with x\in\allvars, c\in\constants\}$ the set of \emph{delayed variables} and $\delaydiffvars\defeq\{\Dx[c] \with \D{x}\in\diffvars, c\in\constants\}$ the set of \emph{delayed differentials}.
-    finite sets
+    We define by $\allvars$ be the set of \emph{all variables} and $\diffvars\defeq\set{\D{x} \with x\in\allvars}$ the corresponding set of \emph{differential symbols}.
+    % TODO: call delay or delayed?
+    Let $\constants$ be the set of \emph{all constants}. We denote $\delayvars\defeq\{\x[c] \with x\in\allvars, c\in\constants\}$ the set of \emph{delay variables} and $\delaydiffvars\defeq\{\Dx[c] \with \D{x}\in\diffvars, c\in\constants\}$ the set of \emph{delay differentials}.
+    % TODO: finite sets
 
-    We will usually denote variables by $x,y,z\in\allvars$ and their differential symbols by $\D{x},\D{y},\D{z}\in\diffvars$.
-
+    We will usually write variables as $x,y,z\in\allvars$ and their differential symbols as $\D{x},\D{y},\D{z}\in\diffvars$.
     \emph{Function symbols} $f,g,h$, \emph{constant symbols} $a,b,c$ and \emph{predicate symbols} $p,q,r$ are as in first-order logic (cf.\ Section~\ref{sec:first-order-logic}).
 
-    We use $\astrm,\bstrm$ for \ddL terms, $\asfml,\bsfml$ for \ddL formulae, $\asprg,\bsprg$ for \dHPs and $\asfmlfolR,\bsfmlfolR$ for formulae of first-order logic of real arithmetic.
+    Moreover, we write $\astrm,\bstrm$ for \ddL terms, $\asfml,\bsfml$ for \ddL formulae and $\asprg,\bsprg$ for \dHPs. For formulae of first-order logic of real arithmetic (\FOLR), we use the symbols $\asfmlfolR$ and $\bsfmlfolR$.
 
     % TODO: parentheses
 
-    % FIXME: what are program constants?
-    %program constants $ $, may be in $\rationals$
-extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     \begin{definition}[Terms]\label{def:syntax-terms}
         The syntax of \emph{terms} of \emph{delay differential dynamic logic} is defined by the following grammar:
         \begin{equation*}
@@ -89,25 +86,28 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         %     &\mid \astrm+\bstrm\hfill\text{test}
         % \end{align}
         where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
-        The symbol $c\in\constants$ defines a rational number constant and $b\in\Q_{\leq 0}$.
+        The symbol $c\in\constants$ stands for a constant value in $\Q$. The constant parameter $b\in\Q_{\leq 0}$ is not allowed to be positive.
+    \end{definition}
+
+        % FIXME: mention \emph{delay vars}
+        %extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         All terms implicitely depend on a time parameter $s\in\R_{\leq 0}$, written as $\astrm(s)$. When $s=0$ we abbreviate the notation to $\astrm$.
         The variable symbol $x$ and the differential symbol $\D{x}$ are the only ones which allow explicitely mentioning this parameter. They are spelled slightly differently using square brackets as $\x[s]$ and $\Dx[s]$, respectively. Note that $s\notin\allvars\cup\diffvars\cup\constants$. It is a special variable.
         In particular, for $\x[0]$ we write $x$ and $\D{x}$ for $\Dx[0]$.
 
-        Writing $\astrm(-\tau)$ means that all occurences of $s$ in $\astrm$ have been replaced with $-\tau$.
-        parameter is inherited
+        Writing $\astrm(-\tau)$ means that all occurences of $s$ in $\astrm$ have been replaced with $-\tau$. The parameter is inherited.
 
-        differentials
-        total derivation
-        derivation follows standard rules, they hold, shown in Lemma~\ref{lm:derivations}, gives a new term
-        The syntactic (total) derivation, defined in \ref{def:derivation}, gives new term
+        The \emph{differential} $\D{(\astrm)}$ of a term $\astrm$ is its syntactic (total) derivation, obtained by standard differentiation rules.
+        Lemma~\ref{lm:derivations} shows the validity of these rules and that the result is again a \ddL term.
+
 
         % TODO: subtraction and division in terms
+        addition and multiplication
         allows polynomials,
         division theoretically possible, when can exclude division by zero
 
         %The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\x$.
-    \end{definition}
+
 
     \begin{example}
         Let us consider the \ddL term
