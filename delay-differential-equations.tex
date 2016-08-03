@@ -12,6 +12,9 @@ depends on current value and past
 need to specify in initial condition
 at least for the time of longest delay
 
+delays can be both stabilizing and destabilizing
+stability in many application an important property
+
 Examples
 epidemics
 traffic flow
@@ -125,14 +128,14 @@ methods to solve analytically \cite{Falbo06FDEs}
 
 \section{Definition DDE}
     \label{sec:definition-dde}
-    % TODO: fixed, discrete, bounded delay
+    % TODO: multiple fixed, discrete, bounded delay
 
     % TODO: also, but not here: state-dependent delay, distributed delay
 
     \cite{Roussel04DDEs}
 
     \begin{definition}[Delay Differential Equation]\label{def:dde}
-        Let $f\from\deff\to\R^n$ and $0<\tau_1<\ldots<\tau_k$ $\tau_j > 0$ for $j=\range{1}{k}$. Put $\taumax\defeq\tau_k\max_j\set{\tau_j}$ and $\taumin\defeq\tau_1$.
+        Let $f\from\deff\to\R^n$ and time delays $0<\tau_1<\ldots<\tau_k$ $\tau_j > 0$ for $j=\range{1}{k}$. Put $\taumax\defeq\tau_k\max_j\set{\tau_j}$ and $\taumin\defeq\tau_1$.
 
         A functional equation of the form
         \begin{equation}\label{eq:dde}
