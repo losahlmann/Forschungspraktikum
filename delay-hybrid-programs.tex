@@ -95,6 +95,10 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
         Writing $\astrm(-\tau)$ means that all occurences of $s$ in $\astrm$ have been replaced with $-\tau$.
         parameter is inherited
 
+        total derivation
+        derivation follows standard rules, they hold, shown in Lemma~\ref{lm:derivations}, gives a new term
+        The syntactic (total) derivation, defined in \ref{def:derivation}, gives new term
+
         % TODO: subtraction and division in terms
         allows polynomials,
         division theoretically possible, when can exclude division by zero
@@ -261,7 +265,7 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
             \item $\ivaluation{\IddL}{\Dx[s]} = \asstate(\D{x})(s)$ for a differential symbol $\D{x}\in\diffvars$
             \item $\ivaluation{\IddL}{\x[b]} = \asstate(x)(b)$ for a variable $x\in\allvars$ and a constant $b\in\constants$ with $\interpret[b]\in\Q_{\leq 0}$
             \item $\ivaluation{\IddL}{\Dx[b]} = \asstate(\D{x})(b)$ for a differential symbol $\D{x}\in\diffvars$ and a constant $b\in\constants$ with $\interpret[b]\in\Q_{\leq 0}$
-            \item $\ivaluation{\IddL}{\Dx[b]} = \lim_{s\downto \interpret[b]} \frac{\asstate(x)(s)-\asstate(x)(\interpret[b])}{s-\interpret[b]}$
+            \item $\ivaluation{\IddL}{\Dx[b]} = \asstate(\D{x})(b) \defeq \lim_{s\downto \interpret[b]} \frac{\asstate(x)(s)-\asstate(x)(\interpret[b])}{s-\interpret[b]}$
             \item $\ivaluation{\IddL}{c} = \interpret[c]$ for a constant $c\in\constants$
             \item $\ivaluation{\IddL}{f(\range{\istrm{1}}{\istrm{k}})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}}}{\ivaluation{\IddL}{\istrm{k}}})$ for a function symbol $f$
             \item $\ivaluation{\IddL}{\astrm+\bstrm} = \ivaluation{\IddL}{\astrm} + \ivaluation{\IddL}{\bstrm}$
@@ -270,17 +274,16 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
             \item $\ivaluation{\IddL}{\D{(\astrm)}} = \displaystyle\sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial \x[c]}$
         \end{enumerate}
         %where $s\in [-T,0]$.
-        The  syntactic (total) derivation, defined in \ref{def:derivation}, gives new term
     \end{definition}
         % TODO: mention 'interpretation' for semantics.
         % FIXME: interpretation of $f$ is a smooth function
 
 
     % TODO: total derivative operator for terms
-    \begin{definition}[Derivation]\label{def:derivation}
-        common derivation rules
-        $\D{(\x[b])}=\Dx[b]$ need in premise $\D{x}$ on $[t+b,t]$
-    \end{definition}
+    % \begin{definition}[Derivation]\label{def:derivation}
+    %     common derivation rules
+    %     $\D{(\x[b])}=\Dx[b]$ need in premise $\D{x}$ on $[t+b,t]$
+    % \end{definition}
 
     % The semantic of the new symbol $\x$ depends on the context in which the term occures:
     % \begin{enumerate}
@@ -458,6 +461,62 @@ extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     % in general, we do not write expression explicitely, just give possible intervals in precondition
     
     As a \FOLR formula, $\ivr$ do not contain any delayed variables and thus only depend of the values at the current time instant (and not over the entire interval $\delayinterval$).
+
+    \begin{lemma}[Derivations]\label{lm:derivations}
+        Standard analysis derivation rules also hold in the semantics of \ddL terms, i.e.\ the following equations are valid \ddL formulas
+        \begin{align}
+            \D{(\x[s])} &= \Dx[s]\\
+            %\Dx[s] &=\\
+            \D{(\x[b])} &= \Dx[b]\\
+            %\Dx[b] &=\\
+            \D{(c)} &= 0\\
+            \D{(f(\range{\istrm{1}}{\istrm{k}}))} &=\\
+            \D{(\astrm+\bstrm)} &= \D{(\astrm)}+\D{(\bstrm)}\\
+            \D{(\astrm\cdot\bstrm)} &= \D{(\astrm)}\cdot\bstrm + \astrm\cdot\D{(\bstrm)}\\
+            % FIXME: is term' allowed? diff inv is only a FOLR formula? even for dL valid?
+            %\D{(\astrm)}
+        \end{align}
+        This allows to apply these rules on a syntactic level, what will be done in the form of axioms (see~\ref{sec:differential-axioms}).
+    \end{lemma}
+    \begin{proof}
+        \begin{align*}
+            % FIXME:semantics of x': must coincide with deriv of x
+            % FIXME: semantics of Derivation: no I(s) and nu(s)
+            \ivaluation{\IddL}{\D{(\x[s])}}
+            &= \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\x[s]}}{\partial \x[c]}\\
+            &= \asstate(\D{x})(s)\frac{\partial\ivaluation{\IddL}{\x[s]}}{\partial \x[s]}
+            = \asstate(\D{x})(s) = \ivaluation{\IddL}{\Dx[s]}\\
+            % delayed derivative
+            \ivaluation{\IddL}{\D{(\x[b])}}
+            &= \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\x[b]}}{\partial \x[c]}\\
+            &= \asstate(\D{x})(\interpret[b])\frac{\partial\ivaluation{\IddL}{\x[b]}}{\partial \x[b]}
+            = \asstate(\D{x})(b) = \ivaluation{\IddL}{\Dx[b]}\\
+            % constant
+            \ivaluation{\IddL}{\D{(c)}}
+            &= \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{c}}{\partial \x[c]}\\
+            &= \asstate(\D{x})(\interpret[c])\frac{\partial\interpret[c]}{\partial \x[c]} = 0\\
+            % chain rule
+            % FIXME: derivation of function symbol
+            \ivaluation{\IddL}{\D{(f(\range{\istrm{1}}{\istrm{k}}))}} &= \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial \x[c]}\\
+            % addition rule
+            \ivaluation{\IddL}{\D{(\astrm+\bstrm)}}
+            &= \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm+\bstrm}}{\partial \x[c]}\\
+            &= \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial(\ivaluation{\IddL}{\astrm}+\ivaluation{\IddL}{\bstrm})}{\partial \x[c]}\\
+            &= \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial \x[c]}
+            + \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\bstrm}}{\partial \x[c]}\\
+            &= \ivaluation{\IddL}{\D{(\astrm)}} + \ivaluation{\IddL}{\D{(\bstrm)}}
+            = \ivaluation{\IddL}{\D{(\astrm)}+\D{(\bstrm)}}\\
+            % multiplication rule
+            \ivaluation{\IddL}{\D{(\astrm\cdot\bstrm)}}
+            &= \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm\cdot\bstrm}}{\partial \x[c]}\\
+            &= \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial(\ivaluation{\IddL}{\astrm}\cdot\ivaluation{\IddL}{\bstrm})}{\partial \x[c]}\\
+            &= \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm}}{\partial \x[c]}\ivaluation{\IddL}{\bstrm}
+            + \sum_{\x[c]\in\delayvarswiths} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\bstrm}}{\partial \x[c]}\ivaluation{\IddL}{\astrm}\\
+            &= \ivaluation{\IddL}{\D{(\astrm)}}\cdot\ivaluation{\IddL}{\bstrm} + \ivaluation{\IddL}{\astrm}\cdot\ivaluation{\IddL}{\D{(\bstrm)}}
+            = \ivaluation{\IddL}{\D{(\astrm)}\cdot\bstrm+\astrm\cdot\D{(\bstrm)}}
+        \end{align*}
+        
+    \end{proof}
 
     \begin{definition}\label{def:termvars}
         We define by
