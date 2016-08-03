@@ -48,3 +48,67 @@ To motivate the need of being able to treat Delayed Differential Equations in hy
 \section{Network Induced Delay in Control Loops}
 
     only an input or measurement delay (in u)
+
+    A \textbf{Networked Control Systems (NCS)} is a feedback control system with sensing and control data transmitted on a network.
+    Sensors sample the state of a \textit{plant} periodically and send their output as packets to a event-driven \textit{controller}, which calculates a control signal as soon as the sensor data arrives. This is then transmitted to event-driven actuators in the plant, which perform action immediately on reception of the command.
+
+    The plant is considered to be continuous in time by its physical nature, whereas the controller is discrete in time.
+
+    This scenario has some possible issues, such as network induced \textbf{delay} and \textbf{loss} of network packets.
+    For that reason, the plant output and the controller input are not delivered at the same time and the controller might not have received all the plant updates when it has to perform its control calculations. This makes NCSs different to conventional sampled-data systems.
+
+    \subsection{Modelling of NCSs with Network-Induced Delay}
+        The plant (physical component) is modeled as time continuous and the evolution of its state $x \in\R^{n}$ by
+        \begin{align*}
+            \dot{x}(t) &= Ax(t) + Bu(t) \\
+            y(t) &= Cx(t)
+        \end{align*}
+        which depends additionally on a control signal $u \in\R^{m}$ provided by the discrete controller
+        \begin{equation*}
+            u(kh) = -Kx(kh),\quad k\in N_0
+        \end{equation*} or \begin{equation*}
+            u(kh) = -Ky(kh),\quad k\in N_0
+        \end{equation*}
+        if not the full state is known to the controller, but only some plant output (sensor data) $y \in\R^{p}$.
+        The matrices $A, B, K$ are chosen with suitable dimensions. 
+
+        The network induces delays in the loop, namely $\tau_{sc}$ between sensor and controller, as well as $\tau_{ca}$ between controller and actuator.
+
+        In case of a time-invariant controller, the partial delays can be combined together into a single $\tau_k=\tau_{sc,k}+\tau_{ca,k}+t_{\text{calculation}}$ with the processing time of the controller.
+
+        Assuming that the delay $\tau_k$ of each sample $k$ is less than the sampling period $h$ and that each data sample $x(t)$ fits into a single packet, the system equations can be written as
+        \begin{align*}
+            \dot{x}(t) &= Ax(t) + Bu(t),\\
+            &\quad\quad\quad t\in[kh+\tau_k, (k+1)h+\tau_{k+1}]\\
+            y(t) &= Cx(t) \\
+            u(t^+) &= -Kx(t-\tau_k)\\
+            &\quad\quad\quad t^+\in\{kh+\tau_k, k=0,1,2,...\}
+        \end{align*}
+        with the piecewise constant control signal $u(t^+)$ in the actuator.
+
+        This plant system can be solved using the standard \textit{variation of constants} method in order to express the new state variables $u(kh)$ and $x((k+1)h)$ as function of their values at the previous sampling instant.
+
+    \subsection{Hybrid Systems}
+        A more general class of systems are called \textit{hybrid}, which consist of a continuous dynamics part and discrete events.
+        The NCS model above can be written as such what allows applying stability theory for hybrid systems to derive conditions for asymptotical stability depending on the sampling rate $h$ and the network delay $\tau$.
+
+    \subsection{Compensation of Network Induced Delay}
+        If the plant and the controller have synchronized clocks, the sensor-controller delay can be determined in the controller.
+        Using an estimator to approximate the evolved full plant state at time of reception even if only the partial state measurements $y(t)$ are available, one can try to compensate the sensor-controller delay by an estimator-predictor scheme.
+
+        Having an estimation of the full plant state $\hat{x}(kh)$ for time $kh$, one awaits the reception of the plant output $y(kh)$ for this instant. Receiving this packet at time $kh+\tau_{sc,k}$ one can correct the former prediction $\hat{x}(kh)$ to a better estimation $\bar{x}(kh)$.
+        Assuming that this estimation fulfills the equations describing the system, one forwards the estimation to $\bar{x}(kh+\tau_{sc,k})$ which is used to calculate the control command $u(kh+\tau_{sc,k})$.
+        In order to prepare the next iteration, $\bar{x}(kh)$ is further forwarded to obtain a prediction of the plant state at time $(k+1)h$.
+
+    \subsection{Modelling of Packet Loss}
+        The potential loss of data packets on the network can be modeled as an \textbf{Asynchronous Dynamical System (ADS)}, which comprises continuous dynamics (described by differential/difference equations) and discrete dynamics (governed by finite automata).
+        Assuming that the non-networked system is stable, that the network is lossy only between sensor and controller and that the packets contain $x(kh)$ to provide the full current state to the controller, a pair of difference equations
+        \begin{align*}
+            S_0:&\quad \bar{x}(kh) = \bar{x}((k-1)h)\\
+            S_1:&\quad  \bar{x}(kh) = x(kh)
+        \end{align*}
+        is obtained.
+
+        This system can be interpreted as a switch that closes at a certain rate $r$, indicating if a message is lost ($S_0$) or delivered ($S_1$). 
+        In the case of $S_0$ the state in the controller $x(kh)$ is held at its previous value.
+        For this system, Lyaponov theory gives conditions for exponential stability.
