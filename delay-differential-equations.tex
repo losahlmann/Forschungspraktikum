@@ -2,31 +2,28 @@
 
 special case of more general functional differential equations (FDEs)
 
-often arise in automatic control
-controller montitor state of systems
-control decision to adjust state
-delay between observation and control action
+They often arise in automatic control %\cite
+, where a controller montitors the state of a system in order to make control decisions to adjust this state.
+If there is a delay between the observation and the control action, the differential equation describing the system not only depends on its current state, but also on its past.
 
-depends on earlier values
-depends on current value and past
 need to specify in initial condition
 at least for the time of longest delay
 
-delays can be both stabilizing and destabilizing
-stability in many application an important property
+Even small delays can have a strong effect on the system's behaviour.
+be both stabilizing and destabilizing
+Stability is an important property for many applications.
 
-Examples
-epidemics
-traffic flow
-vibrations, chattering
--> ref in \cite{Falbo06FDEs}
+Examples of ... which have been modeled using delay differential equations include epidemics, traffic flow and vibrations/chattering. See \cite{Falbo06FDEs} and there references therein.
 
-methods to solve analytically \cite{Falbo06FDEs}
+Some methods to solve basic DDEs analytically are presented in \cite{Falbo06FDEs}.
+numerical methods are not as 
+see \cite{Bellen13NumericalDDEs}
 
 \section{Piecewise Continuous Functions}
     \label{sec:piecewise-continuous-functions}
     
     The following definition is motivated by capturing the character evolution arising from hybrid systems. We will see that we can consider such to be piecewise continuous.
+    function space of operation
 
     % \begin{definition}[Piecewise Continuous]\label{def:piecewise-continuous}
     %     Let $D=[a,b]\subseteq\R$ be a closed interval (this includes the cases when $a=-\infty$ or $b=\infty$, or both). The mapping $x:D\rightarrow\R^n$ is called \emph{piecewise continuous} if and only if there is a finite partition $\{t_i:i=\range{0}{m}\}$ of $D$ (i.e.\ $a=t_0<t_1<\ldots<t_m=b$) such that $x$ is continuous on each interval piece $[t_i,t_{i+1})$ for all $i=\range{0}{m-1}$ and the left sided limits
@@ -39,50 +36,57 @@ methods to solve analytically \cite{Falbo06FDEs}
     % \end{definition}
 
     \begin{definition}[Piecewise Continuously Differentiable]\label{def:pw-cont-diff}
-        % FIXME: find better word for 'partition'. partition?
-        Let $D=[a,b]\subseteq\R$ be a closed interval (this includes the cases when $a=-\infty$ or $b=\infty$, or both). The mapping $x:D\rightarrow\R^n$ is called $n$-times \emph{piecewise continuously differentiable} if and only if there is a finite partition (ordered set) $\{t_i:i=\range{0}{m}\}$ of $D$ (i.e.\ $a=t_0<t_1<\ldots<t_m=b$) such that $x$ is $n$-times continuously differentiable on each interval piece $(t_i,t_{i+1})$ with continuable derivatives on $\compactum{t_i}{t_{i+1}}$ right continuous with left limits.
-        \emph{càdlàg} (``continue à droite, limite à gauche'')
-        knots
+        Let $D=\compactum{a}{b}\subseteq\R$ be a closed interval(this includes the cases when $a=-\infty$ or $b=\infty$, or both). The mapping $x\from D\to\R^n$ is called $n$-times \emph{piecewise continuously differentiable} if and only if there is a finite partition (ordered set) $\{t_i:i=\range{0}{m}\}$ of $D$ (i.e.\ $a=t_0<t_1<\ldots<t_m=b$) such that $x$ is $n$-times continuously differentiable on each interval $(t_i,t_{i+1})$ with \foreignlanguage{frenchb}{\emph{càdlàg} (\og continue à droite, limite à gauche\fg{})} derivative.
 
-        This means, for all $i=\range{0}{m-1}$ and for all $k=\range{0}{n}$ exist the left sided limits
+        This means that everywhere on $D$ the function and each of its derivatives are right continuous and have left limits.
+
+        More precisely, for all $i=\range{0}{m-1}$ and for all $k=\range{0}{n}$ exist the left limits
         \begin{equation}
             \lim_{\substack{t\upto t_{i+1}\\ t\in(t_i,t_{i+1})}} \D[k]{x}(t)
         \end{equation}
-        as well as the right sided limits
+        as well as the right limits
         \begin{equation}
-            \lim_{\substack{t\downto t_{i}\\ t\in(t_i,t_{i+1})}} \D[k]{x}(t) =: \D[k]{x}(t_i)
+            \lim_{\substack{t\downto t_{i}\\ t\in(t_i,t_{i+1})}} \D[k]{x}(t) = \D[k]{x}(t_i)
         \end{equation}
-        which are supposed to coincide with the value of $\D[k]{x}$ at $t_i$.
-        Hence $x(b)$ can be an isolated point and this right interval limit $b$ is the only spot where such is allowed.
+        which additionally coincide with the value of $\D[k]{x}$ at this knot $t_i$.
+
+        Hence only $x(b)$ can be an isolated point and this right interval limit $b$ is the only spot where such is allowed.
         In the case $n=0$, we say $x$ is \emph{piecewise continuous}.
 
-        We denote by $\Cnpw[n]{D}{\R^n}$ the set of \emph{$n$-times piecewise continuously differentiable functions} on the compact interval $D$ (this excludes the cases with $\pm\infty$), mapping to $\R^n$, and respectively, by $\Cnpw[0]{D}{\R^n}$ the \emph{piecewise continuous functions}.
+        For a compact interval $D\subset\R$ (this excludes the cases with $\pm\infty$), we denote by $\Cnpw[n]{D}{\R^n}$ the set of \emph{$n$-times piecewise continuously differentiable functions} on $D$ mapping to $\R^n$, and respectively, by $\Cnpw[0]{D}{\R^n}$ the set of\emph{piecewise continuous functions} on $D$.
+
+        The supremum norm $\supnorm{\cdot}$ of the Banach space of continuous functions on the compactum $D$ can be extended to $\Cnpw[n]{D}{\R^n}$, since each element consists of a finite number of continuous parts.
     \end{definition}
 
-    % TODO: sup-norm for pw
+    % FIXME: pw means as in def
+    In the following
+    in the sense of Definition~\ref{def:pw-cont-diff}.
 
     \begin{lemma}
-        chain of continuous and piecewise-continuous is again piecewise-continuous with same partition
-    \end{lemma}
-
-    \begin{lemma}[]\label{lm:pc-integrable}
-        A \emph{piecewise continuous function}, as defined in Definition~\ref{def:pw-cont-diff} is (Riemann) integrable.
+        The composition of a continuous (outer) and a piecewise-continuous function (inner) is again piecewise-continuous with the same partition.
     \end{lemma}
     \begin{proof}
-        See standard analysis literature, such as \cite{Rudin76PrinciplesAnalysis} (Theorem~6.10) or \cite{Gathmann12GDM} (Example~11.16b).
-        % ObdA: one subint with jump at end
+        The limits exist, because they commute with the continuous function and exist for the piecewise-continuous function.
+    \end{proof}
+
+    \begin{lemma}\label{lm:pc-integrable}
+        A piecewise continuous function is (Riemann) integrable.
+    \end{lemma}
+    \begin{proof}
+        This proof is usually given in every standard analysis book, see for example Theorem~6.10 in~\cite{Rudin76PrinciplesAnalysis} or Example~11.16b in~\cite{Gathmann12GDM}.
     \end{proof}
 
     The following lemma generalizes the fundamental theorem of calculus to piecewise continuous derivatives.
 
-    \begin{lemma}[]\label{lm:pc-hauptsatz}
-        Let $F\in\Cn[0]{\compactum{a}{b}}{} \cap \Cnpw[1]{\compactum{a}{b}}{}$ with the partition $\partition{a=t_0}{t_m=b}$ and piecewise derivative $f$.
-        %of $\compactum{a}{b}\subset\R$. 
-        For all $t\in\compactum{a}{b}$ it holds
+    \begin{lemma}\label{lm:pc-hauptsatz}
+        Let $F\in\Cn[0]{\compactum{a}{b}}{} \cap \Cnpw[1]{\compactum{a}{b}}{}$
+        % with the partition $\partition{a=t_0}{t_m=b}$
+        with piecewise derivative $f$. Then
         \begin{equation*}
             F(t)-F(a) = \integral{a}{t} f(s)\dx[s]
             %\sum_{i=0}^k\int\limits_{t_i}^{t_{i+1}}f(t)\dx[t] + \int\limits_{t_k}^s f(t)\dx[t]
         \end{equation*}
+        for all $t\in\compactum{a}{b}$.
         %where $t_k\leq s < t_{k+1}$.
         % FIXME: what about a=-inf or b=inf?
     \end{lemma}
@@ -111,19 +115,24 @@ methods to solve analytically \cite{Falbo06FDEs}
         \end{equation*}
     \end{proof}
 
-% \begin{figure*}[h]\centering
-%     \begin{subfigure}[t]{0.5\textwidth}\centering
-%         \includegraphics[width=\textwidth]{figures/allowed.png}
-%         \caption{Admissible piecewise continuous function.}
-%         \label{fig:allowed}
-%     \end{subfigure}
-%     \begin{subfigure}[t]{0.5\textwidth}\centering
-%         \includegraphics[width=\textwidth]{figures/not-allowed.png}
-% 	    \caption{Not allowed!}
-% 	    \label{fig:not-allowed}
-%     \end{subfigure}
-%     \caption{Examples to Definition \ref{definition-piecewise-continuous}.}
-% \end{figure*}
+    \begin{figure}[t]\centering
+        \begin{subfigure}[t]{0.48\textwidth}
+            \centering
+            %\input{figures/sorting_angles_tikz}
+            \includegraphics[width=\textwidth]{figures/allowed.png}
+            \caption{Admissible piecewise continuous function.}
+            \label{fig:allowed}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[t]{0.48\textwidth}
+            \centering
+            %\input{figures/vertex_sorting_tikz}
+            \includegraphics[width=\textwidth]{figures/not-allowed.png}
+            \caption{Not allowed!}
+            \label{fig:not-allowed}
+        \end{subfigure}
+        \caption{Examples to Definition~\ref{def:pw-cont-diff}.}
+    \end{figure}
 
 
 \section{Definition DDE}
@@ -577,6 +586,6 @@ derivative not necessarily continuous at knots
 \begin{figure}[h]\centering
     \includegraphics[width=\textwidth]{figures/piecewise-initial-function.png}
 	%\caption{}
-	\label{fig:not-allowed}
+	\label{Piecewise continuous initial function.}
 \end{figure}
 

@@ -10,8 +10,8 @@
 % for propper Umlaute
 \usepackage[T1]{fontenc}
 
-% proper hyphenation
-\usepackage[english]{babel}
+% proper hyphenation, last loaded is default: english
+\usepackage[frenchb,english]{babel}
 
 % better i18n Postscript version of Knuth's cm fonts, better than cm-super
 \usepackage{lmodern}
@@ -24,6 +24,9 @@
 \usepackage{amssymb} % provides symbols, loads amsfonts
 \usepackage{amsthm} % provides theorem environment
 %\usepackage{nicefrac} % better slash fracs in inline
+
+% subfigures
+\usepackage{subcaption}
 
 % For including figures, rotating or scaling text (dont use file extension)
 \usepackage{graphicx}
@@ -102,7 +105,7 @@
 
 \begin{abstract}
     Cyber Physical Systems incorporate the connection between the physical world and computing devices.
-This connection is often given by a computer network, which needs hence to be considered in the system model.
+    This connection is often given by a computer network, which needs hence to be considered in the system model.
 
     In this work we extend Differential Dynamic Logic with Delay Differential Equations.
 
@@ -122,6 +125,11 @@ This connection is often given by a computer network, which needs hence to be co
 \end{abstract}
 
 % TODO: Acknowledgements
+% to CMU for hosting me
+% to André Platzer
+% to Eric for intro me to ddes and to Andre
+% to Sylvie
+% to fondation ... et chair Thales for supporting me financially
 
 %\include{introduction}
 
@@ -133,7 +141,7 @@ This connection is often given by a computer network, which needs hence to be co
 
 \include{axiomatization-proof-calculus}
 
-\include{example}
+%\include{example}
 
 \include{conclusion}
 
