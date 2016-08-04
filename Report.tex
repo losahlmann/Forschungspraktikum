@@ -31,6 +31,9 @@
 % For including figures, rotating or scaling text (dont use file extension)
 \usepackage{graphicx}
 
+%
+\usepackage{tikz}
+
 % rotate figures
 \usepackage{rotating}
 
@@ -93,6 +96,16 @@
     ]}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\usetikzlibrary{arrows.meta, backgrounds}
+
+\tikzset{%
+    curve/.style={thick, color=red},
+    leftpoint/.style={color=black},
+    rightpoint/.style={color=white, draw=black},
+    %my thick box/.style={thick,color=blue}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 

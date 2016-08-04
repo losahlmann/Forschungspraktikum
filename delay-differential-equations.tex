@@ -118,16 +118,16 @@ see \cite{Bellen13NumericalDDEs}
     \begin{figure}[t]\centering
         \begin{subfigure}[t]{0.48\textwidth}
             \centering
-            %\input{figures/sorting_angles_tikz}
-            \includegraphics[width=\textwidth]{figures/allowed.png}
+            \input{figures/plot-pw-allowed.tikz}
+            %\includegraphics[width=\textwidth]{figures/allowed.png}
             \caption{Admissible piecewise continuous function.}
             \label{fig:allowed}
         \end{subfigure}
         \hfill
         \begin{subfigure}[t]{0.48\textwidth}
             \centering
-            %\input{figures/vertex_sorting_tikz}
-            \includegraphics[width=\textwidth]{figures/not-allowed.png}
+            \input{figures/plot-pw-not-allowed.tikz}
+            %\includegraphics[width=\textwidth]{figures/not-allowed.png}
             \caption{Not allowed!}
             \label{fig:not-allowed}
         \end{subfigure}
@@ -135,26 +135,22 @@ see \cite{Bellen13NumericalDDEs}
     \end{figure}
 
 
-\section{Definition DDE}
+\section{Definition of DDEs}
     \label{sec:definition-dde}
-    % TODO: multiple fixed, discrete, bounded delay
-
-    % TODO: also, but not here: state-dependent delay, distributed delay
 
     \cite{Roussel04DDEs}
 
     \begin{definition}[Delay Differential Equation]\label{def:dde}
-        Let $f\from\deff\to\R^n$ and time delays $0<\tau_1<\ldots<\tau_k$ $\tau_j > 0$ for $j=\range{1}{k}$. Put $\taumax\defeq\tau_k\max_j\set{\tau_j}$ and $\taumin\defeq\tau_1$.
-
-        A functional equation of the form
+        Given a function $f\from\deff\to\R^n$ and a set of time delays $0<\tau_1<\ldots<\tau_k$, a functional equation of the form
         \begin{equation}\label{eq:dde}
             \D{x}(t) = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))
         \end{equation}
-        is called (first order) \emph{delay differential equation} (DDE) with \emph{multiple constant, discrete delays $\tau_j$}.
-        It is \emph{autonomous} if its right hand side $f$ is time independent and \emph{pure} if the right hand side only depends on $x(t-\tau_i)$ and not on $x(t)$.
+        is called (first order) \emph{delay differential equation} (DDE) with \emph{multiple constant, discrete delays} $\tau_j$.
+        It is said to be \emph{autonomous} if its right hand side $f$ is time independent and \emph{pure}, if the right hand side only depends on $x(t-\tau_j)$ but not on $x(t)$.
+        We define its \emph{maximal} and \emph{minimal delay} as $\taumax\defeq\tau_k$ and $\taumin\defeq\tau_1$, respectively.
 
-        A DDE can be equipped with an \emph{initial condition} $x_{\tzero}$. It specifies the state, i.e.\ the values of $x$ on $[\tzero-\taumax, \tzero]$ on which the right hand side depends.
-        Such a pair is called \emph{initial value problem (IVP)}:
+        A DDE can be equipped with an \emph{initial condition} $x_{\tzero}$. It specifies the state, i.e.\ the values of $x$ on $[\tzero-\taumax, \tzero]$, on which the right hand side depends.
+        Such a pair is called \emph{initial value problem} (IVP):
         \begin{equation}\label{eq:ivp}
             \begin{cases}
                 \D{x}(t) = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k)) & \text{for } t\geq\tzero\\
@@ -163,9 +159,11 @@ see \cite{Bellen13NumericalDDEs}
         \end{equation}
     \end{definition}
 
-    % Since we only consider autonomous DDEs, we can without loss of generality restrict to the case of initial time $t_0=0$.
+    % TODO: autonomous DDEs is without loss of generality?
+    In the following chapters, we will only consider autonomous DDEs, i.e.\ restrict to the case of initial time $\tzero=0$.
 
-    % The definition of a DDE can be extended to multiple constant discrete delays. For simplicity, we restrict here to a single delay.
+    % TODO: source for state-dependent and distributed delays
+    The definition of a DDE can be extended to state-dependent or distributed delays (cf.~\cite{}). For simplicity, we restrict here to fixed delays, which already cover a wide range of applications.
 
 
 \section{Definition of Solution}
@@ -173,7 +171,9 @@ see \cite{Bellen13NumericalDDEs}
 
     \begin{definition}[Solution of DDE]\label{def:solution-dde}
         A function $x\from\compactum{\tzero-\taumax}{\tzero+T}\to\R^n$ is called \emph{(local) solution} of the initial value problem~\eqref{eq:ivp}, if and only if
-        $x$ is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$ (in the sense of Def.~\ref{def:piecewise-continuous}) with partition $\Delta$.
+        $x$ is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$
+        %(in the sense of Def.~\ref{def:piecewise-continuous})
+        with partition $\Delta$.
         This means, when $\Delta=\partition{\tzero=t_0}{t_m=\tzero+T}$, $x$ is continuously differentiable on each interval $(t_i,t_{i+1})$
         %there exists a $T>0$ such that
         % FIXME: local solution is on a single subdiv int only -> cont diffable
