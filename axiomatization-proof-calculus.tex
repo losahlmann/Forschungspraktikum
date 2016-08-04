@@ -1,0 +1,818 @@
+\chapter{Axiomatization and Proof Calculus}
+\label{ch:axiomatization-proof-calculus}
+
+
+verification purposes
+\ddL formulas to specify properties, such as
+and verify them with proof calculus
+rules based on axioms
+
+allow manipulations on a syntcatic level, which can be realized in software
+syntactic
+do not need to consider semantics
+can be implemented in software
+
+\section{Axiomatization}
+    \label{sec:axioms}
+
+
+    provide syntactic operations, verify properties without going back to their mathematical semantics
+    important for automatization of proofs
+
+    based on \dL axiomatization, as given in \cite{Platzer12Complete}
+
+    use first-order Hilbert calculus, modus ponens and forall-generalization as basis
+
+    all instances of valid formulas of first-order real arithmetic are allowed as axiom
+
+    axiom: concrete formula
+    axiom schemata, represents infinte list of axioms
+
+    combine axioms to a proof rule/tactic
+    to avoid to small steps
+
+    first-order real arithmetic is decideable by quantifier elimination ($\QE$)
+
+    If the \ddL formula $\asfml$ can be derived by \ddL proof rules from \ddL axioms, we say it is provable and write $|-\asfml$
+    (includes first-order axioms and rules)
+
+    axioms expressed in $\dbox{\cdot}$, duality to $\ddiamond{\cdot}$ by $\ddiamond{\asprg}{\asfml}\lbisubjunct\lnot\dbox{\asprg}{\lnot\asfml}$
+
+    % TODO: what about [a;b]p. is [a][b]p correct?
+
+    % QUESTION: which axioms are needed? in papers differences
+    % FIXME: is there a paragraph like calculus environment?
+    \begin{calculus}
+        % TODO: Diamond-Axiom
+        % TODO: holds iff semantic of not is complement
+        \cinferenceRule[testb|$\htest{}$]{test condition}{
+            \linferenceRule[equiv]{
+                (\chi\limply\asfml)
+            }{
+                \dbox{\htest{\chi}}{\asfml}
+            }
+        }{}
+        % TODO: add box in rule names
+        \cinferenceRule[assignbb|$\mathrel{{:}{=}}$]{discrete assignment}{
+            \linferenceRule[equiv]{
+                \asfml(\astrm(0))
+            }{
+                \dbox{\hupdate{\humod{x}{\astrm(0)}}}{\asfml(x)}
+            }
+        }{}
+        % TODO: ['] axiom name
+        % FIXME: how is relation to DDE solution axiom
+        \cinferenceRule[solb|$'$]{}{
+            \linferenceRule[equiv]{
+                \lforall{t\geq 0}{\dbox{\hupdate{\humod{x}{y(t)}}}{\asfml}}
+            }{
+                \dbox{\hevolve{\D{x}=\astrm}}{\asfml}
+            }
+        }{$\hevolve{\D{y}(t)=\astrm}$}
+        \cinferenceRule[choiceb|$\hchoice{}{}$]{choice}{
+            \linferenceRule[equiv]{
+                \dbox{\asprg}{\asfml}\land\dbox{\bsprg}{\asfml}
+            }{
+                \dbox{\hchoice{\asprg}{\bsprg}}{\asfml}
+            }
+        }{}
+        % TODO: name for [&]
+        % TODO: [&] also holds for DDEs?
+        \cinferenceRule[constb|$\&$]{}{
+            \linferenceRule[equiv]{
+                \lforall{t_0=x_0}{\dbox{\hevolve{\D{x}=\astrm}}{(\dbox{\hevolve{\D{x}=-\astrm}}{(x_0\geq t_0\limply\ivr)}\limply\asfml)}}
+            }{
+                \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}
+            }
+        }{}
+        % TODO: composeb symbol
+        \cinferenceRule[composeb|$;$]{composition}{
+            \linferenceRule[equiv]{
+                \dbox{\asprg}{\dbox{\bsprg}{\asfml}}
+            }{
+                \dbox{\asprg;\bsprg}{\asfml}
+            }
+        }{}
+        % TODO: iterateb symbol
+        \cinferenceRule[iterateb|$*$]{loop unrolling}{
+            \linferenceRule[equiv]{
+                \asfml\land\dbox{\asprg}{\dbox{\hrepeat{\asprg}}{\asfml}}
+            }{
+                \dbox{\hrepeat{\asprg}}{\asfml}
+            }
+        }{}
+        % TODO: proper name K-Axiom
+        \cinferenceRule[Kb|K]{}{
+            \linferenceRule[impl]{
+                \dbox{\asprg}{(\asfml\limply\bsfml)}
+            }{
+                (\dbox{\asprg}{\asfml}\limply\dbox{\asprg}{\bsfml})
+            }
+        }{}
+        % TODO: proper name I-Axiom
+        \cinferenceRule[Ib|I]{}{
+            \linferenceRule[impl]{
+                \dbox{\hrepeat{\asprg}}{(\asfml\limply\dbox{\asprg}{\asfml})}
+            }{
+                (\asfml\limply\dbox{\hrepeat{\asprg}}{\asfml})
+            }
+        }{}
+        % TODO: proper name C-Axiom
+        \cinferenceRule[Cb|C]{}{
+            \linferenceRule[impl]{
+                \dbox{\hrepeat{\asprg}}{\lforall{v>0 (\varphi(v)\limply\ddiamond{\asprg}{\varphi(v-1)})}}
+            }{
+                \lforall{v}{(\varphi(v)\limply\ddiamond{\hrepeat{\asprg}}{\lexists{v\leq 0}{\varphi(v)}})}
+            }
+        }{$v\notin\asprg$}
+        % TODO: proper name B-Axiom
+        \cinferenceRule[Bb|B]{}{
+            \linferenceRule[impl]{
+                \lforall{x}{\dbox{\asprg}{\asfml}}
+            }{
+                \dbox{\asprg}{\lforall{x}{\asfml}}
+            }
+        }{$x\notin\asprg$}
+        % TODO: proper name V-Axiom
+        % QUESTION: what is difference between V and G axiom?
+        \cinferenceRule[Vb|V]{}{
+            \linferenceRule[impl]{
+                \asfml
+            }{
+                \dbox{\asprg}{\asfml}
+            }
+        }{$\freevars{\asfml}\cap\boundvars{\asprg}=\emptyset$}
+        % TODO: proper name G-Axiom
+        \cinferenceRule[gen|G]{Gödel's generalization rule}{
+            \linferenceRule[sequent]{
+                \asfml
+            }{
+                \dbox{\asprg}{\asfml}
+            }
+        }{}
+        \cinferenceRule[MP|MP]{modus ponens}{
+            \linferenceRule[sequent]{
+                \asfml\limply\bsfml & \asfml
+            }{
+                \bsfml
+            }
+        }{}
+        \cinferenceRule[forall|$\forall$]{forall generalization rule}{
+            \linferenceRule[sequent]{
+                \asfml
+            }{
+                \lforall{x}{\asfml}
+            }
+        }{}
+
+        % TODO: CT-Axiom
+        % TODO: CQ-Axiom
+        % TODO: CE-Axiom
+        % TODO: US-Axiom
+
+    \end{calculus}
+
+    discrete assignment axiom, substitution
+    substitute $x$ by $\astrm$, needs $x$ not to be ... (admissibility condition)
+
+    solution axiom
+    solution of symbolic initial-value problem (conv. IVP is numerical), must be expressible as first-order formula of real arithmetic
+
+    iteration axiom
+    partially unwind a loop
+
+    induction axioms I and C for unbounded repetitions of loops
+
+    axiom I
+
+    axiom C
+    variant of Harel's convergence rule
+
+    axiom K
+    modal modus ponens
+
+    axiom B
+    Barcan formula for first-order modal logic
+
+    axiom V
+
+    proof rules
+
+    Gödel's necessitation rule G of modal logic
+
+    modus ponens
+
+    $\forall$-generalization
+
+        % TODO: axiom [&] in combination with [steps]
+
+    \subsection{Differential Axioms}
+        \label{sec:differential-axioms}
+
+        \begin{calculus}
+            \cinferenceRule[]{}{
+                \D{} =
+            }{}
+            \cinferenceRule[]{}{
+                \D{} =
+            }{}
+            \cinferenceRule[]{}{
+                \D{} =
+            }{}
+        \end{calculus}
+    
+        \begin{calculus}
+            \cinferenceRule[DW|DW]{differential weakening}{
+                %\linferenceRule[term]{
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\ivr}
+                %}{}
+            }{}
+            \cinferenceRule[DC|DC]{differential cut}{
+                \linferenceRule[lpmi]{
+                    \left(\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}
+                    \lbisubjunct
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\inv}}{\asfml}\right)
+                }{
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}
+                }
+            }{}
+            \cinferenceRule[DE|DE]{differential effect}{
+                \linferenceRule[equiv]{
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(x,\D{x})}}
+                }{
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(x,\D{x})}
+                }
+            }{}
+            \cinferenceRule[DI|DI]{differential invariant}{
+                \linferenceRule[lpmi]{
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}
+                }{
+                    \left(\ivr\limply\inv\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}\right)
+                }
+            }{}
+
+        
+        \end{calculus}
+
+        $\D{x}$ and $\x[c]$ are not allowed in invariant (leads to discontinuities). Invariants must be \FOLR
+
+    \subsection{History Axiom}
+        \label{history-axiom}
+
+        Just replace symbol by its semantical meaning
+        The occurence of $\x[-\tau]$ in expressions can be replaced by turning the (implicitely existing) time variable explicit, i.e.\
+        uniform substitution $\sigma$
+        allows substitution of $\x[-\tau]$ by, depending on context, $x(t-\tau)$ or $\forall{s\in[0,\tau]}{x(t-\tau)}$
+        allows substitution of x, +quantifier from semantics in certain contexts
+
+        \begin{calculus}
+            \cinferenceRule[hist|hist]{history axiom}{
+                \linferenceRule[equiv]{
+                    \holdssince{-T}{\asfml(s)}
+                }{
+                    \hs[-T]{\asfml}
+                }
+            }{}
+        \end{calculus}
+
+        and $t\rightarrow t+s$
+
+        for a piecewise continuous function $\theta\in\statespace$.
+
+    \subsection{Solution Axiom}
+        \label{sec:solution-axiom}
+
+        \begin{calculus}
+            \cinferenceRule[solb|solb]{solution axiom}{
+                \linferenceRule[equiv]{
+                    (\lforall{0\leq t\leq\taumin}{\dbox{\hupdate{\humod{x}{y(t)}}}{\phi}})
+                    \land
+                    (\holdssince{-T}{x=y(s+\taumin)} \limply \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi})
+                }{
+                    \holdssince{-T}{x=\bstrm(s)} \limply \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi}
+                }
+            }{}
+        \end{calculus}
+
+        where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, i.e.\ $y$ is a local solution of the symbolic initial value problem. The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
+        However, only a very little class of delay differential equations has such solutions.
+        need to reposition time, so that each step begins at $t=0$, no problem for autonomous ddes
+        (Since the DDE is autonomous, we can emit the time index.)
+
+it often makes sense to treat the very first initial condition separately, because after it solution is at least $C^1$, at $x(0)$ might be knick
+
+    \subsection{Axiom of Steps}
+        \label{sec:axiom-of-steps}
+
+        The \emph{method of steps} presented in Section~\ref{sec:method-of-steps} translates into an axiom.
+        %It allows to partially unwind an autonomous DDE given a analytic representation of its solution.
+
+        % Let $\theta_0$ and $\theta$
+        Introduce a fresh variable $t$ for tracking time
+
+        can go taumin, right hand side only depends on initial cond, not on solution yet
+        right hand side is in general pw continuous
+        theorem shows existence of unique solution in this case
+
+        \begin{calculus}
+            \cinferenceRule[stepsb|stpsb]{method of steps axiom}{
+                \linferenceRule[equiv]{
+                    \dbox{\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin(\astrm)})}}{\asfml}
+                }{
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi}
+                }
+            }{}
+        \end{calculus}
+
+        differential equation on right hand side is not longer a DDE, but of \emph{ordinary} type. 
+
+        What if $T=t_{max} < \tau$?
+        Step character of DDE gives partition of continuous time
+
+        \begin{proof}
+            apply methods of steps
+        \end{proof}
+
+    \subsection{Axiom of One Step}
+        \label{sex:axiom-of-one-step}
+
+        Unwind loop in axiom od steps
+        given an analytic solution on $[0,\tau]$ and given initial condition
+        useful for bounded model checking
+
+\section{Soundness}
+    \label{sec:soundness}
+
+    obviously fundamental for the thoery in order to make sense
+
+    \begin{theorem}[Soundness of \ddL]
+        \label{thm:dL-soundness}
+        The \ddL calculus is sound.
+
+        every formula provable from \ddL axioms by \ddL proof rules
+        valid (true in all states)
+        $|-\asfml$ implies $|=\asfml$
+
+    \end{theorem}
+    \begin{proof}
+        The arguments of most proof parts are the same as they were for the classic \dL, since only the definition of the statespace has been replaced. The proofs were independent of this definition, though. This is the case for [?], [choice], [;], [*], K, I, C, B, V, G and their proof can be found in \cite{Platzer12Complete}.
+        Exceptions: [:=] , ['] (-> new PL)
+
+        [\&]???
+
+        % 
+    \begin{description}
+        % FIXME: assignment symbol
+        \item[$\dbox{:=}$] (->substitution lemma in book)
+        \item[DW] Proof as for \dL.
+        \item[DC] For a formula $\bsfmlfolR$ of \FOLR, let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\bsfmlfolR}}$ and $\trajectory\from\compactum{0}{\bar{r}}\to\states$ be an arbitrary trajectory of duration $\bar{r}\geq 0$, solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\xi)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\xi\in\compactum{0}{\bar{r}}$.
+
+        Suppose $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, i.e.\ there exists a $0\leq r\leq\bar{r}$, such that $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr}$ for all $\zeta\in\compactum{0}{r}$ and $\trajectory(r)\in\imodel{\IddL}{\asfml}$. Since $\zeta\leq\bar{r}$ it is also $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$. This is equivalent to $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr\land\bsfmlfolR}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$ for all $\zeta\in\compactum{0}{r}$, which is the same as $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\bsfmlfolR}}{\asfml}}$.
+
+        \item[DI] This proof is an adaption of the \dL proof for DI given in~\cite{Platzer15Uniform}. Without loss of generality we restrict to the case of invariants of the form $\inv\equiv(g(x)\geq 0)$, where $g$ is a term of \FOLR. Then $\D{(\inv)}\equiv(\D{(g(x))}\geq 0)$ (by ??).
+
+        Consider a state $\asstate\in\states$ with $\asstate\in\imodel{\IddL}{\ivr\limply\inv\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}}$. We need to distinguish two cases. If $\asstate\notin\imodel{\IddL}{\ivr}$, then their is no solution of the DDE and hence $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}}$ vacuously.
+
+        If $\asstate\in\imodel{\IddL}{\ivr}$, then $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}}$. Let $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory solving the DDE for some time $r\geq 0$, i.e.\ $\interpret,\trajectory\models(\hevolvein{\D{x}=\astrm}{\ivr})$.
+        % FIXME: r=0 in DI proof
+        If $r=0$ then $\asstate\in\imodel{\IddL}{\ivr}$ since the only varaible changing its value is $\D{x}$, which is not contained in
+        % FIXME: is this freevars{\inv} like in proof by Platzer?
+        $\ivr$ ($\freevars{\ivr}\cap\set{\D{x}}=\emptyset$). Hence it follows from the precondition that $\asstate\in\imodel{\IddL}{\inv}$ and for this reason $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}}$.
+        % FIXME: free vars of inv? x' can be changed? wouldn't influence \ivr
+
+        If $r>0$, $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}}$ implies $\interpret,\trajectory\models\D{(\inv)}$.
+        By the Differential Lemma~\ref{lm:differential-lemma} it holds for all $\zeta\in\compactum{0}{r}$
+        \begin{equation*}
+            0 \leq \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(g(x))}}=\DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{g(x)}}{t}(\zeta)
+        \end{equation*}
+        $\freevars{\inv}\cap\set{\D{x}}=\emptyset$ (means no $\D{x}$ in invariant) implies $\trajectory(0)=\asstate\in\imodel{\IddL}{g(x)\geq 0}$.
+        no $\x[c]$ in invariant, hence continuous
+        Lemma~\ref{lm:pc-integrable} yields for any $z\in\compactum{0}{r}$
+        \begin{equation*}
+            \ivaluation{\iconcat[state=\trajectory(z)]{\IddL}}{g(x)}= \ivaluation{\iconcat[state=\trajectory(0)]{\IddL}}{g(x)} + \integral{0}{z} \DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{g(x)}}{t}(\zeta)\dx[\zeta] \geq 0
+        \end{equation*}
+        hence $\trajectory(z)\in\imodel{\IddL}{\inv}$ and hence $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}}$
+
+        \item[DE] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$ and $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory of duration $r\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{r}$.
+        Since $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, we have $\trajectory(r)\in\imodel{\IddL}{\asfml}$ which, by the Differential Assignment Lemma~\ref{lm:diff-assignment}, is equivalent to $\trajectory(r)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}$. Hence $\asstate\in\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}$.
+        The inverse implication is shown in the same way.
+    \end{description}
+    \end{proof}
+
+\section{Proof Rules}
+    \label{sec:proof-rules}
+
+    We keep the standard sequent calculus proof rules, given in \dL.
+
+    \paragraph{Propositional Sequent Calculus Proof Rules}
+        \label{sec:propositional-rules}
+
+        some text
+
+        \begin{calculus}
+            \cinferenceRule[closeTrue|$\top$R]{close by always true antedecent}{
+                \linferenceRule[sequent]{
+                %\lsequent{}{}
+                }{
+                    \lsequent{\Gamma}{\ltrue,\Delta}
+                }
+            }{}
+            \cinferenceRule[close|id]{close by identity}{
+                \linferenceRule[sequent]{
+                %\lsequent{}{}
+                }{
+                    \lsequent{P,\Gamma}{P,\Delta}
+                }
+            }{}
+            \cinferenceRule[andR|$\land$R]{and right proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma} {P,\Delta}
+                    &\lsequent{\Gamma} {Q,\Delta}
+                }{\lsequent{\Gamma} {P\land Q,\Delta}}
+            }{}
+            \cinferenceRule[andL|$\land$L]{and left proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma, P, Q} {\Delta}
+                }{\lsequent{\Gamma, P\land Q} {\Delta}}
+            }{}
+            \cinferenceRule[implyR|$\limply$R]{imply right proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma,P} {Q,\Delta}}{
+                    \lsequent{\Gamma} {P\limply Q,\Delta}}
+            }{}
+
+        \end{calculus}
+
+
+    \paragraph{Quantifier Sequent Calculus Proof Rules}
+        \label{sec:quantifier-rules}
+
+        some text
+
+        \begin{calculus}
+            \cinferenceRule[allR|$\forall$R]{for all right proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma}{p(y),\Delta}
+                }{
+                    \lsequent{\Gamma}{\lforall{x}{p(x)},\Delta}
+                }
+            }{$y\notin\Gamma,\Delta$}
+        \end{calculus}
+
+    \paragraph{\dL Sequent Calculus Proof Rules}
+        \label{sec:dL-rules}
+
+        some text
+
+        \begin{calculus}
+            % TODO: replace := by command
+            \cinferenceRule[assignb|$\mathrel{{:}{=}}$]{discrete assignment}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma,x=e}{P,\Delta}
+                }{\lsequent{\Gamma}{\dbox{\hupdate{\humod{x}{e}}}{P},\Delta}}
+            }{$x\notin\Gamma,\Delta$}
+            \cinferenceRule[loop|loop]{loop invariant}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma}{J,\Delta}
+                    &\lsequent{J}{\dbox{\alpha}{J}}
+                    &\lsequent{J}{P}
+                }{\lsequent{\Gamma}{\dbox{\hrepeat{\alpha}}{P},\Delta}}
+            }{}
+        \end{calculus}
+
+    \paragraph{Differential Equation Sequent Calculus Proof Rules}
+        \label{sec:ode-rules}
+
+        some text
+
+        \begin{calculus}
+            \cinferenceRule[DC|DC]{differential cut}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{r(x)},\Delta}
+                    &\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr\land r(x)}}{P}}
+                }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
+            }{}
+            \cinferenceRule[dI|dI]{differential invariant}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma,Q}{P,\Delta}
+                    &\lsequent{Q}{\dbox{\Dupdate{\Dumod{\D{x}}{f(x)}}}{\der{P}}}
+                }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
+            }{}
+            \cinferenceRule[dW|dW]{differential weakening}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma}{\lforall{x}{(\ivr\limply P)},\Delta}
+                }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
+            }{}
+        \end{calculus}
+
+    % TODO: Rule of Steps
+    \subsection{Rule of Steps}
+        \label{sec:rule-of-steps}
+        ODEs don't have notion of \emph{one step}, but DDEs do.
+        condition valid for initial condition and given condition for a $s\leq t$ then condition holds after dde-evolution of max time tau and safety follows from condition then condition holds after dde with mentioned initial condition
+        loop induction
+        truth value of invariant never changes during dde
+        % \begin{equation}
+        % \frac{\Gamma(\xbartaut{0})\rightarrow F(\xbartaut{0})\quad F(\xbartaut{s})\rightarrow [\D{x}=\theta(\xbartaut{t})\,\&\,t\leq\tau]F(\xbartaut{t}) \quad F(\xbartaut{t})\rightarrow\phi}{\Gamma(\xbartaut{0}) \rightarrow [\D{x}=\theta(\xbartaut{t})]\phi}
+        % \end{equation}
+
+        %\begin{small}
+        \begin{calculus}
+            % FIXME: \landS -> steps
+            \cinferenceRule[steps|stps]{steps proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma}{\inv,\Delta}
+                    &\lsequent{t=0,\inv(\theta(t-\tau))}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\rho(x,\theta(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv}}
+                    &\lsequent{\inv}{\asfml}
+                }{
+                    \lsequent{\Gamma}{\dbox[]{\hevolvein{\D{x}=\rho(x,\x[-\tau])}{\ivr}}{\asfml},\Delta}
+                }
+            }{}
+        \end{calculus}
+        %\end{small}
+
+        Formulas of the form $\Gamma(\x[-\tau])$ implicitely also include a statement about $x$.
+
+    \subsection{Delay Differential Induction}
+        \label{sec:delay-differential-induction}
+
+        Like loop+DI, the former for $\lforall{k\geq 0}$, the latter for $\lforall{k\tau\leq t \leq (k+1)\tau}$
+        The idea behind this proof rule is
+        the initial condition fulfills a certain condition
+        evolve a little in time
+        the values which come out of the dde also fulfill this condition
+        all runs od dde lead to states satisfying formula
+        start in safe state
+        dynamical system only evolve in direction of safe states in $\inv$
+        direction is given by dde: in state $\omega$ it is $\imodel{}{f(x)}\omega$
+        only need how system evolves in relation to $\inv$
+        hence stays safe forever
+        so the state after the DDE fulfills the condition, parts of the state come from initial condition, parts from dde outcome
+
+        \begin{calculus}
+            \cinferenceRule[DDI|DDI]{delay differential induction proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\Gamma}{\inv(\x[-\tau]),\Delta}
+                    &\lsequent{\ivr,0\leq t\leq\tau,\inv(\theta)}{\dbox{\hevolve{\Dupdate{\Dumod{\D{x}}{\rho(x,\theta)}}}}{\der{\inv(x)}}}
+                    &\lsequent{\inv(\x[-\tau])}{\asfml}
+                }{
+                    \lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=\rho(x,\x[-\tau])}{\ivr}}{\asfml,\Delta}}
+                }
+            }{}
+        \end{calculus}
+
+        % sidewaysfigure
+        %\begin{proof}\small
+        \begin{sidewaysfigure}\footnotesize
+        \centering
+        % TODO: hist axiom earlier? before first DC?
+        \begin{sequentdeduction}[]
+            \linfer[stepsb]{
+                \linfer[loop]{
+                    % FIXME: formel zu hoch
+                    \lsequent{\Gamma(\x[-\tau])}{\inv(\x[-\tau]),\Delta}
+                    % FIXME: multiple rules at once
+                    &\linfer[assignb+composeb]{
+                        \linfer[hist]{
+                            \linfer[DC]{
+                                \linfer[DC]{
+                                    (1)
+                                }{
+                                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau\land \inv(x(t-\tau)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
+                                }
+                                &\linfer[dW]{
+                                    (2)
+                                }{
+                                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
+                                }
+                            }{
+                                \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
+                            }
+                        }{
+                            \lsequent{\inv(\x[-\tau]),t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\x[-\tau])}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\x[-\tau])}}
+                        }
+                    }{
+                        \lsequent{\inv(\x[-\tau])}{\dbox[]{\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\x[-\tau])}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\x[-\tau])}}
+                    }
+                    \lsequent{\inv(\x[-\tau])}{\asfml(\x[-\tau])}
+                }{
+                \lsequent{\Gamma(\x[-\tau])}{\dbox{\hrepeat{(\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\x[-\tau])}{(\ivr\land 0\leq t\leq\tau))}}}{\asfml(\x[-\tau]),\Delta}}}
+            }
+            {\lsequent{\Gamma(\x[-\tau])}{\dbox{\hevolvein{\D{x}=\astrm(x,\x[-\tau])}{\ivr}}{\asfml(\x[-\tau]),\Delta}}}
+        \end{sequentdeduction}
+
+        % TODO: ref to here: (2)
+        \begin{sequentdeduction}
+            \linfer[dW]{
+                \linfer[allR]{
+                    \linfer[implyR]{
+                        \linfer[]{
+                            \lclose
+                        }{
+                            \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0,\ivr(r,y),0\leq r\leq\tau}{\inv(x(r-\tau))}
+                        }
+                    }{
+                        \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\ivr(r,y)\land 0\leq r\leq\tau\limply \inv(x(r-\tau))}
+                    }
+                }{
+                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\lforall{(t,x)}{(\ivr\land 0\leq t\leq\tau\limply \inv(x(t-\tau)))}}
+                }
+            }{
+                \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
+            }
+        \end{sequentdeduction}
+
+        % TODO: ref to here: (1)
+        \begin{sequentdeduction}
+            \linfer[DC]{
+                \linfer[dI]{
+                    \linfer[hist]{
+                        \linfer[]{
+                            \lclose
+                        }{
+                            \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\inv(x(0))}
+                        }
+                    }{
+                        \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0,A, \inv(x(t-\tau))}{\inv(x(t))}
+                    }
+                    % TODO: A=\ivr, 0\leq t\leq\tau
+                    &\lsequent{A, \inv(x(t-\tau)))}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{ \D{x}}{\eta(x(t),x(t-\tau))}}}{\der{\inv(x(t))}}}
+                    %}
+                }{
+                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau)))}}{\inv(x(t))}}
+                }
+                &\linfer[dW]{
+                    (3)
+                }{
+                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau))\land \inv(x(t)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
+                }
+            }{
+                \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
+            }
+        \end{sequentdeduction}
+        % TODO: ref here (3)
+        \begin{sequentdeduction}
+            \linfer[dW]{
+                \linfer[allR]{
+                    \linfer[implyR]{
+                        \linfer[]{
+                            \lclose
+                        }{
+                            \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))}, t=0, \ivr(r,y), 0\leq r\leq\tau, \inv(y(r-\tau)), \inv(y(r))}{\lforall{s\in[-\tau,0]}{\inv(y(r+s))}}
+                        }
+                    }{
+                        \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))}, t=0}{((\ivr(r,y)\land 0\leq r\leq\tau\land \inv(y(r-\tau))\land \inv(y(r)))\limply\lforall{s\in[-\tau,0]}{\inv(y(r+s))})}
+                    }
+                }{
+                    \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))}, t=0}{\lforall{(t,x)}{((A\land \inv(x(t-\tau))\land \inv(x(t)))\limply\lforall{s\in[-\tau,0]}{\inv(x(t+s))})}}
+                }
+            }{
+                \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))}, t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau))\land \inv(x(t)))}}{(\lforall{s\in[-\tau,0]}{\inv(x(t+s))})}}
+            }
+        \end{sequentdeduction}
+        \end{sidewaysfigure}
+        \normalsize
+        %\end{proof}
+
+    \subsection{Delay Differential Invariant}
+        \label{sec:delay-differential-invariant}
+
+        loop and differential invariants are of form $\lforall{s\in[-\tau,0]}{\inv(x(s))}$
+        can they have $x$?
+
+        Meaning of derivative $\der{\inv(\x[-\tau])}=\lforall{s\in[-\tau,0]}{\der{\inv(x(t+s))}}$ would lead to occurrence of derivative of init cond, which we don't know
+
+        Mentioning $\x[-\tau]$ in the invariant differential invariant is not permitted, since derivation would lead to the occurrence of the symbol $x_{2\tau}$, whose properties are out of the scope of the current state.
+
+        % TODO: ref to DDI
+        As for ODEs in \dL, we cannot have $x(t)$ in the premise in DDI. Would permit to prove wrong statements.
+
+        Invariant for limited time: use with loop unrolling (can it be generalized to unlimited inv?)
+
+    % TODO: Example
+    \subsection{Examples}
+        \label{sec:examples}
+
+        \subsubsection{Example 1}
+            \label{sec:ddi-example-1}
+
+            Consider the non-linear first-order delay differential equation
+            \begin{equation}
+                \begin{cases}
+                    \D{x}(t) = x(t-\tau) & t \geq \tzero\\
+                    x(t) = \theta(t)\geq 0 & t \in [\tzero-\tau,\tzero]
+                \end{cases}
+            \end{equation}
+            Using the invariant $F\equiv(x^3\geq 0)$ we prove that the solution stays non-negativ for all time $t$.
+            DDE is autonomous, can assume $\tzero=0$.
+            \footnotesize
+            \begin{sequentdeduction}
+                \linfer[DDI]{
+                    \linfer[]{
+                        \lclose
+                    }{
+                        \lsequent{\x[-\tau]\geq 0}{\x[-\tau]^3\geq 0}
+                    }
+                    &\linfer[]{
+                        \linfer[]{
+                            \linfer[]{
+                                \lclose
+                            }{
+                                \lsequent{\theta^3\geq 0}{3x^2\theta\geq 0}
+                            }
+                        }{
+                            \lsequent{0\leq t\leq \tau,\theta^3\geq 0}{\dbox{\Dupdate{\Dumod{\D{x}}{\theta}}}{(3x^2 \D{x}\geq 0)}}
+                        }
+                    }{
+                        %\lclose
+                        \lsequent{0\leq t\leq \tau,\theta^3\geq 0}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{\D{x}}{\theta}}}{\der{x^3\geq 0}}}
+                    }
+                    &\linfer[]{
+                        \lclose
+                    }{
+                        \lsequent{\x[-\tau]^3\geq 0}{\x[-\tau]\geq 0}
+                    }
+                }{
+                    \lsequent{\holdssinceclosed{-\tau}{\x[s]\geq 0}}{\dbox{\D{x}=\x[-\tau]}{(\holdssinceclosed{-\tau}{\x[s]\geq 0})}}
+                }
+            \end{sequentdeduction}\normalsize
+            In the same way we can prove that the solution stays negative for all $t$, if the initial condition is non-positive.
+
+        \subsubsection{Example 2}
+            \label{sec:ddi-example-2}
+
+            % FIXME: it's not autonomous ?
+            Consider the non-linear first-order delay differential equation with explicitely given initial condition
+            \begin{equation}
+                \begin{cases}
+                    \D{x}(t) = -x(t-1)^2 & t \geq 0\\
+                    x(t) = t & t \in [-1,0]
+                \end{cases}
+            \end{equation}
+            Using $F\equiv(x^3\leq 0)$ we prove that the solution stays non-positiv.
+            \begin{small}
+                \begin{sequentdeduction}
+                    \linfer[DDI]{
+                        \linfer[hist]{
+                            \linfer[]{
+                                \linfer{\lclose}{
+                                    \lsequent{}{\lforall{s\in[-1,0]}{s^3\leq 0}}
+                                }
+                            }{
+                                \lsequent{t=0,\lforall{s\in[-1,0]}{x(t+s)=t+s}}{\lforall{s\in[-1,0]}{x(t+s)^3\leq 0}}
+                            }
+                        }{
+                            \lsequent{t=0,\x[-1]=t}{\x[-1]^3\leq 0}
+                        }
+                        &\linfer[]{
+                            \linfer[]{
+                                \linfer[closeTrue]{
+                                    \lclose
+                                }{
+                                    \lsequent{}{-3x^2\theta^2\leq 0}
+                                }
+                            }{
+                                \lsequent{0\leq t\leq 1,\theta^3\leq 0}{\dbox{\Dupdate{\Dumod{\D{x}}{-\theta^2}}}{(-3x^2 \D{x}\leq 0)}}
+                            }
+                        }{
+                            %\lclose
+                            \lsequent{0\leq t\leq 1,\theta^3\leq 0}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{\D{x}}{-\theta^2}}}{\der{x\leq 0}}}
+                        }
+                        &\linfer[]{
+                            \lclose
+                        }{
+                            \lsequent{\x[-1]^3\leq 0}{\x[-1]\leq 0}
+                        }
+                    }{
+                        \lsequent{t=0,\x[-1]=t}{\dbox{\D{x}=-\x[-1]^2}{(\x[1]\leq 0)}}
+                    }
+                \end{sequentdeduction}
+            \end{small}
+
+            This proof doesn't even need any premisse about $\x[-\tau]$ in the induction step.
+
+        \subsubsection{Example 3}
+            \label{sec:ddi-example-3}
+
+            We want to proof the safety condition $\asfml\equiv(-1\leq x\wedge x\leq 1)$ for the continuous program with delay differential equation
+            \begin{equation}
+                \forall\,t\in[-\tau,0]:\,-1\leq\xbartaut{0}(t)\wedge\xbartaut{0}(t)\leq 1
+                \rightarrow
+                [\D{x}=-\x[-\tau]] (\forall\,s\in[-\tau,0]:\,-1\leq\xbartaut{t}(s)\wedge\xbartaut{t}(s)\leq 1)
+            \end{equation}
+            in explicit quantified representation. It can be simplified by using an implicit time variable and a context depending meaning of $\x[-\tau]$
+            \begin{equation}
+                -1\leq\x[-\tau]\leq 1 \rightarrow [\D{x}=-\x[-\tau]]\asfml.
+            \end{equation}
+
+            We apply the rule of steps using the safety condition $\phi$ as step condition $F(x)\equiv(\forall\,t\in[-\tau,0]:\,-1\leq x(t)\wedge x(t)\leq 1)$.
+
+            The first and third premisses hold. The second by ??? (delay differential invariant)
+
+            Use the algebraic differential invariant $F\equiv(-1\leq x^3\wedge x^3\leq1)$, which is valid for the initial condition. Differentiation leads to the inequalities, which needs to be shown $\forall t\in[0,\tau]$
+            \begin{equation}
+                0\leq 3\,x(t)^2 \D{x}(t) = -3\,x(t)^2 \x[-\tau](t)
+            \end{equation}
+
+            This holds since
+
