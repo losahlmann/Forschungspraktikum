@@ -2,6 +2,18 @@
 
 special case of more general functional differential equations (FDEs)
 
+deterministic system
+future behaviour depends on present state only
+
+ODE: in $\R^n$
+if influence of past by a deviated time argument, functional state on past time-interval
+FDS
+
+method of steps shows hat solution is sequence of polynomials
+with incrasing degree, smoothing property
+
+backward continuation (Richard) -> [\&] limit up to T, state contains entire evolution, can check evo domain constraint on this state
+
 They often arise in automatic control %\cite
 , where a controller montitors the state of a system in order to make control decisions to adjust this state.
 If there is a delay between the observation and the control action, the differential equation describing the system not only depends on its current state, but also on its past.
@@ -9,9 +21,8 @@ If there is a delay between the observation and the control action, the differen
 need to specify in initial condition
 at least for the time of longest delay
 
-Even small delays can have a strong effect on the system's behaviour.
-be both stabilizing and destabilizing
-Stability is an important property for many applications.
+neutral type: rhs also depends on deriv of init cond
+
 
 Examples of ... which have been modeled using delay differential equations include epidemics, traffic flow and vibrations/chattering. See \cite{Falbo06FDEs} and there references therein.
 
@@ -170,8 +181,7 @@ see \cite{Bellen13NumericalDDEs}
  %   \label{sec:definition-of-solution}
 
     \begin{definition}[Solution of DDE]\label{def:solution-dde}
-    %there exists a $T>0$ such that
-        A function $x\from\compactum{\tzero-\taumax}{\tzero+T}\to\R^n$ is called \emph{(local) solution} of the initial value problem~\eqref{eq:ivp}, if and only if
+        A function $x\from\compactum{\tzero-\taumax}{\tzero+T}\to\R^n$ is called \emph{(local) solution} of the initial value problem~\eqref{eq:ivp}, if and only if there exists a $T>0$ such that
         $x$ obeys the initial condition
         \begin{equation*}
             x(t) = x_{\tzero}(t) \quad\text{for } t\in\compactum{\tzero-\taumax}{\tzero}
