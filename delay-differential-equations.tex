@@ -9,8 +9,7 @@ ODE: in $\R^n$
 if influence of past by a deviated time argument, functional state on past time-interval
 FDS
 
-method of steps shows hat solution is sequence of polynomials
-with incrasing degree, smoothing property
+
 
 backward continuation (Richard) -> [\&] limit up to T, state contains entire evolution, can check evo domain constraint on this state
 
@@ -256,28 +255,25 @@ see \cite{Bellen13NumericalDDEs}
 \section{Method of Steps}
     \label{sec:method-of-steps}
     
-    See \cite{Falbo06FDEs}
-    by restricting the IVP onto an interval
-    actually have an ODE IVP
-    convert DDE into a ODE on a certain interval, by plugging the given initial condition into the delay differential equation, eliminating the explicit dependance on the past
-    can be repeated on next interval by inserting the previously computed solution instead of the initial condition
+    If we restrict the IVP (Eq.~\ref{eq:ivp}) onto an interval $\compactum{\tzero}{\tzero+T_1}$ with $T_1\leq\taumin$, then the values of all $x(t-\tau_j)$ are specified by the initial condition and can thus be replaced by $x_{\tzero}(t-\tau_j)$.
+    We obtain an \emph{initial value problem} for a \emph{ordinary differential equation}.
+    If we can solve this IVP, i.e.\ if we can find a solution of the ODE on $\compactum{\tzero}{\tzero+T_1}$, then we can reapplay this method by plugging the computed solution into the DDE and solving the resulting ODE on the interval $\compactum{\tzero+T_1}{\tzero+T_2}$, where again $T_2\leq\taumin$. As long as one can solve the resulting ODE (for suitable $f$ and $x_{\tzero}$, the existence (and uniqueness) of a solution for the ODE is guaranteed by Picard-Lindelöf's theorem), this step can be iterated.
 
-    for $t\in [0,\tau]$, $x$ must satisfy the following ordinary initial value problem obtained by plugging the initial function into equation (??). For suitable $f$ and $x_0$, the existence (and uniqueness) of a solution on $[0,\tau]$ is guaranteed by ODE theory (\ldots{} or Picard-Lindelöf theorems).
+    This method, which allows to convert DDE into a ODE on a certain interval, eliminating the explicit dependance on the past by inserting the initial condition, is know as \emph{method of steps}.
 
-    This procedure can then be applied repeatedly to extend the obtained solution by steps of length $\tau$.
+    See \cite{Falbo06FDEs} for examples.
 
-
-
+    % TODO: Why? It shows that solution is sequence of polynomials
+    % with incrasing degree, smoothing property
 
 
 \section{Existence and Uniqueness of Solutions}
     \label{solutions-existence-uniqueness}
 
-    cannot have more than one solution
-    under certain conditions, there is such 
+    In this section, we show that, under certain conditions, we can guarantee the existence of a solution for the DDE-IVP (Eq.~\ref{eq:ivp}) and that in general it cannot have more than one. 
 
-    will consider rhs cont and lip
-    $f$ Lipschitz with piecewise continuous initial function have existence and uniqueness ???? smoothing
+    % will consider rhs cont and lip
+    % $f$ Lipschitz with piecewise continuous initial function have existence and uniqueness ???? smoothing
 
     \begin{definition}[Lipschitz Continuity]\label{def:lipschitz}
         % similar to \cite{pruesswilke10GewDiffGl,Smith10IntroDDE}
