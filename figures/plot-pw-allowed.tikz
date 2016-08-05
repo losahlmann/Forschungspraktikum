@@ -13,14 +13,14 @@
 	\draw (1,0) node[below] {$t_1$};
 
 	
-	\draw[thick] plot[samples=50, smooth, domain=0:1] (\x, {((\x-2)^2-5*\x^3)/8});
+	\draw[curve,cadlag] plot[samples=50, smooth, domain=0:1] (\x, {((\x-2)^2-5*\x^3)/8});
 	
-	\draw[thick] plot[samples=50, smooth, domain=1:2] (\x, {(5*(\x-2)^2+\x^3)/8});
+	\draw[curve,leftp] plot[samples=50, smooth, domain=1:2] (\x, {(5*(\x-2)^2+\x^3)/8});
 
-	\filldraw[leftpoint] (0,0.5) circle (0.025);
-	\filldraw[rightpoint] (1,-0.5) circle (0.025);
+	% \filldraw[leftpoint] (0,0.5) circle (0.025);
+	% \filldraw[rightpoint] (1,-0.5) circle (0.025);
 		
-	\filldraw[leftpoint] (1,0.75) circle (0.025);
+	% \filldraw[leftpoint] (1,0.75) circle (0.025);
 	
 
 \end{tikzpicture}
