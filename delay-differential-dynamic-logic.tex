@@ -618,10 +618,13 @@ time-invariant
     \end{proof}
 
     \begin{figure}
+        \centering
         \input{figures/differential-lemma}
+        \caption{Plot for Example~\ref{ex:differential-lemma}, initial condition and solution of DDE (solid), derivatives (dashed), value of term ().}
+        \label{fig:not-allowed}
     \end{figure}
 
-    \begin{example}
+    \begin{example}\label{ex:differential-lemma}
         \begin{equation*}
             \D{\left(\holdssince{-T}{x+\x[c]+\x[s]\geq 0}\right)} \equiv \holdssince{-T}{\D{x}+\Dx[c]+\Dx[s]\geq 0}
         \end{equation*}

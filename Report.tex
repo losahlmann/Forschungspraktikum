@@ -105,9 +105,22 @@
 \usetikzlibrary{arrows.meta, backgrounds}
 
 \tikzset{%
-    curve/.style={thick, color=red},
+    curve/.style={thick},
+    deriv/.style={thick,dashed},
     leftpoint/.style={color=black},
     rightpoint/.style={color=white, draw=black},
+    leftp/.style={
+        {Circle[width=4,length=4]}-,
+        shorten <=-2},
+    rightp/.style={
+        -{Circle[width=4,length=4,fill=white]},
+        shorten >=-2},
+    cadlag/.style={
+        {Circle[width=4,length=4]}-{Circle[width=4,length=4,fill=white]},
+        shorten >=-2,
+        shorten <=-2
+    }
+        %Circle[scale=0.8]}-{Circle[fill=white]}}
     %my thick box/.style={thick,color=blue}
 }
 
