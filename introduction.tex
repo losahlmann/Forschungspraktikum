@@ -1,150 +1,172 @@
 \chapter{Introduction}
 
-	dynamical systems
-	mathematical model
-	describing evolvement of state of as system over time
-	modeling of embedded systems and cyber-physical systems
-    discrete dynamical systems: difference equations, discrete state transition relations
-    continuous dynamical systems: state evolves continuously, differential equation
-    hybrid (dynamical) systems: combine discrete and continuous dynamics
-    can capture very complex behaviour
+    \emph{Dynamical systems} are a mathematical model which describe the evolution of a system's
+    % TODO: sense of system?
+    state over time.
+    
+    There are \emph{discrete dynamical systems}, obeying difference equations and discrete state transition relations,
+    and \emph{continuous dynamical systems}, whose states evolve continuously, described by a (ordinary) differential equation (ODE).
+
+    A fusion of both are \emph{hybrid (dynamical) systems}, which combine discrete and continuous dynamics with conditional switching, nondeterminism and repetition.
+
+    % modeling of embedded systems and cyber-physical systems
+    % interaction between computer and physical world (sensors actuators)
+    
+    The fashionable notion of \emph{cyber-physical systems} (CPS) is broadly used to describe technical systems which apply the discrete dynamics of digital computation (the cyber part) to control the continuous dynamics of physical processes.
+
+    Hybrid systems well suited for capturing the complex behaviour of CPS in a mathematical model.
+
+    With the ongoing emergence of technology, cyber-physical systems are getting perceptibly more present in our surroundings and begin to largely interfere in our everyday life.
+    While the complexity of these systems is growing, more and more control and responsability is handed off to such technical systems.
+    Thus the question of their ``safety'' is getting increasingly important.
+    
+    This demands the definition and specification of what is a reasonable and appropriate behaviour for a system.
+
+    This includes not only classical safety properties (something never happens), but also liveness (something eventually happens), controllability and reactivity.
+
+    The task of \emph{verification} is to show that the system satisfies its specification and to establish guarantees for its safety- and performance-critical correctness.
+
+    However, the complexity of dynamical system usually leads to a (uncountably) infinite state space, what means that any finite number of tests cannot cover all possible states reachable by execution of the system. Thus a finite number of tests cannot prove safety!
+    
+    Formal methods provide a means to systematically obtaining proofs of specifications, if the system can be described as a model in a certain formal language.
+    
+    This way, safety certificates can be established.
+
+    
+    % safe control choices
+    % possible states accessible after control choice
+    % (prone to) software verification
+    % proof that always chooses safe control
+
+    
+    % TODO: references for examples
+    Classical examples for CPS include all applications of automatic control, such as in robotics, automotive (self-driving cars), aviation, railway or power plants.
+    But also models of electrical circuits, chemical and biological processes
+    medical models
+    (events which can be seen as discrete with relation to continuous evolution)
 
 
-	cyber-physical systems (CPS)
-	combine computation, communication, control of physical processes/effects
-	discrete and continuous dynamics
-	often safety-critical, performance-critical
-    safe control choices
-    possible states accessible after control choice
-	(prone to) software verification
-    proof that always chooses safe control
+    % dL
+    A language for the specification and verification of correctness properties, such as safety and liveness properties,
+    for hybrid systems is \emph{differential dynamic logic} (\dL)
+    (see~\cite{Platzer12LogicsDynSys} for a concise introduction and overview).
 
-    dynamical systems usually (uncountably) infinite state space
-    finite number of tests cannot prove safety
-    systematically obtain proofs
+    It provides syntax and semantics for hybrid programs and logic formulae as well as a proof calculus to formally reason about hybrid systems.
+    This logic is based on first-order modal logic and dynamic logic and relies on first-order real arithmetic.
 
-    classical safety, liveness, controllability, reactivity, quantified parametrized properties
+    % analyze and predict behaviour
+    % logics and proof principles
+    % models of cyber-physical systems
+    % sound and complete proof calculus relative to ... diff (ref)
+    % and to ... disc (ref)
+    % (nonlinear) real arithmetic
+    % transition behaviour as formulas
+    
+    With differential forms, \dL provides a powerful tool to reason about ordinary differential equations by differential invariants (an induction principle for differential equations), differential substitutions and ghosts.    
 
-	hybrid systems: mathematical model to describe CPS
-	combine discrete dynamics/computation
-	continuous dynamics: differential equations
-    conditional switching
-    nondeterminism
-    repetition
-	infinite state space
+    Some important theoretical results, such as \emph{soundness} (everything provable is true) and \emph{completeness} (everything true is provable) have been established for \dL.
 
-	examples:
-    robotics, medical surgery robots
-    electrical circuits
-	automotive, self-driving cars (lane controllers for highway car traffic, controllers for intersections)
-    speed limit control
-	aviation, aircraft collision-avoidance systems (flyable roundabout maneuvers)
-	railway, European train control system (ETCS)
-    power plants
-    chemical, biological processes
-    medical models (events which can be seen as discrete with relation to continuous evolution)
+    Another important property of \dL is its compositionality.
+    denotational semantics, its semantics (of models and formuals) are functions of their parts.
+    This allows a structural decomposition of proofs by splitting complex systems in their parts.
+    The completeness property assures that this decomposition is always possible and successful.
+    Moreover, this modularity makes \dL extendable. New proof rules can be added to the proof calculus, to improve its deductive power.
 
-	study logic of dynamical systems
-    analyze and predict behaviour
-    logics and proof principles
-
-    differential dynamic logic (\dL)
-    a concise overview and introduction is given in~\cite{Platzer12LogicsDynSys}
-    a dynamic logic for hybrid systems
-    logic/language for specify, verify correctness properties, such as safety and liveness properties
-    of hybrid systems
-    based on first-order modal logic and dynamic logic, first-order real arithmetic
-    models of cyber-physical systems
-    ordinary differential equations
-    sound and complete proof calculus relative to ... diff (ref)
-    and to ... disc (ref)
-
-    (nonlinear) real arithmetic
-
-    transition behaviour as formulas
-
-    differential invariants
-    differential forms, allow differential invariants, substitutions, ghosts as axioms
-    induction principle for differential equations
-
-    theoretical results
-    \emph{soundness} (everything provable is true)
-    \emph{completeness} (everything true is provable)
-    compositionality (denotational semantics, semantics (of models and formuals) functions of their parts, proofs structural decomposition, split complex systems in their parts, completeness: decomposition always successful)
-    extendability (rules can be added to proof calculus)
-    deductive power
-
-	tutorial with examples modeled in \dL
-	\cite{Quesel16Tutorial}
-
-	mechanized proofs
-	automatic and interactive theorem proving
-	KeYmaeraX
-    used successfully
-
-	several formulations of dL
-	earliest: sequent calculus \cite{Platzer10HybridSystems}, tuned for automatic proof search, KeYmaera
+    Different formulations of \dL have been presented.
+    The earliest, given in \cite{Platzer10HybridSystems}, is a sequent calculus (in Gentzen style), which is tuned for automatic proof search. It is implemented in the proof assistant \KeYmaera.
     automatically find (differential) invariants
-	Hilbert-type axiomatic formulation \cite{Platzer15Uniform}, based on uniform substitution and bound variable renaming, implemented in KeYmaeraX
 
-    extensions to \dL
-    \emph{differential-algebraic dynamic logic} \DAL: differential-algebraic equations and constraints
-    \emph{differential temporal dynamic logic} \dTL: temporal properties, trace semantics
+    The later, Hilbert-type axiomatic formulation of \dL (cf.~\cite{Platzer15Uniform,Platzer12Complete,Platzer12LogicsDynSys}) is based on uniform substitution and bound variable renaming, which allows a much more concise programmatic implementation. This is done in form of the interactive theorem prover \KeYmaeraX.
+
+    The tutorial \cite{Quesel16Tutorial} shows some examples of systems modeled and proved in \dL.
+    
+    real-world examples
+    used successfully mechanized proofs
+    % EXamples
+    robotics, medical surgery robots \cite{Kouskoulas13SurgicalRobot}
+    self-driving cars 
+    cruise control \cite{Loos11CruiseControl,Loos13CruiseControllers}
+    (lane controllers for highway car traffic, controllers for intersections)
+    speed limit control
+    aviation, aircraft collision-avoidance systems \cite{Jeannin15CollisonAvoidance}
+    (flyable roundabout maneuvers)
+    railway, European train control system (ETCS) \cite{Platzer09ETCS}
+
+    Some extensions to \dL have been presented
+    \emph{Differential-algebraic dynamic logic} \DAL adds differential-algebraic equations and constraints, where as
+    \emph{differential temporal dynamic logic} \dTL is based on a trace semantics, which allows to specify temporal properties.
+    % TODO: more dL extensions, and sources
+    stochastic
+    stochastic differential dynamic logic (SdL), stochastic hybrid systems
+    distributed: quantified differential dynamic logic (QdL)
+    distributed hybrid systems
+    differential game logic \dGL \cite{Platzer15GameLogic}
 
 
-	capture non-deterministic
-	not known a priori
+    % capture non-deterministic
+    % not known a priori
 
+
+
+    % TDS
+    Models in \dL are limited to ordinary differential equations
+    This report studies a more general class of dynamical systems, called \emph{time-delay systems} (TDS), which extend dynamical systems by obeying \emph{functional differential equations} (FDEs). 
+
+        of high interest in research and application in the recent decades
+    especially in systems and control community
+
+    extension of state space by remembering past
+
+    in combination with discrete
+
+    add communication to CPS
+
+    present a logic 
+    establish
 
     \cite{Richard2003TDSs}
-    \emph{time-delay systems} (TDS)
-    governed by
-    also called differential-difference equations
-    belong to class of functional differential equations (FDEs)
+    described by functional differential equations (FDEs)
+    TDS are governed by \emph{delay differential equations} (DDEs) (also called differential-difference equations), which belong to the broader class of \emph{functional differential equations} (FDEs).
+    
     infinite dimensional
     as opposed to ordinary differential equations
+    
     delay is an applied problem
-    more realistic models with better performance
     as many real world processes incorporate
-
-    often these effects cannot be ignored, see example of exp
-
     sensors, actuators, feedback loops
     introduce delay
 
-    communication networks
-    networked control systems
-    teleoperated systems
-    robotics
 
-    can be used to simplify higher order models
-    control engineering
-
-    constant delays
-    time-varying delays
-
-    introduction of delay can benefit the control, can be stabilizing
-    control via delay value
+    Allows to formulate more realistic models with better performance
+    since these effects can often not be ignored,
+    (see example of exp)
     Even small delays can have a complex effect on the system's behaviour, in particular on its stability.
     be both stabilizing and destabilizing
     and are hence of special practial interest
+    introduction of delay can benefit the control, can be stabilizing
+    control via delay value
     Stability is an important property for many applications.
+    stability and control issues of time-delay systems
+    Especially important for control engineering
 
     in application: need discretization for computer
     cannot have infinite dimensional state
     may restrict to point-wise delays, leads to DDEs considered in this work
 
-
+    Examples
+    communication networks
+    networked control systems
+    teleoperated systems
+    robotics
     \cite{Gu03TimeDelaySys} % examples
-    time-delay systems
-    described by functional differential equations (FDEs)
-    of high interest in research and application in the recent decades
-    especially in systems and control community
-
-    stability and control issues of time-delay systems
-
-    special class of FDE are delay differential equations
 
 
-	\section{Related Work}
-	\cite{Huang16BoundedVerificationNNDS}
+    constant delays
+    time-varying delays
+
+    can be used to simplify higher order models
+    
+
+    \section{Related Work}
+        apart from all literature to \dL (see above)
+        \cite{Huang16BoundedVerificationNNDS}
