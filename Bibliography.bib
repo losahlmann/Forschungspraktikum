@@ -296,36 +296,75 @@ pages = " - ",
   optnote   = {Preprint at arXiv 1408.1980}
 }
 
-
-%%%% Applications of dL
-@INPROCEEDINGS{DBLP:conf/hybrid/LoosRP13,
-  author    = {Sarah M. Loos and
-               David W. Renshaw and
-               Andr{\'e} Platzer},
-  title     = {Formal Verification of Distributed
-               Aircraft Controllers},
-  year      = {2013},
-  pages     = {125-130},
-  doi       = {10.1145/2461328.2461350},
-  publisher = {ACM},
-  editor    = {Calin Belta and
-               Franjo Ivancic},
-  booktitle = {Hybrid Systems: Computation and Control
-               (part of CPS Week 2013), HSCC'13,
-               Philadelphia, PA, USA, April 8-13, 2013},
+@inproceedings{Platzer11StochasticHP,
+  author    = {Andr{\'e} Platzer},
+  title     = {Stochastic Differential Dynamic Logic for Stochastic Hybrid Programs},
+  editor    = {Nikolaj Bj{\o}rner and Viorica Sofronie-Stokkermans},
+  booktitle = {Proceedings of International Conference on Automated Deduction, CADE'11},
+  address   = {Wroc{\l}aw, Poland},
+  year      = {2011},
+  series    = {LNCS},
+  volume    = {6803},
+  pages     = {431--445},
+  publisher = {Springer},
+  doi       = {10.1007/978-3-642-22438-6_34}
 }
 
-@MISC{JeanninGKSGMP15,
-  author    = {Jean{-}Baptiste Jeannin and
-               Khalil Ghorbal and
-         Yanni Kouskoulas and
-         Aurora Schmidt and
-         Ryan Gardner and
-         Stefan Mitsch and
-               Andr{\'e} Platzer},
-  title     = {A Formally Verified Hybrid System for Safe Advisories in the
-               Next-generation Airborne Collision Avoidance System},
-  year      = {2015},
+@article{Platzer10DAL,
+  author    = {Andr{\'e} Platzer},
+  title     = {Differential-algebraic Dynamic Logic for Differential-algebraic Programs},
+  journal   = {Journal of Logic and Computation},
+  year      = {2010},
+  volume    = {20},
+  number    = {1},
+  pages     = {309--352},
+  doi       = {10.1093/logcom/exn070}
+}
+
+@inproceedings{Platzer10QdL,
+  author    = {Andr{\'e} Platzer},
+  title     = {Quantified Differential Dynamic Logic for Distributed Hybrid Systems},
+  editor    = {Anuj Dawar and Helmut Veith},
+  booktitle = {Proceedings of 24th International Workshop in Computer Science Logic (CSL)},
+  address   = {Brno, Czech Republic},
+  month     = {August 23--27},
+  year      = {2010},
+  series    = {LNCS},
+  volume    = {6247},
+  pages     = {469--483},
+  publisher = {Springer},
+  isbn      = {978-3-642-15204-7},
+  doi       = {10.1007/978-3-642-15205-4_36}
+}
+
+@inproceedings{Platzer07dTL,
+  author    = {Andr{\'e} Platzer},
+  title     = {A Temporal Dynamic Logic for Verifying Hybrid System Invariants},
+  editor    = {Sergei N. Art{\"e}mov and Anil Nerode},
+  booktitle = {Proceedings of 5th International Symposium on Logical Foundations of Computer Science, LFCS'07},
+  address   = {New York, USA},
+  month     = {June 4--7},
+  year      = {2007},
+  series    = {LNCS},
+  volume    = {4514},
+  pages     = {457--471},
+  publisher = {Springer},
+  isbn      = {978-3-540-72732-3},
+  doi       = {10.1007/978-3-540-72734-7_32}
+}
+
+%%%% Applications of dL
+@inproceedings{Loos13Aircraft,
+  author    = {Sarah M. Loos and David W. Renshaw and Andr{\'e} Platzer},
+  title     = {Formal Verification of Distributed Aircraft Controllers},
+  editor    = {Calin Belta and Franjo Ivancic},
+  booktitle = {Hybrid Systems: Computation and Control, HSCC'13},
+  pages     = {125--130},
+  address   = {Philadelphia, PA, USA},
+  month     = {April 8--13},
+  year      = {2013},
+  publisher = {ACM},
+  doi       = {10.1145/2461328.2461350},
 }
 
 @inproceedings{Jeannin15CollisonAvoidance,
@@ -343,35 +382,36 @@ pages = " - ",
   doi       = {10.1007/978-3-662-46680-3_2},
 }
 
-@ARTICLE{DBLP:journals/jais/GhorbalJZPGC14,
-  author    = {Khalil Ghorbal and
-               Jean{-}Baptiste Jeannin and
-               Erik P. Zawadzki and
-               Andr{\'e} Platzer and
-               Geoffrey J. Gordon and
-               Peter Capell},
-  title     = {Hybrid Theorem Proving of Aerospace Systems:
-               Applications and Challenges},
+@article{GhorbalAerospace,
+  author    = {Khalil Ghorbal and Jean{-}Baptiste Jeannin and Erik P. Zawadzki and Andr{\'e} Platzer and Geoffrey J. Gordon and Peter Capell},
+  title     = {Hybrid Theorem Proving of Aerospace Systems: Applications and Challenges},
   journal   = {Journal of Aerospace Information Systems},
   volume    = {11},
-  pages     = {702-713},
-  doi        = {10.2514/1.I010178},
+  pages     = {702--713},
+  doi       = {10.2514/1.I010178},
 }
 
-@ARTICLE{DBLP:journals/corr/abs-1605-00604,
-  author    = {Stefan Mitsch and
-               Khalil Ghorbal and
-               David Vogelbacher and
-               Andr{\'e} Platzer},
-  title     = {Formal Verification of Obstacle Avoidance and
-               Navigation of Ground Robots},
+@inproceedings{Jeannin15ACASX,
+  author    = {Jean{-}Baptiste Jeannin and Khalil Ghorbal and Yanni Kouskoulas and Ryan Gardner and Aurora Schmidt and Erik Zawadzki and Andr{\'e} Platzer},
+  title     = {Formal Verification of {ACAS X}, an Industrial Airborne Collision Avoidance System},
+  editor    = {Alain Girault and Nan Guan},
+  booktitle = {International Conference on Embedded Software, {EMSOFT} 2015},
+  address   = {Amsterdam, Netherlands},
+  month     = {October 4--9},
+  year      = {2015},
+  pages     = {127--136},
+  publisher = {IEEE Press},
+  doi       = {10.1109/EMSOFT.2015.7318268}
+}
+
+@article{Mitsch16Robots,
+  author    = {Stefan Mitsch and Khalil Ghorbal and David Vogelbacher and Andr{\'e} Platzer},
+  title     = {Formal Verification of Obstacle Avoidance and Navigation of Ground Robots},
   journal   = {CoRR},
   volume    = {abs/1605.00604},
   year      = {2016},
   url       = {http://arxiv.org/abs/1605.00604},
 }
-
-
 
 @inproceedings{Kouskoulas13SurgicalRobot,
   author    = {Yanni Kouskoulas and David W. Renshaw and Andr{\'e} Platzer and Peter Kazanzides},
@@ -411,13 +451,38 @@ pages = " - ",
   month     = {June 20--24},
   year      = {2011},
   pages     = {42--56},
-  doi       = {10.1007/978-3-642-21437-0_6},
+  doi       = {10.1007/978-3-642-21437-0_6}
+}
+
+@inproceedings{Mitsch12SpeedControl,
+  author    = {Stefan Mitsch and Sarah M. Loos and Andr{\'e} Platzer},
+  title     = {Towards formal verification of freeway traffic control},
+  editor    = {Chenyang Lu},
+  booktitle = {ACM/IEEE Third International Conference on Cyber-Physical Systems (ICCPS)},
+  address   = {Beijing, China},
+  month     = {April 17--19},
+  year      = {2012},
+  pages     = {171--180},
+  publisher = {IEEE},
+  isbn      = {978-0-7695-4695-7},
+  doi       = {10.1109/ICCPS.2012.25}
+}
+
+@inproceedings{Loos11Intersections,
+  author    = {Sarah M. Loos and Andr{\'e} Platzer},
+  title     = {Safe Intersections: At the Crossing of Hybrid Systems and Verification},
+  editor    = {Kyongsu Yi},
+  booktitle = {Proceedings of 14th International IEEE Conference on Intelligent Transportation Systems (ITSC)},
+  address   = {Washington, DC, USA},
+  month     = {October 5--7},
+  year      = {2011},
+  pages     = {1181--1186},
+  doi       = {10.1109/ITSC.2011.6083138}
 }
 
 @inproceedings{Platzer09ETCS,
   author    = {Andr{\'e} Platzer and Jan-David Quesel},
-  title     = {{European Train Control System}:
-               A Case Study in Formal Verification},
+  title     = {{European Train Control System}: A Case Study in Formal Verification},
   editor    = {Karin Breitman and Ana Cavalcanti},
   year      = {2009},
   booktitle = {Formal Methods and Software Engineering, Proceedings of 11th International Conference on Formal Engineering Methods, ICFEM 2009},
