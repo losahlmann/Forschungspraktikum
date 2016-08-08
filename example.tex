@@ -32,14 +32,26 @@ To motivate the need of being able to treat Delayed Differential Equations in hy
     \end{align*}
     Both $\alpha$ and $\tau$ are considered to be constant.
 
-    Model
-    \begin{equation*}
-        \dbox{\hevolve{
-            \D{v_{n+1}} = \alpha(\D{x_n}[-\tau]-\D{x_{n+1}}[-\tau])\syssep
-            \D{x_{n+1}} = v_{n+1}\syssep
-            \D{x_n} = v
-        }}{d\geq\delta}
-    \end{equation*}
+    % TODO: verify: leading car with constant deacceleration, choose initial safe alpha (no rep in controller)
+    \begin{algorithm}
+        \caption{}
+        \label{mdl:car} % needs be after caption
+        \begin{align*}
+            % FIXME: add missing formulas
+            &\init \limply \dbox{\ctrl;\plant}{(\req)}\\
+            % FIXME: add A and B and K and taus
+            \init &\equiv \\
+            \ctrl &\equiv \hupdate{\humod{\alpha}{}}\\
+            \plant &\equiv \hevolve{
+                \D{v_{n+1}} = \alpha(\D{x_n}[-\tau]-\D{x_{n+1}}[-\tau])\syssep
+                \D{x_{n+1}} = v_{n+1}\syssep
+                \D{x_n} = v
+            }\\
+            \req &\equiv d\geq\delta
+        \end{align*}
+    \end{algorithm}
+
+    Model \ref{mdl:car}
 
     too strong reactions of the following car lead to damped oscillations
 
@@ -47,50 +59,88 @@ To motivate the need of being able to treat Delayed Differential Equations in hy
 
 \section{Network Induced Delay in Control Loops}
 
+    
+
     only an input or measurement delay (in u)
 
-    A \textbf{Networked Control Systems (NCS)} is a feedback control system with sensing and control data transmitted on a network.
-    Sensors sample the state of a \textit{plant} periodically and send their output as packets to a event-driven \textit{controller}, which calculates a control signal as soon as the sensor data arrives. This is then transmitted to event-driven actuators in the plant, which perform action immediately on reception of the command.
+    A \emph{Networked Control Systems} (NCS) is a feedback control system with sensing and control data transmission over a network.
+    Sensors sample the state of the \emph{plant} periodically and send their output as packet to an event-driven \emph{controller}, which calculates a control signal as soon as the sensor data arrives. This signal is then transmitted to event-driven actuators in the plant, which perform action immediately on reception of the command.
 
-    The plant is considered to be continuous in time by its physical nature, whereas the controller is discrete in time.
+    % FIXME: could add random h in each turn, out of a certain interval, still action fits into one package
 
-    This scenario has some possible issues, such as network induced \textbf{delay} and \textbf{loss} of network packets.
-    For that reason, the plant output and the controller input are not delivered at the same time and the controller might not have received all the plant updates when it has to perform its control calculations. This makes NCSs different to conventional sampled-data systems.
+    The plant is considered to be continuous in time by its physical nature, whereas the controller modeled as discrete in time.
 
-    \subsection{Modelling of NCSs with Network-Induced Delay}
-        The plant (physical component) is modeled as time continuous and the evolution of its state $x \in\R^{n}$ by
-        \begin{align*}
-            \dot{x}(t) &= Ax(t) + Bu(t) \\
-            y(t) &= Cx(t)
-        \end{align*}
-        which depends additionally on a control signal $u \in\R^{m}$ provided by the discrete controller
+    This scenario has some possible issues, such as network induced \emph{delay} and \emph{loss} of network packets.
+    Due to different retardation times on the plant-controller and controller-plant connections, the plant output and the controller input may not be delivered at the same time. For this reason, the controller might not yet have received all the plant updates when it has to perform its control computations. This makes NCSs different to conventional sampled-data systems.
+
+    \subsection{Modelling NCSs with Network-Induced Delay}
+        The plant (physical component) is modeled as time continuous and the evolution of its state $x\in\R^{n}$ by
         \begin{equation*}
-            u(kh) = -Kx(kh),\quad k\in N_0
-        \end{equation*} or \begin{equation*}
-            u(kh) = -Ky(kh),\quad k\in N_0
+            \begin{cases}
+                \D{x}(t) &= Ax(t) + Bu(t) \\
+                y(t) &= Cx(t)
+            \end{cases}
         \end{equation*}
-        if not the full state is known to the controller, but only some plant output (sensor data) $y \in\R^{p}$.
+        which depends additionally on a control signal $u\in\R^{m}$ provided by the discrete controller
+        \begin{equation*}
+            u(kh) = -Kx(kh)\quad k\in\N_0
+        \end{equation*}
+        or
+        \begin{equation*}
+            u(kh) = -Ky(kh)\quad k\in\N_0
+        \end{equation*}
+        if not the full state is known to the controller, but only some plant output (sensor data) $y\in\R^{p}$.
         The matrices $A, B, K$ are chosen with suitable dimensions. 
 
-        The network induces delays in the loop, namely $\tau_{sc}$ between sensor and controller, as well as $\tau_{ca}$ between controller and actuator.
+        The network induces delays in the control loop, namely $\tau_{sc}$ between sensor and controller, as well as $\tau_{ca}$ between controller and actuator. Without loss of generality can the processing time of the controller be added to either delay.
+        \begin{equation*}
+            \begin{cases}
+                \D{x}(t) = Ax(t) + Bu(t-\tau_{ca,k}) &
+                t\in\compactum{kh+\tau_k}{(k+1)h+\tau_{k+1}}\\
+                y(t) = Cx(t) &\\
+                u(t^+) = -Kx(t-\tau_{sc,k}) &
+                t^+\in\set{kh+\tau_k\with k\in\N_0}
+            \end{cases}
+        \end{equation*}
 
-        In case of a time-invariant controller, the partial delays can be combined together into a single $\tau_k=\tau_{sc,k}+\tau_{ca,k}+t_{\text{calculation}}$ with the processing time of the controller.
+        \begin{algorithm}
+            \caption{Simple NCS model with network induced delay}
+            \label{mdl:ncs} % needs be after caption
+            % FIXME: for figures: label after caption?
+            \begin{align*}
+                % FIXME: add missing formulas
+                &\init \limply \dbox{\hrepeat{(\ctrl;\plant)}}{(\req)}\\
+                % FIXME: add A and B and K and taus
+                \init &\equiv h>0\land t=h\land T=\land \hs{x=}\land \hs{u=}\\
+                \ctrl &\equiv (\htest{t=h}); \hupdate{\humod{t}{0},\humod{u}{-K\x[-\tau_{sc}]}}\\
+                \plant &\equiv (\htest{t<h}); \hevolvein{\D{x}=Ax+Bu[-\tau_{ca}]\syssep \D{t}=1}{t\leq h}\\
+                \req &\equiv
+            \end{align*}
+        \end{algorithm}
+
+        In case of a time-invariant controller, the partial delays can be combined together into a single $\tau=\tau_{sc}+\tau_{ca}+t_{\text{ctrl}}$ with the processing time of the controller.
 
         Assuming that the delay $\tau_k$ of each sample $k$ is less than the sampling period $h$ and that each data sample $x(t)$ fits into a single packet, the system equations can be written as
-        \begin{align*}
-            \dot{x}(t) &= Ax(t) + Bu(t),\\
-            &\quad\quad\quad t\in[kh+\tau_k, (k+1)h+\tau_{k+1}]\\
-            y(t) &= Cx(t) \\
-            u(t^+) &= -Kx(t-\tau_k)\\
-            &\quad\quad\quad t^+\in\{kh+\tau_k, k=0,1,2,...\}
-        \end{align*}
+        \begin{equation*}
+            \begin{cases}
+                \D{x}(t) = Ax(t) + Bu(t) &
+                t\in\compactum{kh+\tau_k}{(k+1)h+\tau_{k+1}}\\
+                y(t) = Cx(t) &\\
+                u(t^+) = -Kx(t-\tau_k) &
+                t^+\in\set{kh+\tau_k\with k\in\N_0}
+            \end{cases}
+        \end{equation*}
         with the piecewise constant control signal $u(t^+)$ in the actuator.
 
-        This plant system can be solved using the standard \textit{variation of constants} method in order to express the new state variables $u(kh)$ and $x((k+1)h)$ as function of their values at the previous sampling instant.
+        This plant system can be solved using the standard \emph{variation of constants} method for ordinary differential equations in order to express the new state variables $u(kh)$ and $x((k+1)h)$ as function of their values at the previous sampling instant.
 
-    \subsection{Hybrid Systems}
-        A more general class of systems are called \textit{hybrid}, which consist of a continuous dynamics part and discrete events.
-        The NCS model above can be written as such what allows applying stability theory for hybrid systems to derive conditions for asymptotical stability depending on the sampling rate $h$ and the network delay $\tau$.
+        % TODO: can be written as HP of dL
+
+        The NCS models above can be written as hybrid systems with delay.
+        The former is given in Program~\ref{mdl:ncs}.
+
+
+        what allows applying stability theory for hybrid systems to derive conditions for asymptotical stability depending on the sampling rate $h$ and the network delay $\tau$.
 
     \subsection{Compensation of Network Induced Delay}
         If the plant and the controller have synchronized clocks, the sensor-controller delay can be determined in the controller.
@@ -100,8 +150,8 @@ To motivate the need of being able to treat Delayed Differential Equations in hy
         Assuming that this estimation fulfills the equations describing the system, one forwards the estimation to $\bar{x}(kh+\tau_{sc,k})$ which is used to calculate the control command $u(kh+\tau_{sc,k})$.
         In order to prepare the next iteration, $\bar{x}(kh)$ is further forwarded to obtain a prediction of the plant state at time $(k+1)h$.
 
-    \subsection{Modelling of Packet Loss}
-        The potential loss of data packets on the network can be modeled as an \textbf{Asynchronous Dynamical System (ADS)}, which comprises continuous dynamics (described by differential/difference equations) and discrete dynamics (governed by finite automata).
+    \subsection{Modelling Packet Loss}
+        The potential loss of data packets on the network can be modeled as an \emph{Asynchronous Dynamical System} (ADS), which comprises continuous dynamics (described by differential/difference equations) and discrete dynamics (governed by finite automata).
         Assuming that the non-networked system is stable, that the network is lossy only between sensor and controller and that the packets contain $x(kh)$ to provide the full current state to the controller, a pair of difference equations
         \begin{align*}
             S_0:&\quad \bar{x}(kh) = \bar{x}((k-1)h)\\
@@ -112,3 +162,4 @@ To motivate the need of being able to treat Delayed Differential Equations in hy
         This system can be interpreted as a switch that closes at a certain rate $r$, indicating if a message is lost ($S_0$) or delivered ($S_1$). 
         In the case of $S_0$ the state in the controller $x(kh)$ is held at its previous value.
         For this system, Lyaponov theory gives conditions for exponential stability.
+
