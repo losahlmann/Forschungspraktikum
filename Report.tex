@@ -1,8 +1,13 @@
 % fix bugs: fixes already in kernel now
 %\RequirePackage{fixltx2e}
 
-
-\documentclass[10pt,draft]{report}
+\documentclass[
+    final,
+    fontsize=10pt,
+    oneside,
+    abstract=on,
+    toc=bibliographynumbered
+]{scrreprt}
 
 % encoding of tex-file
 \usepackage[utf8x]{inputenc}
@@ -29,6 +34,9 @@
 
 % subfigures
 \usepackage{subcaption}
+
+%
+\usepackage[chapter,ruled]{algorithm}
 
 % For including figures, rotating or scaling text (dont use file extension)
 \usepackage{graphicx}
@@ -73,6 +81,7 @@
     precisenames%
     ]{dL}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % own symbol definitions
 \input{mathcommands}
@@ -100,8 +109,32 @@
     state=\nu,
     access=\rho
     ]}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% Settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% serif titles
+\addtokomafont{disposition}{\rmfamily}
+\addtokomafont{descriptionlabel}{\rmfamily}
+
+% additional title page variables
+\newcommand*{\cdepartment}{}%
+\newcommand*{\department}[1]{\gdef\cdepartment{#1}}
+\newcommand*{\cinstitution}{}%
+\newcommand*{\institution}[1]{\gdef\cinstitution{#1}}
+\newcommand*{\csupervisor}{}%
+\newcommand*{\supervisor}[1]{\gdef\csupervisor{#1}}
+\newcommand*{\csupervisorinst}{}%
+\newcommand*{\supervisorinst}[1]{\gdef\csupervisorinst{#1}}
+\newcommand*{\cscndsupervisor}{}%
+\newcommand*{\scndsupervisor}[1]{\gdef\cscndsupervisor{#1}}
+\newcommand*{\cscndsupervisorinst}{}%
+\newcommand*{\scndsupervisorinst}[1]{\gdef\cscndsupervisorinst{#1}}
+\renewcommand{\maketitle}{\include{Titlepage}}
+
+% Title for algorithm environment
+\floatname{algorithm}{Program}
+
+% tikz
 \usetikzlibrary{arrows.meta, backgrounds}
 
 \tikzset{%
@@ -124,63 +157,44 @@
     %my thick box/.style={thick,color=blue}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
-\title{Delay Hybrid Systems}
-
-\author{Lorenz Sahlmann\\ École Polytechnique\\ Carnegie Mellon University}
-\date{\today}
+\department{Master Comasic}
+\institution{École Polytechnique}
+\subject{Stage de Recherche\\ at\\ Carnegie Mellon University}
+\title{Delay Differential Logic for Hybrid Systems with Delay}
+\author{Lorenz Sahlmann}
+\date{Mars\,--\,August 2016}
+% FIXME: proper titles of professors
+\supervisor{Prof.~Dr.~André Platzer}
+\supervisorinst{Carnegie Mellon University}
+\scndsupervisor{Eric Goubault}
+\scndsupervisorinst{École Polytechnique}
 
 \maketitle
 
-\begin{abstract}
-    Cyber Physical Systems incorporate the connection between the physical world and computing devices.
-    This connection is often given by a computer network, which needs hence to be considered in the system model.
-
-    In this work we extend Differential Dynamic Logic with Delay Differential Equations.
-
-    This requires an extension of the syntax, a (partially) redefinition of the semantics and the introduction of additional axioms and proof rules.
-
-    This results in a superset of \dL which we call \textbf{Delay Differential Dynamic Logic}.
-
-    the resulting logics extends
-
-    provide a program notation for hybrid systems with delay
-
-    static and dynamic semantics
-    differential-forms, to reason in axiomatic way about DDEs
-    modular soundness proof
-    axiomatization
-    proof calculus
-\end{abstract}
-
-% TODO: Acknowledgements
-% to CMU for hosting me
-% to André Platzer
-% to Eric for intro me to ddes and to Andre
-% to Sylvie
-% to fondation ... et chair Thales for supporting me financially
+\include{preface}
 
 %\include{introduction}
 
-\include{delay-differential-equations}
+%\include{delay-differential-equations}
 
 %\include{intro-logic}
 
-\include{delay-differential-dynamic-logic}
+%\include{delay-differential-dynamic-logic}
 
-\include{axiomatization-proof-calculus}
+%\include{axiomatization-proof-calculus}
 
 %\include{example}
 
-\include{conclusion}
+%\include{conclusion}
 
 
 % TODO: choose good citation style. Chicago?
 \nocite{Fulton16LogicProofs,*}
 \bibliographystyle{plain}
-\bibliography{Bibliography}
+%\bibliography{Bibliography}
 
 \end{document}

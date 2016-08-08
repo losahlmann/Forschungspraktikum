@@ -1,0 +1,53 @@
+\makeatletter
+
+\begin{titlepage}
+
+\noindent\begin{tikzpicture}[x=1cm,y=-1cm]
+    \node at (0,0) {};
+    % 567 × 368 px, 1.54 x 1, tight
+    \node [inner sep=0cm, below left] at (12.6,0.07) {\includegraphics[width=4cm]{figures/CMU_logo_stack_red}};
+    % 392 × 177 px, 2.21 x 1, almost tight (+5px each side)
+    \node [inner sep=0cm, below right] at (0,0)  {\includegraphics[width=6cm]{figures/Logo_Ecole_polytechnique_horizontal_300dpi}};
+    %\draw (0,0.7) -- (13.1,0.7);
+%\draw (0,1.39) -- (13.1,1.39);
+\end{tikzpicture}
+
+\bigskip
+\bigskip
+\bigskip
+\begin{center}
+    \textsc{\Large \cdepartment}\\
+    \Large \cinstitution
+
+    \bigskip\bigskip
+    \Large\bfseries\@subject%\\[-0.5\baselineskip]
+
+    \noindent\rule{\textwidth}{1pt}
+    \huge\bfseries\@title\\[-0.5\baselineskip]
+    \noindent\rule{\textwidth}{1pt}
+\end{center}
+
+\begin{center}
+    \Large\bfseries\@author
+\end{center}
+
+\begin{center}
+    \Large\@date
+\end{center}
+
+\vfill
+\begin{center}
+    \normalsize supervised by\\ 
+    \Large\csupervisor\\
+    \Large\,\large\csupervisorinst\\
+    \Large\,\normalsize and\\
+    \Large\cscndsupervisor\\
+    \Large\,\large\cscndsupervisorinst
+
+    % \medskip
+    % \large\csupervisorinst
+\end{center}
+
+\end{titlepage}
+
+\makeatother
