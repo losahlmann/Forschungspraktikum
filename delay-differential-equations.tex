@@ -302,14 +302,16 @@ see \cite{Bellen13NumericalDDEs}
         for all $t\in\compactum{a}{b}$ and $x_j\in\R^n$ with $\nnorm{x_j}\leq M$.
     \end{lemma}
     \begin{proof}
-        Let $L_j$ be the Lipschitz constant for the $j$-th argument of $f$ for the given $\compactum{a}{b}$ and $M$. Set $L\defeq\max_j\set{L_j}$. Then
+        Let $L_j$ be the Lipschitz constant for the $j$-th argument of $f$ for the given $\compactum{a}{b}$ and $M$. Set $L\defeq\max_j\set{L_j}$.
+
+        Then for all $t\in\compactum{a}{b}$ and $\range{x_1}{x_k}\in\R^n$ with $\range{\nnorm{x_1}}{\nnorm{x_k}}\leq M$
         \begin{multline*}
             \nnorm{f(t,x_1,\ldots,x_k)} \leq \nnorm{f(t,x_1,\ldots,x_k) - f(t,0,\ldots,0)} + \nnorm{f(t,0,\ldots,0)}\\
             \leq L_j\nnorm{x_j-0} + \nnorm{f(t,0,\ldots,0)} \leq LM+P = K
         \end{multline*}
-        for every $j\in\set{\range{1}{k}}$ and for all $t\in\compactum{a}{b}$ and $x_j\in\R^n$ with $\nnorm{x_j}\leq M$. We used the continuity of $f$ on the compact set $\compactum{a}{b}$ for the existence of
+        for every $j\in\set{\range{1}{k}}$. We used the continuity of $f$ on the compact set $\compactum{a}{b}$ for the existence of
         \begin{equation*}
-            P = \max_{t\in\compactum{a}{b}}\nnorm{f(t,0,\ldots,0)}
+            P = \max_{t\in\compactum{a}{b}}\nnorm{f(t,0,\ldots,0)}.
         \end{equation*}
     \end{proof}
 
@@ -338,10 +340,10 @@ see \cite{Bellen13NumericalDDEs}
         By the fundamental theorem of calculus, $x$ is continuous on $\compactum{\tzero}{\tzero+T}$.
 
         From the partition $\partition{t_0}{t_m}$ of $x_{\tzero}$, we define a partition of $\compactum{\tzero}{\tzero+T}$ by
-        \begin{equation*}
+        \begin{equation}\label{eq:partition}
             \mathcal{Z}\defeq \partition{\hat{t}_0}{\hat{t}_p}
             \defeq \set{\tzero,\tzero+T}\cup\bigcup_{j=1}^{k}\bigcup_{\substack{i=1\\t_i\geq\tau_j}}^{m}\set{t_i+\tau_j}
-        \end{equation*}
+        \end{equation}
         Let $t\in\open{\hat{t}_{l-1}}{\hat{t}_l}$ for any $l\in\set{\range{1}{p}}$. If for any $j\in\set{\range{1}{k}}$ and $i\in\set{\range{0}{m}}$ was $t-\tau_j = t_i$, then $t=t_i+\tau_j=\hat{t}_r$ for a $r\in\set{\range{1}{p}}$, which would be a contradiction to the choice of $t$. Hence $t-\tau_j \neq t_i$ for all $j\in\set{\range{1}{k}}$ and $i\in\set{\range{0}{m}}$, what implies that all $s\mapsto x(s-\tau_j)$ are continuous in $t$. Thus the composition
         \begin{equation*}
             s\mapsto f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))
@@ -363,78 +365,91 @@ see \cite{Bellen13NumericalDDEs}
         % FIXME: f cont uberall in Voraussetzung?
     \end{proof}
 
-    \begin{theorem}[Existence of unique solution]\label{thm:solution-existence}
-        Consider the Delay Differential Equation
-    %TODO: do we need global existence or just local?
+    The most important result for the considered class of delay differential equations is the following theorem.
+    Its proof is an adaption and extension of the existence theorem (Theorem 3.7) given in~\cite{Smith10IntroDDE} and the proof of uniqueness in \cite{PruessWilke10GewDiffGl}.
+
+    \begin{theorem}[Existence of a unique solution]
+    \label{thm:solution-existence}
+        For a continuous function $f\from\deff\to\R^n$, satisfying the Lipschitz condition (Def.~\ref{def:lipschitz}) in all but its zeroth argument, consider the IVP for a delay differential equation
         \begin{equation}
             \begin{cases}
-                \D{x} = f(t,x(t),x(t-\tau)) & \text{for } t\geq\tzero\\
-                x(t) = x_\tzero(t-\tzero)   & \text{for } t\in [\tzero-\tau,\tzero]
+                \D{x} = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k)) & \text{for } t\geq\tzero\\
+                x(t) = x_\tzero(t-\tzero) & \text{for } t\in\compactum{\tzero-\taumax}{\tzero}
             \end{cases}
         \end{equation}
-        with $f\from\deff\to\R^n$ continuous and satisfying the (local) Lipschitz condition in its second argument (Def.~\ref{def:lipschitz}).
-
+        with zero-aligned initial function.
+        
+    %TODO: do we need global existence or just local?
         % where $\nnorm{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\supnorm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
 
-        Then for each \emph{initial condition} $x_{\tzero}\in\statespace[\tau]$ and start time $\tzero$, there \textbf{exists} a \textbf{unique local solution} of the IVP on a time interval $[\tzero-\tau, \tzero+T]$. The duration $T>0$ depends on the sup-norm and discontinuity points of the initial condition. (?)
-        This solution is continuous and piecewise differentiable on $\compactum{\tzero}{\tzero+T}$ with partition $t_i+\tau$.
+        Then, for each \emph{initial condition} $x_{\tzero}\in\statespace[-\taumax]$ and start time $\tzero\in\R$, there \emph{exists} a \emph{unique local solution} of the IVP on a time interval $\compactum{\tzero-\taumax}{\tzero+T}$.
+        %The duration $T>0$ depends on the sup-norm and the partition of the initial condition.
+        This solution is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$ with partition \eqref{eq:partition}.
     \end{theorem}
 
-    The proof is smiliar to the proof of the existence theorem (Theorem 3.7) given in~\cite{Smith10IntroDDE}.
+    
     \begin{proof}
         % FIXME: where sup-norm?
-        As a piecewise continuous function, the initial condition can bounded by $M\geq \supnorm{x_\tzero}$ on $\delayinterval[-\tau]$.
+        Let $\partition{-\taumax=t_0}{t_m=0}$ be the partition of $x_{\tzero}$. As a piecewise continuous function, the initial condition can be bounded on $\closeddelayinterval[-\tau]$ by any $M\geq \supnorm{x_\tzero}$.
         
-        % FIXME: do I need t_0+tau or is just \tau okay? do I need x not to be pw, just cont in proof?
-        If $\set{\range{-\tau=t_0}{t_k=0}}$ is the partition of $x_{\tzero}$, we choose $T=\min\set{t_0+\tau,\frac{M}{K}}$.
+        % FIXME: do I need t_0+tau or is just \tau okay? do I need x not to be pw, just cont in proof?        
         
         % FIXME: M or 2M?
-        Let $K>0$ be the upper bound for $f$ from Lemma~\ref{lm:bounded-lipschitz} on the set $S=[\tzero,\tzero+T] \times \{x\in R^n: \nnorm{x}\leq 2M\}\times \{y\in R^n: \nnorm{y}\leq 2M\}$ and $L>0$ the Lipschitz constant of $f$ for that set.
+        Let $K>0$ be the upper bound for $f$ on the set
+        % TODO: could use any fixed upper bound for time compactum, taumax is arbitrary
+        \begin{equation*}
+            S\defeq\compactum{\tzero}{\tzero+\taumax} \times \set{x\in\R^n\with \nnorm{x}\leq 2M}^k
+            %\times \set{y\in\R^n\with \nnorm{y}\leq 2M}
+        \end{equation*}
+        given by Lemma~\ref{lm:bounded-lipschitz} and $L>0$ the Lipschitz constant of $f$ for that set.
+        We put $T\defeq\min\set{\taumax,\frac{M}{K}}$ to restrict the integrand $f$ to $S$.
 
         % FIXME: why continuous? its pw cont? cont in tzero
-        We construct a series $(x_{(m)})_{m\in\N_0}$ of piecewise continuous functions which approximates the solution of the initial value problem.
+        We construct a series $(x_{(m)})_{m\in\N_0}$ of piecewise continuous functions, which approximates the solution of the initial value problem.
         Set
-        \begin{equation}
+        \begin{equation*}
             x_{(0)}(t)= \begin{cases}
-                x_\tzero(0) & t\in [\tzero,\tzero+T]\\
-                x_\tzero(t-\tzero) & t\in [\tzero-\tau,\tzero]
+                x_\tzero(0) & \text{for } t\in\compactum{\tzero}{\tzero+T}\\
+                x_\tzero(t-\tzero) & \text{for } t\in\compactum{\tzero-\taumax}{\tzero}
             \end{cases}
-        \end{equation}
+        \end{equation*}
         For $m\in\N_{>0}$ define
-        \begin{equation}
+        \begin{equation*}
             x_{(m)}(t)= \begin{cases}
-                x_\tzero(0) + \int_\tzero^t f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau))\dx[s] & t\in [\tzero,\tzero+T]\\
-                x_\tzero(t-\tzero) & t\in [\tzero-\tau,\tzero]
+                x_\tzero(0) + \integral{\tzero}{t}
+                f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots,x_{(m-1)}(s-\tau_k))\dx[s] & \text{for } t\in\compactum{\tzero}{\tzero+T}\\
+                x_\tzero(t-\tzero) & \text{for } t\in\compactum{\tzero-\taumax}{\tzero}
             \end{cases}
-        \end{equation}
-        % FIXME: why exists integral? f cont, x in int even cont
-        Integral exists
-        It holds for all $m>0$ and $t\in \compactum{\tzero-\tau}{\tzero}$ by definition of the series
-        \begin{equation}
+        \end{equation*}
+        The integral exists, because the integrand is a composition of a continuous and piecewise continuous function, which is again piecewise continuous (Lemma~\ref{lm:comp-pw-cont}) and hence by Lemma~\ref{lm:pc-integrable} integrable on $\compactum{\tzero}{\tzero+T}$.
+
+        It holds for all $m>0$ and $t\in \compactum{\tzero-\taumax}{\tzero}$ by the definition of this sequence that
+        \begin{equation*}
             \nnorm*{x_{(m)}(t)-x_{(m-1)}(t)}=0
-        \end{equation}
+        \end{equation*}
         We show by induction over $m$ that for all $t\in [\tzero,\tzero+T]$ it holds
-        \begin{equation}
+        \begin{equation*}
             \nnorm*{x_{(m)}(t)-x_{(m-1)}(t)} \leq \frac{K}{L}\frac{L^m (t-\tzero)^m}{m!}.
-        \end{equation}
-        Since obviously $\nnorm{x_{(0)}(t)}\leq M$, the statement for $m=0$ follows from the boundedness of $f$ on $S$ and the triangle inequality for integrals:
-        \begin{equation}
-            \nnorm{x_{(1)}(t)-x_{(0)}(t)} = \nnorm*{\int_\tzero^t f(s,x_{(0)}(s),x_{(0)}(s-\tau))\dx[s]} \leq K(t-\tzero)
-        \end{equation}
-        In the inductive step we can apply
-        Since for any $m>0$, it holds by the triangle inequality and by the choice of $T$
+        \end{equation*}
+        Let $t\in [\tzero,\tzero+T]$. Since for all $s\in [\tzero-\taumax,\tzero+T]$ obviously $\nnorm{x_{(0)}(t)}\leq M$, the statement for $m=0$ follows from the boundedness of $f$ on $S$ and the triangle inequality for integrals:
+        \begin{equation*}
+            \nnorm{x_{(1)}(t)-x_{(0)}(t)} = \nnorm*{\integral{\tzero}{t} f(s,x_{(0)}(s),x_{(0)}(s-\tau_1),\ldots,,x_{(0)}(s-\tau_k))\dx[s]} \leq K(t-\tzero)
+        \end{equation*}
+        In the inductive step for any $m>0$, we use that $\nnorm{x_{(m-1)}(t)}\leq 2M$ for all $s\in [\tzero-\taumax,\tzero+T]$ implies
         % FIXME: why x(m)(t) smaller than 2M, such that K holds?
         % TODO: why do integral and norm commute? once integral over vectors, once over scalars
         \begin{align}\label{eq:bounded-xm}
-            \nnorm*{x_{(m)}} &\leq \nnorm*{x_\tzero(0)} + \int_\tzero^t \nnorm*{f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau))}\dx[s]\\
-            &\leq M + K(t-\tzero) \leq M+KT\\
+            \nnorm*{x_{(m)}(t)} &\leq \nnorm*{x_\tzero(0)} + \int_\tzero^t \nnorm*{f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots,x_{(m-1)}(s-\tau_k))}\dx[s] \nonumber \\
+            &\leq M + K(t-\tzero) \leq M+KT \nonumber \\
             &\leq 2M
         \end{align}
-        if $\nnorm{x_{(m-1)}(t)}\leq 2M$.
-        It follows by the Lipschitz property of $f$
+        using the triangle inequality and the choice of $T$.
+
+        It follows by the Lipschitz property of $f$ (for its first argument) that
         \begin{multline*}
             \nnorm*{x_{(m+1)}(t)-x_{(m)}(t)}=\\
-            = \nnorm*{\int_\tzero^t f(s,x_{(m)}(s),x_{(m)}(s-\tau)) - f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau))\dx[s]}\\
+            = \left\lVert\int_\tzero^t f(s,x_{(m)}(s),x_{(m)}(s-\tau_1),\ldots,x_{(m)}(s-\tau_k))\right.\\ \left.- f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots,x_{(m-1)}(s-\tau_k))\dx[s]
+            \vphantom{\int_\tzero^t}\right\rVert\\
             \leq L \int_\tzero^t \nnorm*{x_{(m)}(s) - x_{(m-1)}(s)}\dx[s]\\
             \leq \frac{L^m K}{m!} \int_\tzero^t (s-\tzero)^m\dx[s]
             = \frac{L^m K}{(m+1)!}(t-\tzero)^{m+1}
@@ -443,9 +458,9 @@ see \cite{Bellen13NumericalDDEs}
         The Cauchy criterion for convergent series (\cite{Gathmann12GDM} 6.13, \cite{Rudin76PrinciplesAnalysis} 3.22) applied to the exponential series states that
         \begin{equation*}
             % "\ " needed for space
-            \mforall{\epsilon>0}\ \mexists{n_0\in\N_0}\ \mforall{m\geq k\geq n_0}\holds \sum_{i=k+1}^m \frac{(LT)^i}{i!} <\epsilon
+            \mforall{\varepsilon>0}\ \mexists{n_0\in\N_0}\ \mforall{m\geq k\geq n_0}\holds \sum_{i=k+1}^m \frac{(LT)^i}{i!} <\varepsilon
         \end{equation*}
-        So for any $\epsilon>0$ exist $k\in\N_0$ and $m\geq k$, such that
+        So for any $\varepsilon>0$ exist $k\in\N_0$ and $m\geq k$, such that
         \begin{align*}
             \nnorm*{x_{(m)}(t)-x_{(k)}(t)} \leq{} & \nnorm*{x_{(m)}(t)-x_{(m-1)}(t)} + \nnorm*{x_{(m-1)}(t)-x_{(m-2)}(t)} + {}\\
             & + \ldots + \nnorm*{x^{(k+1)}(t)-x^{(k)}(t)}\\
@@ -453,17 +468,16 @@ see \cite{Bellen13NumericalDDEs}
             & + \ldots +\frac{K}{L}\frac{L^{k+1} (t-\tzero)^{k+1}}{(k+1)!}\\
             \leq{} & \frac{K}{L}\sum_{i=k+1}^m \frac{(LT)^i}{i!} < \varepsilon
         \end{align*}
-        for all $t\in [\tzero,\tzero+T]$, i.e. $x_{(m)}$ is a Cauchy sequence
+        for all $t\in [\tzero,\tzero+T]$, i.e. $(x_{(m)})$ is a Cauchy sequence
 
     
         % FIXME: show that this a Cauchy series
         %This is the tail of the convergent exponential series and hence it converges to zero for $k\to\infty$ (boundedness and positivity of summands, monotonicity crit).
 
         % FIXME: why continuous? since integral exists
-        Since $x_{(m)}$ is continuous on $[\tzero,\tzero+T]$, this Cauchy
-        sequence admits a limit $x$ in the Banach space $\continuouss[0]{[\tzero,\tzero+T]}{\R^n}$ in terms of the supremum-norm.
+        Since each $x_{(m)}$ is continuous on $\compactum{\tzero}{\tzero+T}$, this Cauchy sequence admits a limit $x$ in the Banach space $\Cn[0]{\compactum{\tzero}{\tzero+T}}{\R^n}$ with respect to the sup-norm.
 
-        Again, we extend $x$ to $[\tzero-\tau,\tzero]$ with $x_\tzero$, such that $x\in\Cnpw[0]{[\tzero-\tau,\tzero]}{\R^n}$.
+        Again, we extend $x$ to $\compactum{\tzero-\taumax}{\tzero}$ with $x_\tzero$, such that $x\in\Cnpw[0]{\compactum{\tzero-\tau}{\tzero+T}}{\R^n}$.
 
 
         
