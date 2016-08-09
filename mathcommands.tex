@@ -80,7 +80,7 @@
 \newcommand{\denseintegral}[2]{\int_{#1}^{#2}\!\!}
 
 \newcommand{\Cn}[3][]{C^{#1}\ifthenelse{\equal{#2}{}}{}{\ifthenelse{\equal{#3}{}}{(#2)}{(#2,#3)}}}
-\newcommand{\Cnpw}[3][]{C_\mathrm{pw}^{#1}\ifthenelse{\equal{#2}{}}{}{\ifthenelse{\equal{#3}{}}{(#2)}{(#2,#3)}}}
+\newcommand{\Cnpw}[3][]{C_{\mkern-2mu\mathrm{pw}}^{#1}\ifthenelse{\equal{#2}{}}{}{\ifthenelse{\equal{#3}{}}{(#2)}{(#2,#3)}}}
 
 %
 % Delay Differential Equation
@@ -126,6 +126,7 @@
 %
 % Delay Differential Dynamic Logic
 %
+% FIXME: \constants might need \mkern-2mu
 \newcommand{\constants}[1][]{\mathcal{C}_{#1}}
 \newcommand{\diffvars}{\D{\allvars}}
 \newcommand{\delayvars}[1][]{\allvars\times\constants[#1]}
@@ -156,7 +157,9 @@
 \newcommand{\bsstate}{\omega}
 \newcommand{\csstate}{\mu}
 
-\newcommand{\partition}[2]{\set{#1<\ldots<#2}}
+% partition of an interval
+\newcommand{\partition}[3][]{
+	\set{#2<\ifthenelse{\equal{#1}{}}{}{#1<}\ldots<#3}}
 
 %\newcommand{\delayinterval}[1][T]{[-#1,0]}
 \newcommand{\closeddelayinterval}[1][-T]{\compactum{#1}{0}}
