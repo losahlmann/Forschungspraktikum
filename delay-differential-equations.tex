@@ -1,50 +1,28 @@
 \chapter{Delay Differential Equations}
 
-special case of more general functional differential equations (FDEs)
+Differential equations are often used to describe the dynamics of a deterministic system, whose future behaviour depends on the present state.
+For an \emph{ordinary differential equation} (ODE), this state is an element of $\R^n$. The rate of change only depends on the current time instant.
 
-deterministic system
-future behaviour depends on present state only
+In \emph{delay differential equations} (DDEs) however, the system is influenced by the past through the appearance of a deviated time argument, the current state needs to contain the previous evolution.
+This leads to a functional state space, its elements are functions on a past time interval.
+For that reason, DDEs belong to the class of \emph{functional differential equations} (FDEs).
 
-ODE: in $\R^n$
-if influence of past by a deviated time argument, functional state on past time-interval
-FDS
-
-
-
-backward continuation (Richard) -> [\&] limit up to T, state contains entire evolution, can check evo domain constraint on this state
-
-They often arise in automatic control %\cite
-, where a controller montitors the state of a system in order to make control decisions to adjust this state.
+% TODO: add \cite
+DDEs often appear in automatic control, where a controller montitors the state of a system in order to make control decisions to adjust this state.
 If there is a delay between the observation and the control action, the differential equation describing the system not only depends on its current state, but also on its past.
+These previous values need to be specify in an initial condition, for at least the time of the longest delay.
 
-need to specify in initial condition
-at least for the time of longest delay
+%neutral type: rhs also depends on deriv of init cond
 
-neutral type: rhs also depends on deriv of init cond
+Examples of phenomena which have been modeled using delay differential equations include epidemics, traffic flow and vibrations/chattering. See \cite{Falbo06FDEs} and the references therein.
 
-
-% proofs similar to
-
-Examples of ... which have been modeled using delay differential equations include epidemics, traffic flow and vibrations/chattering. See \cite{Falbo06FDEs} and there references therein.
-
-Some methods to solve basic DDEs analytically are presented in \cite{Falbo06FDEs}.
-numerical methods are not as 
-see \cite{Bellen13NumericalDDEs}
+Some methods to solve basic DDEs analytically are presented in \cite{Falbo06FDEs}. Numerical procedures are not as far develloped as for ODEs. 
+See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous integration algorithm.
 
 \section{Piecewise Continuous Functions}
     \label{sec:piecewise-continuous-functions}
     
     The following definition is motivated by the character of evolution arising from hybrid systems. We define the main functional space of operation for the following chapters.
-
-    % \begin{definition}[Piecewise Continuous]\label{def:piecewise-continuous}
-    %     Let $D=[a,b]\subseteq\R$ be a closed interval (this includes the cases when $a=-\infty$ or $b=\infty$, or both). The mapping $x:D\rightarrow\R^n$ is called \emph{piecewise continuous} if and only if there is a finite partition $\{t_i:i=\range{0}{m}\}$ of $D$ (i.e.\ $a=t_0<t_1<\ldots<t_m=b$) such that $x$ is continuous on each interval piece $[t_i,t_{i+1})$ for all $i=\range{0}{m-1}$ and the left sided limits
-    %     \begin{equation}
-    %         \lim_{\substack{t\upto t_{i+1}\\ t\in[t_i,t_{i+1})}} x(t)
-    %     \end{equation}
-    %     exist. Hence $x(b)$ can be an isolated point and this right interval limit $b$ is the only spot where such is allowed.
-
-    %     We denote by $\Cnpw[0]{D}{\R^n}$ the set of \emph{piecewise continuous functions} on the compact interval $D$ (this excludes the cases with $\pm\infty$), mapping to $\R^n$.
-    % \end{definition}
 
     \begin{definition}[Piecewise Continuously Differentiable]
     \label{def:pw-cont-diff}
@@ -116,7 +94,6 @@ see \cite{Bellen13NumericalDDEs}
         \end{equation*}
         for all $t\in\compactum{a}{b}$.
         %where $t_k\leq s < t_{k+1}$.
-        % FIXME: what about a=-inf or b=inf?: By def of C_pw is interval bounded
     \end{lemma}
     \begin{proof}
         On each compact interval $\compactum{t_{i-1}}{t_i}$ of the partition, $f$ is piecewise continuous and hence integrable (Lemma~\ref{lm:pc-integrable}).
@@ -147,9 +124,8 @@ see \cite{Bellen13NumericalDDEs}
 \section{Definition of DDEs}
     \label{sec:definition-dde}
 
-    % FIXME: text DDE
-    There are different possibilties to define delay differetial equations, dependent on what 
-    We restrict to a class adapted to our needs and often found in literature,  see for example \cite{Roussel04DDEs}
+    There are different possibilties to define delay differetial equations, depending on what application one has in mind.
+    We restrict to a class adapted to our needs and often found in literature, see for example \cite{Roussel04DDEs} and which cover a wide range of applications.
 
     \begin{definition}[Delay Differential Equation]\label{def:dde}
         Given a function $f\from\deff\to\R^n$ and a set of time delays $\set{\tau_j\with 0<\tau_1<\ldots<\tau_k}$, a functional equation of the form
@@ -170,18 +146,6 @@ see \cite{Bellen13NumericalDDEs}
         \end{equation}
     \end{definition}
 
-    % TODO: put this later
-
-    % TODO: autonomous DDEs is without loss of generality?
-    In the following chapters, we will only consider autonomous DDEs, i.e.\ restrict to the case of initial time $\tzero=0$.
-
-    % TODO: source for state-dependent and distributed delays
-    The definition of a DDE can be extended to state-dependent or distributed delays (cf.~\cite{}). For simplicity, we restrict here to fixed delays, which already cover a wide range of applications.
-
-
-%\section{Definition of Solution}
- %   \label{sec:definition-of-solution}
-
     \begin{definition}[Solution of DDE]\label{def:solution-dde}
         A function $x\from\compactum{\tzero-\taumax}{\tzero+T}\to\R^n$ is called \emph{(local) solution} of the initial value problem~\eqref{eq:ivp}, if and only if there exists a $T>0$ such that
         $x$ obeys the initial condition
@@ -201,61 +165,19 @@ see \cite{Bellen13NumericalDDEs}
     \begin{equation*}
         \lim_{s\downto t_i}\D{x}(s) = f(t_i,x(t_i),x(t_i-\tau_1),\ldots,x(t_i-\tau_k))
     \end{equation*}
-    in the knots $t_i$ for $i\in\set{\range{0}{m-1}}$.
-
-    % FIXME: local solution is on a single subdiv int only -> cont diffable
+    for the right limits in the knots $t_i$, $i\in\set{\range{0}{m-1}}$.
+    This is equivalent to the fact that it holds for the \emph{right derivative}
+    \begin{equation*}
+        \D{x_+}(t)\defeq
+        \lim_{s\downto t}\frac{x(s)-x(t)}{s-t}
+        = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))
+    \end{equation*}
+    for all $t\in\compactum{\tzero}{\tzero+T}$.
 
     %TODO: Fortsetzbarkeit For example initial condition has jump, this point is limit for local solution.
     % FIXME: is this true? ref to source
     There can be a T such that left limit does not exist. explosion
     The left limits $\lim_{s\upto t_m}\D{x}(s)$ exists not necessarily in the last knot $t_m=\tzero+T$. If it does, the solution is continuable.
-
-    % TODO: for the right-hand derivative?
-    in knots: right sided derivative
-    the right continuability of derivative is equivalent to right-hand derivative equals f
-
-
-    \cite{Roussel04DDEs}
-    If we limit $T$ by $\taumin$, we can see the solution of a delay differential equation as an operator mapping from functions on $\compactum{t-\taumax}{t}$ to functions on $\compactum{t}{t+\taumin}$.
-    Then the solution of the initial value problem is the sequence of these functions.
-    derivative not necessarily continuous at knots
-
-% \begin{figure}[h]\centering
-%     \includegraphics[width=\textwidth]{figures/multiple.png}
-% 	\caption{Illustration of proof to Lemma \ref{lemma-continuity}}
-% 	\label{fig:not-allowed}
-% \end{figure}
-
-% FIXME: This lemma is wrong. Show instead integrability of f(t,x_t)
-%\begin{lemma}
-%    \label{lemma-continuity}
-
-    % Let $x:[\tzero-\tau,\tzero+T] \rightarrow \R^n$ be piecewise continuous (as in Definition \ref{definition-piecewise-continuous}) with the partition $\{t_0,\ldots,t_k\}$, i.e. there are $k$ subintervals.
-    %
-    % Then $t \mapsto x_t = x(t+\theta)$, where $\theta\in[-\tau,0]$, is a piecewise continuous mapping from $[\tzero,\tzero+T]$ into $\statespace[\tau]$.
-%\end{lemma}
-
-%\begin{proof}
-    % $x$ is piecewise continuous and hence uniformly piecewise continuous on the compact interval $I=[\tzero-\tau,\tzero+T]$.
-    % i.e. uniformely continuous on each subinterval with stetiger Fortsetzung in right side.
-    % \begin{equation}
-    %     \forall\epsilon >0 \exists\delta_i >0 \forall t,s\in I_i: \quad \abs{t-s}<\delta_i \Rightarrow \nnorm{x(t)-x(s)}<\epsilon
-    % \end{equation}
-    % Let $\epsilon > 0$. $x|_{[t_i,t_{i+1}]}$ (with stetiger fortsetzung in right interval limit) is uniformly continuous, i.e. there is a $\delta_i > 0$ (for the given $\epsilon$), such that $\forall\,t, s \in [t_i,t_{i+1}]$ holds
-    % % TODO: can use \leq ?
-    % \begin{equation}
-    %     \abs{t-s} < \delta_i \Rightarrow \nnorm{x(t)-x(s)} < \epsilon
-    % \end{equation}
-    %
-    % Among the given $\delta_i$, choose the smallest as $\delta = \min_i \delta_i$.
-    %
-    % For any $i$ and $s,t\in [t_i,t_{i+1})\subset [\tzero,\tzero+T]$ with $\abs{t-s}<\delta$, it holds
-    % \begin{equation}
-    %     \supnorm{x_t - x_s} = \sup_{\theta\in [-\tau,0]}\nnorm{x(t+\theta) - x(s+\theta)} < \epsilon
-    % \end{equation}
-    % since $t+\theta, s+\theta \in I$
-    % Hence $t \mapsto x_t$ is uniformely continuous on $[t_i,t_{i+1})$.
-%\end{proof}
 
 
 \section{Method of Steps}
@@ -369,7 +291,7 @@ see \cite{Bellen13NumericalDDEs}
     \end{proof}
 
     The most important result for the considered class of delay differential equations is the following theorem.
-    Its proof is an adaption and extension of the existence theorem (Theorem 3.7) given in~\cite{Smith10IntroDDE} and the proof of uniqueness in \cite{PruessWilke10GewDiffGl}.
+    Its proof is an adaption and extension of the existence theorem (Theorem 3.7) given in~\cite{Smith10IntroDDE} and the proof of uniqueness in \cite{PruessWilke10GewDiffGl}. It essentially reduces the DDE locally to an ODE by applying the method of steps.
 
     \begin{theorem}[Existence of a unique solution]
         \label{thm:solution-existence}
@@ -382,7 +304,6 @@ see \cite{Bellen13NumericalDDEs}
         \end{equation}
         with zero-aligned initial function.
         
-    %TODO: do we need global existence or just local?
         % where $\nnorm{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\supnorm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
 
         Then, for each \emph{initial condition} $x_{\tzero}\in\statespace[-\taumax]$ and start time $\tzero\in\R$, there \emph{exists} a \emph{unique local solution} of the IVP on a time interval $\compactum{\tzero-\taumax}{\tzero+T}$.
@@ -393,7 +314,7 @@ see \cite{Bellen13NumericalDDEs}
         % FIXME: where sup-norm?
         Let $\partition{-\taumax=t_0}{t_m=0}$ be the partition of $x_{\tzero}$. As a piecewise continuous function, the initial condition can be bounded on $\closeddelayinterval[-\tau]$ by any $M\geq \supnorm{x_\tzero}$.      
         
-        Since $f$ is continuous, it admits an upper bound $K>0$
+        Since $f$ is continuous, its sup-norm admits a maximum $K>0$
         on the compact set
         \begin{equation*}
             S\defeq\compactum{\tzero}{\tzero+\taumax} \times \set{x\in\R^n\with \nnorm{x}\leq 2M}^k
@@ -403,8 +324,7 @@ see \cite{Bellen13NumericalDDEs}
         Let $L>0$ be the Lipschitz constant of $f$ for that set with respect to its first argument.
         We put $T\defeq\min\set{\tzero+\taumin,\frac{M}{K}}$ to restrict $f$ as integrand to $S$.
 
-        We construct a series $(x_{(m)})_{m\in\N_0}$ of piecewise continuous functions, which approximates the solution of the initial value problem.
-        Set
+        We construct a series $(x_{(m)})_{m\in\N_0}$ of piecewise continuous functions, which approximates the solution of the initial value problem. Set
         \begin{equation*}
             x_{(0)}(t)= \begin{cases}
                 x_\tzero(0) & \text{for } t\in\compactum{\tzero}{\tzero+T}\\
@@ -542,7 +462,10 @@ see \cite{Bellen13NumericalDDEs}
         \begin{align*}
             \rho(t) &\defeq \nnorm*{x(t)-\bar{x}(t)}
             \leq \integral{\tzero}{t} \nnorm*{f(s,x(s),x(s-\tau))-f(s,\bar{x}(s),\bar{x}(s-\tau))}\dx[s]\\
-            & =\integral{\tzero}{t} \nnorm*{f(s,x(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))-f(s,\bar{x}(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))}\dx[s]\\
+            &= \!\begin{multlined}[t][0.8\displaywidth]
+                \integral{\tzero}{t} \lVert f(s,x(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))\\
+                -f(s,\bar{x}(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))\rVert\dx[s]
+            \end{multlined}\\
             & \leq L \integral{\tzero}{t} \nnorm*{x(s)-\bar{x}(s)}\dx[s] = L \integral{\tzero}{t} \rho(s)\dx(s)\\
             &= L \integral{\tzero}{t} \e{-\alpha s}\rho(s)\e{\alpha s}\dx[s] \leq L \sup_{s\in [\tzero,\tzero+T]}\left(\e{-\alpha s}\rho(s)\right)\integral{\tzero}{t} \e{\alpha s}\dx[s]\\
             & \leq\frac{L}{\alpha}\e{\alpha t} \sup_{s\in [\tzero,\tzero+T]}\left(\e{-\alpha s}\rho(s)\right)
@@ -571,37 +494,44 @@ see \cite{Bellen13NumericalDDEs}
     %     then $x_1(\tzero+t_1)=x_2(\tzero+t_1)$
     %     follows from initial cond $x_1$
     % \end{lemma}
-    \begin{corollary}
-        \label{cor:continuability-of-solution}
+    \begin{corollary}\label{cor:continuability-of-solution}
         just proof existence/uniqueness on each peace of continuity proof continuity at knots with Lemma of integral equ
         % FIXME: why?
         This solution is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$ with partition \eqref{eq:partition}.
         % FIXME: why continuous? its pw cont? cont in tzero
         % TODO: What is derivation in randpunkten of interval [] ?
-        If in Theorem \ref{theorem-solution-existence} $T=t_1-\tau$, can reapplay theorem with starting point $\tzero=\tzero_{old}+t_1-\tau$. Get existence of unique solution on $[\tzero-\tau,\tzero+S]$ with $S>T$.
+        If in Theorem~\ref{theorem-solution-existence} $T=\tzero+\taumin$, can reapplay theorem with new starting point $\tzero=\tzero_{old}+t_1-\tau$. Get existence of unique solution on $[\tzero-\tau,\tzero+S]$ with $S>T$.
     \end{corollary}
 
     % IDEA: can show? init cond bounded by M, and loc sol bounded by M, get glob sol since f glob Lip on set of bounded inputs?
+
     In the following chapters, we will deal with delay differential equations having a polynomial right-hand side.
     \begin{corollary}
-        \label{corollary}
         If $f$ is a polynomial over $t$, $x(t)$ and $x(t-\tau_j)$, then there exists a unique solution to the initial value problem with delay differential equation and piecewise continuous initial condition~\eqref{eq:ivp}.
     \end{corollary}
     \begin{proof}
         As a polynomial, $f$ is continuously differentiable and hence locally Lipschitz. The existence of a unique solution follows from Theorem~\ref{thm:solution-existence} and Corollary~\ref{cor:continuability-of-solution}.
     \end{proof}
 
-    %TODO: put after uniqueness theorem, need uniqueness and existence so that amap well-defined
+    %TODO: put after uniqueness theorem, need uniqueness and existence so that map well-defined
+       \cite{Roussel04DDEs}
+    If we limit $T$ by $\taumin$, we can see the solution of a delay differential equation as an operator mapping from functions on $\compactum{t-\taumax}{t}$ to functions on $\compactum{t}{t+\taumin}$.
+    Then the solution of the initial value problem is the sequence of these functions.
+    derivative not necessarily continuous at knots
     The notion of solution for an autonomous DDE as given above can be lifted to be a trajectory $\trajectory[x]$ in the statespace
     \begin{equation}
         \trajectory[x] \from [0,T] \to \statespace[\tau],\\
         t \mapsto \xbartaut{t}
     \end{equation}
 
-    The \emph{state} at time $t$ is a function which provides a time limited history up to the current time. This is all information needed to determine (using the DDE) to determine the solution for time $\geq t$. It is defined as $\xbartaut{t}(s)\defeq x(t+s)$ for $s\in [-\tau,0]$. In the case of $t=0$, we simplify the notation to $\xbartau \defeq \xbartaut{0}$.
+    % The \emph{state} at time $t$ is a function which provides a time limited history up to the current time. This is all information needed to determine (using the DDE) to determine the solution for time $\geq t$. It is defined as $\xbartaut{t}(s)\defeq x(t+s)$ for $s\in [-\tau,0]$. In the case of $t=0$, we simplify the notation to $\xbartau \defeq \xbartaut{0}$.
     This notion of solution is a \emph{dynamical systems} point of view which later turns out to be useful.
 
     Other results know from ordinary differential equations can be adapted to delay differential equations, such as continuous (or even differentiable) dependence of the solution on initial data, see \cite{Dads06DDEs}. % TODO: add other cites
+    % TODO: non-autonomous -> autonomous
+    % TODO: autonomous DDEs is without loss of generality?
+    In the following chapters, we will only consider autonomous DDEs, i.e.\ restrict to the case of initial time $\tzero=0$.
+
 
     %TODO: can write DDE (eq??) from definition as
 
@@ -613,31 +543,28 @@ see \cite{Bellen13NumericalDDEs}
     \end{equation}
 
 
-    % TODO: non-autonomous -> autonomous
 
     \begin{example}\label{ex:ode-dde}
         Delay differential equations can often incorporate a much richer behaviour than ordinary differetial equations.
-        The basic ODE IVP
+        The basic ordinary IVP
         \begin{equation}
             \begin{cases}
                 \D{x}(t) = -x(t)\\
                 x(0) = x_0
             \end{cases}
         \end{equation}
-        has the solution $x(t)=x_0 e^{-t}$. However the similiar DDE
+        has the solution $x(t)=x_0 \e{-t}$. However the similiar DDE
         \begin{equation}
             \begin{cases}
                 \D{x}(t) = -x(t-\tau) & t\geq 0\\
                 x(t) = x_0(t) & -\tau\leq t\leq 0
             \end{cases}
         \end{equation}
-        has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can compute first solutions by method of steps. \ldots{}    
+        has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can compute first solutions by method of steps.   
     \end{example}
 
-
-    \begin{figure}[h]\centering
+    \begin{figure}[b]\centering
         \includegraphics[width=\textwidth]{figures/piecewise-initial-function.png}
     	%\caption{}
     	\label{Piecewise continuous initial function.}
     \end{figure}
-

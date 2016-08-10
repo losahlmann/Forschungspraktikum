@@ -2,7 +2,7 @@
 %\RequirePackage{fixltx2e}
 
 \documentclass[
-    final,
+    draft,
     fontsize=10pt,
     oneside,
     abstract=on,
@@ -179,15 +179,15 @@
 
 %\include{introduction}
 
-%\include{delay-differential-equations}
-
 %\include{intro-logic}
+
+\include{delay-differential-equations}
 
 %\include{delay-differential-dynamic-logic}
 
 %\include{axiomatization-proof-calculus}
 
-\include{example}
+%\include{example}
 
 %\include{conclusion}
 
@@ -195,6 +195,6 @@
 % TODO: choose good citation style. Chicago?
 \nocite{Fulton16LogicProofs,*}
 \bibliographystyle{plain}
-%\bibliography{Bibliography}
+\bibliography{Bibliography}
 
 \end{document}
