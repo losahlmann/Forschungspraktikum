@@ -292,39 +292,42 @@ see \cite{Bellen13NumericalDDEs}
         for all $t\in\compactum{a}{b}$ and $x_j,y_j\in\R^n$ with $\nnorm{x_j},\nnorm{y_j},\leq M$.
     \end{definition}
 
-    \begin{lemma}\label{lm:bounded-lipschitz}
-        Let $f\from\deff\to\R^n$ be continuous and Lipschitz continuous in all but its zeroth argument.
+    % \begin{lemma}\label{lm:bounded-lipschitz}
+    %     Let $f\from\deff\to\R^n$ be continuous and Lipschitz continuous in all but its zeroth argument.
 
-        For any given compact interval $\compactum{a}{b}\subset\R$ and $M>0$, there exists a bound $K>0$ such that
-        \begin{equation}
-            \nnorm{f(t,x_1,\ldots,x_k)}\leq K
-        \end{equation}
-        for all $t\in\compactum{a}{b}$ and $x_j\in\R^n$ with $\nnorm{x_j}\leq M$.
-    \end{lemma}
-    \begin{proof}
-        Let $L_j$ be the Lipschitz constant for the $j$-th argument of $f$ for the given $\compactum{a}{b}$ and $M$. Set $L\defeq\max_j\set{L_j}$.
+    %     For any given compact interval $\compactum{a}{b}\subset\R$ and $M>0$, there exists a bound $K>0$ such that
+    %     \begin{equation}
+    %         \nnorm{f(t,x_1,\ldots,x_k)}\leq K
+    %     \end{equation}
+    %     for all $t\in\compactum{a}{b}$ and $x_j\in\R^n$ with $\nnorm{x_j}\leq M$.
+    % \end{lemma}
+    % \begin{proof}
+    %     Let $L_j$ be the Lipschitz constant for the $j$-th argument of $f$ for the given $\compactum{a}{b}$ and $M$. Set $L\defeq\max_j\set{L_j}$.
 
-        Then for all $t\in\compactum{a}{b}$ and $\range{x_1}{x_k}\in\R^n$ with $\range{\nnorm{x_1}}{\nnorm{x_k}}\leq M$
-        \begin{multline*}
-            \nnorm{f(t,x_1,\ldots,x_k)} \leq \nnorm{f(t,x_1,\ldots,x_k) - f(t,0,\ldots,0)} + \nnorm{f(t,0,\ldots,0)}\\
-            \leq L_j\nnorm{x_j-0} + \nnorm{f(t,0,\ldots,0)} \leq LM+P = K
-        \end{multline*}
-        for every $j\in\set{\range{1}{k}}$. We used the continuity of $f$ on the compact set $\compactum{a}{b}$ for the existence of
-        \begin{equation*}
-            P = \max_{t\in\compactum{a}{b}}\nnorm{f(t,0,\ldots,0)}.
-        \end{equation*}
-    \end{proof}
+    %     Then for all $t\in\compactum{a}{b}$ and $\range{x_1}{x_k}\in\R^n$ with $\range{\nnorm{x_1}}{\nnorm{x_k}}\leq M$
+    %     \begin{multline*}
+    %         \nnorm{f(t,x_1,\ldots,x_k)} \leq \nnorm{f(t,x_1,\ldots,x_k) - f(t,0,\ldots,0)} + \nnorm{f(t,0,\ldots,0)}\\
+    %         \leq L_j\nnorm{x_j-0} + \nnorm{f(t,0,\ldots,0)} \leq LM+P = K
+    %     \end{multline*}
+    %     for every $j\in\set{\range{1}{k}}$. We used the continuity of $f$ on the compact set $\compactum{a}{b}$ for the existence of
+    %     \begin{equation*}
+    %         P = \max_{t\in\compactum{a}{b}}\nnorm{f(t,0,\ldots,0)}.
+    %     \end{equation*}
+    % \end{proof}
 
     \begin{lemma}\label{lm:integral-equation}
         %TODO: compare with ODE lecture notes
         Finding a solution of the initial value problem~\eqref{eq:ivp} is equivalent to solving the integral equation
         \begin{equation*}\label{eq:integral-equation}
-            \begin{cases}
-                x(t) = x_{\tzero}(\tzero) + \integral{\tzero}{t} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))\dx[s] & \text{for } t\geq\tzero\\
-                x(t) = x_{\tzero}(t) & \text{for } t\in [\tzero-\taumax,\tzero]
-            \end{cases}
+            \normalfont
+            \begin{cases*}
+                x(t) = x_{\tzero}(\tzero) + \integral{\tzero}{t} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))\dx[s] & for $t\geq\tzero$\\
+                x(t) = x_{\tzero}(t) & for $t\in\compactum{\tzero-\taumax}{\tzero}$
+            \end{cases*}
         \end{equation*}
-        where $f\from\deff\to\R^n$ is continuous and and Lipschitz continuous in all but its zeroth argument.
+        where $f\from\deff\to\R^n$ is continuous
+        % FIXME: do I nedd Lip here?
+        and Lipschitz continuous in all but its zeroth argument.
         The integral is meant to be componentwise, if $f$ is vector-valued.
     \end{lemma}
     \begin{proof}
@@ -369,7 +372,7 @@ see \cite{Bellen13NumericalDDEs}
     Its proof is an adaption and extension of the existence theorem (Theorem 3.7) given in~\cite{Smith10IntroDDE} and the proof of uniqueness in \cite{PruessWilke10GewDiffGl}.
 
     \begin{theorem}[Existence of a unique solution]
-    \label{thm:solution-existence}
+        \label{thm:solution-existence}
         For a continuous function $f\from\deff\to\R^n$, satisfying the Lipschitz condition (Def.~\ref{def:lipschitz}) in all but its zeroth argument, consider the IVP for a delay differential equation
         \begin{equation}
             \begin{cases}
@@ -383,28 +386,23 @@ see \cite{Bellen13NumericalDDEs}
         % where $\nnorm{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\supnorm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
 
         Then, for each \emph{initial condition} $x_{\tzero}\in\statespace[-\taumax]$ and start time $\tzero\in\R$, there \emph{exists} a \emph{unique local solution} of the IVP on a time interval $\compactum{\tzero-\taumax}{\tzero+T}$.
-        %The duration $T>0$ depends on the sup-norm and the partition of the initial condition.
-        This solution is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$ with partition \eqref{eq:partition}.
+        The duration $T>0$ depends on the sup-norm and the partition of the initial condition, as well as the right hand side $f$.
     \end{theorem}
 
-    
     \begin{proof}
         % FIXME: where sup-norm?
-        Let $\partition{-\taumax=t_0}{t_m=0}$ be the partition of $x_{\tzero}$. As a piecewise continuous function, the initial condition can be bounded on $\closeddelayinterval[-\tau]$ by any $M\geq \supnorm{x_\tzero}$.
+        Let $\partition{-\taumax=t_0}{t_m=0}$ be the partition of $x_{\tzero}$. As a piecewise continuous function, the initial condition can be bounded on $\closeddelayinterval[-\tau]$ by any $M\geq \supnorm{x_\tzero}$.      
         
-        % FIXME: do I need t_0+tau or is just \tau okay? do I need x not to be pw, just cont in proof?        
-        
-        % FIXME: M or 2M?
-        Let $K>0$ be the upper bound for $f$ on the set
-        % TODO: could use any fixed upper bound for time compactum, taumax is arbitrary
+        Since $f$ is continuous, it admits an upper bound $K>0$
+        on the compact set
         \begin{equation*}
             S\defeq\compactum{\tzero}{\tzero+\taumax} \times \set{x\in\R^n\with \nnorm{x}\leq 2M}^k
             %\times \set{y\in\R^n\with \nnorm{y}\leq 2M}
         \end{equation*}
-        given by Lemma~\ref{lm:bounded-lipschitz} and $L>0$ the Lipschitz constant of $f$ for that set.
-        We put $T\defeq\min\set{\taumax,\frac{M}{K}}$ to restrict the integrand $f$ to $S$.
+        given by Lemma~\ref{lm:bounded-lipschitz}
+        Let $L>0$ be the Lipschitz constant of $f$ for that set with respect to its first argument.
+        We put $T\defeq\min\set{\tzero+\taumin,\frac{M}{K}}$ to restrict $f$ as integrand to $S$.
 
-        % FIXME: why continuous? its pw cont? cont in tzero
         We construct a series $(x_{(m)})_{m\in\N_0}$ of piecewise continuous functions, which approximates the solution of the initial value problem.
         Set
         \begin{equation*}
@@ -415,11 +413,14 @@ see \cite{Bellen13NumericalDDEs}
         \end{equation*}
         For $m\in\N_{>0}$ define
         \begin{equation*}
-            x_{(m)}(t)= \begin{cases}
-                x_\tzero(0) + \integral{\tzero}{t}
-                f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots,x_{(m-1)}(s-\tau_k))\dx[s] & \text{for } t\in\compactum{\tzero}{\tzero+T}\\
-                x_\tzero(t-\tzero) & \text{for } t\in\compactum{\tzero-\taumax}{\tzero}
-            \end{cases}
+            x_{(m)}(t)= \begin{dcases*}
+                \begin{multlined}[c][0.57\displaywidth]
+                    x_\tzero(0) + \integral{\tzero}{t}
+                f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots\\
+                \ldots,x_{(m-1)}(s-\tau_k))\dx[s] 
+                \end{multlined} & for $t\in\compactum{\tzero}{\tzero+T}$\\
+                x_\tzero(t-\tzero) \vphantom{\int} & for $t\in\compactum{\tzero-\taumax}{\tzero}$
+            \end{dcases*}
         \end{equation*}
         The integral exists, because the integrand is a composition of a continuous and piecewise continuous function, which is again piecewise continuous (Lemma~\ref{lm:comp-pw-cont}) and hence by Lemma~\ref{lm:pc-integrable} integrable on $\compactum{\tzero}{\tzero+T}$.
 
@@ -439,20 +440,31 @@ see \cite{Bellen13NumericalDDEs}
         % FIXME: why x(m)(t) smaller than 2M, such that K holds?
         % TODO: why do integral and norm commute? once integral over vectors, once over scalars
         \begin{align}\label{eq:bounded-xm}
-            \nnorm*{x_{(m)}(t)} &\leq \nnorm*{x_\tzero(0)} + \int_\tzero^t \nnorm*{f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots,x_{(m-1)}(s-\tau_k))}\dx[s] \nonumber \\
+            \nnorm*{x_{(m)}(t)} &\leq \nnorm*{x_\tzero(0)} + \integral{\tzero}{t} \nnorm*{f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots,x_{(m-1)}(s-\tau_k))}\dx[s] \nonumber \\
             &\leq M + K(t-\tzero) \leq M+KT \nonumber \\
             &\leq 2M
         \end{align}
-        using the triangle inequality and the choice of $T$.
+        using the triangle inequality and the choice of $T\leq\frac{M}{K}$.
 
+        Given the second restriction for $T\leq\tzero+\taumin$
         It follows by the Lipschitz property of $f$ (for its first argument) that
         \begin{multline*}
-            \nnorm*{x_{(m+1)}(t)-x_{(m)}(t)}=\\
-            = \left\lVert\int_\tzero^t f(s,x_{(m)}(s),x_{(m)}(s-\tau_1),\ldots,x_{(m)}(s-\tau_k))\right.\\ \left.- f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots,x_{(m-1)}(s-\tau_k))\dx[s]
-            \vphantom{\int_\tzero^t}\right\rVert\\
-            \leq L \int_\tzero^t \nnorm*{x_{(m)}(s) - x_{(m-1)}(s)}\dx[s]\\
-            \leq \frac{L^m K}{m!} \int_\tzero^t (s-\tzero)^m\dx[s]
+            \nnorm*{x_{(m+1)}(t)-x_{(m)}(t)} =\\
+            \!\begin{multlined}[t][0.8\displaywidth]
+                = \left\lVert\integral{\tzero}{t} f(s,x_{(m)}(s),x_{(m)}(s-\tau_1),\ldots,x_{(m)}(s-\tau_k))\right.\\
+                \left.- f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots,x_{(m-1)}(s-\tau_k))\dx[s]
+                \vphantom{\integral{\tzero}{t}}\right\rVert
+            \end{multlined}\\
+            \!\begin{multlined}[t][0.8\displaywidth]
+                = \left\lVert\integral{\tzero}{t} f(s,x_{(m)}(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))\right.\\
+                \left.- f(s,x_{(m-1)}(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))\dx[s]
+                \vphantom{\integral{\tzero}{t}}\right\rVert
+            \end{multlined}\\
+            \begin{split}   
+            &\leq L \integral{\tzero}{t} \nnorm*{x_{(m)}(s) - x_{(m-1)}(s)}\dx[s]\\
+            &\leq \frac{L^m K}{m!} \integral{\tzero}{t} (s-\tzero)^m\dx[s]
             = \frac{L^m K}{(m+1)!}(t-\tzero)^{m+1}
+            \end{split}
         \end{multline*}
         %We use this bound and the triangle inequality in
         The Cauchy criterion for convergent series (\cite{Gathmann12GDM} 6.13, \cite{Rudin76PrinciplesAnalysis} 3.22) applied to the exponential series states that
@@ -462,11 +474,17 @@ see \cite{Bellen13NumericalDDEs}
         \end{equation*}
         So for any $\varepsilon>0$ exist $k\in\N_0$ and $m\geq k$, such that
         \begin{align*}
-            \nnorm*{x_{(m)}(t)-x_{(k)}(t)} \leq{} & \nnorm*{x_{(m)}(t)-x_{(m-1)}(t)} + \nnorm*{x_{(m-1)}(t)-x_{(m-2)}(t)} + {}\\
-            & + \ldots + \nnorm*{x^{(k+1)}(t)-x^{(k)}(t)}\\
-            \leq{} & \frac{K}{L}\frac{L^m (t-\tzero)^m}{m!} + \frac{K}{L}\frac{L^{m-1} (t-\tzero)^{m-1}}{(m-1)!} + {}\\
-            & + \ldots +\frac{K}{L}\frac{L^{k+1} (t-\tzero)^{k+1}}{(k+1)!}\\
-            \leq{} & \frac{K}{L}\sum_{i=k+1}^m \frac{(LT)^i}{i!} < \varepsilon
+            \nnorm*{x_{(m)}(t)-x_{(k)}(t)}
+            &\leq \!\begin{multlined}[t][0.55\displaywidth]
+                % FIXME: Bug: no space after first line break 
+                \nnorm*{x_{(m)}(t)-x_{(m-1)}(t)} + \nnorm*{x_{(m-1)}(t)-x_{(m-2)}(t)} + {}\\[0.5em]
+                +\ldots+\nnorm*{x_{(k+1)}(t)-x_{(k)}(t)}
+            \end{multlined}\\
+            &\leq \!\begin{multlined}[t][0.6\displaywidth]
+                \frac{K}{L}\frac{L^m (t-\tzero)^m}{m!} + \frac{K}{L}\frac{L^{m-1} (t-\tzero)^{m-1}}{(m-1)!} + {}\\
+                +\ldots+\frac{K}{L}\frac{L^{k+1} (t-\tzero)^{k+1}}{(k+1)!}
+            \end{multlined}\\
+            &\leq \frac{K}{L}\sum_{i=k+1}^m \frac{(LT)^i}{i!} < \varepsilon
         \end{align*}
         for all $t\in [\tzero,\tzero+T]$, i.e. $(x_{(m)})$ is a Cauchy sequence
 
@@ -479,63 +497,67 @@ see \cite{Bellen13NumericalDDEs}
 
         Again, we extend $x$ to $\compactum{\tzero-\taumax}{\tzero}$ with $x_\tzero$, such that $x\in\Cnpw[0]{\compactum{\tzero-\tau}{\tzero+T}}{\R^n}$.
 
-
-        
-
-        Since by the continuity of the supremum norm it follows from~\eqref{eq:bounded-xm} that
+        By the continuity of the sup-norm it follows from~\eqref{eq:bounded-xm} that
         \begin{equation*}
-            \supnorm*{x}=\lim_{m\to\infty}\supnorm*{x_m}\leq 2M
+            \supnorm*{x}=\lim_{m\to\infty}\supnorm*{x_{(m)}}\leq 2M
         \end{equation*}
-        can apply Lipschitz property of $f$
-        \begin{equation*}
-            \sup_{t\in\compactum{\tzero}{\tzero+T}}\nnorm*{f(s,x_m(s),x_m(s-\tau))-f(s,x(s),x(s-\tau))} \leq \sup_{t\in\compactum{\tzero}{\tzero+T}}\nnorm*{x_m(t)-x(t)}
-        \end{equation*}
-        Due to the uniform convergence (conv in sup-norm) of $x_{(m)}\to x$, we get the uniform convergence
-        \begin{equation*}
-            f(s,x_m(s),x_m(s-\tau)) \xrightarrow{m\to\infty} f(s,x(s),x(s-\tau))
-        \end{equation*}
-        and hence the integral and the limit process swap and by
+        can by the Lipschitz property of $f$
         \begin{align*}
-            x(t) = \lim_{m\to\infty} x^{(m+1)} &= x_\tzero(0) + \lim_{m\to\infty}\int_\tzero^t f(s,x^{(m)}(s),x^{(m)}(s-\tau))\dx[s]\\
-            &= x_\tzero(0) + \int_\tzero^t f(s,x(s),x(s-\tau))\dx[s]
+            &\!\begin{multlined}[t][0.8\displaywidth]
+                \sup_{t\in\compactum{\tzero}{\tzero+T}}\lVert f(s,x_{(m)}(s),x_{(m)}(s-\tau_1),\ldots,x_{(m)}(s-\tau_k))\\
+                -f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))\rVert
+            \end{multlined}\\
+            ={} &\!\begin{multlined}[t][0.8\displaywidth]
+                \sup_{t\in\compactum{\tzero}{\tzero+T}}\lVert f(s,x_{(m)}(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))\\
+                -f(s,x(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))\rVert
+            \end{multlined}\\
+            \leq{} &\sup_{t\in\compactum{\tzero}{\tzero+T}}\nnorm*{x_{(m)}(t)-x(t)}
         \end{align*}
-        it follows that $x$ solves the integral equation and hence, by Lemma~\ref{lm:integral-equation},
-        this proves the existence of a solution to the DDE.
+        The uniform convergence (convergence in sup-norm) of $x_{(m)}\to x$, implies the uniform convergence
+        \begin{equation*}
+            f(s,x_{(m)}(s),x_{(m)}(s-\tau_1),\ldots,x_{(m)}(s-\tau_k)) \xrightarrow{m\to\infty} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))
+        \end{equation*}
+        and hence we can commute the integral and the limit process in
+        \begin{align*}
+            x(t) &= \lim_{m\to\infty} x_{(m+1)}\\
+            &= x_\tzero(0) + \lim_{m\to\infty}\integral{\tzero}{t} f(s,x_{(m)}(s),x_{(m)}(s-\tau_1),\ldots,x_{(m)}(s-\tau_k))\dx[s]\\
+            &= x_\tzero(0) + \integral{\tzero}{t} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))\dx[s]
+        \end{align*}
+        It follows that $x$ solves the integral equation \eqref{eq:ivp}, which, by Lemma~\ref{lm:integral-equation}, proves the existence of a solution to the DDE which fulfills the initial condition.
         % TODO: continuous because limit in Banach space, diffable and subdiv see integral equiv lemma
 
+        % FIXME: seq index m, use _m for all
         % TODO: can one solution be on [\tzero, T_2] with T_2<T ?
-        It remains to show uniqueness.
-        Let $x$ and $\bar{x}$ be two solutions of the DDE on $[\tzero,\tzero+T]$.
+        It remains to show the uniqueness of a solution.
+        Let $x$ and $\bar{x}$ be two solutions of the DDE on $\compactum{\tzero}{\tzero+T}$, coinciding on $\compactum{\tzero-\taumax}{\tzero}$.
         By Lemma \ref{lm:integral-equation} they are equivalent to solutions of the integral equations
-        \begin{equation}
-            x(t) = x_\tzero(0) + \int_\tzero^t f(s,x(s),x(s-\tau))\dx[s]
-        \end{equation}
+        \begin{equation*}
+            x(t) = x_\tzero(0) + \integral{\tzero}{t} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))\dx[s]
+        \end{equation*}
         and
-        \begin{equation}
-            \bar{x}(t) = x_\tzero(0) + \int_\tzero^t f(s,\bar{x}(s),\bar{x}(s-\tau))\dx[s]
-        \end{equation}
-        For $t\in [\tzero,T]$, we set
+        \begin{equation*}
+            \bar{x}(t) = x_\tzero(0) + \integral{\tzero}{t} f(s,\bar{x}(s),\bar{x}(s-\tau_1),\ldots,\bar{x}(s-\tau_k))\dx[s]
+        \end{equation*}
+        For $t\in\compactum{\tzero}{\tzero+T}$, we set
         \begin{align*}
-            \rho(t) &:= \nnorm*{x(t)-\bar{x}(t)} \leq \int_\tzero^t \nnorm*{f(s,x(s),x(s-\tau))-f(s,\bar{x}(s),\bar{x}(s-\tau))}\dx[s]\\
-            & \leq L \int_\tzero^t \nnorm*{x(s)-\bar{x}(s)}\dx[s] = L \int_\tzero^t \rho(s)\dx(s)\\
-            &= L \int_\tzero^t \e{-\alpha s}\rho(s)\e{\alpha s}\dx[s] \leq L \sup_{s\in [\tzero,\tzero+T]}\left(\e{-\alpha s}\rho(s)\right)\int_\tzero^t \e{\alpha s}\dx[s]\\
+            \rho(t) &\defeq \nnorm*{x(t)-\bar{x}(t)}
+            \leq \integral{\tzero}{t} \nnorm*{f(s,x(s),x(s-\tau))-f(s,\bar{x}(s),\bar{x}(s-\tau))}\dx[s]\\
+            & =\integral{\tzero}{t} \nnorm*{f(s,x(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))-f(s,\bar{x}(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))}\dx[s]\\
+            & \leq L \integral{\tzero}{t} \nnorm*{x(s)-\bar{x}(s)}\dx[s] = L \integral{\tzero}{t} \rho(s)\dx(s)\\
+            &= L \integral{\tzero}{t} \e{-\alpha s}\rho(s)\e{\alpha s}\dx[s] \leq L \sup_{s\in [\tzero,\tzero+T]}\left(\e{-\alpha s}\rho(s)\right)\integral{\tzero}{t} \e{\alpha s}\dx[s]\\
             & \leq\frac{L}{\alpha}\e{\alpha t} \sup_{s\in [\tzero,\tzero+T]}\left(\e{-\alpha s}\rho(s)\right)
         \end{align*}
-        with $L$ the Lipschitz constant of $f$ on the set ...
-        and $\rho$ is continuous, since $x$ continuous
+        %with $L$ the Lipschitz constant of $f$ on the set ...
+        The continuity of $x$ also asserts the continuity of $\rho$.
         Choosing $\alpha=2L$ and multiplying with $\e{-\alpha t}>0$ leads to
-        \begin{equation}
+        \begin{equation*}
             \rho(t)\e{-2Lt} \leq \frac{1}{2}\sup_{s\in [\tzero,\tzero+T]}\left(\e{-2L s}\rho(s)\right)
-        \end{equation}
+        \end{equation*}
         for all $t\in [\tzero,\tzero+T]$
-        \begin{equation}
+        \begin{equation*}
             0 \leq \sup_{t\in [\tzero,\tzero+T]}\left(\rho(t)\e{-2Lt}\right) \leq \frac{1}{2}\sup_{s\in [\tzero,\tzero+T]}\left(\e{-2L s}\rho(s)\right)
-        \end{equation}
+        \end{equation*}
         That is only possible if $\rho(t)=0$ for all $t\in [\tzero,\tzero+T]$, which means $x(t)=\bar{x}(t)$.
-
-        % TODO: still needed?
-        just proof existence/uniqueness on each peace of continuity proof continuity at knots with Lemma of integral equ
-
     \end{proof}
 
 % TODO: on [\tzero,t_1] DDE equiv to ODE/IntEq
@@ -549,20 +571,25 @@ see \cite{Bellen13NumericalDDEs}
     %     then $x_1(\tzero+t_1)=x_2(\tzero+t_1)$
     %     follows from initial cond $x_1$
     % \end{lemma}
-\begin{corollary}
-    \label{cor:continuability-of-solution}
+    \begin{corollary}
+        \label{cor:continuability-of-solution}
+        just proof existence/uniqueness on each peace of continuity proof continuity at knots with Lemma of integral equ
+        % FIXME: why?
+        This solution is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$ with partition \eqref{eq:partition}.
+        % FIXME: why continuous? its pw cont? cont in tzero
+        % TODO: What is derivation in randpunkten of interval [] ?
+        If in Theorem \ref{theorem-solution-existence} $T=t_1-\tau$, can reapplay theorem with starting point $\tzero=\tzero_{old}+t_1-\tau$. Get existence of unique solution on $[\tzero-\tau,\tzero+S]$ with $S>T$.
+    \end{corollary}
 
-    % TODO: What is derivation in randpunkten of interval [] ?
-    If in Theorem \ref{theorem-solution-existence} $T=t_1-\tau$, can reapplay theorem with starting point $\tzero=\tzero_{old}+t_1-\tau$. Get existence of unique solution on $[\tzero-\tau,\tzero+S]$ with $S>T$.
-\end{corollary}
-
-\begin{corollary}
-    \label{corollary}
-    If f is polynomial in $t$, $x(t)$ and $x(t-\tau)$ then theorem holds
-
-    polynomial -> continuously differentiable -> locally Lipschitz
-% IDEA: can show? init cond bounded by M, and loc sol bounded by M, get glob sol since f glob Lip on set of bounded inputs?
-
+    % IDEA: can show? init cond bounded by M, and loc sol bounded by M, get glob sol since f glob Lip on set of bounded inputs?
+    In the following chapters, we will deal with delay differential equations having a polynomial right-hand side.
+    \begin{corollary}
+        \label{corollary}
+        If $f$ is a polynomial over $t$, $x(t)$ and $x(t-\tau_j)$, then there exists a unique solution to the initial value problem with delay differential equation and piecewise continuous initial condition~\eqref{eq:ivp}.
+    \end{corollary}
+    \begin{proof}
+        As a polynomial, $f$ is continuously differentiable and hence locally Lipschitz. The existence of a unique solution follows from Theorem~\ref{thm:solution-existence} and Corollary~\ref{cor:continuability-of-solution}.
+    \end{proof}
 
     %TODO: put after uniqueness theorem, need uniqueness and existence so that amap well-defined
     The notion of solution for an autonomous DDE as given above can be lifted to be a trajectory $\trajectory[x]$ in the statespace
@@ -574,47 +601,43 @@ see \cite{Bellen13NumericalDDEs}
     The \emph{state} at time $t$ is a function which provides a time limited history up to the current time. This is all information needed to determine (using the DDE) to determine the solution for time $\geq t$. It is defined as $\xbartaut{t}(s)\defeq x(t+s)$ for $s\in [-\tau,0]$. In the case of $t=0$, we simplify the notation to $\xbartau \defeq \xbartaut{0}$.
     This notion of solution is a \emph{dynamical systems} point of view which later turns out to be useful.
 
-  Other results know from ordinary differential equations can be adapted to delay differential equations, such as continuous (or even differentiable) dependence of the solution on initial data and, see \cite{Dads06DDEs} % TODO: add other cites
+    Other results know from ordinary differential equations can be adapted to delay differential equations, such as continuous (or even differentiable) dependence of the solution on initial data, see \cite{Dads06DDEs}. % TODO: add other cites
 
-%TODO: can write DDE (eq??) from definition as
+    %TODO: can write DDE (eq??) from definition as
 
-\begin{equation}
-    \begin{cases}
-        \D{x}=f(\xbartaut{t})\defeq g(\xbartaut{t}(0),\xbartaut{t}(-\tau)) &\text{for } t\geq 0\\
-        x(t)=x_0(t) & \text{for } t\in[-\tau,0]
-    \end{cases}
-\end{equation}
-\end{corollary}
-
-\begin{proof}
-
-\end{proof}
-
-% TODO: non-autonomous -> autonomous
-
-\begin{example}\label{ex:ode-dde}
-    Delay differential equations can often incorporate a much richer behaviour than ordinary differetial equations.
-    The basic ODE IVP
     \begin{equation}
         \begin{cases}
-            \D{x}(t) = -x(t)\\
-            x(0) = x_0
+            \D{x}=f(\xbartaut{t})\defeq g(\xbartaut{t}(0),\xbartaut{t}(-\tau)) &\text{for } t\geq 0\\
+            x(t)=x_0(t) & \text{for } t\in[-\tau,0]
         \end{cases}
     \end{equation}
-    has the solution $x(t)=x_0 e^{-t}$. However the similiar DDE
-    \begin{equation}
-        \begin{cases}
-            \D{x}(t) = -x(t-\tau) & t\geq 0\\
-            x(t) = x_0(t) & -\tau\leq t\leq 0
-        \end{cases}
-    \end{equation}
-    has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can compute first solutions by method of steps. \ldots{}    
-\end{example}
 
 
-\begin{figure}[h]\centering
-    \includegraphics[width=\textwidth]{figures/piecewise-initial-function.png}
-	%\caption{}
-	\label{Piecewise continuous initial function.}
-\end{figure}
+    % TODO: non-autonomous -> autonomous
+
+    \begin{example}\label{ex:ode-dde}
+        Delay differential equations can often incorporate a much richer behaviour than ordinary differetial equations.
+        The basic ODE IVP
+        \begin{equation}
+            \begin{cases}
+                \D{x}(t) = -x(t)\\
+                x(0) = x_0
+            \end{cases}
+        \end{equation}
+        has the solution $x(t)=x_0 e^{-t}$. However the similiar DDE
+        \begin{equation}
+            \begin{cases}
+                \D{x}(t) = -x(t-\tau) & t\geq 0\\
+                x(t) = x_0(t) & -\tau\leq t\leq 0
+            \end{cases}
+        \end{equation}
+        has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can compute first solutions by method of steps. \ldots{}    
+    \end{example}
+
+
+    \begin{figure}[h]\centering
+        \includegraphics[width=\textwidth]{figures/piecewise-initial-function.png}
+    	%\caption{}
+    	\label{Piecewise continuous initial function.}
+    \end{figure}
 
