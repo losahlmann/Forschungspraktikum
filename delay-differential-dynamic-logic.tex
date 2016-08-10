@@ -1,76 +1,60 @@
 \chapter{Delay Differential Dynamic Logic}
 \label{ch:delay-differential-dynamic-logic}
 
+We extent classical differential dynamic logic (\dL) (see e.g.~\cite{Platzer12LogicsDynSys}) with syntax, semantics, axiomatization and proof rules to support reasoning about hybrid dynamical systems with delay.
 
-We extent classical differential dynamic logic (\dL) with syntax, semantics, axiomatization and proof rules to support reasoning about hybrid programs with delay differential equations.
-%Is a super set, \dL is a fragment
+To that purpose, we allow delay differential equations in hybrid programs, which are then called \emph{delay hybrid program} (\dHP).
 
-of hybrid dynamical systems with delay
-called \emph{delay hybrid program} (\dHP)
+The definition of \emph{delay differential dynamic logic} (\ddL) provides all operators of first-order logic, as well as modal operators, in order to specify and verify reachability properties about the state of such \dHPs.
 
-we present a semantic model
+In the language of \ddL, we can not only model hybrid programs with DDEs in the continuous part, but also with temporal differences in the discrete fragment.
+For example a controller which approximates a derivative by a difference quotient.
 
-As \dL
-\ddL is modal logic
-specify and verify reachability properties about the state of a hybrid program
-
-all operators of first-order logic
-modal operators, refer to reachable states
-
-Similiar to first-order logic and essentially as an extension of dL we define delay differential logic
+The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduces to classical \emph{differential dynamic logic}.
 
 
-safety and liveness properties specify
+% Similiar to first-order logic and essentially as an extension of dL we define delay differential logic
+% in general an arbitrary unknown initial function, only conditions on it
 
-\dL in \cite{Platzer15Uniform} no axiom schemata, but finite number of axioms and proof rules (sets of formulas)
-proof rule for substitution on axiom preserving soundness
+% time-invariant
 
-here for simplicity: axioms in infinite sense
-
-also differential form axiomatization of differential equations
-
-\cite{Platzer12Complete,Platzer15Uniform}
-
-\ddL not only allows DDEs for plant but also difference equations in controller, e.g. to approximate a derivative by differential-quotient
-
-in general an arbitrary unknown initial function, only conditions on it
-
-time-invariant
-
+% safety and liveness properties specify
 
 \section{Syntax}
     \label{sec:syntax}
 
-    The syntax of \ddL terms, formulae as well as of \dHPs is defined inductively by grammars in Backus-Naur-form (BNF).
+    The syntax of \ddL terms, formulas as well as of \dHPs is defined inductively by grammars in Backus-Naur-form (BNF).
 
-    We define by $\allvars$ be the set of \emph{all variables} and $\diffvars\defeq\set{\D{x} \with x\in\allvars}$ the corresponding set of \emph{differential symbols}.
+    We define by $\allvars$ be the set of \emph{all variables} and by $\diffvars\defeq\set{\D{x} \with x\in\allvars}$ the corresponding set of \emph{differential symbols}.
     % TODO: call delay or delayed?
-    Let $\constants$ be the set of \emph{all constants}. We denote $\delayvars\defeq\{\x[c] \with x\in\allvars, c\in\constants\}$ the set of \emph{delay variables} and $\delaydiffvars\defeq\{\Dx[c] \with \D{x}\in\diffvars, c\in\constants\}$ the set of \emph{delay differentials}.
-    % TODO: finite sets
+    Let $\constants$ be the set of \emph{all constants}. We denote $\delayvars\defeq\{\x[c] \with x\in\allvars, c\in\constants\}$ as the set of \emph{delay variables} and $\delaydiffvars\defeq\{\Dx[c] \with \D{x}\in\diffvars, c\in\constants\}$ as the set of \emph{delay differentials}.
+    % TODO: finite sets, or sets infinite, but only finitely many symbols in one term/formula
 
     We will usually write variables as $x,y,z\in\allvars$ and their differential symbols as $\D{x},\D{y},\D{z}\in\diffvars$.
-    \emph{Function symbols} $f,g,h$, \emph{constant symbols} $a,b,c$ and \emph{predicate symbols} $p,q,r$ are as in first-order logic (cf.\ Section~\ref{sec:first-order-logic}).
+    \emph{Function symbols} $f,g,h$, \emph{constant symbols} $a,b,c$
+    % FIXME: do I use predicates?
+    %and \emph{predicate symbols} $p,q,r$
+    are as in first-order logic (cf.\ Section~\ref{sec:first-order-logic}).
 
-    Moreover, we write $\astrm,\bstrm$ for \ddL terms, $\asfml,\bsfml$ for \ddL formulae and $\asprg,\bsprg$ for \dHPs. For formulae of first-order logic of real arithmetic (\FOLR), we use the symbols $\asfmlfolR$ and $\bsfmlfolR$.
+    Moreover, we write $\astrm,\bstrm$ for \ddL terms, $\asfml,\bsfml$ for \ddL formulas and $\asprg,\bsprg$ for \dHPs. For formulas of first-order logic of real arithmetic (\FOLR), we use the symbols $\asfmlfolR$ and $\bsfmlfolR$.
 
-    % TODO: parentheses
-
-    \begin{definition}[Terms]\label{def:syntax-terms}
+    % FIXME: parentheses
+    % TODO: maybe dont need x[c], only with s and use t(s) with specified s, as in DDE and extra x[0]=x
+    \begin{definition}[s-Terms]\label{def:syntax-terms}
         The syntax of \emph{terms} of \emph{delay differential dynamic logic} is defined by the following grammar:
-        \begin{equation*}
-            \astrm,\bstrm \Coloneqq
+        \begin{align*}
+            \astrm(s),\bstrm(s) \Coloneqq{}&
                 \x[s] \mid
                 \Dx[s] \mid
-                % TODO: maybe dont need x[c], only with s and use t(s) with specified s, as in DDE and extra x[0]=x
                 \x[b] \mid
                 \Dx[b] \mid
-                c \mid
-                f(\range{\istrm{1}}{\istrm{k}}) \mid
-                \astrm + \bstrm \mid
-                \astrm \cdot \bstrm \mid
-                % FIXME: is term' allowed? diff inv is only a FOLR formula? even for dL valid?
-                \D{(\astrm)}
-        \end{equation*}
+                c \mid\\
+                & f(\range{\istrm{1}(s)}{\istrm{k}(s)}) \mid
+                \astrm(s) + \bstrm(s) \mid
+                \astrm(s) \cdot \bstrm(s) \mid
+                \D{(\astrm(s))}
+        \end{align*}
+        % FIXME: is term' allowed? diff inv is only a FOLR formula? even for dL valid?
         % TODO: line breaks and explination text in syntax
         % \begin{align}
         %     \astrm\Coloneqq{}&\\
@@ -80,31 +64,27 @@ time-invariant
         The symbol $c\in\constants$ stands for a constant value in $\Q$. The constant parameter $b\in\Q_{\leq 0}$ is not allowed to be positive.
     \end{definition}
 
-        % TODO: Fix explanation for term syntax
-        % FIXME: mention \emph{delay vars}
-        %extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
-        All terms implicitely depend on a time parameter $s\in\R_{\leq 0}$, written as $\astrm(s)$. When $s=0$ we abbreviate the notation to $\astrm$.
-        The variable symbol $x$ and the differential symbol $\D{x}$ are the only ones which allow explicitely mentioning this parameter. They are spelled slightly differently using square brackets as $\x[s]$ and $\Dx[s]$, respectively. Note that $s\notin\allvars\cup\diffvars\cup\constants$. It is a special variable.
-        In particular, for $\x[0]$ we write $x$ and $\D{x}$ for $\Dx[0]$.
+    The terms listed in the first line are called \emph{atomic}, as opposed to \emph{composite} terms.
+    % FIXME: what if f like?
+    % TODO: Fix explanation for term syntax
+    % FIXME: mention \emph{delay vars}
+    %extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
+    All terms implicitely depend on a time parameter $s\in\R_{\leq 0}$, written as $\astrm(s)$.
+    If a term $\astrm(s)$ does not contain $\x[s]$ nor $\Dx[s]$, we say $s\notin\astrm(s)$ and abbreviate the notation to $\astrm$.
+    In the same way, we agree on writing $x$ for $\x[0]$ and $\D{x}$ for $\Dx[0]$. Writing $\astrm(b)$ means that all occurences of $s$ in $\astrm(s)$ have been replaced with $b\in\Q_{\leq 0}$.
 
-        Writing $\astrm(-\tau)$ means that all occurences of $s$ in $\astrm$ have been replaced with $-\tau$. The parameter is inherited.
+    % The variable symbol $x$ and the differential symbol $\D{x}$ are the only ones which allow explicitely mentioning this parameter. They are spelled slightly differently using square brackets as $\x[s]$ and $\Dx[s]$, respectively.
+    Note that $s\notin\allvars\cup\diffvars\cup\constants$. It is a special variable.
 
-        The \emph{differential} $\D{(\astrm)}$ of a term $\astrm$ is its syntactic (total) derivation, obtained by standard differentiation rules.
-        Lemma~\ref{lm:derivations} shows the validity of these rules and that the result is again a \ddL term.
+    The \emph{differential} $\D{(\astrm(s))}$ of a term $\astrm(s$ is its syntactic (total) derivation, obtained by standard differentiation rules.
+    Lemma~\ref{lm:derivations} shows the validity of these rules and that the result is again a \ddL term.
 
-
-        % TODO: subtraction and division in terms
-        addition and multiplication
-        allows polynomials,
-        division theoretically possible, when can exclude division by zero
-
-        %The symbol $x$ is only allowed in the right hand side of a DDE and in evolution domain constraints, not in other formulas. The latter may only contain $\x$.
-
+    Subtraction can be defined using addition and multiplication, division would also be possible, if we can exclude any division by zero. The grammar allows in particular the construction of polynomial forms.
 
     \begin{example}
-        Let us consider the \ddL term
+        Let us consider the s-term
         \begin{equation}
-            \astrm(s) = \underbrace{\x[s]}_{\text{var}} + \underbrace{\x[-\tau]}_{\text{const}}.
+            \astrm(s) = \x[s] + \x[-\tau].
         \end{equation}
         Setting $s=-1$ gives the term
         \begin{equation}
@@ -112,25 +92,22 @@ time-invariant
         \end{equation}
     \end{example}
 
-    system model of hybrid programs
-    The grammar defining \emph{delayed hybrid programs} is the same as for classical \HPs (cf. \cite{Platzer15Uniform}) and is shown here for completeness.
+    Delay differential dynamic logic uses hybrid programs with delay differential equations as system model. 
+    The grammar defining these \emph{delayed hybrid programs} is the same as for classical \HPs (cf.~\cite{Platzer15Uniform}).
 
-    \begin{definition}[(Delay) Hybrid Programs]\label{def:syntax-HP}
-        The syntax of \emph{(delay) hybrid programs} (\dHPs) is defined by
+    \begin{definition}[Delay Hybrid Programs]\label{def:syntax-HP}
+        The syntax of \emph{delay hybrid programs} (\dHPs) is defined by
         % TODO: first-order logic of real arithmetic formulas include \x?
         \begin{equation*}
             \asprg,\bsprg \Coloneqq
-                % program constants?
-                %a \mid
-                % FIXME: do I need theta(0), or can I later just say, s not free in theta ?
-                \hupdate{\humod{x}{\astrm(0)}} \mid
-                \Dupdate{\Dumod{\D{x}}{\astrm(0)}} \mid
+                \hupdate{\humod{x}{\astrm}} \mid
+                \Dupdate{\Dumod{\D{x}}{\astrm}} \mid
                 \htest{\asfmlfolR} \mid
                 \hchoice{\asprg}{\bsprg} \mid
                 % TODO: replace ; in HPs
                 \asprg;\bsprg \mid
                 \hrepeat{\asprg} \mid
-                \hevolvein{\D{x}=\astrm(0)}{\ivr}
+                \hevolvein{\D{x}=\astrm}{\ivr}
         \end{equation*}
         % TODO: ddes with mult const delay
         % TODO: program constant
@@ -373,13 +350,13 @@ time-invariant
             % FIXME: use \set instead of {}
             % FIXME: proper use of lforall and mforall
             \imodel{\IddL}{\holdssince{-T}{\dbox{\asprg}{\asfml(s)}}} =\\
-            \begin{split}
+            \begin{aligned}
                 &= \set{\asstate\in\states \with \holdssince{-T}{\mforall{\bsstate\in\states}\holds (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\asfml(s)}}}\\
                 &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{\holdssince{-T}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
                 &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \holdssince{-T}{\bsstate\in\imodel{\IddL}{\asfml(s)}}}}\\
                 &= \set{\asstate\in\states \with \mforall{\bsstate\in\states}{(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\holdssince{-T}{\asfml(s)}}}}\\
                 &= \imodel{\IddL}{\dbox{\asprg}{(\holdssince{-T}{\asfml(s)})}}
-            \end{split}
+            \end{aligned}
         \end{multline*}
     \end{proof}
     
