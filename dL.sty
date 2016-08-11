@@ -482,6 +482,11 @@
 %     {\o@@iget{#1}{#2}}}%
 %   }
 
+%%%%%%%%%%%%%%%%%%%
+% TODO: added this to have assign shown for ddL
+  \renewcommand*{\imodel}[3][]{\@interpretationformatfix{\iget[const]{#2}}{\iget[assign]{#2}}{#3}}
+%%%%%%%%%%%%%%%%%%
+
   %\newmethodinherit{dTL}{iportray}{}
   %\newmethodinherit{dTL}{imodels}{}
   

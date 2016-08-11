@@ -1,9 +1,16 @@
+% FIXME: use \set instead of {}
+% FIXME: proper use of lforall and mforall
+
+
+
+
 % fix bugs: fixes already in kernel now
 %\RequirePackage{fixltx2e}
 
 \documentclass[
     draft,
     fontsize=10pt,
+    a4paper,
     oneside,
     abstract=on,
     toc=bibliographynumbered
@@ -37,6 +44,7 @@
 
 %
 \usepackage[chapter,ruled]{algorithm}
+\usepackage{scrhack} % fix deprecated warning when using algorithm with koma
 
 % For including figures, rotating or scaling text (dont use file extension)
 \usepackage{graphicx}
@@ -65,7 +73,7 @@
     %longinterpret,
     bracketinterpret,%
     bracketmodalinterpret,
-    %fixformat,%
+    fixformat,%
     sidenotecalculus,%
     %silentconst,%
     longseqcontext%
@@ -76,7 +84,7 @@
     %bracketmodalinterpret,% use [[]] for semantics
     bracketinterpret,%
     bracketmodalinterpret,
-    %fixformat,%
+    fixformat,%
     %silentconst,% don't show `const' and `algebra'
     precisenames%
     ]{dL}
@@ -86,14 +94,16 @@
 % own symbol definitions
 \input{mathcommands}
 
+% classic first order logic
 \newcommand{\IFOL}{\interpretation[
     algebra=\model,
-    %const=I,
-    %assign=\assignment,
+    const=I,
+    assign=\assignment,
     % state=\nu,
     universe=\universe
     ]}
 
+% classic modal logic
 \newcommand{\IML}{\interpretation[
     algebra=\model,
     %const=I,
@@ -104,10 +114,12 @@
     universe=\universe
     ]}
 
+% ddL
 \newcommand{\IddL}{\vdLint[
-    const=I,
-    state=\nu,
-    access=\rho
+    const=I, % interpretation
+    state=\nu, % state
+    assign=\past, % time parameter
+    access=\rho % reachability relation
     ]}
 
 %% Settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -153,8 +165,6 @@
         shorten >=-2,
         shorten <=-2
     }
-        %Circle[scale=0.8]}-{Circle[fill=white]}}
-    %my thick box/.style={thick,color=blue}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -173,23 +183,23 @@
 \scndsupervisor{Eric Goubault}
 \scndsupervisorinst{École Polytechnique}
 
-%\maketitle
+% \maketitle
 
-%\include{preface}
+% \include{preface}
 
-%\include{introduction}
+% \include{introduction}
 
-%\include{intro-logic}
+% \include{intro-logic}
 
-\include{delay-differential-equations}
+% \include{delay-differential-equations}
 
-%\include{delay-differential-dynamic-logic}
+\include{delay-differential-dynamic-logic}
 
-%\include{axiomatization-proof-calculus}
+% \include{axiomatization-proof-calculus}
 
-%\include{example}
+% \include{example}
 
-%\include{conclusion}
+% \include{conclusion}
 
 
 % TODO: choose good citation style. Chicago?

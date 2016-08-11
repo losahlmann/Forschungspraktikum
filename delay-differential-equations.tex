@@ -320,7 +320,7 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
             S\defeq\compactum{\tzero}{\tzero+\taumax} \times \set{x\in\R^n\with \nnorm{x}\leq 2M}^k
             %\times \set{y\in\R^n\with \nnorm{y}\leq 2M}
         \end{equation*}
-        given by Lemma~\ref{lm:bounded-lipschitz}
+        %given by Lemma~\ref{lm:bounded-lipschitz}
         Let $L>0$ be the Lipschitz constant of $f$ for that set with respect to its first argument.
         We put $T\defeq\min\set{\tzero+\taumin,\frac{M}{K}}$ to restrict $f$ as integrand to $S$.
 
@@ -380,11 +380,11 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
                 \left.- f(s,x_{(m-1)}(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))\dx[s]
                 \vphantom{\integral{\tzero}{t}}\right\rVert
             \end{multlined}\\
-            \begin{split}   
+            \begin{aligned}   
             &\leq L \integral{\tzero}{t} \nnorm*{x_{(m)}(s) - x_{(m-1)}(s)}\dx[s]\\
             &\leq \frac{L^m K}{m!} \integral{\tzero}{t} (s-\tzero)^m\dx[s]
             = \frac{L^m K}{(m+1)!}(t-\tzero)^{m+1}
-            \end{split}
+            \end{aligned}
         \end{multline*}
         %We use this bound and the triangle inequality in
         The Cauchy criterion for convergent series (\cite{Gathmann12GDM} 6.13, \cite{Rudin76PrinciplesAnalysis} 3.22) applied to the exponential series states that
@@ -500,7 +500,7 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
         This solution is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$ with partition \eqref{eq:partition}.
         % FIXME: why continuous? its pw cont? cont in tzero
         % TODO: What is derivation in randpunkten of interval [] ?
-        If in Theorem~\ref{theorem-solution-existence} $T=\tzero+\taumin$, can reapplay theorem with new starting point $\tzero=\tzero_{old}+t_1-\tau$. Get existence of unique solution on $[\tzero-\tau,\tzero+S]$ with $S>T$.
+        If in Theorem~\ref{thm:solution-existence} $T=\tzero+\taumin$, can reapplay theorem with new starting point $\tzero=\tzero_{old}+t_1-\tau$. Get existence of unique solution on $[\tzero-\tau,\tzero+S]$ with $S>T$.
     \end{corollary}
 
     % IDEA: can show? init cond bounded by M, and loc sol bounded by M, get glob sol since f glob Lip on set of bounded inputs?
