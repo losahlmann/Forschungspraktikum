@@ -1,6 +1,6 @@
 \chapter{Delay Differential Equations}
 
-Differential equations are often used to describe the dynamics of a deterministic system, whose future behaviour depends on the present state.
+Differential equations are often used to describe the dynamics of a deterministic system, whose future behavior depends on the present state.
 For an \emph{ordinary differential equation} (ODE), this state is an element of $\R^n$. The rate of change only depends on the current time instant.
 
 In \emph{delay differential equations} (DDEs) however, the system is influenced by the past through the appearance of a deviated time argument, the current state needs to contain the previous evolution.
@@ -8,7 +8,7 @@ This leads to a functional state space, its elements are functions on a past tim
 For that reason, DDEs belong to the class of \emph{functional differential equations} (FDEs).
 
 % TODO: add \cite
-DDEs often appear in automatic control, where a controller montitors the state of a system in order to make control decisions to adjust this state.
+DDEs often appear in automatic control, where a controller monitors the state of a system in order to make control decisions to adjust this state.
 If there is a delay between the observation and the control action, the differential equation describing the system not only depends on its current state, but also on its past.
 These previous values need to be specify in an initial condition, for at least the time of the longest delay.
 
@@ -16,7 +16,7 @@ These previous values need to be specify in an initial condition, for at least t
 
 Examples of phenomena which have been modeled using delay differential equations include epidemics, traffic flow and vibrations/chattering. See \cite{Falbo06FDEs} and the references therein.
 
-Some methods to solve basic DDEs analytically are presented in \cite{Falbo06FDEs}. Numerical procedures are not as far develloped as for ODEs. 
+Some methods to solve basic DDEs analytically are presented in \cite{Falbo06FDEs}. Numerical procedures are not as far developed as for ODEs. 
 See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous integration algorithm.
 
 \section{Piecewise Continuous Functions}
@@ -124,7 +124,7 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
 \section{Definition of DDEs}
     \label{sec:definition-dde}
 
-    There are different possibilties to define delay differetial equations, depending on what application one has in mind.
+    There are different possibilities to define delay differential equations, depending on what application one has in mind.
     We restrict to a class adapted to our needs and often found in literature, see for example \cite{Roussel04DDEs} and which cover a wide range of applications.
 
     \begin{definition}[Delay Differential Equation]\label{def:dde}
@@ -185,9 +185,9 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
     
     If we restrict the IVP (Eq.~\ref{eq:ivp}) onto an interval $\compactum{\tzero}{\tzero+T_1}$ with $T_1\leq\taumin$, then the values of all $x(t-\tau_j)$ are specified by the initial condition and can thus be replaced by $x_{\tzero}(t-\tau_j)$.
     We obtain an \emph{initial value problem} for an \emph{ordinary differential equation}.
-    If we can solve this IVP, i.e.\ if we can find a solution of the ODE on $\compactum{\tzero}{\tzero+T_1}$, then we can reapplay this method by plugging the computed solution into the DDE and solving the resulting ODE on the interval $\compactum{\tzero+T_1}{\tzero+T_2}$, where again $T_2\leq\taumin$. As long as one can solve the resulting ODE (for suitable $f$ and $x_{\tzero}$, the existence (and uniqueness) of a solution for the ODE is guaranteed by Picard-Lindelöf's theorem), this step can be iterated.
+    If we can solve this IVP, i.e.\ if we can find a solution of the ODE on $\compactum{\tzero}{\tzero+T_1}$, then we can reapply this method by plugging the computed solution into the DDE and solving the resulting ODE on the interval $\compactum{\tzero+T_1}{\tzero+T_2}$, where again $T_2\leq\taumin$. As long as one can solve the resulting ODE (for suitable $f$ and $x_{\tzero}$, the existence (and uniqueness) of a solution for the ODE is guaranteed by Picard-Lindelöf's theorem), this step can be iterated.
 
-    This method, which allows to convert DDE into a ODE on a certain interval, eliminating the explicit dependance on the past by inserting the initial condition, is know as \emph{method of steps}.
+    This method, which allows to convert DDE into a ODE on a certain interval, eliminating the explicit dependence on the past by inserting the initial condition, is know as \emph{method of steps}.
     See \cite{Falbo06FDEs} for examples.
 
     % TODO: Why? It shows that solution is sequence of polynomials
@@ -205,7 +205,7 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
     \begin{definition}[Lipschitz Continuity]\label{def:lipschitz}
         % similar to \cite{pruesswilke10GewDiffGl,Smith10IntroDDE}
         % FIXME: dont I need xtau in right side ??? 
-        A function $f\from\deff\to\R^n$ is called \emph{(locally) Lipschitz continuous} (in its $j$-th argument, refering to $t$ as zeroth argument) if and only if for all $a,b\in\R$ and $M>0$ there is a $L>0$, such that
+        A function $f\from\deff\to\R^n$ is called \emph{(locally) Lipschitz continuous} (in its $j$-th argument, referring to $t$ as zeroth argument) if and only if for all $a,b\in\R$ and $M>0$ there is a $L>0$, such that
         \begin{equation*}
             % TODO: is L(\nnorm*{x-x}+\nnorm*{y-y}) better? is equiv, with different L
             % FIXME: or just say Lipschitz continuous with respect to two other arguments, once for x once for y -> compare proof
@@ -495,12 +495,14 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
     %     follows from initial cond $x_1$
     % \end{lemma}
     \begin{corollary}\label{cor:continuability-of-solution}
-        just proof existence/uniqueness on each peace of continuity proof continuity at knots with Lemma of integral equ
-        % FIXME: why?
-        This solution is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$ with partition \eqref{eq:partition}.
-        % FIXME: why continuous? its pw cont? cont in tzero
-        % TODO: What is derivation in randpunkten of interval [] ?
-        If in Theorem~\ref{thm:solution-existence} $T=\tzero+\taumin$, can reapplay theorem with new starting point $\tzero=\tzero_{old}+t_1-\tau$. Get existence of unique solution on $[\tzero-\tau,\tzero+S]$ with $S>T$.
+        % just proof existence/uniqueness on each peace of continuity proof continuity at knots with Lemma of integral equ
+        % % FIXME: why?
+        % This solution is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$ with partition \eqref{eq:partition}.
+        % % FIXME: why continuous? its pw cont? cont in tzero
+        % % TODO: What is derivation in randpunkten of interval [] ?
+        % If in Theorem~\ref{thm:solution-existence} $T=\tzero+\taumin$, can reapplay theorem with new starting point $\tzero=\tzero_{old}+t_1-\tau$.
+        Continuability of solution.
+        Get existence of unique solution on $[\tzero-\tau,\tzero+S]$ with $S>T$.
     \end{corollary}
 
     % IDEA: can show? init cond bounded by M, and loc sol bounded by M, get glob sol since f glob Lip on set of bounded inputs?
@@ -517,11 +519,11 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
        \cite{Roussel04DDEs}
     If we limit $T$ by $\taumin$, we can see the solution of a delay differential equation as an operator mapping from functions on $\compactum{t-\taumax}{t}$ to functions on $\compactum{t}{t+\taumin}$.
     Then the solution of the initial value problem is the sequence of these functions.
-    derivative not necessarily continuous at knots
-    The notion of solution for an autonomous DDE as given above can be lifted to be a trajectory $\trajectory[x]$ in the statespace
+    % derivative not necessarily continuous at knots
+    The notion of solution for an autonomous DDE as given above can be lifted to be a trajectory $\trajectory$ in the state space
     \begin{equation}
-        \trajectory[x] \from [0,T] \to \statespace[\tau],\\
-        t \mapsto \xbartaut{t}
+        \trajectory \from [0,T] \to \statespace[\tau]%,\\
+        %t \mapsto \xbartaut{t}
     \end{equation}
 
     % The \emph{state} at time $t$ is a function which provides a time limited history up to the current time. This is all information needed to determine (using the DDE) to determine the solution for time $\geq t$. It is defined as $\xbartaut{t}(s)\defeq x(t+s)$ for $s\in [-\tau,0]$. In the case of $t=0$, we simplify the notation to $\xbartau \defeq \xbartaut{0}$.
@@ -535,17 +537,17 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
 
     %TODO: can write DDE (eq??) from definition as
 
-    \begin{equation}
-        \begin{cases}
-            \D{x}=f(\xbartaut{t})\defeq g(\xbartaut{t}(0),\xbartaut{t}(-\tau)) &\text{for } t\geq 0\\
-            x(t)=x_0(t) & \text{for } t\in[-\tau,0]
-        \end{cases}
-    \end{equation}
+    % \begin{equation}
+    %     \begin{cases}
+    %         \D{x}=f(\xbartaut{t})\defeq g(\xbartaut{t}(0),\xbartaut{t}(-\tau)) &\text{for } t\geq 0\\
+    %         x(t)=x_0(t) & \text{for } t\in[-\tau,0]
+    %     \end{cases}
+    % \end{equation}
 
 
 
     \begin{example}\label{ex:ode-dde}
-        Delay differential equations can often incorporate a much richer behaviour than ordinary differetial equations.
+        Delay differential equations can often incorporate a much richer behavior than ordinary differential equations.
         The basic ordinary IVP
         \begin{equation}
             \begin{cases}
@@ -553,7 +555,7 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
                 x(0) = x_0
             \end{cases}
         \end{equation}
-        has the solution $x(t)=x_0 \e{-t}$. However the similiar DDE
+        has the solution $x(t)=x_0 \e{-t}$. However the similar DDE
         \begin{equation}
             \begin{cases}
                 \D{x}(t) = -x(t-\tau) & t\geq 0\\
