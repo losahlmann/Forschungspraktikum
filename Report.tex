@@ -8,7 +8,7 @@
 %\RequirePackage{fixltx2e}
 
 \documentclass[
-    draft,
+    final,
     fontsize=10pt,
     a4paper,
     oneside,
@@ -151,7 +151,8 @@
 
 \tikzset{%
     curve/.style={thick},
-    deriv/.style={thick,dashed},
+    deriv/.style={thick,dotted},
+    term/.style={thick,dashed},
     leftpoint/.style={color=black},
     rightpoint/.style={color=white, draw=black},
     leftp/.style={
@@ -191,7 +192,7 @@
 
 % \include{intro-logic}
 
-% \include{delay-differential-equations}
+\include{delay-differential-equations}
 
 \include{delay-differential-dynamic-logic}
 

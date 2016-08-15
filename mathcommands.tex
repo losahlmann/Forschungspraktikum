@@ -138,9 +138,9 @@
 % FIXME: \constants might need \mkern-2mu
 \newcommand{\constants}[1][]{\mathcal{C}_{#1}}
 \newcommand{\diffvars}{\D{\allvars}}
-\newcommand{\delayvars}{\allvars[\nonposQ]}
+\newcommand{\delayvars}[1][]{\allvars[\constants[#1]]}
 \newcommand{\delayvarswiths}{\allvars\times\constants\cup\set{s}}
-\newcommand{\delaydiffvars}{\diffvars[\nonposQ]}
+\newcommand{\delaydiffvars}[1][]{\diffvars[\constants[#1]]}
 
 % evolution domain constraint
 \renewcommand{\ivr}{\asfmlfolR}

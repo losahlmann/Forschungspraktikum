@@ -267,7 +267,7 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
         From the partition $\partition{t_0}{t_m}$ of $x_{\tzero}$, we define a partition of $\compactum{\tzero}{\tzero+T}$ by
         \begin{equation}\label{eq:partition}
             \mathcal{Z}\defeq \partition{\hat{t}_0}{\hat{t}_p}
-            \defeq \set{\tzero,\tzero+T}\cup\bigcup_{j=1}^{k}\bigcup_{\substack{i=1\\t_i\geq\tau_j}}^{m}\set{t_i+\tau_j}
+            \defeq \set{\tzero,\tzero+T}\cup\bigcup_{j=1}^{k}\bigcup_{\substack{i=1\\t_i\geq\tzero-\tau_j}}^{m}\set{t_i+\tau_j}
         \end{equation}
         Let $t\in\open{\hat{t}_{l-1}}{\hat{t}_l}$ for any $l\in\set{\range{1}{p}}$. If for any $j\in\set{\range{1}{k}}$ and $i\in\set{\range{0}{m}}$ was $t-\tau_j = t_i$, then $t=t_i+\tau_j=\hat{t}_r$ for a $r\in\set{\range{1}{p}}$, which would be a contradiction to the choice of $t$. Hence $t-\tau_j \neq t_i$ for all $j\in\set{\range{1}{k}}$ and $i\in\set{\range{0}{m}}$, what implies that all $s\mapsto x(s-\tau_j)$ are continuous in $t$. Thus the composition
         \begin{equation*}

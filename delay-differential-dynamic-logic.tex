@@ -28,18 +28,20 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
 \section{Syntax}
     \label{sec:syntax}
 
-    The syntax of \ddL terms, formulas as well as of \dHPs is defined inductively by grammars in Backus-Naur-form (BNF).
+    Terms and formulas in \ddL, as well as \dHPs are defined as \emph{words} of finite length, produced by their corresponding grammars in Backus-Naur-form (BNF).
+    % The syntax of is defined inductively by 
 
     We define by $\allvars$ be the set of \emph{all variables} and by $\diffvars\defeq\Set{\D{x} \with x\in\allvars}$ the corresponding set of \emph{differential symbols}.
     % TODO: call delay or delayed?
-    % FIXME: just use \Q as set of constants, they have their semantics
-    % Let $\constants$ be the set of \emph{all constants}.
-    We denote $\delayvars\defeq\Set{\x[b] \with x\in\allvars,\ b\in\nonposQ}$ as the set of \emph{delay variables} and $\delaydiffvars\defeq\Set{\Dx[b] \with \D{x}\in\diffvars,\ b\in\nonposQ}$ as the set of \emph{delay differentials}.
+    Let $\constants\subset\nonposQ$ be the set of \emph{constant parameters}.
+    All three sets are supposed to be finite.
+    We denote $\delayvars\defeq\Set{\x[c] \with x\in\allvars,\ c\in\constants}$ as the set of \emph{delay variables} and $\delaydiffvars\defeq\Set{\Dx[c] \with \D{x}\in\diffvars,\ c\in\constants}$ as the set of \emph{delay differentials}.
     % TODO: finite sets, or sets infinite, but only finitely many symbols in one term/formula, Trm()
     % FIXME: parentheses
 
     We will usually write variables as $x,y,z\in\allvars$ and their differential symbols as $\D{x},\D{y},\D{z}\in\diffvars$.
-    \emph{Function symbols} $f,g,h$ and \emph{constant symbols} $a,b,c\in\constants$
+    % FIXME: just use \Q as set of constants, they have their semantics
+    \emph{Function symbols} $f,g,h$ and \emph{constant symbols} $a,b\in\Q$
     % FIXME: do I use predicates?
     % \emph{predicate symbols} $p,q,r$
     are as in first-order logic (cf.\ Section~\ref{sec:first-order-logic}).
@@ -52,9 +54,9 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             \astrm(s),\bstrm(s) \Coloneqq{}&
                 \x[s] \mid
                 \Dx[s] \mid
-                \x[b] \mid
-                \Dx[b] \mid
-                c \mid\\
+                \x[c] \mid
+                \Dx[c] \mid
+                a \mid\\
                 & f(\range{\istrm{1}(s)}{\istrm{k}(s)}) \mid
                 \astrm(s) + \bstrm(s) \mid
                 \astrm(s) \cdot \bstrm(s) \mid
@@ -67,7 +69,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         %     &\mid \astrm+\bstrm\hfill\text{test}
         % \end{align}
         where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
-        The symbol $c\in\constants$ stands for a constant value in $\Q$. The constant parameters $b\in\nonposQ$ are not allowed to be positive.
+        The symbol $a\in\constants$ stands for a constant value in $\Q$. The constant parameters $c\in\nonposQ$ are not allowed to be positive.
     \end{definition}
 
     The s-terms listed in the first line are called \emph{atomic}, as opposed to the \emph{composite} s-terms in the second line.
@@ -231,7 +233,6 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
     
 
     \begin{definition}[Semantics of s-terms]\label{def:sematic-terms}
-        % FIXME: replace t by \tilde{s}
         The \emph{semantics} of a s-term $\astrm(s)$ in the state $\asstate\in\states$ with respect to the time instant $\past\in\closeddelayinterval$
         is a value in $\R$ and defined inductively as follows:
         \begin{enumerate}
@@ -239,17 +240,17 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             % FIXME: need Cpw for derivatives or only \R?
             \item $\ivaluation{\IddL}{\Dx[s]} = \asstate(\D{x})(\past) \defeq \lim_{t\downto \past} \frac{\asstate(x)(t)-\asstate(x)(\past)}{t-\past}$ (except in $\past=0$)
             % for a differential symbol $\D{x}\in\diffvars$
-            \item $\ivaluation{\IddL}{\x[b]} = \asstate(x)(b)$ for a variable $x\in\allvars$ 
+            \item $\ivaluation{\IddL}{\x[c]} = \asstate(x)(c)$ for a variable $x\in\allvars$ 
             % \item $\ivaluation{\IddL}{\Dx[b]} = \asstate(\D{x})(b)$ for a differential symbol $\D{x}\in\diffvars$ and a constant $b\in\constants$ with $\interpret[b]\in\nonposQ$
-            \item $\ivaluation{\IddL}{\Dx[b]} = \asstate(\D{x})(b) \defeq \lim_{\tilde{s}\downto b} \frac{\asstate(x)(\tilde{s})-\asstate(x)(b)}{\tilde{s}-b}$ (except in $\past=0$)
-            \item $\ivaluation{\IddL}{c} = \interpret[c]$ for a constant $c\in\constants$
+            \item $\ivaluation{\IddL}{\Dx[c]} = \asstate(\D{x})(c) \defeq \lim_{t\downto c} \frac{\asstate(x)(t)-\asstate(x)(c)}{t-c}$ (except in $c=0$)
+            \item $\ivaluation{\IddL}{a} = \interpret[a]$ for a constant $a\in\constants$
             \item $\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}(s)}}{\ivaluation{\IddL}{\istrm{k}(s)}})$ for a function symbol $f$
             \item $\ivaluation{\IddL}{\astrm(s)+\bstrm(s)} = \ivaluation{\IddL}{\astrm(s)} + \ivaluation{\IddL}{\bstrm(s)}$
             \item $\ivaluation{\IddL}{\astrm(s)\cdot\bstrm(s)} = \ivaluation{\IddL}{\astrm(s)} \cdot \ivaluation{\IddL}{\bstrm(s)}$
             % FIXME: derivation of terms with x'?
-            \item $\ivaluation{\IddL}{\D{(\astrm(s))}} = \displaystyle\sum_{\x[b]\in\delayvars} \asstate(\D{x})(\interpret[b])\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[b]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}$
+            \item $\ivaluation{\IddL}{\D{(\astrm(s))}} = \displaystyle\sum_{\x[c]\in\delayvars} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[b]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}$
         \end{enumerate} 
-        where $b\in\nonposQ$ is a non-positive rational number.
+        where $c\in\nonposQ$ is a non-positive rational number.
     \end{definition}
         % FIXME: interpretation of $f$ is a smooth function?
 
@@ -407,9 +408,9 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         \begin{align}
             \D{(\x[s])} &= \Dx[s]\\
             %\Dx[s] &=\\
-            \D{(\x[b])} &= \Dx[b]\\
+            \D{(\x[c])} &= \Dx[c]\\
             %\Dx[b] &=\\
-            \D{(c)} &= 0\\
+            \D{(a)} &= 0\\
             \D{(f(\range{\istrm{1}}{\istrm{k}}))} &=\\
             \D{(\astrm+\bstrm)} &= \D{(\astrm)}+\D{(\bstrm)}\\
             \D{(\astrm\cdot\bstrm)} &= \D{(\astrm)}\cdot\bstrm + \astrm\cdot\D{(\bstrm)}\\
@@ -423,45 +424,46 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             % FIXME: semantics of x': must coincide with deriv of x
             % FIXME: semantics of Derivation: no I(s) and nu(s)
             \ivaluation{\IddL}{\D{(\x[s])}}
-            &= \sum_{\x[b]\in\delayvars} \asstate(\D{x})(b)\frac{\partial\ivaluation{\IddL}{\x[s]}}{\partial \x[b]}+ \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\x[s]}}{\partial \x[s]}\\
+            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\x[s]}}{\partial \x[c]}+ \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\x[s]}}{\partial \x[s]}\\
             &= \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\x[s]}}{\partial \x[s]}
             = \asstate(\D{x})(\past) = \ivaluation{\IddL}{\Dx[s]}
         \end{align*}
         \begin{align*}
             % delayed derivative
-            \ivaluation{\IddL}{\D{(\x[b])}}
-            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\x[b]}}{\partial \x[c]}+ \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\x[b]}}{\partial \x[s]}\\
-            &= \asstate(\D{x})(b)\frac{\partial\ivaluation{\IddL}{\x[b]}}{\partial \x[b]}
-            = \asstate(\D{x})(b) = \ivaluation{\IddL}{\Dx[b]}
+            \ivaluation{\IddL}{\D{(\x[c])}}
+            &= \sum_{\x[d]\in\delayvars} \asstate(\D{x})(d)\frac{\partial\ivaluation{\IddL}{\x[c]}}{\partial \x[d]}+ \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\x[c]}}{\partial \x[s]}\\
+            &= \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\x[c]}}{\partial \x[c]}
+            = \asstate(\D{x})(c) = \ivaluation{\IddL}{\Dx[b]}
         \end{align*}
         \begin{align*}
             % constant
-            \ivaluation{\IddL}{\D{(c)}}
-            &= \sum_{\x[b]\in\delayvars} \asstate(\D{x})(b)\frac{\partial\ivaluation{\IddL}{c}}{\partial \x[b]}\\
-            &= \asstate(\D{x})(c)\frac{\partial\interpret[c]}{\partial \x[c]} = 0
+            \ivaluation{\IddL}{\D{(a)}}
+            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{a}}{\partial \x[c]}\\
+            % &= \asstate(\D{x})(c)\frac{\partial\interpret[a]}{\partial \x[c] 
+            = 0
         \end{align*}
         \begin{align*}
             % chain rule
             % FIXME: derivation of function symbol
-            \ivaluation{\IddL}{\D{(f(\range{\istrm{1}(s)}{\istrm{k}(s)}))}} &= \sum_{\x[b]\in\delayvars} \asstate(\D{x})(b)\frac{\partial\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})}}{\partial \x[b]}\\ &+ \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})}}{\partial \x[s]}
+            \ivaluation{\IddL}{\D{(f(\range{\istrm{1}(s)}{\istrm{k}(s)}))}} &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})}}{\partial \x[c]}\\ &+ \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})}}{\partial \x[s]}
         \end{align*}
         \begin{align*}
             % addition rule
             \ivaluation{\IddL}{\D{(\astrm(s)+\bstrm(s))}}
-            &= \sum_{\x[b]\in\delayvars} \asstate(\D{x})(b)\frac{\partial\ivaluation{\IddL}{\astrm(s)+\bstrm(s)}}{\partial \x[b]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)+\bstrm(s)}}{\partial \x[s]}\\
-            &= \sum_{\x[b]\in\delayvars} \asstate(\D{x})(b)\frac{\partial\ivaluation{\IddL}{\astrm(s)}+\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[b]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}+\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[s]}\\
-            &= \sum_{\x[b]\in\delayvars} \asstate(\D{x})(b)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[b]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}\\
-            &+ \sum_{\x[b]\in\delayvars} \asstate(\D{x})(b)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[b]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[s]}\\
+            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)+\bstrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)+\bstrm(s)}}{\partial \x[s]}\\
+            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)}+\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}+\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[s]}\\
+            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}\\
+            &+ \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[s]}\\
             &= \ivaluation{\IddL}{\D{(\astrm(s))}} + \ivaluation{\IddL}{\D{(\bstrm(s)}}
             = \ivaluation{\IddL}{\D{(\astrm(s))}+\D{(\bstrm(s))}}
         \end{align*}
         \begin{align*}
             % multiplication rule
             \ivaluation{\IddL}{\D{(\astrm(s)\cdot\bstrm(s))}}
-            &= \sum_{\x[b]\in\delayvars} \asstate(\D{x})(b)\frac{\partial\ivaluation{\IddL}{\astrm(s)\cdot\bstrm(s)}}{\partial \x[b]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)\cdot\bstrm(s)}}{\partial \x[s]}\\
-            &= \sum_{\x[b]\in\delayvars} \asstate(\D{x})(b)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[b]} + \asstate(\D{x})(\past)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[s]}\\
-            &= \sum_{\x[b]\in\delayvars} \asstate(\D{x})(b)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[b]}\ivaluation{\IddL}{\bstrm(s)} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}\ivaluation{\IddL}{\bstrm(s)}\\
-            &+ \sum_{\x[b]\in\delayvars} \asstate(\D{x})(b)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[b]}\ivaluation{\IddL}{\astrm(s)} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[s]}\ivaluation{\IddL}{\astrm(s)}\\
+            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)\cdot\bstrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)\cdot\bstrm(s)}}{\partial \x[s]}\\
+            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[s]}\\
+            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[c]}\ivaluation{\IddL}{\bstrm(s)} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}\ivaluation{\IddL}{\bstrm(s)}\\
+            &+ \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[c]}\ivaluation{\IddL}{\astrm(s)} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[s]}\ivaluation{\IddL}{\astrm(s)}\\
             &= \ivaluation{\IddL}{\D{(\astrm(s))}}\cdot\ivaluation{\IddL}{\bstrm(s)} + \ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\D{(\bstrm(s)}}\\
             &= \ivaluation{\IddL}{\D{(\astrm(s))}\cdot\bstrm(s)+\astrm(s)\cdot\D{(\bstrm(s)}}
         \end{align*}
@@ -472,7 +474,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         We define by
         \begin{equation*}
             % TODO: what if x'[] in term ?
-            \constants[\astrm] \defeq \Set{b\in\constants \with \mexists{\x[b]\in\vars}\holds\x[b]\in\astrm(s)}
+            \constants[\astrm] \defeq \Set{c\in\constants \with \mexists{\x\in\allvars}\holds\x[c]\in\astrm(s)}
         \end{equation*}
         the set of constant parameter symbols occuring in the s-term $\astrm(s)$.
 
@@ -490,9 +492,9 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         % FIXME: differnt vars possible, not just x
         \begin{equation*}
             \sampledtraj[\past]{\astrm}(t) \defeq \colvec{
-                \trajectory(t)(x)(b_1)\\
+                \trajectory(t)(x)(c_1)\\
                 \vdots\\
-                \trajectory(t)(x)(b_n)
+                \trajectory(t)(x)(c_n)
             % \\ \vdots\\ \trajectory(t)(x_m)(c_1)\\ \vdots\\ \trajectory(t)(x_m)(c_n)
             }
         \end{equation*}
@@ -500,8 +502,8 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
     % TODO: alternatively, could maybe have \trajectory Fréchet-diffable
 
     The following lemma shows the consistency of the semantics for differentials with the semantics of the evolution of a delay differential equation.
-    This means that along a DDE, the values of differential symbols coincide with time derivative of the value of the corresponding variable.
-    Derivative means right-hand in points of partition.
+    This means that along a DDE, the values of differential symbols coincide with the time derivative of the value of the corresponding variable.
+    % Derivative means right-hand in points of partition.
 
     \begin{lemma}[Differential Lemma]\label{lm:differential-lemma}
         % FIXME: check if everywhere correctly used: \states=(\statespace)^n
@@ -528,48 +530,52 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         %We show that value of a term is piecewise differentiable with partition $\mathcal{Z}$.
         % FIXME: c used for symbol and its interpretation
         % FIXME: mult tau
-        Let in the following $\past\in\closeddelayinterval$ be arbitray but fixed, such that $s$ can be treated as a constant, in the same way as any $b\in\nonposQ$.
-        Depending on the s-term $\bstrm(s)$ and the fixed $\past$, we define a partition $\mathcal{Z}_\bstrm^\past=\partition{\hat{t}_0}{\hat{t}_k}$ of $\compactum{0}{\duration}$ by
+        Let in the following $\past\in\closeddelayinterval$ be arbitray but fixed, such that $s$ can be treated as a constant, in the same way as any $c\in\nonposQ$.
+        Depending on the s-term $\bstrm(s)$ and the fixed $\past$, we define a partition $\mathcal{Z}_\bstrm^\past=\partition{\hat{t}_0}{\hat{t}_p}$ of $\compactum{0}{\duration}$ by
         % FIXME: what when r>T ? Z={0,r}
         \begin{equation*}
-            \mathcal{Z}_\bstrm^s \defeq \set{0,\duration}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i-c}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i+\tau_j-c}
+            \mathcal{Z}_\bstrm^\past \defeq \set{0,\duration}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i-c}\cup \bigcup_{i=0}^m\bigcup_{j=1}^k\bigcup_{\substack{c\in \mathcal{K}\\ t_i+\tau_j\geq c}}\set{t_i+\tau_j-c}
         \end{equation*}
         where $\mathcal{K}\defeq\constants[\bstrm]\cup\constants[\astrm]\cup\set{\past}$ is the set of constant symbols (or their interpretations/valuations) appeaering in the term $\bstrm$ and the right hand side of the DDE.
+
+        % FIXME
+        in side of a continuous diffable piece of init cond or solution (cf.)
+
         The set $\mathcal{Z}_\bstrm^s$ is finite and non-empty, since it contains at least the values $0$ and $\duration$.
         
         We show first that $\trajectory(t)(x)(c)$ is piecewise continuously differentiable in $t$ for all $c\in\mathcal{K}$ with partition $\mathcal{Z}_\bstrm^s$:
 
-        Let $c\in\mathcal{K}$ and $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$.
-        Assume that $\zeta+c=t_i$ for some $i$. That is $\zeta=t_i-c=\hat{t}_k$ for some $k$. This is not possible by the choice of $\zeta$ lying between two consequtive $\hat{t}_j$.
-        In the same way for $\zeta+c=t_i+\tau_j$.
-        Hence for $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ it holds that $\zeta+c\neq t_i$ and $\zeta+c\neq t_i+\tau_j$ for all $c\in\mathcal{K}$ and for all $i\in\set{\range{0}{m}}, j\in\set{\range{1}{k}}$.
-        in side of a continuous diffable piece of init cond or solution
+        Let $c\in\mathcal{K}$ and $\zeta\in(\hat{t}_l,\hat{t}_{l+1})$.
+        Assume that $\zeta+c=t_i$ for some $i$. This implies $\zeta=t_i-c=\hat{t}_k$ for some $k$ by the definition of the partition. This is not possible by the choice of $\zeta$ lying between two consequtive $\hat{t}_l$.
+        We apply the same argumentation to the assumption $\zeta+c=t_i+\tau_j$.
+        These contradictions show that for $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$, it holds that $\zeta+c\neq t_i$ and $\zeta+c\neq t_i+\tau_j$ for all $c\in\mathcal{K}$ and for all $i\in\Set{\range{0}{m}}$, $j\in\set{\range{1}{k}}$.
 
-        We need to distinguish two cases.
+
+        We now distinguish two cases.
 
         % FIXME: which cases includes =0 ?
-        If $c+\zeta<0$, it holds by the definition of the DDE semantics (Definition~\ref{def:semantic-HP}(\ref{itm:sem-HP-DDE})) that $\trajectory(\zeta)(x)(c)=\trajectory(0)(x)(c+\zeta)$, which is continuously differentiable as initial condition, if $\zeta+c\neq t_i$. Then
+        If $\zeta+c<0$, it holds by the definition of the DDE semantics (Definition~\ref{def:semantic-HP}(\ref{itm:sem-HP-DDE})) that $\trajectory(\zeta)(x)(c)=\trajectory(0)(x)(\zeta+c)$, which is continuously differentiable as initial condition, if $\zeta+c\neq t_i$. Hence it follows
         \begin{equation*}
-            \DD{\trajectory(t)(x)(c)}{t}(\zeta)=\DD{\trajectory(0)(x)(\past)}{\past}(c+\zeta)=\trajectory(0)(\D{x})(c+\zeta)=\trajectory(\zeta)(\D{x})(c)
+            \DD{\trajectory(t)(x)(c)}{t}(\zeta)=\DD{\trajectory(0)(x)(\past)}{\past}(\zeta+c)=\trajectory(0)(\D{x})(\zeta+c)=\trajectory(\zeta)(\D{x})(c)
         \end{equation*}
         For the limits it holds
         \begin{align*}
             \lim_{\zeta\downto\hat{t}_j} \DD{\trajectory(t)(x)(c)}{t}(\zeta)
-                & = \lim_{\zeta\downto t_i-c} \DD{\trajectory(0)(x)(\past)}{\past}(c+\zeta)\\
+                & = \lim_{\zeta\downto t_i-c} \DD{\trajectory(0)(x)(\past)}{\past}(\zeta+c)\\
                 & = \lim_{\zeta\downto t_i} \DD{\trajectory(0)(x)(\past)}{\past}(\zeta)
                 %=\lim_{s\downto t_i}\trajectory(0)(\D{x})(s)
                 = \trajectory(0)(\D{x})(t_i)
         \end{align*}
         And analogously for the existence of the limit for $\zeta\upto\hat{t}_{j+1}$
 
-        If $c+\zeta\geq 0$, then $\trajectory(\zeta)(x)(\past)=\trajectory(\zeta+c)(x)(0)$ is differentiable in $\zeta$ with $\trajectory(\zeta)(\D{x})(\past) = \DD{\trajectory(t)(x)(\past)}{t}(\zeta)$ by the semantics of DDEs, if $\zeta+c\neq t_i+\tau$.
+        If $\zeta+c\geq 0$, then $\trajectory(\zeta)(x)(\past)=\trajectory(\zeta+c)(x)(0)$ is differentiable in $\zeta$ with $\trajectory(\zeta)(\D{x})(\past) = \DD{\trajectory(t)(x)(\past)}{t}(\zeta)$ by the semantics of DDEs, if $\zeta+c\neq t_i+\tau$.
         % FIXME: jumppoints and pw conitnuity/diffable
         By Theorem~\ref{thm:solution-existence}: continuous and pw diffable with partition $Z$.
 
         % By definition, $\hat{t}_j=t_i-\hat{c}$ for some $i\in\set{\range{0}{m}}$ and $\hat{c}\in\mathcal{K}$.
-        % If $c\geq\hat{c}$ then $\zeta>\hat{t}_j$ implies $c+\zeta > c+t_i-\hat{c}\geq t_i$.
+        % If $c\geq\hat{c}$ then $\zeta>\hat{t}_j$ implies $\zeta+c > c+t_i-\hat{c}\geq t_i$.
         % If $c<\hat{c}$, then $\zeta < \hat{t}_{j+1} \leq t_i-c$ (needs explanation: tjp1 is smallest next point, construct one, must be greater or equal) and hence $\zeta+c<t_i$.
-        % So whenever $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ is $c+\zeta\neq t_i$ for all $i=\range{0}{m}$ and $c\in\mathcal{K}$
+        % So whenever $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$ is $\zeta+c\neq t_i$ for all $i=\range{0}{m}$ and $c\in\mathcal{K}$
 
         %On each $\zeta\in(\hat{t}_k,\hat{t}_{k+1})$ is each $\ivaluation{\iconcat[state={\trajectory(\zeta)},assign=s]{\IddL}}{\x[c]}$ diffable in $\zeta$
 
