@@ -562,11 +562,13 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
                 x(t) = x_0(t) & -\tau\leq t\leq 0
             \end{cases}
         \end{equation}
-        has a much richer dynamics, but solution (as series) for $x_0\equiv 1$, can compute first solutions by method of steps.   
+        has a much complexer dynamics, which is shown in Figure~\ref{fig:plot-ex-dde} for $x_0(t)=1$. The solution can be computed as a series of polynomial pieces by the method of steps.   
     \end{example}
 
-    \begin{figure}[b]\centering
-        \includegraphics[width=\textwidth]{figures/piecewise-initial-function.png}
-    	%\caption{}
-    	\label{Piecewise continuous initial function.}
+    % TODO: order caption
+    \begin{figure}[b]
+        \centering
+        \input{figures/plot-example-dde.tikz}
+    	\caption{Example~\ref{ex:ode-dde} of a delay differential equation with initial condition.}
+    	\label{fig:plot-ex-dde}
     \end{figure}
