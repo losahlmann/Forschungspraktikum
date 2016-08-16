@@ -481,10 +481,13 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         Note that this set does not contain $s$, since it is, as a special purpose symbol, not in $\constants$.
     \end{definition}
 
-    % TODO: find better name for 'augmented trajectory'
     \begin{definition}[Sampled trajectory]\label{def:sampled-trajectory}
+        Since a s-term $\astrm(s)$ only comprises a finite number of atomic terms, its valuation can also be seen as a mapping
+        \begin{equation*}
+            \ivaluation{\interpretation[const=\interpret]}{\astrm(s)} \from \R^{\abs{\mathcal{K}}} \to \R  
+        \end{equation*}
         % TODO: what about x'
-        Since a s-term $\astrm(s)$ only comprises a finite number of atomic terms, its valuation can also be seen as a mapping from the concrete values for each element of $\mathcal{K}\defeq \delayvars[\astrm] \cup \delaydiffvars[\astrm] \cup \Set{\x[s], \Dx[s]}$ into $\R$, if we assign a fixed $r\in\closeddelayinterval$ to $s$.
+        from the concrete values for each element of $\mathcal{K}\defeq \delayvars[\astrm] \cup \delaydiffvars[\astrm] \cup \Set{\x[s], \Dx[s]}$ into the reals, if we assign a fixed $r\in\closeddelayinterval$ to $s$.
 
         % , instead of using the functional state space as domain.
 
@@ -515,51 +518,40 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         \begin{equation*}
             \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(\bstrm(s))}} = \DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{\bstrm(s)}}{t}(\zeta)
         \end{equation*}
-        % FIXME: equality holds also in jump points?
         As in Definition~\ref{def:pw-cont-diff}, the derivative at a discontinuity point of is to be understood as right derivative.
-        % FIXME: where do I need this satisfaction in proof, relation to DDE: semantics of DDE
     \end{lemma}
     \begin{proof}
         \label{prf:differential-lemma}
         % TODO: what if x'[] in term ?
         % TODO: in init cond: x and x' need to match, ie d/ds x[s] = x'[s], same partition, specification of x' in init cond only needed when referenced to it later
         % FIXME: oBdA: t_0=0
-        %Let $\trajectory\from\compactum{0}{r}$
 
         Without loss of generality, we restrict in this proof to a single variable $x$. If $\bstrm(s)$ depends on more variables, consider the union of their partitions in the initial condition.
         Let $\partition{-T=t_0}{t_m=0}$ be the partition of the initial condition $\trajectory(0)(x)\in\statespace$.
-        %We show that value of a term is piecewise differentiable with partition $\mathcal{Z}$.
-        % FIXME: c used for symbol and its interpretation
-        % FIXME: mult tau
-        Let in the following $\past\in\closeddelayinterval$ be arbitray but fixed, such that $s$ can be treated as a constant, in the same way as any $c\in\nonposQ$.
-        Depending on the s-term $\bstrm(s)$ and the fixed $\past$, we define a partition $\mathcal{Z}_\bstrm^\past=\partition{\hat{t}_0}{\hat{t}_p}$ of $\compactum{0}{\duration}$ by
-        % FIXME: what when r>T ? Z={0,r}
+
+        We choose an arbitray but fixed valuation for $s$ from $\closeddelayinterval$, such that the symbol $s$ can be treated as a constant, in the same way as any $c\in\nonposQ$.
+        Depending on the s-term $\bstrm(s)$ and the fixed $s$, we define a partition $\mathcal{Z}_\bstrm^s=\partition{\hat{t}_0}{\hat{t}_p}$ of $\closedopen{0}{\infty}$ (which can be limited to $\compactum{0}{R}$) by
         \begin{equation*}
-            \mathcal{Z}_\bstrm^\past \defeq \set{0,\duration}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i-c}\cup \bigcup_{i=0}^m\bigcup_{j=1}^k\bigcup_{\substack{c\in \mathcal{K}\\ t_i+\tau_j\geq c}}\set{t_i+\tau_j-c}
+            \mathcal{Z}_\bstrm^s \defeq \set{0}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i-c}\cup \bigcup_{i=0}^m\bigcup_{j=1}^k\bigcup_{\substack{c\in \mathcal{K}\\ t_i+\tau_j\geq c}}\set{t_i+\tau_j-c}
         \end{equation*}
-        where $\mathcal{K}\defeq\constants[\bstrm]\cup\constants[\astrm]\cup\set{\past}$ is the set of constant symbols (or their interpretations/valuations) appeaering in the term $\bstrm$ and the right hand side of the DDE.
-
+        where $\mathcal{K}\defeq\constants[\bstrm]\cup\set{s}$ is the set of the constants (the interpretations/valuations of the constant symbols) appearing in the term $\bstrm$ and $\tau_j\in\constants[\astrm]$ the delays in the right hand side of the DDE.
+        The set $\mathcal{Z}_\bstrm^s$ is finite and non-empty, since it contains at least the value $0$ and $\duration$.
         % FIXME
-        in side of a continuous diffable piece of init cond or solution (cf.)
+        % in side of a continuous diffable piece of init cond or solution (cf.)
 
-        The set $\mathcal{Z}_\bstrm^s$ is finite and non-empty, since it contains at least the values $0$ and $\duration$.
-        
         We show first that $\trajectory(t)(x)(c)$ is piecewise continuously differentiable in $t$ for all $c\in\mathcal{K}$ with partition $\mathcal{Z}_\bstrm^s$:
 
         Let $c\in\mathcal{K}$ and $\zeta\in(\hat{t}_l,\hat{t}_{l+1})$.
         Assume that $\zeta+c=t_i$ for some $i$. This implies $\zeta=t_i-c=\hat{t}_k$ for some $k$ by the definition of the partition. This is not possible by the choice of $\zeta$ lying between two consequtive $\hat{t}_l$.
         We apply the same argumentation to the assumption $\zeta+c=t_i+\tau_j$.
         These contradictions show that for $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$, it holds that $\zeta+c\neq t_i$ and $\zeta+c\neq t_i+\tau_j$ for all $c\in\mathcal{K}$ and for all $i\in\Set{\range{0}{m}}$, $j\in\set{\range{1}{k}}$.
+        We now distinguish two cases:
 
-
-        We now distinguish two cases.
-
-        % FIXME: which cases includes =0 ?
         If $\zeta+c<0$, it holds by the definition of the DDE semantics (Definition~\ref{def:semantic-HP}(\ref{itm:sem-HP-DDE})) that $\trajectory(\zeta)(x)(c)=\trajectory(0)(x)(\zeta+c)$, which is continuously differentiable as initial condition, if $\zeta+c\neq t_i$. Hence it follows
         \begin{equation*}
             \DD{\trajectory(t)(x)(c)}{t}(\zeta)=\DD{\trajectory(0)(x)(\past)}{\past}(\zeta+c)=\trajectory(0)(\D{x})(\zeta+c)=\trajectory(\zeta)(\D{x})(c)
         \end{equation*}
-        For the limits it holds
+        For the right limit it holds
         \begin{align*}
             \lim_{\zeta\downto\hat{t}_j} \DD{\trajectory(t)(x)(c)}{t}(\zeta)
                 & = \lim_{\zeta\downto t_i-c} \DD{\trajectory(0)(x)(\past)}{\past}(\zeta+c)\\
@@ -567,11 +559,15 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
                 %=\lim_{s\downto t_i}\trajectory(0)(\D{x})(s)
                 = \trajectory(0)(\D{x})(t_i)
         \end{align*}
-        And analogously for the existence of the limit for $\zeta\upto\hat{t}_{j+1}$
+        And analogously for the existence of the left limit for $\zeta\upto\hat{t}_{j+1}$
 
-        If $\zeta+c\geq 0$, then $\trajectory(\zeta)(x)(\past)=\trajectory(\zeta+c)(x)(0)$ is differentiable in $\zeta$ with $\trajectory(\zeta)(\D{x})(\past) = \DD{\trajectory(t)(x)(\past)}{t}(\zeta)$ by the semantics of DDEs, if $\zeta+c\neq t_i+\tau$.
+        If $\zeta+c\geq 0$, then $\trajectory(\zeta)(x)(\past)=\trajectory(\zeta+c)(x)(0)$ is differentiable in $\zeta$ with
+        \begin{equation*}
+            \trajectory(\zeta)(\D{x})(\past) = \DD{\trajectory(t)(x)(\past)}{t}(\zeta)
+        \end{equation*}
+        by the semantics of the DDEs, if $\zeta+c\neq t_i+\tau_j$.
         % FIXME: jumppoints and pw conitnuity/diffable
-        By Theorem~\ref{thm:solution-existence}: continuous and pw diffable with partition $Z$.
+        % By Theorem~\ref{thm:solution-existence}: continuous and pw diffable with partition $Z$.
 
         % By definition, $\hat{t}_j=t_i-\hat{c}$ for some $i\in\set{\range{0}{m}}$ and $\hat{c}\in\mathcal{K}$.
         % If $c\geq\hat{c}$ then $\zeta>\hat{t}_j$ implies $\zeta+c > c+t_i-\hat{c}\geq t_i$.
@@ -580,23 +576,28 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
 
         %On each $\zeta\in(\hat{t}_k,\hat{t}_{k+1})$ is each $\ivaluation{\iconcat[state={\trajectory(\zeta)},assign=s]{\IddL}}{\x[c]}$ diffable in $\zeta$
 
-        %f in terms smooth, hence each term on this open interval diffable
-        Let $\sampledtraj[s]{\astrm}$ be the $\bstrm$-augmented trajectory for the considered delay differential equation.
-        By the transition semantics of DDEs (Definition~\ref{def:semantic-HP}\,(\ref{itm:sem-HP-DDE})), it holds for $\zeta+c\geq 0$ (along sol of DDE)
-        $\trajectory(\zeta)(\D{x})(c) = \DD{\trajectory(t)(x)(c)}{t}(\zeta)$, and for $\zeta+c\leq 0$ (init cond, match demanded)
+        % TODO: f in terms smooth, hence each term on this open interval diffable
+        Let $\sampledtraj[s]{\bstrm}$ be the $\bstrm$-sampled trajectory for the considered delay differential equation and the fixed $s$.
+        It follows with the above results
+        % By the transition semantics of DDEs (Definition~\ref{def:semantic-HP}\,(\ref{itm:sem-HP-DDE})), it holds for $\zeta+c\geq 0$ (along sol of DDE)
+        % $\trajectory(\zeta)(\D{x})(c) = \DD{\trajectory(t)(x)(c)}{t}(\zeta)$, and for $\zeta+c\leq 0$ (init cond, match demanded)
 
         \begin{align*}
-            \DD{\ivaluation{\iconcat[state={\sampledtraj[\past]{\bstrm}(\zeta)}]{\IddL}}{\bstrm(s)}}{t}(\zeta)
-            &= \D{\left(\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm(s)}\compose\sampledtraj[\past]{\bstrm}(\zeta)\right)}
-            = \gradient{\ivaluation{\iconcat[state={}]{\IddL}}{\bstrm(s)}}(\sampledtraj[\past]{\bstrm}(\zeta))\cdot\DD{\sampledtraj[\past]{\bstrm}}{t}(\zeta)\\
-            &= \sum_{\x[c]\in\delayvars}\DD{\trajectory(t)(x)(c)}{t}(\zeta) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\sampledtraj[\past]{\bstrm}(\zeta)}]{\IddL}}{\bstrm(s)}}\\
+            \DD{\ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign={}]{\IddL}}{\bstrm}}{t}
+            &= \D{\left(\ivaluation{\iconcat[state={},assign={}]{\IddL}}{\bstrm}\compose\sampledtraj[s]{\bstrm}(\zeta)\right)}
+            = \gradient{\ivaluation{\iconcat[state={},assign={}]{\IddL}}{\bstrm}}(\sampledtraj[s]{\bstrm}(\zeta))\cdot\DD{\sampledtraj[s]{\bstrm}}{t}(\zeta)\\
+            &= \sum_{\x[c]\in\delayvars[\bstrm]}\DD{\trajectory(t)(x)(c)}{t}(\zeta) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
             % &= \sum_{\x[c]\in\delayvarswiths}\trajectory(\zeta)(\Dx[c])(s) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
-            &= \sum_{\x[b]\in\delayvars}\trajectory(\zeta)(\D{x})(c) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)}]{\IddL}}{\bstrm(s)}}\\
+            &= \sum_{\x[c]\in\delayvars}\trajectory(\zeta)(\D{x})(c) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
             %&= \sum_{\x[c]\in\delayvarswiths}\asstate(\D{x})(c) \Dp[{(\x[c])}]{\ivaluation{\IddL}{\bstrm}}{(s)}\\
-            &= \ivaluation{\iconcat[state=\trajectory(\cdot)]{\IddL}}{\D{(\bstrm(s))}}(\zeta)
+            &= \ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign={}]{\IddL}}{\D{(\bstrm})}
         \end{align*}
-        % FIXME: limits
         where each sum only consits of finitely many summands.
+        Moreover, it holds for the right limits
+        \begin{equation*}
+            \lim_{\zeta\downto\hat{t}_j} \DD{\ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{t} = \ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\hat{t}_j)},assign={}]{\IddL}}{\D{(\bstrm})}
+        \end{equation*}
+        and the left limits for $\zeta\upto\hat{t}_{j+1}$ exist.
     \end{proof}
 
     \begin{figure}[t]
