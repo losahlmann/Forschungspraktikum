@@ -520,6 +520,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         % FIXME: where do I need this satisfaction in proof, relation to DDE: semantics of DDE
     \end{lemma}
     \begin{proof}
+        \label{prf:differential-lemma}
         % TODO: what if x'[] in term ?
         % TODO: in init cond: x and x' need to match, ie d/ds x[s] = x'[s], same partition, specification of x' in init cond only needed when referenced to it later
         % FIXME: oBdA: t_0=0
@@ -598,32 +599,41 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         where each sum only consits of finitely many summands.
     \end{proof}
 
-    \begin{figure}
+    \begin{figure}[t]
         \centering
         \input{figures/differential-lemma}
-        \caption{Plot for Example~\ref{ex:differential-lemma}, initial condition and solution of DDE (solid), derivatives (dashed), value of term ().}
-        \label{fig:not-allowed}
+        \caption{Plot for Example~\ref{ex:differential-lemma}, initial condition and solution of DDE (dashed), derivatives (dotted), value of term (solid) and the derivative of the term (dash-dotted).}
+        \label{fig:differential-lemma}
     \end{figure}
 
     \begin{example}\label{ex:differential-lemma}
+        As an example for the construction of the partition in Proof~\ref{prf:differential-lemma}, consider the s-term $\bstrm(s)\equiv x+\x[-3.5]+\x[s]$ together with the DDE $\D{x}=\x[-4]$.
+        Let
         \begin{equation*}
-            \D{\left(\hs{x+\x[c]+\x[s]\geq 0}\right)} \equiv \hs{\D{x}+\Dx[c]+\Dx[s]\geq 0}
+            \mathcal{Z} = \Set{-4,-3.25,-2,-1.2,0}
         \end{equation*}
-        where $c=-3.5$ and $s=-2$
-        \begin{equation}
-            \mathcal{Z}_\bstrm^s = \set{0,0.5,1,2.5,3.5,r}
-        \end{equation}
-        then $g_s\in\Cnpw[1]{\compactum{0}{r}}{\R}$ along traj de dde
+        be the partition of some initial condition.
+        Choosing $\past=-1.8$ for $s$, we obtain
         \begin{equation*}
-            g_s(t)=\ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\bstrm} = \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[0]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[c]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[s]}
+            \mathcal{Z}_\bstrm^\past = \set{0,0.25,0.6,0.75,1.5,1.8,2,2.3,2.55,2.8,3.5,3.8,4}
         \end{equation*}
-        each summand diffable in $(\hat{t}_j,\hat{t}_{j+1})$ and
-        \begin{equation*}
-            \D{g}_s(t)= \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dx[0]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dx[c]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dx[s]}
-        \end{equation*}
-        \begin{equation*}
-            \lim_{\zeta\downto\hat{t}_j} \D{g}_s(\zeta)=
-        \end{equation*}
+        when we restrict the evolution to $\compactum{0}{4}$.
+        Figure~\ref{fig:differential-lemma} depicts an example for the piecewise continuous differentiability of the term's evolution, given some initial condition.
+        % \begin{equation*}
+        %     \D{\left(\hs{x+\x[c]+\x[s]\geq 0}\right)} \equiv \hs{\D{x}+\Dx[c]+\Dx[s]\geq 0}
+        % \end{equation*}
+        
+        % then $g_s\in\Cnpw[1]{\compactum{0}{r}}{\R}$ along traj de dde
+        % \begin{equation*}
+        %     g_s(t)=\ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\bstrm} = \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[0]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[c]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[s]}
+        % \end{equation*}
+        % each summand diffable in $(\hat{t}_j,\hat{t}_{j+1})$ and
+        % \begin{equation*}
+        %     \D{g}_s(t)= \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dx[0]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dx[c]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\Dx[s]}
+        % \end{equation*}
+        % \begin{equation*}
+        %     \lim_{\zeta\downto\hat{t}_j} \D{g}_s(\zeta)=
+        % \end{equation*}
     \end{example}
 
     % FIXME: replace duration r
