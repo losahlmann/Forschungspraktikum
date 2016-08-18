@@ -47,7 +47,7 @@ Moreover, they can be implemented in software for computer-aided verification.
             }
         }{}
         % TODO: add box in rule names
-        \cinferenceRule[assignbb|$\mathrel{{:}{=}}$]{discrete assignment}{
+        \cinferenceRule[assignb|$\mathrel{{:}{=}}$]{discrete assignment}{
             \linferenceRule[equiv]{
                 \asfml(s,\astrm)
             }{
@@ -170,15 +170,17 @@ Moreover, they can be implemented in software for computer-aided verification.
 
     \end{calculus}
 
-    discrete assignment axiom, substitution
-    substitute $x$ by $\astrm$, needs $x$ not to be ... (admissibility condition)
+    The \emph{discrete assignment axiom}~\irref{assignb} substitutes $\x[0]$ by its new value $\astrm$ in the formula.
+    % FIXME: admissibility condition for assignb
+    This requires $x$ not to be ... (admissibility condition)
 
-    solution axiom
-    solution of symbolic initial-value problem (conv. IVP is numerical), must be expressible as first-order formula of real arithmetic
+    The \emph{solution axiom}~\irref{solb} replaces a DDE with the solution of its symbolic initial-value problem (as opposed to a convential IVP, which is numerical), This solution must be expressible as first-order formula of real arithmetic, which is only the case for a small class of delay differential equations.
 
     The \emph{iteration axiom}~\irref{iterateb} partially unwinds a loop, which can be used for bounded model checking.
 
-    The \emph{induction axioms}~\irref{Ib} and \irref{Cb}, which is a variant of Harel's convergence rule, can be applied when reasoning about loops with unbounded repetitions. 
+    The \emph{induction axioms}~\irref{Ib}
+    % and \irref{Cb}, which is a variant of Harel's convergence rule,
+    can be applied when reasoning about loops with unbounded repetitions. 
 
     The \emph{modal modus ponens} axiom~\irref{Kb} and the \emph{Barcan formula}~\irref{barcan} are taken from first-order modal logic.
 
@@ -186,7 +188,6 @@ Moreover, they can be implemented in software for computer-aided verification.
 
     The basic \emph{proof rules} for the presented Hilbert calculus are \emph{Gödel's necessitation rule}~\irref{gen} of modal logic, as well as \emph{modus ponens}~\irref{MP} and \emph{$\forall$-generalization}~\irref{forall} of first-order logic.
 
-        % TODO: axiom [&] in combination with [steps]
 
     \subsection{Differential Axioms}
         \label{sec:differential-axioms}
@@ -211,30 +212,30 @@ Moreover, they can be implemented in software for computer-aided verification.
             }{}
             \cinferenceRule[DC|DC]{differential cut}{
                 \linferenceRule[lpmi]{
-                    \left(\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}
+                    \big(\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}
                     \lbisubjunct
-                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\inv}}{\asfml}\right)
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\inv}}{\asfml(s)}\big)
                 }{
                     \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}
                 }
             }{}
             \cinferenceRule[DE|DE]{differential effect}{
                 \linferenceRule[equiv]{
-                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(x,\D{x})}}
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(s,x,\D{x})}}
                 }{
-                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(x,\D{x})}
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s,x,\D{x})}
                 }
             }{}
             \cinferenceRule[DI|DI]{differential invariant}{
                 \linferenceRule[lpmi]{
                     \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}
                 }{
-                    \left(\ivr\limply\inv\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}\right)
+                    \big(\ivr\limply\inv\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}\big)
                 }
             }{}
         \end{calculus}
 
-        $\D{x}$ and $\x[c]$ are not allowed in invariant (leads to discontinuities). Invariants must be \FOLR
+        $\Dx[c]$ and $\x[c]$ are not allowed in the expression of an differential invariant, because they would lead to discontinuities. Thus differential invariants $\inv$ must be \FOLR formulas.
 
     % \subsection{History Axiom}
     %     \label{history-axiom}
@@ -286,17 +287,18 @@ Moreover, they can be implemented in software for computer-aided verification.
 
         The \emph{method of steps} presented in Section~\ref{sec:method-of-steps} translates into an axiom.
 
-        By introduce a fresh variable $t$ as a clock, we restrict the evolution of a delay differntial equation starting from a state by a duration not longer than its smallest delay $\taumin$. This evolution is then wrapped in a loop.
+        By introducing a fresh variable $t$ as a clock, we restrict the evolution of a delay differntial equation starting from a state by a duration not longer than its smallest delay $\taumin$. This evolution is then wrapped in a loop.
         In this case, the right hand side of the differential equation only depends on the initial state of the loop, not on its own solution yet. Hence the differential equation is not longer a DDE, but of \emph{ordinary} type.
         Its right hand side is in general piecewise continuous.
         Theorem~\ref{thm:solution-existence} shows the existence of a unique local solution in this case.
 
+        % FIXME: spacing around calculus-env
         \begin{calculus}
             \cinferenceRule[stepsb|stpsb]{method of steps axiom}{
                 \linferenceRule[equiv]{
-                    \dbox{\Dupdate{\Dumod{\D{x}}{\astrm}};\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin})}}{\asfml}
+                    \dbox{\Dupdate{\Dumod{\D{x}}{\astrm}};\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin})}}{\asfml(s)}
                 }{
-                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi}
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}
                 }
             }{}
         \end{calculus}
@@ -325,10 +327,8 @@ Moreover, they can be implemented in software for computer-aided verification.
         This is the case for \irref{testb}, %\irref{choiceb}
         \irref{composeb}, \irref{iterateb}, \irref{Kb}, \irref{Ib}, \irref{Cb}, \irref{barcan}, \irref{Vb} and \irref{gen}, whose proof can hence be found in \cite{Platzer12Complete}.
 
-        Exceptions: [:=] , ['] (-> new PL)
-
-        [\&]???
-        backward continuation (Richard) -> [\&] limit up to T, state contains entire evolution, can check evo domain constraint on this state
+        % TODO: axiom [&] in combination with [steps]
+        % backward continuation (Richard) -> [\&] limit up to T, state contains entire evolution, can check evo domain constraint on this state
 
         % 
     \begin{description}
@@ -345,11 +345,11 @@ Moreover, they can be implemented in software for computer-aided verification.
         The same holds if $\asfml(\x[0])$ does not depend on $s$.
          (->substitution lemma in book)
         
-        \item[stpsb] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory of duration $\duration\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\duration}$. By the choice of $\asstate$ it holds $\trajectory(\zeta)\in\imodel{\IddL}{\asfml}$ for all $\zeta\in\compactum{0}{\duration}$.
+        \item[stpsb] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory of duration $\duration\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\duration}$. By the choice of $\asstate$ it holds $\trajectory(\zeta)\in\imodel{\IddL}{\asfml(s)}$ for all $\zeta\in\compactum{0}{\duration}$.
 
-        We need to show that $\asstate\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}};\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin})}}{\asfml}}$.
-        If we enter the loop in the right hand side zero times, this holds since $\trajectory(0)\in\imodel{\IddL}{\asfml}$ and $\trajectory(0)=\modif{\asstate}{\D{x}}{\astrm}$.
-        If we repeated the loop $n$ times, it holds after the last iteration that $\zeta=(n-1)\taumin+t\leq\duration$, since the evolution is restricted by $\ivr$. We know in this case that $\trajectory(\zeta)\in\imodel{\IddL}{\asfml}$ what implies the assertion.
+        We need to show that $\asstate\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}};\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin})}}{\asfml(s)}}$.
+        If we enter the loop in the right hand side zero times, this holds since $\trajectory(0)\in\imodel{\IddL}{\asfml(s)}$ and $\trajectory(0)=\modif{\asstate}{\Dx[0]}{\astrm}$.
+        If we repeated the loop $n$ times, it holds after the last iteration that $\zeta=(n-1)\taumin+t\leq\duration$, since the evolution is restricted by $\ivr$. We know in this case that $\trajectory(\zeta)\in\imodel{\IddL}{\asfml(s)}$ what implies the assertion.
 
         The converse implication is shown analogously.
 
@@ -357,34 +357,34 @@ Moreover, they can be implemented in software for computer-aided verification.
         
         \item[DC] For a formula $\bsfmlfolR$ of \FOLR, let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\bsfmlfolR}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be an arbitrary trajectory of duration $\duration\geq 0$, solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\xi)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\xi\in\compactum{0}{\duration}$.
 
-        Suppose $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, i.e.\ there exists a $0\leq \bar{r}\leq\duration$, such that $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr}$ for all $\zeta\in\compactum{0}{\bar{r}}$ and $\trajectory(\bar{r})\in\imodel{\IddL}{\asfml}$. Since $\zeta\leq\duration$ it is also $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$. This is equivalent to $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr\land\bsfmlfolR}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$ for all $\zeta\in\compactum{0}{\bar{r}}$, which is the same as $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\bsfmlfolR}}{\asfml}}$.
+        Suppose $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$, i.e.\ there exists a $0\leq \bar{r}\leq\duration$, such that $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\bar{r}}$ and $\trajectory(\bar{r})\in\imodel{\IddL}{\asfml(s)}$. Since $\zeta\leq\duration$ it is also $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$. This is equivalent to $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\astrm\land\ivr\land\bsfmlfolR}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$ for all $\zeta\in\compactum{0}{\bar{r}}$, which is the same as $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\bsfmlfolR}}{\asfml(s)}}$.
 
         \item[DI] This proof is an adaption of the \dL proof for DI given in~\cite{Platzer15Uniform}. Without loss of generality we restrict to the case of invariants of the form $\inv\equiv(g(x)\geq 0)$, where $g$ is a term of \FOLR. Then $\D{(\inv)}\equiv(\D{(g(x))}\geq 0)$ (by ??).
 
         Consider a state $\asstate\in\states$ with $\asstate\in\imodel{\IddL}{\ivr\limply\inv\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}}$. We need to distinguish two cases. If $\asstate\notin\imodel{\IddL}{\ivr}$, then their is no solution of the DDE and hence $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}}$ vacuously.
 
-        If $\asstate\in\imodel{\IddL}{\ivr}$, then $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}}$. Let $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory solving the DDE for some time $r\geq 0$, i.e.\ $\interpret,\trajectory\models(\hevolvein{\D{x}=\astrm}{\ivr})$.
+        If $\asstate\in\imodel{\IddL}{\ivr}$, then $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}}$. Let $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory solving the DDE for some time $r\geq 0$, i.e.\ $\interpret,\trajectory\models(\hevolvein{\D{x}=\astrm}{\ivr})$.
         % FIXME: r=0 in DI proof
-        If $r=0$ then $\asstate\in\imodel{\IddL}{\ivr}$ since the only varaible changing its value is $\D{x}$, which is not contained in
+        If $\duration=0$ then $\asstate\in\imodel{\IddL}{\ivr}$ since the only varaible changing its value is $\D{x}$, which is not contained in
         % FIXME: is this freevars{\inv} like in proof by Platzer?
         $\ivr$ ($\freevars{\ivr}\cap\set{\D{x}}=\emptyset$). Hence it follows from the precondition that $\asstate\in\imodel{\IddL}{\inv}$ and for this reason $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}}$.
         % FIXME: free vars of inv? x' can be changed? wouldn't influence \ivr
 
-        If $r>0$, $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}}$ implies $\interpret,\trajectory\models\D{(\inv)}$.
-        By the Differential Lemma~\ref{lm:differential-lemma} it holds for all $\zeta\in\compactum{0}{r}$
+        If $\duration>0$, $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}}$ implies $\interpret,\trajectory\models\D{(\inv)}$.
+        By the Differential Lemma~\ref{lm:differential-lemma} it holds for all $\zeta\in\compactum{0}{\duration}$
         \begin{equation*}
             0 \leq \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(g(x))}}=\DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{g(x)}}{t}(\zeta)
         \end{equation*}
         $\freevars{\inv}\cap\set{\D{x}}=\emptyset$ (means no $\D{x}$ in invariant) implies $\trajectory(0)=\asstate\in\imodel{\IddL}{g(x)\geq 0}$.
-        no $\x[c]$ in invariant, hence continuous
-        Lemma~\ref{lm:pc-integrable} yields for any $z\in\compactum{0}{r}$
+        no $\x[c]$ in invariant, hence continuous. 
+        Lemma~\ref{lm:pc-integrable} yields for any $z\in\compactum{0}{\duration}$
         \begin{equation*}
             \ivaluation{\iconcat[state=\trajectory(z)]{\IddL}}{g(x)}= \ivaluation{\iconcat[state=\trajectory(0)]{\IddL}}{g(x)} + \integral{0}{z} \DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{g(x)}}{t}(\zeta)\dx[\zeta] \geq 0
         \end{equation*}
         hence $\trajectory(z)\in\imodel{\IddL}{\inv}$ and hence $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}}$
 
-        \item[DE] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$ and $\trajectory\from\compactum{0}{r}\to\states$ be a trajectory of duration $r\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{r}$.
-        Since $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, we have $\trajectory(r)\in\imodel{\IddL}{\asfml}$ which, by the Differential Assignment Lemma~\ref{lm:diff-assignment}, is equivalent to $\trajectory(r)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}$. Hence $\asstate\in\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml}}$.
+        \item[DE] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory of duration $\duration\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\Dx[0]}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\duration}$.
+        Since $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$, we have $\trajectory(\duration)\in\imodel{\IddL}{\asfml}$ which, by the Differential Assignment Lemma~\ref{lm:diff-assignment}, is equivalent to $\trajectory(\duration)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(s)}}$. Hence $\asstate\in\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(s)}}$.
         The inverse implication is shown in the same way.
     \end{description}
     \end{proof}
@@ -488,30 +488,30 @@ Moreover, they can be implemented in software for computer-aided verification.
             }{with loop invariant $\bsfml$}
         \end{calculus}
 
-%     \paragraph{Differential Equation Sequent Calculus Proof Rules}
-%         \label{sec:ode-rules}
+    \paragraph{Differential Equation Sequent Calculus Proof Rules}
+        \label{sec:diff-rules}
 
-%         some text
+        text
 
-%         \begin{calculus}
-%             \cinferenceRule[DC|DC]{differential cut}{
-%                 \linferenceRule[sequent]{
-%                     \lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{r(x)},\bsfmls}
-%                     &\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr\land r(x)}}{P}}
-%                 }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\bsfmls}}
-%             }{}
-%             \cinferenceRule[dI|dI]{differential invariant}{
-%                 \linferenceRule[sequent]{
-%                     \lsequent{\asfmls,Q}{P,\bsfmls}
-%                     &\lsequent{Q}{\dbox{\Dupdate{\Dumod{\D{x}}{f(x)}}}{\der{P}}}
-%                 }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\bsfmls}}
-%             }{}
-%             \cinferenceRule[dW|dW]{differential weakening}{
-%                 \linferenceRule[sequent]{
-%                     \lsequent{\asfmls}{\lforall{x}{(\ivr\limply P)},\bsfmls}
-%                 }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\bsfmls}}
-%             }{}
-%         \end{calculus}
+        \begin{calculus}
+            \cinferenceRule[DC|DC]{differential cut}{
+                \linferenceRule[sequent]{
+                    \lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv},\bsfmls}
+                    &\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land \inv}}{\asfml}}
+                }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml},\bsfmls}}
+            }{}
+            \cinferenceRule[dI|dI]{differential invariant}{
+                \linferenceRule[sequent]{
+                    \lsequent{\asfmls,\asfml}{\inv,\bsfmls}
+                    &\lsequent{\asfml}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\der{\inv}}}
+                }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml},\bsfmls}}
+            }{}
+            \cinferenceRule[dW|dW]{differential weakening}{
+                \linferenceRule[sequent]{
+                    \lsequent{\asfmls}{\lforall{x}{(\ivr\limply\asfml)},\bsfmls}
+                }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml},\bsfmls}}
+            }{}
+        \end{calculus}
 
     % TODO: Rule of Steps
     % \subsection{Rule of Steps}
