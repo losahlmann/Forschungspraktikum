@@ -33,102 +33,106 @@ Moreover, they can be implemented in software for computer-aided verification.
         % TODO: Diamond-Axiom
         \cinferenceRule[dual|$dual$]{modality duality}{
             \linferenceRule[equiv]{
-                \lnot\dbox{\asprg}{\lnot\asfml}
+                \lnot\dbox{\asprg}{\lnot\asfml(s)}
             }{
-                \ddiamond{\asprg}{\asfml}
+                \ddiamond{\asprg}{\asfml(s)}
             }
         }{}
         % TODO: holds iff semantic of not is complement
         \cinferenceRule[testb|$\htest{}$]{test condition}{
             \linferenceRule[equiv]{
-                (\chi\limply\asfml)
+                (\bsfml(s)\limply\asfml(s))
             }{
-                \dbox{\htest{\chi}}{\asfml}
+                \dbox{\htest{\bsfml(s)}}{\asfml(s)}
             }
         }{}
         % TODO: add box in rule names
         \cinferenceRule[assignbb|$\mathrel{{:}{=}}$]{discrete assignment}{
             \linferenceRule[equiv]{
-                \asfml(\astrm(0))
+                \asfml(s,\astrm)
             }{
-                \dbox{\hupdate{\humod{x}{\astrm(0)}}}{\asfml(x)}
+                \dbox{\hupdate{\humod{x}{\astrm}}}{\asfml(s,\x[0])}
             }
         }{}
         % TODO: ['] axiom name
         % FIXME: how is relation to DDE solution axiom
         \cinferenceRule[solb|$'$]{}{
+            % FIXME: syntax forall t invalid?
             \linferenceRule[equiv]{
-                \lforall{t\geq 0}{\dbox{\hupdate{\humod{x}{y(t)}}}{\asfml}}
+                \lforall{t\geq 0}{\dbox{\hupdate{\humod{x}{y(t)}}}{\asfml(s)}}
             }{
-                \dbox{\hevolve{\D{x}=\astrm}}{\asfml}
+                \dbox{\hevolve{\D{x}=\astrm}}{\asfml(s)}
             }
         }{$\hevolve{\D{y}(t)=\astrm}$}
+
         \cinferenceRule[choiceb|$\hchoice{}{}$]{choice}{
             \linferenceRule[equiv]{
-                \dbox{\asprg}{\asfml}\land\dbox{\bsprg}{\asfml}
+                \dbox{\asprg}{\asfml(s)}\land\dbox{\bsprg}{\asfml(s)}
             }{
-                \dbox{\hchoice{\asprg}{\bsprg}}{\asfml}
+                \dbox{\hchoice{\asprg}{\bsprg}}{\asfml(s)}
             }
         }{}
         % TODO: name for [&]
-        % TODO: [&] also holds for DDEs?
-        \cinferenceRule[constb|$\&$]{}{
-            \linferenceRule[equiv]{
-                \lforall{t_0=x_0}{\dbox{\hevolve{\D{x}=\astrm}}{(\dbox{\hevolve{\D{x}=-\astrm}}{(x_0\geq t_0\limply\ivr)}\limply\asfml)}}
-            }{
-                \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}
-            }
-        }{}
+        % TODO: [&] for DDEs?
+        % \cinferenceRule[constb|$\&$]{}{
+        %     \linferenceRule[equiv]{
+        %         \lforall{t_0=x_0}{\dbox{\hevolve{\D{x}=\astrm}}{(\dbox{\hevolve{\D{x}=-\astrm}}{(x_0\geq t_0\limply\ivr)}\limply\asfml)}}
+        %     }{
+        %         \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}
+        %     }
+        % }{}
         % TODO: composeb symbol
         \cinferenceRule[composeb|$;$]{composition}{
             \linferenceRule[equiv]{
-                \dbox{\asprg}{\dbox{\bsprg}{\asfml}}
+                \dbox{\asprg}{\dbox{\bsprg}{\asfml(s)}}
             }{
-                \dbox{\asprg;\bsprg}{\asfml}
+                \dbox{\asprg;\bsprg}{\asfml(s)}
             }
         }{}
         % TODO: iterateb symbol
         \cinferenceRule[iterateb|$*$]{loop unrolling}{
             \linferenceRule[equiv]{
-                \asfml\land\dbox{\asprg}{\dbox{\hrepeat{\asprg}}{\asfml}}
+                \asfml(s)\land\dbox{\asprg}{\dbox{\hrepeat{\asprg}}{\asfml(s)}}
             }{
-                \dbox{\hrepeat{\asprg}}{\asfml}
+                \dbox{\hrepeat{\asprg}}{\asfml(s)}
             }
         }{}
         % TODO: proper name K-Axiom
         \cinferenceRule[Kb|K]{}{
             \linferenceRule[impl]{
-                \dbox{\asprg}{(\asfml\limply\bsfml)}
+                \dbox{\asprg}{(\asfml(s)\limply\bsfml(s))}
             }{
-                (\dbox{\asprg}{\asfml}\limply\dbox{\asprg}{\bsfml})
+                (\dbox{\asprg}{\asfml(s)}\limply\dbox{\asprg}{\bsfml(s)})
             }
         }{}
         % TODO: proper name I-Axiom
         \cinferenceRule[Ib|I]{}{
             \linferenceRule[impl]{
-                \dbox{\hrepeat{\asprg}}{(\asfml\limply\dbox{\asprg}{\asfml})}
+                \dbox{\hrepeat{\asprg}}{(\asfml(s)\limply\dbox{\asprg}{\asfml(s)})}
             }{
-                (\asfml\limply\dbox{\hrepeat{\asprg}}{\asfml})
+                (\asfml(s)\limply\dbox{\hrepeat{\asprg}}{\asfml(s)})
             }
         }{}
         % TODO: proper name C-Axiom
-        \cinferenceRule[Cb|C]{}{
-            \linferenceRule[impl]{
-                \dbox{\hrepeat{\asprg}}{\lforall{v>0 (\varphi(v)\limply\ddiamond{\asprg}{\varphi(v-1)})}}
-            }{
-                \lforall{v}{(\varphi(v)\limply\ddiamond{\hrepeat{\asprg}}{\lexists{v\leq 0}{\varphi(v)}})}
-            }
-        }{$v\notin\asprg$}
+        % TODO: C-Axiom holds for DDEs?
+        % \cinferenceRule[Cb|C]{}{
+        %     \linferenceRule[impl]{
+        %         \dbox{\hrepeat{\asprg}}{\lforall{v>0 (\varphi(v)\limply\ddiamond{\asprg}{\varphi(v-1)})}}
+        %     }{
+        %         \lforall{v}{(\varphi(v)\limply\ddiamond{\hrepeat{\asprg}}{\lexists{v\leq 0}{\varphi(v)}})}
+        %     }
+        % }{$v\notin\asprg$}
         % TODO: proper name B-Axiom
         \cinferenceRule[barcan|B]{}{
             \linferenceRule[impl]{
-                \lforall{x}{\dbox{\asprg}{\asfml}}
+                \lforall{x}{\dbox{\asprg}{\asfml(s)}}
             }{
-                \dbox{\asprg}{\lforall{x}{\asfml}}
+                \dbox{\asprg}{\lforall{x}{\asfml(s)}}
             }
         }{$x\notin\asprg$}
         % TODO: proper name V-Axiom
         % QUESTION: what is difference between V and G axiom?
+        % TODO: check V axiom with def of FV, BV, can adds to fml?
         \cinferenceRule[Vb|V]{}{
             \linferenceRule[impl]{
                 \asfml
@@ -146,16 +150,16 @@ Moreover, they can be implemented in software for computer-aided verification.
         }{}
         \cinferenceRule[MP|MP]{modus ponens}{
             \linferenceRule[sequent]{
-                \asfml\limply\bsfml & \asfml
+                \asfml(s)\limply\bsfml(s) & \asfml(s)
             }{
-                \bsfml
+                \bsfml(s)
             }
         }{}
         \cinferenceRule[forall|$\forall$]{forall generalization rule}{
             \linferenceRule[sequent]{
-                \asfml
+                \asfml(s)
             }{
-                \lforall{x}{\asfml}
+                \lforall{x}{\asfml(s)}
             }
         }{}
 
@@ -228,56 +232,54 @@ Moreover, they can be implemented in software for computer-aided verification.
                     \left(\ivr\limply\inv\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}\right)
                 }
             }{}
-
-        
         \end{calculus}
 
         $\D{x}$ and $\x[c]$ are not allowed in invariant (leads to discontinuities). Invariants must be \FOLR
 
-    \subsection{History Axiom}
-        \label{history-axiom}
+    % \subsection{History Axiom}
+    %     \label{history-axiom}
 
-        Just replace symbol by its semantical meaning
-        The occurence of $\x[-\tau]$ in expressions can be replaced by turning the (implicitely existing) time variable explicit, i.e.\
-        uniform substitution $\sigma$
-        allows substitution of $\x[-\tau]$ by, depending on context, $x(t-\tau)$ or $\forall{s\in[0,\tau]}{x(t-\tau)}$
-        allows substitution of x, +quantifier from semantics in certain contexts
+    %     Just replace symbol by its semantical meaning
+    %     The occurence of $\x[-\tau]$ in expressions can be replaced by turning the (implicitely existing) time variable explicit, i.e.\
+    %     uniform substitution $\sigma$
+    %     allows substitution of $\x[-\tau]$ by, depending on context, $x(t-\tau)$ or $\forall{s\in[0,\tau]}{x(t-\tau)}$
+    %     allows substitution of x, +quantifier from semantics in certain contexts
 
-        \begin{calculus}
-            \cinferenceRule[hist|hist]{history axiom}{
-                \linferenceRule[equiv]{
-                    \holdssince{-T}{\asfml(s)}
-                }{
-                    \hs[-T]{\asfml}
-                }
-            }{}
-        \end{calculus}
+    %     \begin{calculus}
+    %         \cinferenceRule[hist|hist]{history axiom}{
+    %             \linferenceRule[equiv]{
+    %                 \holdssince{-T}{\asfml(s)}
+    %             }{
+    %                 \hs[-T]{\asfml}
+    %             }
+    %         }{}
+    %     \end{calculus}
 
-        and $t\rightarrow t+s$
+    %     and $t\rightarrow t+s$
 
-        for a piecewise continuous function $\theta\in\statespace$.
+    %     for a piecewise continuous function $\theta\in\statespace$.
 
-    \subsection{Solution Axiom}
-        \label{sec:solution-axiom}
+%     \subsection{Solution Axiom}
+%         \label{sec:solution-axiom}
 
-        \begin{calculus}
-            \cinferenceRule[solb|solb]{solution axiom}{
-                \linferenceRule[equiv]{
-                    (\lforall{0\leq t\leq\taumin}{\dbox{\hupdate{\humod{x}{y(t)}}}{\phi}})
-                    \land
-                    (\holdssince{-T}{x=y(s+\taumin)} \limply \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi})
-                }{
-                    \holdssince{-T}{x=\bstrm(s)} \limply \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi}
-                }
-            }{}
-        \end{calculus}
+%         \begin{calculus}
+%             \cinferenceRule[solb|solb]{solution axiom}{
+%                 \linferenceRule[equiv]{
+%                     (\lforall{0\leq t\leq\taumin}{\dbox{\hupdate{\humod{x}{y(t)}}}{\phi}})
+%                     \land
+%                     (\holdssince{-T}{x=y(s+\taumin)} \limply \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi})
+%                 }{
+%                     \holdssince{-T}{x=\bstrm(s)} \limply \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi}
+%                 }
+%             }{}
+%         \end{calculus}
 
-        where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, i.e.\ $y$ is a local solution of the symbolic initial value problem. The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
-        However, only a very little class of delay differential equations has such solutions.
-        need to reposition time, so that each step begins at $t=0$, no problem for autonomous ddes
-        (Since the DDE is autonomous, we can emit the time index.)
+%         where $\forall 0\leq t\leq\tau$, $y'(t)=\theta(\theta_0)$, i.e.\ $y$ is a local solution of the symbolic initial value problem. The solution must be expressible in polynomial form so that the axiom leads to decidable arithmetic.
+%         However, only a very little class of delay differential equations has such solutions.
+%         need to reposition time, so that each step begins at $t=0$, no problem for autonomous ddes
+%         (Since the DDE is autonomous, we can emit the time index.)
 
-it often makes sense to treat the very first initial condition separately, because after it solution is at least $C^1$, at $x(0)$ might be knick
+% it often makes sense to treat the very first initial condition separately, because after it solution is at least $C^1$, at $x(0)$ might be knick
 
     \subsection{Axiom of Steps}
         \label{sec:axiom-of-steps}
@@ -331,7 +333,17 @@ it often makes sense to treat the very first initial condition separately, becau
         % 
     \begin{description}
         % FIXME: assignment symbol
-        \item[$\dbox{:=}$] (->substitution lemma in book)
+        \item[$\dbox{:=}$]
+        It is $\asstate\in\imodel{\IddL}{\dbox{\hupdate{\humod{x}{\astrm}}}{\asfml(s,\x[0])}}$ iff $\bsstate\in\imodel{\IddL}{\asfml(s,\x[0])}$ for all $(\asstate,\bsstate)\in\ireachability{\IddL}{\hupdate{\humod{x}{\astrm}}}$. There exists only a unique such state $\bsstate\in\states$. For this state it holds $\bsstate=\asstate$ except for the variable $x$, for which
+        \begin{equation*}
+            \bsstate(x)(\past) = \begin{cases*}
+                    \ivaluation{\IddL}{\astrm} & if $\past=0$\\
+                    \asstate(x)(\past) & if $\past\in\delayinterval$
+                \end{cases*}
+        \end{equation*}
+        i.e.\ the two states coincide in the values for $\x[s]$, except in $\x[0]$. Hence $\asstate\in\imodel{\IddL}{\asfml(s,\astrm)}$ iff $\bsstate\in\imodel{\IddL}{\asfml(s,\x[0])}$.
+        The same holds if $\asfml(\x[0])$ does not depend on $s$.
+         (->substitution lemma in book)
         
         \item[stpsb] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\phi}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory of duration $\duration\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\duration}$. By the choice of $\asstate$ it holds $\trajectory(\zeta)\in\imodel{\IddL}{\asfml}$ for all $\zeta\in\compactum{0}{\duration}$.
 
@@ -343,9 +355,9 @@ it often makes sense to treat the very first initial condition separately, becau
 
         \item[DW] Proof as for \dL.
         
-        \item[DC] For a formula $\bsfmlfolR$ of \FOLR, let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\bsfmlfolR}}$ and $\trajectory\from\compactum{0}{\bar{r}}\to\states$ be an arbitrary trajectory of duration $\bar{r}\geq 0$, solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\xi)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\xi\in\compactum{0}{\bar{r}}$.
+        \item[DC] For a formula $\bsfmlfolR$ of \FOLR, let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\bsfmlfolR}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be an arbitrary trajectory of duration $\duration\geq 0$, solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\xi)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\xi\in\compactum{0}{\duration}$.
 
-        Suppose $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, i.e.\ there exists a $0\leq r\leq\bar{r}$, such that $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr}$ for all $\zeta\in\compactum{0}{r}$ and $\trajectory(r)\in\imodel{\IddL}{\asfml}$. Since $\zeta\leq\bar{r}$ it is also $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$. This is equivalent to $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr\land\bsfmlfolR}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$ for all $\zeta\in\compactum{0}{r}$, which is the same as $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\bsfmlfolR}}{\asfml}}$.
+        Suppose $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}}$, i.e.\ there exists a $0\leq \bar{r}\leq\duration$, such that $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr}$ for all $\zeta\in\compactum{0}{\bar{r}}$ and $\trajectory(\bar{r})\in\imodel{\IddL}{\asfml}$. Since $\zeta\leq\duration$ it is also $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$. This is equivalent to $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\asfml\land\ivr\land\bsfmlfolR}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$ for all $\zeta\in\compactum{0}{\bar{r}}$, which is the same as $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\bsfmlfolR}}{\asfml}}$.
 
         \item[DI] This proof is an adaption of the \dL proof for DI given in~\cite{Platzer15Uniform}. Without loss of generality we restrict to the case of invariants of the form $\inv\equiv(g(x)\geq 0)$, where $g$ is a term of \FOLR. Then $\D{(\inv)}\equiv(\D{(g(x))}\geq 0)$ (by ??).
 
@@ -377,90 +389,104 @@ it often makes sense to treat the very first initial condition separately, becau
     \end{description}
     \end{proof}
 
-% \section{Proof Rules}
-%     \label{sec:proof-rules}
+\section{Proof Rules}
+    \label{sec:proof-rules}
 
-%     We keep the standard sequent calculus proof rules, given in \dL.
-        % combine axioms to a proof rule/tactic
-        % to avoid to small steps
-    %     If the \ddL formula $\asfml$ can be derived by \ddL proof rules from \ddL axioms, we say it is provable and write $|-\asfml$
-    % (includes first-order axioms and rules)
-
-%     \paragraph{Propositional Sequent Calculus Proof Rules}
-%         \label{sec:propositional-rules}
-
-%         some text
-
-%         \begin{calculus}
-%             \cinferenceRule[closeTrue|$\top$R]{close by always true antedecent}{
-%                 \linferenceRule[sequent]{
-%                 %\lsequent{}{}
-%                 }{
-%                     \lsequent{\Gamma}{\ltrue,\Delta}
-%                 }
-%             }{}
-%             \cinferenceRule[close|id]{close by identity}{
-%                 \linferenceRule[sequent]{
-%                 %\lsequent{}{}
-%                 }{
-%                     \lsequent{P,\Gamma}{P,\Delta}
-%                 }
-%             }{}
-%             \cinferenceRule[andR|$\land$R]{and right proof rule}{
-%                 \linferenceRule[sequent]{
-%                     \lsequent{\Gamma} {P,\Delta}
-%                     &\lsequent{\Gamma} {Q,\Delta}
-%                 }{\lsequent{\Gamma} {P\land Q,\Delta}}
-%             }{}
-%             \cinferenceRule[andL|$\land$L]{and left proof rule}{
-%                 \linferenceRule[sequent]{
-%                     \lsequent{\Gamma, P, Q} {\Delta}
-%                 }{\lsequent{\Gamma, P\land Q} {\Delta}}
-%             }{}
-%             \cinferenceRule[implyR|$\limply$R]{imply right proof rule}{
-%                 \linferenceRule[sequent]{
-%                     \lsequent{\Gamma,P} {Q,\Delta}}{
-%                     \lsequent{\Gamma} {P\limply Q,\Delta}}
-%             }{}
-
-%         \end{calculus}
+    In order to avoid small steps in proofs by applying one axiom after the other, several axioms can be combined to a more powerful proof formula.
+    Since we posses for \ddL of most axioms given in \dL, we can also adapt most of its \emph{sequent calculus proof rules}, as given in \cite{cheatsheet}.
+    % TODO: or s-formulas?
+    By $\asfmls,\bsfmls,\csfmls$ we denote sets of formulas.
 
 
-%     \paragraph{Quantifier Sequent Calculus Proof Rules}
-%         \label{sec:quantifier-rules}
+        combine proof rule to tactic
+    
+    If the \ddL formula $\asfml$ can be derived by \ddL proof rules from \ddL axioms, we say it is provable and write $|-\asfml$
+    (includes first-order axioms and rules)
 
-%         some text
+    \paragraph{Propositional Sequent Calculus Proof Rules}
+        \label{sec:propositional-rules}
 
-%         \begin{calculus}
-%             \cinferenceRule[allR|$\forall$R]{for all right proof rule}{
-%                 \linferenceRule[sequent]{
-%                     \lsequent{\Gamma}{p(y),\Delta}
-%                 }{
-%                     \lsequent{\Gamma}{\lforall{x}{p(x)},\Delta}
-%                 }
-%             }{$y\notin\Gamma,\Delta$}
-%         \end{calculus}
+        \par
+        \begin{calculus}
+            \cinferenceRule[closeTrue|$\top$R]{close by always true antedecent}{
+                \linferenceRule[sequent]{
+                    %
+                }{
+                    \lsequent{\asfmls}{\ltrue,\bsfmls}
+                }
+            }{}
+            \cinferenceRule[close|id]{close by identity}{
+                \linferenceRule[sequent]{
+                    %
+                }{
+                    \lsequent{\asfml,\asfmls}{\asfml,\bsfmls}
+                }
+            }{}
+            \cinferenceRule[andR|$\land$R]{and right proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\asfmls}{\asfml,\bsfmls}
+                    &\lsequent{\asfmls}{\bsfml,\bsfmls}
+                }{
+                    \lsequent{\asfmls}{\asfml\land \bsfml,\bsfmls}
+                }
+            }{}
+            \cinferenceRule[andL|$\land$L]{and left proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\asfmls, \asfml, \bsfml}{\bsfmls}
+                }{
+                    \lsequent{\asfmls, \asfml\land \bsfml}{\bsfmls}
+                }
+            }{}
+            \cinferenceRule[implyR|$\limply$R]{imply right proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\asfmls,\asfml}{\bsfml,\bsfmls}
+                }{
+                    \lsequent{\asfmls}{\asfml\limply \bsfml,\bsfmls}
+                }
+            }{}
+            % TODO: more rules, or etc.
+        \end{calculus}
 
-%     \paragraph{\dL Sequent Calculus Proof Rules}
-%         \label{sec:dL-rules}
 
-%         some text
+    \paragraph{Quantifier Sequent Calculus Proof Rules}
+        \label{sec:quantifier-rules}
 
-%         \begin{calculus}
-%             % TODO: replace := by command
-%             \cinferenceRule[assignb|$\mathrel{{:}{=}}$]{discrete assignment}{
-%                 \linferenceRule[sequent]{
-%                     \lsequent{\Gamma,x=e}{P,\Delta}
-%                 }{\lsequent{\Gamma}{\dbox{\hupdate{\humod{x}{e}}}{P},\Delta}}
-%             }{$x\notin\Gamma,\Delta$}
-%             \cinferenceRule[loop|loop]{loop invariant}{
-%                 \linferenceRule[sequent]{
-%                     \lsequent{\Gamma}{J,\Delta}
-%                     &\lsequent{J}{\dbox{\alpha}{J}}
-%                     &\lsequent{J}{P}
-%                 }{\lsequent{\Gamma}{\dbox{\hrepeat{\alpha}}{P},\Delta}}
-%             }{}
-%         \end{calculus}
+        \par
+        \begin{calculus}
+            \cinferenceRule[allR|$\forall$R]{forall right proof rule}{
+                \linferenceRule[sequent]{
+                    \lsequent{\asfmls}{\asfml(y),\bsfmls}
+                }{
+                    \lsequent{\asfmls}{\lforall{x}{\asfml(x)},\bsfmls}
+                }
+            }{$y\notin\asfmls,\bsfmls$}
+        \end{calculus}
+        here $x$ does not mean $\x[0]$.
+
+    \paragraph{\dL Sequent Calculus Proof Rules}
+        \label{sec:dL-rules}
+
+        \par
+        \begin{calculus}
+            % TODO: replace := by command
+            \cinferenceRule[assignb|$\mathrel{{:}{=}}$]{discrete assignment}{
+                \linferenceRule[sequent]{
+                    \lsequent{\asfmls,x=\astrm}{\asfml,\bsfmls}
+                }{
+                    \lsequent{\asfmls}{\dbox{\hupdate{\humod{x}{\astrm}}}{\asfml},\bsfmls}
+                }
+            }{$x\notin\asfmls,\bsfmls$}
+
+            \cinferenceRule[loop|loop]{loop invariant}{
+                \linferenceRule[sequent]{
+                    \lsequent{\asfmls}{\bsfml,\bsfmls}
+                    &\lsequent{\bsfml}{\dbox{\alpha}{\bsfml}}
+                    &\lsequent{\bsfml}{\asfml}
+                }{
+                    \lsequent{\asfmls}{\dbox{\hrepeat{\asprg}}{\asfml},\bsfmls}
+                }
+            }{with loop invariant $\bsfml$}
+        \end{calculus}
 
 %     \paragraph{Differential Equation Sequent Calculus Proof Rules}
 %         \label{sec:ode-rules}
@@ -470,20 +496,20 @@ it often makes sense to treat the very first initial condition separately, becau
 %         \begin{calculus}
 %             \cinferenceRule[DC|DC]{differential cut}{
 %                 \linferenceRule[sequent]{
-%                     \lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{r(x)},\Delta}
-%                     &\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr\land r(x)}}{P}}
-%                 }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
+%                     \lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{r(x)},\bsfmls}
+%                     &\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr\land r(x)}}{P}}
+%                 }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\bsfmls}}
 %             }{}
 %             \cinferenceRule[dI|dI]{differential invariant}{
 %                 \linferenceRule[sequent]{
-%                     \lsequent{\Gamma,Q}{P,\Delta}
+%                     \lsequent{\asfmls,Q}{P,\bsfmls}
 %                     &\lsequent{Q}{\dbox{\Dupdate{\Dumod{\D{x}}{f(x)}}}{\der{P}}}
-%                 }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
+%                 }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\bsfmls}}
 %             }{}
 %             \cinferenceRule[dW|dW]{differential weakening}{
 %                 \linferenceRule[sequent]{
-%                     \lsequent{\Gamma}{\lforall{x}{(\ivr\limply P)},\Delta}
-%                 }{\lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\Delta}}
+%                     \lsequent{\asfmls}{\lforall{x}{(\ivr\limply P)},\bsfmls}
+%                 }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=f(x)}{\ivr}}{P},\bsfmls}}
 %             }{}
 %         \end{calculus}
 
@@ -495,7 +521,7 @@ it often makes sense to treat the very first initial condition separately, becau
     %     loop induction
     %     truth value of invariant never changes during dde
     %     % \begin{equation}
-    %     % \frac{\Gamma(\xbartaut{0})\rightarrow F(\xbartaut{0})\quad F(\xbartaut{s})\rightarrow [\D{x}=\theta(\xbartaut{t})\,\&\,t\leq\tau]F(\xbartaut{t}) \quad F(\xbartaut{t})\rightarrow\phi}{\Gamma(\xbartaut{0}) \rightarrow [\D{x}=\theta(\xbartaut{t})]\phi}
+    %     % \frac{\asfmls(\xbartaut{0})\rightarrow F(\xbartaut{0})\quad F(\xbartaut{s})\rightarrow [\D{x}=\theta(\xbartaut{t})\,\&\,t\leq\tau]F(\xbartaut{t}) \quad F(\xbartaut{t})\rightarrow\phi}{\asfmls(\xbartaut{0}) \rightarrow [\D{x}=\theta(\xbartaut{t})]\phi}
     %     % \end{equation}
 
     %     %\begin{small}
@@ -503,17 +529,17 @@ it often makes sense to treat the very first initial condition separately, becau
     %         % FIXME: \landS -> steps
     %         \cinferenceRule[steps|stps]{steps proof rule}{
     %             \linferenceRule[sequent]{
-    %                 \lsequent{\Gamma}{\inv,\Delta}
+    %                 \lsequent{\asfmls}{\inv,\bsfmls}
     %                 &\lsequent{t=0,\inv(\theta(t-\tau))}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\rho(x,\theta(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv}}
     %                 &\lsequent{\inv}{\asfml}
     %             }{
-    %                 \lsequent{\Gamma}{\dbox[]{\hevolvein{\D{x}=\rho(x,\x[-\tau])}{\ivr}}{\asfml},\Delta}
+    %                 \lsequent{\asfmls}{\dbox[]{\hevolvein{\D{x}=\rho(x,\x[-\tau])}{\ivr}}{\asfml},\bsfmls}
     %             }
     %         }{}
     %     \end{calculus}
     %     %\end{small}
 
-    %     Formulas of the form $\Gamma(\x[-\tau])$ implicitely also include a statement about $x$.
+    %     Formulas of the form $\asfmls(\x[-\tau])$ implicitely also include a statement about $x$.
 
     % \subsection{Delay Differential Induction}
     %     \label{sec:delay-differential-induction}
@@ -534,11 +560,11 @@ it often makes sense to treat the very first initial condition separately, becau
     %     \begin{calculus}
     %         \cinferenceRule[DDI|DDI]{delay differential induction proof rule}{
     %             \linferenceRule[sequent]{
-    %                 \lsequent{\Gamma}{\inv(\x[-\tau]),\Delta}
+    %                 \lsequent{\asfmls}{\inv(\x[-\tau]),\bsfmls}
     %                 &\lsequent{\ivr,0\leq t\leq\tau,\inv(\theta)}{\dbox{\hevolve{\Dupdate{\Dumod{\D{x}}{\rho(x,\theta)}}}}{\der{\inv(x)}}}
     %                 &\lsequent{\inv(\x[-\tau])}{\asfml}
     %             }{
-    %                 \lsequent{\Gamma}{\dbox{\hevolvein{\D{x}=\rho(x,\x[-\tau])}{\ivr}}{\asfml,\Delta}}
+    %                 \lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\rho(x,\x[-\tau])}{\ivr}}{\asfml,\bsfmls}}
     %             }
     %         }{}
     %     \end{calculus}
@@ -552,7 +578,7 @@ it often makes sense to treat the very first initial condition separately, becau
     %         \linfer[stepsb]{
     %             \linfer[loop]{
     %                 % FIXME: formel zu hoch
-    %                 \lsequent{\Gamma(\x[-\tau])}{\inv(\x[-\tau]),\Delta}
+    %                 \lsequent{\asfmls(\x[-\tau])}{\inv(\x[-\tau]),\bsfmls}
     %                 % FIXME: multiple rules at once
     %                 &\linfer[assignb+composeb]{
     %                     \linfer[hist]{
@@ -578,9 +604,9 @@ it often makes sense to treat the very first initial condition separately, becau
     %                 }
     %                 \lsequent{\inv(\x[-\tau])}{\asfml(\x[-\tau])}
     %             }{
-    %             \lsequent{\Gamma(\x[-\tau])}{\dbox{\hrepeat{(\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\x[-\tau])}{(\ivr\land 0\leq t\leq\tau))}}}{\asfml(\x[-\tau]),\Delta}}}
+    %             \lsequent{\asfmls(\x[-\tau])}{\dbox{\hrepeat{(\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\x[-\tau])}{(\ivr\land 0\leq t\leq\tau))}}}{\asfml(\x[-\tau]),\bsfmls}}}
     %         }
-    %         {\lsequent{\Gamma(\x[-\tau])}{\dbox{\hevolvein{\D{x}=\astrm(x,\x[-\tau])}{\ivr}}{\asfml(\x[-\tau]),\Delta}}}
+    %         {\lsequent{\asfmls(\x[-\tau])}{\dbox{\hevolvein{\D{x}=\astrm(x,\x[-\tau])}{\ivr}}{\asfml(\x[-\tau]),\bsfmls}}}
     %     \end{sequentdeduction}
 
     %     % TODO: ref to here: (2)

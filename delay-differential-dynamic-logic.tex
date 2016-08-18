@@ -108,7 +108,8 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             \asprg,\bsprg \Coloneqq
                 \hupdate{\humod{x}{\astrm}} \mid
                 \Dupdate{\Dumod{\D{x}}{\astrm}} \mid
-                \htest{\asfmlfolR} \mid
+                % TODO: only FOLR
+                \htest{\asfml(s)} \mid
                 \hchoice{\asprg}{\bsprg} \mid
                 % TODO: replace ; in HPs
                 \asprg;\bsprg \mid
@@ -121,7 +122,9 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
     
     Note that the syntax only allows autonomous DDEs, though with multiple constant delays.
 
-    Atomic \dHPs are given by instantaneous discrete \emph{assignments} $\hupdate{\humod{x}{\astrm(0)}}$ and \emph{differential assignments} $\Dupdate{\Dumod{\D{x}}{\astrm(0)}}$, which change the value of the given variable only at the current time instant, not the past, \emph{tests} $\htest{\asfmlfolR}$, which pass only if the current state satisfies first-order formula $\asfmlfolR$ of real arithmetic and abords the program execution if not, as well as evolutions along \emph{delay differential equation} systems $\hevolvein{\D{x}=\astrm(0)}{\ivr}$ of an arbitrary amount of time, but restricted by the evolution domain constraint $\ivr$.
+    Atomic \dHPs are given by instantaneous discrete \emph{assignments} $\hupdate{\humod{x}{\astrm(0)}}$ and \emph{differential assignments} $\Dupdate{\Dumod{\D{x}}{\astrm(0)}}$, which change the value of the given variable only at the current time instant, not the past, \emph{tests} $\htest{\asfml(s)}$, which pass only if the current state satisfies the formula $\asfml$
+    % first-order formula $\asfmlfolR$ of real arithmetic
+    and abords the program execution if not, as well as evolutions along \emph{delay differential equation} systems $\hevolvein{\D{x}=\astrm(0)}{\ivr}$ of an arbitrary amount of time, but restricted by the evolution domain constraint $\ivr$.
 
     Compound \dHPs combine atomic programs, and comprise \emph{nondeterministic choices} $\hchoice{\asprg}{\bsprg}$, running either $\asprg$ or $\bsprg$, \emph{sequential compositions} $\asprg;\bsprg$, executing $\bsprg$ after $\asprg$ and \emph{nondeterministic repetitions} $\hrepeat{\asprg}$, repeating $\asprg$ any number of times, zero times included.
 
@@ -163,6 +166,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
 
     We note $\asfml$ to indicate that $s$ is not a free variable of $\asfml(s)$ and $\asfml(b)$ with $b\in\nonposQ$ to express that each term $\astrm(s)$ in the formula was replaced by its corresponding $\astrm(b)$, even if it was bound by a $\hs{}$.
     % TODO: or only which is not under the scope of a \hs? at the moment I overwrite each \hs
+    If we write $\asfml(x)$, we mean entire function $x$, not only the value $\x[0]$ (cf.\ usage for $\forall$).
     
     % TODO: on variables \allvars (signature)
     Formulas of first-order logic of real arithmetic constitute a subset of \ddL, i.e.\ every \FOLR formula is also a formula of delay differential dynamic logic.
@@ -356,26 +360,27 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         The interpretation of a \dHP is given by a binary \emph{reachability relation} $\ireachability{\IddL}{\asprg}\subseteq\states\times\states$ between states:
         \begin{enumerate}
             % \item $\ireachability{\IddL}{a} = \interpret[a]$ for a program constant $a$
+            % FIXME: astrm(s) or without s
             \item\label{itm:sem-dHP-assgn} $\ireachability{\IddL}{\hupdate{\humod{x}{\astrm}}} =
                 \set{(\asstate,\bsstate)\with \bsstate=\asstate \text{ except }
                 \bsstate(x) = \left(\past\mapsto\begin{cases}
-                    \ivaluation{\IddL}{\theta(s)} & \past=0\\
+                    \ivaluation{\IddL}{\astrm(s)} & \past=0\\
                     \asstate(x)(\past) & \past\in\delayinterval
                 \end{cases}\right)}$
             \item $\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}} =
                 \set{(\asstate,\bsstate)\with \bsstate = \asstate \text{ except }
                 \bsstate(\D{x}) = \left(\past\mapsto\begin{cases}
-                    \ivaluation{\IddL}{\theta(s)} & \past=0\\
+                    \ivaluation{\IddL}{\astrm(s)} & \past=0\\
                     \asstate(\D{x})(\past) & \past\in\delayinterval
                 \end{cases}\right)}$
             % FIXME: no \assign for FOLR formula \imodel
-            \item $\ireachability{\IddL}{\htest{\asfmlfolR}} = \set{(\asstate,\asstate) \with \asstate\in\imodel{\IddL}{\asfmlfolR}}$
+            \item $\ireachability{\IddL}{\htest{\asfml(s)}} = \set{(\asstate,\asstate) \with \asstate\in\imodel{\IddL}{\asfml(s)}}$
             \item $\ireachability{\IddL}{\hchoice{\asprg}{\bsprg}} = \hchoice{\ireachability{\IddL}{\asprg}}{\ireachability{\IddL}{\bsprg}}$
             \item $\ireachability{\IddL}{\asprg;\bsprg} = \set{(\asstate,\bsstate) \with (\asstate,\csstate)\in\ireachability{\IddL}{\asprg}, (\csstate,\bsstate)\in\ireachability{\IddL}{\bsprg}}$
             \item $\ireachability{\IddL}{\hrepeat{\asprg}} 
                 = \displaystyle\cupfold_{n\in\N_0}\ireachability{\IddL}{\asprg^n}$ with $\asprg^{n+1}\equiv (\asprg^n;\asprg)$ and $\asprg^0\equiv (\htest{\ltrue})$
             % TODO: semantics DDE
-            \item\label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm}{\ivr}} = \{(\asstate,\bsstate) \;\vert\; \mforall{\zeta\in[0,r]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\Set{\D{x}}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,r]\to\states\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta+s)]{\IddL}}{\theta}$ and satisfies $\ivr$ for all $s\in[-\min\Set{\zeta,T},0]$. On $[-T,-\min\Set{\zeta,T})$ it holds $\trajectory(\zeta)(\cdot)(s)=\asstate(\cdot)(s+\zeta)$ for all variables.
+            \item\label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm}{\ivr}} = \{(\asstate,\bsstate) \;\vert\; \mforall{\zeta\in[0,r]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\Set{\D{x}}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,r]\to\states\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta+s)]{\IddL}}{\astrm}$ and satisfies $\ivr$ for all $s\in[-\min\Set{\zeta,T},0]$. On $[-T,-\min\Set{\zeta,T})$ it holds $\trajectory(\zeta)(\cdot)(s)=\asstate(\cdot)(s+\zeta)$ for all variables.
             % TODO: case r=0
         \end{enumerate}
     \end{definition}
