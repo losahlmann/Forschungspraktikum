@@ -51,6 +51,7 @@
 \renewcommand{\mforall}[1]{\forall\mkern2mu #1}
 \newcommand{\holds}{\mathrel{\colon}}
 % define as
+\newcommand{\assign}{\mathrel{{:}{=}}}
 \renewcommand{\defeq}{\mathrel{\overset{\makebox[0pt]{\mbox{\normalfont\tiny def}}}{=}}}
 % defined by
 \newcommand\logeq{\mathrel{\vcentcolon\Longleftrightarrow}}
@@ -145,7 +146,7 @@
 % evolution domain constraint
 \renewcommand{\ivr}{\asfmlfolR}
 \renewcommand{\inv}{\bsfmlfolR}
-\newcommand{\csfml}{\varphi}
+% \newcommand{\csfml}{\varphi}
 
 % formula of first-order real arithmetic
 \newcommand{\asfmlfolR}{\chi}
@@ -178,6 +179,7 @@
 \newcommand{\holdssince}[2][s]{\mforall{#1\in\delayinterval[#2]}\holds}
 \newcommand{\holdssinceclosed}[3][s]{\lforall{#1\in\closeddelayinterval[#2]}{\left(#3\right)}}
 \newcommand{\past}{r}
+% FIXME: or D ?
 \newcommand{\duration}{R}
 
 \newcommand{\statespace}[1][-T]{\Cnpw[1]{\closeddelayinterval[#1]}{\R^n}}

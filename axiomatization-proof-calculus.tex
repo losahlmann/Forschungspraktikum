@@ -29,146 +29,146 @@ Moreover, they can be implemented in software for computer-aided verification.
 
     % QUESTION: which axioms are needed? in papers differences
     % FIXME: is there a paragraph like calculus environment?
-    \begin{calculus}
-        % TODO: Diamond-Axiom
-        \cinferenceRule[dual|$dual$]{modality duality}{
-            \linferenceRule[equiv]{
-                \lnot\dbox{\asprg}{\lnot\asfml(s)}
-            }{
-                \ddiamond{\asprg}{\asfml(s)}
-            }
-        }{}
-        % TODO: holds iff semantic of not is complement
-        \cinferenceRule[testb|$\htest{}$]{test condition}{
-            \linferenceRule[equiv]{
-                (\bsfml(s)\limply\asfml(s))
-            }{
-                \dbox{\htest{\bsfml(s)}}{\asfml(s)}
-            }
-        }{}
-        % TODO: add box in rule names
-        \cinferenceRule[assignb|$\mathrel{{:}{=}}$]{discrete assignment}{
-            \linferenceRule[equiv]{
-                \asfml(s,\astrm)
-            }{
-                \dbox{\hupdate{\humod{x}{\astrm}}}{\asfml(s,\x[0])}
-            }
-        }{}
-        % TODO: ['] axiom name
-        % FIXME: how is relation to DDE solution axiom
-        \cinferenceRule[solb|$'$]{}{
-            % FIXME: syntax forall t invalid?
-            \linferenceRule[equiv]{
-                \lforall{t\geq 0}{\dbox{\hupdate{\humod{x}{y(t)}}}{\asfml(s)}}
-            }{
-                \dbox{\hevolve{\D{x}=\astrm}}{\asfml(s)}
-            }
-        }{$\hevolve{\D{y}(t)=\astrm}$}
+    \begin{figure}[t]
+        \renewcommand*{\irrulename}[1]{\text{#1}} % no parentheses around axiom names
+        \begin{calculuscollections}{\textwidth}
+        % axioms
+        \begin{calculus}
+            \cinferenceRule[diamond|$\didia{\cdot}$]{diamond axiom}{
+                \linferenceRule[equiv]{
+                    \lnot\dbox{\asprg}{\lnot\asfml(s)}
+                }{
+                    \ddiamond{\asprg}{\asfml(s)}
+                }
+            }{}
+            % TODO: holds iff semantic of not is complement
+            \cinferenceRule[testb|$\dibox{\htest{}}$]{test axiom}{
+                \linferenceRule[equiv]{
+                    \big(\bsfml(s)\limply\asfml(s)\big)
+                }{
+                    \dbox{\htest{\bsfml(s)}}{\asfml(s)}
+                }
+            }{}
+            \cinferenceRule[assignb|$\dibox{\assign}$]{assignment/substitution axiom}{
+                \linferenceRule[equiv]{
+                    \asfml(s,\astrm)
+                }{
+                    \dbox{\hupdate{\humod{x}{\astrm}}}{\asfml(s,\x[0])}
+                }
+            }{}
+            % FIXME: do I need this axiom, problem of need specify initial condition
+            % or need just for ODE
+            % \cinferenceRule[evolveb|$\dibox{'}$]{}{
+            %     % FIXME: syntax forall t invalid?
+            %     \linferenceRule[equiv]{
+            %         \lforall{t\geq 0}{\dbox{\hupdate{\humod{x}{y(t)}}}{\asfml(s)}}
+            %     }{
+            %         \dbox{\hevolve{\D{x}=\astrm}}{\asfml(s)}
+            %     }
+            % }{$\hevolve{\D{y}(t)=\astrm}$}
 
-        \cinferenceRule[choiceb|$\hchoice{}{}$]{choice}{
-            \linferenceRule[equiv]{
-                \dbox{\asprg}{\asfml(s)}\land\dbox{\bsprg}{\asfml(s)}
-            }{
-                \dbox{\hchoice{\asprg}{\bsprg}}{\asfml(s)}
-            }
-        }{}
-        % TODO: name for [&]
-        % TODO: [&] for DDEs?
-        % \cinferenceRule[constb|$\&$]{}{
-        %     \linferenceRule[equiv]{
-        %         \lforall{t_0=x_0}{\dbox{\hevolve{\D{x}=\astrm}}{(\dbox{\hevolve{\D{x}=-\astrm}}{(x_0\geq t_0\limply\ivr)}\limply\asfml)}}
-        %     }{
-        %         \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}
-        %     }
-        % }{}
-        % TODO: composeb symbol
-        \cinferenceRule[composeb|$;$]{composition}{
-            \linferenceRule[equiv]{
-                \dbox{\asprg}{\dbox{\bsprg}{\asfml(s)}}
-            }{
-                \dbox{\asprg;\bsprg}{\asfml(s)}
-            }
-        }{}
-        % TODO: iterateb symbol
-        \cinferenceRule[iterateb|$*$]{loop unrolling}{
-            \linferenceRule[equiv]{
-                \asfml(s)\land\dbox{\asprg}{\dbox{\hrepeat{\asprg}}{\asfml(s)}}
-            }{
-                \dbox{\hrepeat{\asprg}}{\asfml(s)}
-            }
-        }{}
-        % TODO: proper name K-Axiom
-        \cinferenceRule[Kb|K]{}{
-            \linferenceRule[impl]{
-                \dbox{\asprg}{(\asfml(s)\limply\bsfml(s))}
-            }{
-                (\dbox{\asprg}{\asfml(s)}\limply\dbox{\asprg}{\bsfml(s)})
-            }
-        }{}
-        % TODO: proper name I-Axiom
-        \cinferenceRule[Ib|I]{}{
-            \linferenceRule[impl]{
-                \dbox{\hrepeat{\asprg}}{(\asfml(s)\limply\dbox{\asprg}{\asfml(s)})}
-            }{
-                (\asfml(s)\limply\dbox{\hrepeat{\asprg}}{\asfml(s)})
-            }
-        }{}
-        % TODO: proper name C-Axiom
-        % TODO: C-Axiom holds for DDEs?
-        % \cinferenceRule[Cb|C]{}{
-        %     \linferenceRule[impl]{
-        %         \dbox{\hrepeat{\asprg}}{\lforall{v>0 (\varphi(v)\limply\ddiamond{\asprg}{\varphi(v-1)})}}
-        %     }{
-        %         \lforall{v}{(\varphi(v)\limply\ddiamond{\hrepeat{\asprg}}{\lexists{v\leq 0}{\varphi(v)}})}
-        %     }
-        % }{$v\notin\asprg$}
-        % TODO: proper name B-Axiom
-        \cinferenceRule[barcan|B]{}{
-            \linferenceRule[impl]{
-                \lforall{x}{\dbox{\asprg}{\asfml(s)}}
-            }{
-                \dbox{\asprg}{\lforall{x}{\asfml(s)}}
-            }
-        }{$x\notin\asprg$}
-        % TODO: proper name V-Axiom
-        % QUESTION: what is difference between V and G axiom?
-        % TODO: check V axiom with def of FV, BV, can adds to fml?
-        \cinferenceRule[Vb|V]{}{
-            \linferenceRule[impl]{
-                \asfml
-            }{
-                \dbox{\asprg}{\asfml}
-            }
-        }{$\freevars{\asfml}\cap\boundvars{\asprg}=\emptyset$}
-        % TODO: proper name G-Axiom
-        \cinferenceRule[gen|G]{Gödel's generalization rule}{
-            \linferenceRule[sequent]{
-                \asfml
-            }{
-                \dbox{\asprg}{\asfml}
-            }
-        }{}
-        \cinferenceRule[MP|MP]{modus ponens}{
-            \linferenceRule[sequent]{
-                \asfml(s)\limply\bsfml(s) & \asfml(s)
-            }{
-                \bsfml(s)
-            }
-        }{}
-        \cinferenceRule[forall|$\forall$]{forall generalization rule}{
-            \linferenceRule[sequent]{
-                \asfml(s)
-            }{
-                \lforall{x}{\asfml(s)}
-            }
-        }{}
+            \cinferenceRule[choiceb|$\dibox{\cup}$]{axiom of nondeterministic choice}{
+                \linferenceRule[equiv]{
+                    \dbox{\asprg}{\asfml(s)}\land\dbox{\bsprg}{\asfml(s)}
+                }{
+                    \dbox{\hchoice{\asprg}{\bsprg}}{\asfml(s)}
+                }
+            }{}
+            % TODO: name for [&]
+            % TODO: [&] for DDEs?
+            % \cinferenceRule[constb|$\&$]{}{
+            %     \linferenceRule[equiv]{
+            %         \lforall{t_0=x_0}{\dbox{\hevolve{\D{x}=\astrm}}{(\dbox{\hevolve{\D{x}=-\astrm}}{(x_0\geq t_0\limply\ivr)}\limply\asfml)}}
+            %     }{
+            %         \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml}
+            %     }
+            % }{}
+            \cinferenceRule[composeb|$\dibox{{;}}$]{composition axiom}{ % double {} for correct spacing around semicolon
+                \linferenceRule[equiv]{
+                    \dbox{\asprg}{\dbox{\bsprg}{\asfml(s)}}
+                }{
+                    \dbox{\asprg;\bsprg}{\asfml(s)}
+                }
+            }{}
+            \cinferenceRule[iterateb|$\dibox{*}$]{iteration axiom}{
+                \linferenceRule[equiv]{
+                    \asfml(s)\land\dbox{\asprg}{\dbox{\hrepeat{\asprg}}{\asfml(s)}}
+                }{
+                    \dbox{\hrepeat{\asprg}}{\asfml(s)}
+                }
+            }{}
+            \cinferenceRule[K|K]{modal modus ponens}{
+                \linferenceRule[impl]{
+                    \dbox{\asprg}{\big(\asfml(s)\limply\bsfml(s)\big)}
+                }{
+                    \big(\dbox{\asprg}{\asfml(s)}\limply\dbox{\asprg}{\bsfml(s)}\big)
+                }
+            }{}
+            % TODO: proper name I-Axiom
+            \cinferenceRule[I|I]{loop induction}{
+                \linferenceRule[impl]{
+                    \dbox{\hrepeat{\asprg}}{\big(\asfml(s)\limply\dbox{\asprg}{\asfml(s)}\big)}
+                }{
+                    \big(\asfml(s)\limply\dbox{\hrepeat{\asprg}}{\asfml(s)}\big)
+                }
+            }{}
+            % FIXME: do I need C-Axiom ?
+            % TODO: C-Axiom holds for DDEs?
+            % \cinferenceRule[C|C]{loop convergence}{
+            %     \linferenceRule[impl]{
+            %         \dbox{\hrepeat{\asprg}}{\lforall{v>0 (\varphi(v)\limply\ddiamond{\asprg}{\varphi(v-1)})}}
+            %     }{
+            %         \lforall{v}{(\varphi(v)\limply\ddiamond{\hrepeat{\asprg}}{\lexists{v\leq 0}{\varphi(v)}})}\qquad
+            %     }
+            % }{$v\notin\asprg$}
+            % FIXME: do I need B-axiom?
+            \cinferenceRule[B|B]{Barcan}{
+                \linferenceRule[impl]{
+                    \lforall{x}{\dbox{\asprg}{\asfml(s)}}
+                }{
+                    \dbox{\asprg}{\lforall{x}{\asfml(s)}}
+                }
+            }{$x\notin\asprg$}
+            % TODO: check V axiom with def of FV, BV, can adds to fml?
+            \cinferenceRule[V|V]{vacuous}{
+                \linferenceRule[impl]{
+                    \asfml
+                }{
+                    \dbox{\asprg}{\asfml}
+                }
+            }{$\freevars{\asfml}\cap\boundvars{\asprg}=\emptyset$}
+        \end{calculus}
+        \qquad
+        % proof rules
+        \begin{calculus}
+            \cinferenceRule[G|G]{Gödel's generalization rule}{
+                \linferenceRule[sequent]{
+                    \asfml
+                }{
+                    \dbox{\asprg}{\asfml}
+                }
+            }{}
+            \cinferenceRule[MP|MP]{modus ponens rule}{
+                \linferenceRule[sequent]{
+                    \asfml(s)\limply\bsfml(s) & \asfml(s)
+                }{
+                    \bsfml(s)
+                }
+            }{}
+            \cinferenceRule[gena|$\forall$]{forall generalization rule}{
+                \linferenceRule[sequent]{
+                    \asfml(s)
+                }{
+                    \lforall{x}{\asfml(s)}
+                }
+            }{}
+            % TODO: CT-Axiom, CQ-Axiom, CE-Axiom, US-Axiom
+        \end{calculus}
+        \end{calculuscollections}
+        \caption{Delay differential dynamic logic axioms and proof rules.}
+        \label{fig:axioms}
+    \end{figure}
 
-        % TODO: CT-Axiom
-        % TODO: CQ-Axiom
-        % TODO: CE-Axiom
-        % TODO: US-Axiom
-
-    \end{calculus}
 
     The \emph{discrete assignment axiom}~\irref{assignb} substitutes $\x[0]$ by its new value $\astrm$ in the formula.
     % FIXME: admissibility condition for assignb
