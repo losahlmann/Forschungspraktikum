@@ -7,25 +7,11 @@ Moreover, they can be implemented in software for computer-aided verification.
 \section{Axiomatization}
     \label{sec:axiomatization}
 
-    % axioms: tautologies, syntactic transformation, equivalences
+    % quantifier elimination for FOLR
+    \newsavebox{\Rval}%
+    \sbox{\Rval}{$\scriptstyle\R$}
+    \irlabel{qear|\usebox{\Rval}}
 
-    % FIXME: correct source? \cite{Platzer12Complete,Platzer15Uniform}
-    The axiomatization for \ddL presented here is based on the \dL axiomatization, as given in \cite{Platzer12Complete}.
-    It is a first-order Hilbert calculus, using \emph{modus ponens} and \emph{$\forall$-generalization} as a basis.
-
-    As opposed to an axiom schemata, which represents an infinte list of axioms by containing placeholders for concrete formulas and terms, we consider here for simplicity an axiom as a concrete formula.
-    % FIXME: is s-formula allowed as axiom? or only without s?
-
-    % FOLR or ddL formulas?
-    all instances of valid formulas of first-order real arithmetic are allowed as axiom
-
-    Similar to differential forms for \dL \cite{Platzer15Uniform}, we also consider a differential form axiomatization of differential equations.
-
-    The goal of transforming a \ddL formula into another formula by appliying the axioms is to eventually derive a first-order formula of real arithmetic, which is decideable by \emph{quantifier elimination} ($\QE$).
-
-    The axioms listed in Figure~\ref{fig:axioms} are expressed in $\dbox{\cdot}$. Axioms with the dual operator $\ddiamond{\cdot}$ can be obtained using the duality relation (axiom~\irref{diamond}).
-
-    % TODO: what about [a;b]p. is [a][b]p correct?
     \begin{figure}[t]
         \begin{calculuscollections}{\textwidth}
         % axioms
@@ -37,19 +23,18 @@ Moreover, they can be implemented in software for computer-aided verification.
                     \ddiamond{\asprg}{\asfml(s)}
                 }
             }{}
-            % TODO: holds iff semantic of not is complement
-            \cinferenceRule[testb|$\dibox{\htest{}}$]{test axiom}{
-                \linferenceRule[equiv]{
-                    \big(\bsfml(s)\limply\asfml(s)\big)
-                }{
-                    \dbox{\htest{\bsfml(s)}}{\asfml(s)}
-                }
-            }{}
             \cinferenceRule[assignb|$\dibox{\assign}$]{assignment/substitution axiom}{
                 \linferenceRule[equiv]{
                     \asfml(s,\astrm)
                 }{
                     \dbox{\hupdate{\humod{x}{\astrm}}}{\asfml(s,\x[0])}
+                }
+            }{}
+            \cinferenceRule[testb|$\dibox{\htest{}}$]{test axiom}{
+                \linferenceRule[equiv]{
+                    \big(\bsfml(s)\limply\asfml(s)\big)
+                }{
+                    \dbox{\htest{\bsfml(s)}}{\asfml(s)}
                 }
             }{}
             % FIXME: do I need this axiom, problem of need specify initial condition
@@ -62,7 +47,6 @@ Moreover, they can be implemented in software for computer-aided verification.
             %         \dbox{\hevolve{\D{x}=\astrm}}{\asfml(s)}
             %     }
             % }{$\hevolve{\D{y}(t)=\astrm}$}
-
             \cinferenceRule[choiceb|$\dibox{\cup}$]{axiom of nondeterministic choice}{
                 \linferenceRule[equiv]{
                     \dbox{\asprg}{\asfml(s)}\land\dbox{\bsprg}{\asfml(s)}
@@ -100,7 +84,6 @@ Moreover, they can be implemented in software for computer-aided verification.
                     \big(\dbox{\asprg}{\asfml(s)}\limply\dbox{\asprg}{\bsfml(s)}\big)
                 }
             }{}
-            % TODO: proper name I-Axiom
             \cinferenceRule[I|I]{loop induction}{
                 \linferenceRule[impl]{
                     \dbox{\hrepeat{\asprg}}{\big(\asfml(s)\limply\dbox{\asprg}{\asfml(s)}\big)}
@@ -165,34 +148,54 @@ Moreover, they can be implemented in software for computer-aided verification.
         \label{fig:axioms}
     \end{figure}
 
-    The \emph{test axiom}~\irref{testb}
+    % axioms: tautologies, syntactic transformation, equivalences
 
+    % FIXME: correct source? \cite{Platzer12Complete,Platzer15Uniform}
+    The axiomatization for \ddL presented here is based on the \dL axiomatization, as given in \cite{Platzer12Complete}.
+    It is a first-order Hilbert calculus, using \emph{modus ponens} and \emph{$\forall$-generalization} as a basis.
 
+    As opposed to an axiom schemata, which represents an infinte list of axioms by containing placeholders for concrete formulas and terms, we consider here for simplicity an axiom as a concrete formula.
+    % FIXME: is s-formula allowed as axiom? or only without s?
+
+    % FOLR or ddL formulas?
+    all instances of valid formulas of first-order real arithmetic are allowed as axiom
+
+    Similar to differential forms for \dL \cite{Platzer15Uniform}, we also consider a differential form axiomatization of differential equations.
+
+    The goal of transforming a \ddL formula into another formula by appliying the axioms is to eventually derive a first-order formula of real arithmetic, which is decideable by \emph{quantifier elimination}. The usage of real arithmetic is noted as (\irref{qear}).
+
+    % TODO: QE lifting
+    $\lforall{x}{\asfml}$ quantifies over statespace $\statespace$, QE needs lifting: have finitely many $\x[c]\in\asfml$. can introduce for each a quantification over $\R$. For $\x[s]$ need $\holdssince{}$, which already quantifies over a subset of $\R$.
+
+    % FIXME: s-formula?
+    If the \ddL formula $\asfml$ can be derived by \ddL proof rules from \ddL axioms (this includes first-order logic axioms and rules), we say that this formula is \emph{provable} and write $\infers\asfml$.
+
+    The axioms listed in Figure~\ref{fig:axioms} are expressed in $\dbox{\cdot}$. Axioms with the dual operator $\ddiamond{\cdot}$ can be obtained using the duality relation (axiom~\irref{diamond}).
+    
+    % TODO: what about [a;b]p. is [a][b]p correct?
+    % FIXME: axiom descriptions
     The \emph{discrete assignment axiom}~\irref{assignb} substitutes $\x[0]$ by its new value $\astrm$ in the formula.
     % FIXME: admissibility condition for assignb
-    This requires $x$ not to be ... (admissibility condition)
-
+    This requires $x$ not to be ... (x and any variable in $\astrm$ not bound by quantifier or modalityadmissibility condition).
+    The \emph{test axiom}~\irref{testb}
     The \emph{axiom of nondeterministic choice}~\irref{choiceb}
-
     The \emph{composition axiom}~\irref{composeb}
-
     % The \emph{solution axiom}~\irref{solb} replaces a DDE with the solution of its symbolic initial-value problem (as opposed to a convential IVP, which is numerical), This solution must be expressible as first-order formula of real arithmetic, which is only the case for a small class of delay differential equations.
-
-    The \emph{iteration axiom}~\irref{iterateb} partially unwinds a loop, which can be used for bounded model checking.
-
+    The \emph{iteration axiom}~\irref{iterateb} partially unwinds a loop, which can also be used for bounded model checking.
     The \emph{induction axioms}~\irref{I}
     % and \irref{Cb}, which is a variant of Harel's convergence rule,
     can be applied when reasoning about loops with unbounded repetitions. 
-
     The \emph{modal modus ponens} axiom~\irref{K} and the \emph{Barcan formula}~\irref{B} are taken from first-order modal logic.
-
-    axiom V
+    Axiom~\irref{V}
 
     The basic \emph{proof rules} for the presented Hilbert calculus are \emph{Gödel's necessitation rule}~\irref{G} of modal logic, as well as \emph{modus ponens}~\irref{MP} and \emph{$\forall$-generalization}~\irref{gena} of first-order logic.
 
 
     \subsection{Differential Axioms}
         \label{sec:differential-axioms}
+
+        The \emph{delay differential weakening axiom}~\irref{DDW} internalizes that all values referenced in the state after a the evolution along a DDE were either specified in the initial condition or result from the differential equation. In the latter case, they need satisfied the evolution domain constraint.
+        It should be pointed out, that the right hand side only demands the weaker $\hs{}$, as opposed to the $\hsc$ appearing on the left.
 
         \begin{figure}[h]
             \begin{calculuscollections}{\coloumnwidth}
@@ -237,9 +240,20 @@ Moreover, they can be implemented in software for computer-aided verification.
                     \linferenceRule[lpmi]{
                         \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}
                     }{
-                        \big(\ivr\limply\inv\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}\big)
+                        \big(\ivr\limply\inv\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\der{\inv}}\big)
                     }
                 }{}
+                \cinferenceRule[DDW|DDW]{delay differential weakening}{
+                    \linferenceRule[lpmi]{
+                        \big(\bsfml\limply
+                        \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\hsc{\asfml(s)}}\big)
+                    }{
+                        \big((\bsfml\limply\hs{\asfml(s)})
+                        \land
+                        \lforall{x}{(\ivr\limply\asfml(0))}\big)
+                    }
+                }{$\x[c]\notin\asfml(s)$}
+                % FIXME: space or linebreak for DDW condition
             \end{calculus}
             \end{calculuscollections}
             \caption{Delay differential equation axioms and differential axioms.}
@@ -332,17 +346,16 @@ Moreover, they can be implemented in software for computer-aided verification.
     \begin{proof}
         The soundness proof of most of the axioms adapted from \dL are independent of the definition of the state space, they only reason about states without considering their structure.
         % The arguments of most proof parts are the same as they were for the classic \dL, since only the definition of the statespace has been replaced. The proofs were independent of this definition, though.
-        % FIXME: ref to choiceb
-        This is the case for \irref{testb}, \irref{choiceb}
-        \irref{composeb}, \irref{iterateb}, \irref{K}, \irref{I},
+        This is the case for \irref{composeb}, \irref{choiceb}, \irref{iterateb}, \irref{K}, \irref{I},
         %\irref{C},
-        \irref{B}, \irref{V} and \irref{G}, whose proof can hence be found in \cite{Platzer12Complete}.
+        \irref{B}, \irref{V} and \irref{G}, whose proof can be found in the literature to \dL~\cite{Platzer12Complete}.
+        The proof of \irref{testb} additionally requires the semantics of $\lnot$ being defined as complement.
 
         % TODO: axiom [&] in combination with [steps]
         % backward continuation (Richard) -> [\&] limit up to T, state contains entire evolution, can check evo domain constraint on this state
 
         % 
-    \begin{description}
+    \begin{labeling}{~~~~~~~}
         % FIXME: assignment symbol
         \item[\irref{assignb}]
         It is $\asstate\in\imodel{\IddL}{\dbox{\hupdate{\humod{x}{\astrm}}}{\asfml(s,\x[0])}}$ iff $\bsstate\in\imodel{\IddL}{\asfml(s,\x[0])}$ for all $(\asstate,\bsstate)\in\ireachability{\IddL}{\hupdate{\humod{x}{\astrm}}}$. There exists only a unique such state $\bsstate\in\states$. For this state it holds $\bsstate=\asstate$ except for the variable $x$, for which
@@ -358,11 +371,15 @@ Moreover, they can be implemented in software for computer-aided verification.
         
         \item[\irref{stepsb}] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory of duration $\duration\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\duration}$. By the choice of $\asstate$ it holds $\trajectory(\zeta)\in\imodel{\IddL}{\asfml(s)}$ for all $\zeta\in\compactum{0}{\duration}$.
 
-        We need to show that $\asstate\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}};\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin})}}{\asfml(s)}}$.
+        We need to show that
+        \begin{equation*}
+            \asstate\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}};\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin})}}{\asfml(s)}}.
+        \end{equation*}
         If we enter the loop in the right hand side zero times, this holds since $\trajectory(0)\in\imodel{\IddL}{\asfml(s)}$ and $\trajectory(0)=\modif{\asstate}{\Dx[0]}{\astrm}$.
         If we repeated the loop $n$ times, it holds after the last iteration that $\zeta=(n-1)\taumin+t\leq\duration$, since the evolution is restricted by $\ivr$. We know in this case that $\trajectory(\zeta)\in\imodel{\IddL}{\asfml(s)}$ what implies the assertion.
-
         The converse implication is shown analogously.
+
+        \item[{\parbox[t]{2em}{\irref{Dplus},\irref{Dmult},\\\irref{Dconst},\irref{Dvar}}}] These axioms are special instances of the equations proved in Lemma~\ref{lm:derivations}.
 
         \item[\irref{DW}] Proof as for \dL.
         
@@ -372,7 +389,7 @@ Moreover, they can be implemented in software for computer-aided verification.
 
         \item[\irref{DI}] This proof is an adaption of the \dL proof for DI given in~\cite{Platzer15Uniform}. Without loss of generality we restrict to the case of invariants of the form $\inv\equiv(g(x)\geq 0)$, where $g$ is a term of \FOLR. Then $\D{(\inv)}\equiv(\D{(g(x))}\geq 0)$ (by ??).
 
-        Consider a state $\asstate\in\states$ with $\asstate\in\imodel{\IddL}{\ivr\limply\inv\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}}$. We need to distinguish two cases. If $\asstate\notin\imodel{\IddL}{\ivr}$, then their is no solution of the DDE and hence $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}}$ vacuously.
+        Consider a state $\asstate\in\states$ with $\asstate\in\imodel{\IddL}{\ivr\limply\inv\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}}$. We need to distinguish two cases. If $\asstate\notin\imodel{\IddL}{\ivr}$, then there is no solution of the DDE and hence $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}}$ vacuously.
 
         If $\asstate\in\imodel{\IddL}{\ivr}$, then $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\D{(\inv)}}}$. Let $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory solving the DDE for some time $r\geq 0$, i.e.\ $\interpret,\trajectory\models(\hevolvein{\D{x}=\astrm}{\ivr})$.
         % FIXME: r=0 in DI proof
@@ -397,7 +414,17 @@ Moreover, they can be implemented in software for computer-aided verification.
         \item[\irref{DE}] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory of duration $\duration\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\Dx[0]}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\duration}$.
         Since $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$, we have $\trajectory(\duration)\in\imodel{\IddL}{\asfml}$ which, by the Differential Assignment Lemma~\ref{lm:diff-assignment}, is equivalent to $\trajectory(\duration)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(s)}}$. Hence $\asstate\in\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(s)}}$.
         The inverse implication is shown in the same way.
-    \end{description}
+
+        \item[\irref{DDW}] Let $\asstate\in\imodel{\IddL}{\bsfml\limply\hs{\asfml(s)}}$ and $\asstate\in\imodel{\IddL}{\lforall{x}{(\ivr\limply\asfml(0))}}$.
+        We distinguish two cases: if $\asstate\notin\imodel{\IddL}{\bsfml}$ ... % FIXME: DDW proof case
+        If $\asstate\in\imodel{\IddL}{\bsfml}$ then $\asstate$ also satisfies $\hs{\asfml(s)}$.
+        We follow the given DDE along the trajectory $\trajectory:\from\compactum{0}{\duration}$ starting from $\asstate$ and of duration $\duration\geq 0$, i.e.\ $(\asstate,\trajectory(\zeta))\in\ireachability{\IddL}{\hevolvein{\D{x}=\astrm}{\ivr}}$ and hence $\trajectory(\zeta)\in\imodel{\IddL}{\ivr}$ for all $\zeta\in\compactum{0}{\duration}$. Let $\bsstate=\trajectory(R)$ be the state after the evolution. We show that $\bsstate\in\imodel{\IddL}{\asfml(s)}$ for all $\past\in\closeddelayinterval$.
+
+        Since $\x[c]\notin\asfml(s)$, it is $\bsstate\in\imodel{\IddL}{\asfml(s)}$ iff $\trajectory(\duration-\past)\in\imodel{\iconcat[assign=0]{\IddL}}{\asfml(s)}$.
+
+        For $\duration-\past<0$ this follows since initial state satisfies $\hs{\asfml(s)}$.
+        For $\duration-\past\geq 0$, the evolution domain $\trajectory(\zeta)\in\imodel{\IddL}{\ivr}$ implies by condition $\trajectory(\zeta)\in\imodel{\iconcat[assign=0]{\IddL}}{\asfml(s)}$.
+    \end{labeling}
     \end{proof}
 
 % \section{Proof Rules}
@@ -411,8 +438,7 @@ Moreover, they can be implemented in software for computer-aided verification.
 
 %         combine proof rule to tactic
     
-%     If the \ddL formula $\asfml$ can be derived by \ddL proof rules from \ddL axioms, we say it is provable and write $|-\asfml$
-%     (includes first-order axioms and rules)
+
 
     % \paragraph{Propositional Sequent Calculus Proof Rules}
     %     \label{sec:propositional-rules}
@@ -709,20 +735,20 @@ Moreover, they can be implemented in software for computer-aided verification.
 
         % \end{proof}
 
-    \subsection{Delay Differential Invariant}
-        \label{sec:delay-differential-invariant}
+    % \subsection{Delay Differential Invariant}
+    %     \label{sec:delay-differential-invariant}
 
-        loop and differential invariants are of form $\lforall{s\in[-\tau,0]}{\inv(x(s))}$
-        can they have $x$?
+    %     loop and differential invariants are of form $\lforall{s\in[-\tau,0]}{\inv(x(s))}$
+    %     can they have $x$?
 
-        Meaning of derivative $\der{\inv(\x[-\tau])}=\lforall{s\in[-\tau,0]}{\der{\inv(x(t+s))}}$ would lead to occurrence of derivative of init cond, which we don't know
+    %     Meaning of derivative $\der{\inv(\x[-\tau])}=\lforall{s\in[-\tau,0]}{\der{\inv(x(t+s))}}$ would lead to occurrence of derivative of init cond, which we don't know
 
-        Mentioning $\x[-\tau]$ in the invariant differential invariant is not permitted, since derivation would lead to the occurrence of the symbol $x_{2\tau}$, whose properties are out of the scope of the current state.
+    %     Mentioning $\x[-\tau]$ in the invariant differential invariant is not permitted, since derivation would lead to the occurrence of the symbol $x_{2\tau}$, whose properties are out of the scope of the current state.
 
-        % TODO: ref to DDI
-        As for ODEs in \dL, we cannot have $x(t)$ in the premise in DDI. Would permit to prove wrong statements.
+    %     % TODO: ref to DDI
+    %     As for ODEs in \dL, we cannot have $x(t)$ in the premise in DDI. Would permit to prove wrong statements.
 
-        Invariant for limited time: use with loop unrolling (can it be generalized to unlimited inv?)
+    %     Invariant for limited time: use with loop unrolling (can it be generalized to unlimited inv?)
 
     % TODO: Example
     \subsection{Examples}
@@ -731,7 +757,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         \subsubsection{Example 1}
             \label{sec:ddi-example-1}
 
-            Consider the non-linear first-order delay differential equation
+            Consider the first-order delay differential equation
             \begin{equation}
                 \begin{cases}
                     \D{x}(t) = x(t-\tau) & t \geq \tzero\\
@@ -747,13 +773,13 @@ Moreover, they can be implemented in software for computer-aided verification.
                         \linfer[DDW]{
                             \linfer[DE+G]{
                                 \linfer[assignb]{
-                                    \linfer[QE]{
+                                    \linfer[qear]{
                                         \lclose
                                     }{
                                         (\hsc{\x[s]\geq 0}\limply x^3\geq 0 \land
                                         3x^2\x[-\tau]\geq 0 \land
                                         \hs{\x[s]\geq 0}) \land
-                                        (x^3\geq 0 \limply x\geq 0)
+                                        \lforall{x}{(x^3\geq 0 \limply x\geq 0)}
                                     }
                                 }{
                                     (\hsc{\x[s]\geq 0}
@@ -763,7 +789,7 @@ Moreover, they can be implemented in software for computer-aided verification.
                                     \land
                                     \hs{\x[s]\geq 0})
                                     \land
-                                    (x^3\geq 0 \limply x\geq 0)
+                                    \lforall{x}{(x^3\geq 0 \limply x\geq 0)}
                                 }
                             }{
                                 (\hsc{\x[s]\geq 0}\limply x^3\geq 0
@@ -772,7 +798,7 @@ Moreover, they can be implemented in software for computer-aided verification.
                                 \land
                                 \hs{\x[s]\geq 0})
                                 \land
-                                (x^3\geq 0 \limply x\geq 0)
+                                \lforall{x}{(x^3\geq 0 \limply x\geq 0)}
                             }
                         }{
                             \hsc{\x[s]\geq 0}
@@ -829,58 +855,58 @@ Moreover, they can be implemented in software for computer-aided verification.
             \normalsize
             In the same way we can prove that the solution stays negative for all $t$, if the initial condition is non-positive.
 
-        \subsubsection{Example 2}
-            \label{sec:ddi-example-2}
+        % \subsubsection{Example 2}
+        %     \label{sec:ddi-example-2}
 
-            % FIXME: it's not autonomous ?
-            Consider the non-linear first-order delay differential equation with explicitely given initial condition
-            \begin{equation}
-                \begin{cases}
-                    \D{x}(t) = -x(t-1)^2 & t \geq 0\\
-                    x(t) = t & t \in [-1,0]
-                \end{cases}
-            \end{equation}
-            Using $F\equiv(x^3\leq 0)$ we prove that the solution stays non-positiv.
-            \begin{small}
-                \begin{sequentdeduction}
-                    \linfer[DDI]{
-                        \linfer[hist]{
-                            \linfer[]{
-                                \linfer{\lclose}{
-                                    \lsequent{}{\lforall{s\in[-1,0]}{s^3\leq 0}}
-                                }
-                            }{
-                                \lsequent{t=0,\lforall{s\in[-1,0]}{x(t+s)=t+s}}{\lforall{s\in[-1,0]}{x(t+s)^3\leq 0}}
-                            }
-                        }{
-                            \lsequent{t=0,\x[-1]=t}{\x[-1]^3\leq 0}
-                        }
-                        &\linfer[]{
-                            \linfer[]{
-                                \linfer[closeTrue]{
-                                    \lclose
-                                }{
-                                    \lsequent{}{-3x^2\theta^2\leq 0}
-                                }
-                            }{
-                                \lsequent{0\leq t\leq 1,\theta^3\leq 0}{\dbox{\Dupdate{\Dumod{\D{x}}{-\theta^2}}}{(-3x^2 \D{x}\leq 0)}}
-                            }
-                        }{
-                            %\lclose
-                            \lsequent{0\leq t\leq 1,\theta^3\leq 0}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{\D{x}}{-\theta^2}}}{\der{x\leq 0}}}
-                        }
-                        &\linfer[]{
-                            \lclose
-                        }{
-                            \lsequent{\x[-1]^3\leq 0}{\x[-1]\leq 0}
-                        }
-                    }{
-                        \lsequent{t=0,\x[-1]=t}{\dbox{\D{x}=-\x[-1]^2}{(\x[1]\leq 0)}}
-                    }
-                \end{sequentdeduction}
-            \end{small}
+        %     % FIXME: it's not autonomous ?
+        %     Consider the non-linear first-order delay differential equation with explicitely given initial condition
+        %     \begin{equation}
+        %         \begin{cases}
+        %             \D{x}(t) = -x(t-1)^2 & t \geq 0\\
+        %             x(t) = t & t \in [-1,0]
+        %         \end{cases}
+        %     \end{equation}
+        %     Using $F\equiv(x^3\leq 0)$ we prove that the solution stays non-positiv.
+        %     \begin{small}
+        %         \begin{sequentdeduction}
+        %             \linfer[DDI]{
+        %                 \linfer[hist]{
+        %                     \linfer[]{
+        %                         \linfer{\lclose}{
+        %                             \lsequent{}{\lforall{s\in[-1,0]}{s^3\leq 0}}
+        %                         }
+        %                     }{
+        %                         \lsequent{t=0,\lforall{s\in[-1,0]}{x(t+s)=t+s}}{\lforall{s\in[-1,0]}{x(t+s)^3\leq 0}}
+        %                     }
+        %                 }{
+        %                     \lsequent{t=0,\x[-1]=t}{\x[-1]^3\leq 0}
+        %                 }
+        %                 &\linfer[]{
+        %                     \linfer[]{
+        %                         \linfer[closeTrue]{
+        %                             \lclose
+        %                         }{
+        %                             \lsequent{}{-3x^2\theta^2\leq 0}
+        %                         }
+        %                     }{
+        %                         \lsequent{0\leq t\leq 1,\theta^3\leq 0}{\dbox{\Dupdate{\Dumod{\D{x}}{-\theta^2}}}{(-3x^2 \D{x}\leq 0)}}
+        %                     }
+        %                 }{
+        %                     %\lclose
+        %                     \lsequent{0\leq t\leq 1,\theta^3\leq 0}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{\D{x}}{-\theta^2}}}{\der{x\leq 0}}}
+        %                 }
+        %                 &\linfer[]{
+        %                     \lclose
+        %                 }{
+        %                     \lsequent{\x[-1]^3\leq 0}{\x[-1]\leq 0}
+        %                 }
+        %             }{
+        %                 \lsequent{t=0,\x[-1]=t}{\dbox{\D{x}=-\x[-1]^2}{(\x[1]\leq 0)}}
+        %             }
+        %         \end{sequentdeduction}
+        %     \end{small}
 
-            This proof doesn't even need any premisse about $\x[-\tau]$ in the induction step.
+        %     This proof doesn't even need any premisse about $\x[-\tau]$ in the induction step.
 
         % \subsubsection{Example 3}
         %     \label{sec:ddi-example-3}
