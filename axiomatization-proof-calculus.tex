@@ -389,129 +389,131 @@ Moreover, they can be implemented in software for computer-aided verification.
     \end{description}
     \end{proof}
 
-\section{Proof Rules}
-    \label{sec:proof-rules}
+% \section{Proof Rules}
+%     \label{sec:proof-rules}
 
-    In order to avoid small steps in proofs by applying one axiom after the other, several axioms can be combined to a more powerful proof formula.
-    Since we posses for \ddL of most axioms given in \dL, we can also adapt most of its \emph{sequent calculus proof rules}, as given in \cite{cheatsheet}.
-    % TODO: or s-formulas?
-    By $\asfmls,\bsfmls,\csfmls$ we denote sets of formulas.
+%     In order to avoid small steps in proofs by applying one axiom after the other, several axioms can be combined to a more powerful proof formula.
+%     Since we posses for \ddL of most axioms given in \dL, we can also adapt most of its \emph{sequent calculus proof rules}, as given in \cite{cheatsheet}.
+%     % TODO: or s-formulas?
+%     By $\asfmls,\bsfmls,\csfmls$ we denote sets of formulas.
 
 
-        combine proof rule to tactic
+%         combine proof rule to tactic
     
-    If the \ddL formula $\asfml$ can be derived by \ddL proof rules from \ddL axioms, we say it is provable and write $|-\asfml$
-    (includes first-order axioms and rules)
+%     If the \ddL formula $\asfml$ can be derived by \ddL proof rules from \ddL axioms, we say it is provable and write $|-\asfml$
+%     (includes first-order axioms and rules)
 
-    \paragraph{Propositional Sequent Calculus Proof Rules}
-        \label{sec:propositional-rules}
+    % \paragraph{Propositional Sequent Calculus Proof Rules}
+    %     \label{sec:propositional-rules}
 
-        \par
-        \begin{calculus}
-            \cinferenceRule[closeTrue|$\top$R]{close by always true antedecent}{
-                \linferenceRule[sequent]{
-                    %
-                }{
-                    \lsequent{\asfmls}{\ltrue,\bsfmls}
-                }
-            }{}
-            \cinferenceRule[close|id]{close by identity}{
-                \linferenceRule[sequent]{
-                    %
-                }{
-                    \lsequent{\asfml,\asfmls}{\asfml,\bsfmls}
-                }
-            }{}
-            \cinferenceRule[andR|$\land$R]{and right proof rule}{
-                \linferenceRule[sequent]{
-                    \lsequent{\asfmls}{\asfml,\bsfmls}
-                    &\lsequent{\asfmls}{\bsfml,\bsfmls}
-                }{
-                    \lsequent{\asfmls}{\asfml\land \bsfml,\bsfmls}
-                }
-            }{}
-            \cinferenceRule[andL|$\land$L]{and left proof rule}{
-                \linferenceRule[sequent]{
-                    \lsequent{\asfmls, \asfml, \bsfml}{\bsfmls}
-                }{
-                    \lsequent{\asfmls, \asfml\land \bsfml}{\bsfmls}
-                }
-            }{}
-            \cinferenceRule[implyR|$\limply$R]{imply right proof rule}{
-                \linferenceRule[sequent]{
-                    \lsequent{\asfmls,\asfml}{\bsfml,\bsfmls}
-                }{
-                    \lsequent{\asfmls}{\asfml\limply \bsfml,\bsfmls}
-                }
-            }{}
-            % TODO: more rules, or etc.
-        \end{calculus}
+    %     \par
+    %     \begin{calculus}
+    %         \cinferenceRule[closeTrue|$\top$R]{close by always true antedecent}{
+    %             \linferenceRule[sequent]{
+    %                 %
+    %             }{
+    %                 \lsequent{\asfmls}{\ltrue,\bsfmls}
+    %             }
+    %         }{}
+    %         \cinferenceRule[close|id]{close by identity}{
+    %             \linferenceRule[sequent]{
+    %                 %
+    %             }{
+    %                 \lsequent{\asfml,\asfmls}{\asfml,\bsfmls}
+    %             }
+    %         }{}
+    %         \cinferenceRule[andR|$\land$R]{and right proof rule}{
+    %             \linferenceRule[sequent]{
+    %                 \lsequent{\asfmls}{\asfml,\bsfmls}
+    %                 &\lsequent{\asfmls}{\bsfml,\bsfmls}
+    %             }{
+    %                 \lsequent{\asfmls}{\asfml\land \bsfml,\bsfmls}
+    %             }
+    %         }{}
+    %         \cinferenceRule[andL|$\land$L]{and left proof rule}{
+    %             \linferenceRule[sequent]{
+    %                 \lsequent{\asfmls, \asfml, \bsfml}{\bsfmls}
+    %             }{
+    %                 \lsequent{\asfmls, \asfml\land \bsfml}{\bsfmls}
+    %             }
+    %         }{}
+    %         \cinferenceRule[implyR|$\limply$R]{imply right proof rule}{
+    %             \linferenceRule[sequent]{
+    %                 \lsequent{\asfmls,\asfml}{\bsfml,\bsfmls}
+    %             }{
+    %                 \lsequent{\asfmls}{\asfml\limply \bsfml,\bsfmls}
+    %             }
+    %         }{}
+    %         % TODO: more rules, or etc.
+    %     \end{calculus}
 
 
-    \paragraph{Quantifier Sequent Calculus Proof Rules}
-        \label{sec:quantifier-rules}
+    % \paragraph{Quantifier Sequent Calculus Proof Rules}
+    %     \label{sec:quantifier-rules}
 
-        \par
-        \begin{calculus}
-            \cinferenceRule[allR|$\forall$R]{forall right proof rule}{
-                \linferenceRule[sequent]{
-                    \lsequent{\asfmls}{\asfml(y),\bsfmls}
-                }{
-                    \lsequent{\asfmls}{\lforall{x}{\asfml(x)},\bsfmls}
-                }
-            }{$y\notin\asfmls,\bsfmls$}
-        \end{calculus}
-        here $x$ does not mean $\x[0]$.
+    %     \par
+    %     \begin{calculus}
+    %         \cinferenceRule[allR|$\forall$R]{forall right proof rule}{
+    %             \linferenceRule[sequent]{
+    %                 \lsequent{\asfmls}{\asfml(y),\bsfmls}
+    %             }{
+    %                 \lsequent{\asfmls}{\lforall{x}{\asfml(x)},\bsfmls}
+    %             }
+    %         }{$y\notin\asfmls,\bsfmls$}
+    %     \end{calculus}
+    %     here $x$ does not mean $\x[0]$.
 
-    \paragraph{\dL Sequent Calculus Proof Rules}
-        \label{sec:dL-rules}
+    % \paragraph{\dL Sequent Calculus Proof Rules}
+    %     \label{sec:dL-rules}
 
-        \par
-        \begin{calculus}
-            % TODO: replace := by command
-            \cinferenceRule[assignb|$\mathrel{{:}{=}}$]{discrete assignment}{
-                \linferenceRule[sequent]{
-                    \lsequent{\asfmls,x=\astrm}{\asfml,\bsfmls}
-                }{
-                    \lsequent{\asfmls}{\dbox{\hupdate{\humod{x}{\astrm}}}{\asfml},\bsfmls}
-                }
-            }{$x\notin\asfmls,\bsfmls$}
+    %     \par
+    %     $x\notin\asfmls,\bsfmls$ or reduce $\hsc{}$ to $\hs{}$?
+    %     \begin{calculus}
+    %         % TODO: replace := by command
+    %         % FIXME: check this rule, important for proof below
+    %         \cinferenceRule[assignb|$\mathrel{{:}{=}}$]{discrete assignment}{
+    %             \linferenceRule[sequent]{
+    %                 \lsequent{\asfmls,\x[0]=\astrm}{\asfml,\bsfmls}
+    %             }{
+    %                 \lsequent{\asfmls}{\dbox{\hupdate{\humod{x}{\astrm}}}{\asfml},\bsfmls}
+    %             }
+    %         }{$x\notin\asfmls,\bsfmls$}
 
-            \cinferenceRule[loop|loop]{loop invariant}{
-                \linferenceRule[sequent]{
-                    \lsequent{\asfmls}{\bsfml,\bsfmls}
-                    &\lsequent{\bsfml}{\dbox{\alpha}{\bsfml}}
-                    &\lsequent{\bsfml}{\asfml}
-                }{
-                    \lsequent{\asfmls}{\dbox{\hrepeat{\asprg}}{\asfml},\bsfmls}
-                }
-            }{with loop invariant $\bsfml$}
-        \end{calculus}
+    %         \cinferenceRule[loop|loop]{loop invariant}{
+    %             \linferenceRule[sequent]{
+    %                 \lsequent{\asfmls}{\bsfml,\bsfmls}
+    %                 &\lsequent{\bsfml}{\dbox{\alpha}{\bsfml}}
+    %                 &\lsequent{\bsfml}{\asfml}
+    %             }{
+    %                 \lsequent{\asfmls}{\dbox{\hrepeat{\asprg}}{\asfml},\bsfmls}
+    %             }
+    %         }{with loop invariant $\bsfml$}
+    %     \end{calculus}
 
-    \paragraph{Differential Equation Sequent Calculus Proof Rules}
-        \label{sec:diff-rules}
+    % \paragraph{Differential Equation Sequent Calculus Proof Rules}
+    %     \label{sec:diff-rules}
 
-        text
+    %     text
 
-        \begin{calculus}
-            \cinferenceRule[DC|DC]{differential cut}{
-                \linferenceRule[sequent]{
-                    \lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv},\bsfmls}
-                    &\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land \inv}}{\asfml}}
-                }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml},\bsfmls}}
-            }{}
-            \cinferenceRule[dI|dI]{differential invariant}{
-                \linferenceRule[sequent]{
-                    \lsequent{\asfmls,\asfml}{\inv,\bsfmls}
-                    &\lsequent{\asfml}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\der{\inv}}}
-                }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml},\bsfmls}}
-            }{}
-            \cinferenceRule[dW|dW]{differential weakening}{
-                \linferenceRule[sequent]{
-                    \lsequent{\asfmls}{\lforall{x}{(\ivr\limply\asfml)},\bsfmls}
-                }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml},\bsfmls}}
-            }{}
-        \end{calculus}
+    %     \begin{calculus}
+    %         \cinferenceRule[DC|DC]{differential cut}{
+    %             \linferenceRule[sequent]{
+    %                 \lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv},\bsfmls}
+    %                 &\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land \inv}}{\asfml}}
+    %             }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml},\bsfmls}}
+    %         }{}
+    %         \cinferenceRule[dI|dI]{differential invariant}{
+    %             \linferenceRule[sequent]{
+    %                 \lsequent{\asfmls,\asfml}{\inv,\bsfmls}
+    %                 &\lsequent{\asfml}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\der{\inv}}}
+    %             }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml},\bsfmls}}
+    %         }{}
+    %         \cinferenceRule[dW|dW]{differential weakening}{
+    %             \linferenceRule[sequent]{
+    %                 \lsequent{\asfmls}{\lforall{x}{(\ivr\limply\asfml)},\bsfmls}
+    %             }{\lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml},\bsfmls}}
+    %         }{}
+    %     \end{calculus}
 
     % TODO: Rule of Steps
     % \subsection{Rule of Steps}
@@ -537,7 +539,7 @@ Moreover, they can be implemented in software for computer-aided verification.
     %             }
     %         }{}
     %     \end{calculus}
-    %     %\end{small}
+        %\end{small}
 
     %     Formulas of the form $\asfmls(\x[-\tau])$ implicitely also include a statement about $x$.
 
@@ -557,56 +559,68 @@ Moreover, they can be implemented in software for computer-aided verification.
     %     hence stays safe forever
     %     so the state after the DDE fulfills the condition, parts of the state come from initial condition, parts from dde outcome
 
+    %     invariant of form with $\x[s]$, but without $\x[c]$, i.e. becomes \FOLR formula if I fix $\past=0$.
+
     %     \begin{calculus}
     %         \cinferenceRule[DDI|DDI]{delay differential induction proof rule}{
+    %             % FIXME: \der{} <-> \D{} ?
     %             \linferenceRule[sequent]{
-    %                 \lsequent{\asfmls}{\inv(\x[-\tau]),\bsfmls}
-    %                 &\lsequent{\ivr,0\leq t\leq\tau,\inv(\theta)}{\dbox{\hevolve{\Dupdate{\Dumod{\D{x}}{\rho(x,\theta)}}}}{\der{\inv(x)}}}
-    %                 &\lsequent{\inv(\x[-\tau])}{\asfml}
+    %                 \lsequent{\asfmls}{\hsc{\bsfml(s)},\bsfmls}
+    %                 &\lsequent{\ivr,0\leq t\leq\tau,\inv(\theta)}{\dbox{\hevolve{\Dupdate{\Dumod{\D{x}}{\rho(x,\theta)}}}}{\der{\bsfml(0)}}}
+    %                 % FIXME: only hs?
+    %                 &\lsequent{\hsc{\bsfml(s)}}{\asfml(s)}
     %             }{
-    %                 \lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\rho(x,\x[-\tau])}{\ivr}}{\asfml,\bsfmls}}
+    %                 \lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)},\bsfmls}
     %             }
     %         }{}
     %     \end{calculus}
 
     %     % sidewaysfigure
     %     %\begin{proof}\small
-    %     \begin{sidewaysfigure}\footnotesize
-    %     \centering
+    % \begin{landscape}
+        
+    %     % \begin{sidewaysfigure}
+    %     \footnotesize
+    %     % \centering
     %     % TODO: hist axiom earlier? before first DC?
     %     \begin{sequentdeduction}[]
-    %         \linfer[stepsb]{
-    %             \linfer[loop]{
-    %                 % FIXME: formel zu hoch
-    %                 \lsequent{\asfmls(\x[-\tau])}{\inv(\x[-\tau]),\bsfmls}
-    %                 % FIXME: multiple rules at once
-    %                 &\linfer[assignb+composeb]{
-    %                     \linfer[hist]{
+    %         \linfer[stepsb+composeb]{
+    %             \linfer[assignb]{
+    %                 \linfer[loop]{
+    %                     % FIXME: formel zu hoch
+    %                     \lsequent{\asfmls,\Dx[0]=\astrm}{\hs{\bsfml(s)},\bsfmls}
+    %                     &\linfer[composeb+assignb]{
     %                         \linfer[DC]{
     %                             \linfer[DC]{
     %                                 (1)
     %                             }{
-    %                                 \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau\land \inv(x(t-\tau)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
+    %                                 \lsequent{\hs{\bsfml(s)},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(\ivr\land 0\leq t\leq\tau\land \inv(x(t-\tau)))}}{\hs{\bsfml(s)}}}
     %                             }
     %                             &\linfer[dW]{
     %                                 (2)
     %                             }{
-    %                                 \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
+    %                                 \lsequent{\hs{\bsfml(s)},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
     %                             }
     %                         }{
-    %                             \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
+    %                             \lsequent{\hs{\bsfml(s)},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(\ivr\land 0\leq t\leq\tau)}}{\hs{\bsfml(s)}}}
+    %                             % \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(\ivr\land 0\leq t\leq\tau)}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
     %                         }
     %                     }{
-    %                         \lsequent{\inv(\x[-\tau]),t=0}{\dbox[]{\hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\x[-\tau])}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\x[-\tau])}}
+    %                         % FIXME: hsc?
+    %                         \lsequent{\hs{\bsfml(s)}}{\dbox{\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(\ivr\land 0\leq t\leq\tau)}}{\hs{\bsfml(s)}}}
     %                     }
+    %                     &\lsequent{\hs{\bsfml(s)}}{\asfml(s)}
     %                 }{
-    %                     \lsequent{\inv(\x[-\tau])}{\dbox[]{\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\x[-\tau])}{(\ivr\land 0\leq t\leq\tau)}}{\inv(\x[-\tau])}}
+    %                     % FIXME: Soundness of assignb, and applicaple here?
+    %                     % x' not in Gamma, and x not affected since (x[0])' and x'[0] need not to coincide?
+    %                     \lsequent{\asfmls,\Dx[0]=\astrm}{\dbox{\hrepeat{(\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(\ivr\land 0\leq t\leq\taumin)})}}{\asfml(s)}},\bsfmls
     %                 }
-    %                 \lsequent{\inv(\x[-\tau])}{\asfml(\x[-\tau])}
     %             }{
-    %             \lsequent{\asfmls(\x[-\tau])}{\dbox{\hrepeat{(\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm(x,\x[-\tau])}{(\ivr\land 0\leq t\leq\tau))}}}{\asfml(\x[-\tau]),\bsfmls}}}
+    %                 \lsequent{\asfmls}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\dbox{\hrepeat{(\hupdate{\humod{t}{0}}; \hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(\ivr\land 0\leq t\leq\taumin)})}}{\asfml(s)}}},\bsfmls
+    %             }
+    %         }{
+    %             \lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s),\bsfmls}}
     %         }
-    %         {\lsequent{\asfmls(\x[-\tau])}{\dbox{\hevolvein{\D{x}=\astrm(x,\x[-\tau])}{\ivr}}{\asfml(\x[-\tau]),\bsfmls}}}
     %     \end{sequentdeduction}
 
     %     % TODO: ref to here: (2)
@@ -626,7 +640,7 @@ Moreover, they can be implemented in software for computer-aided verification.
     %                 \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\lforall{(t,x)}{(\ivr\land 0\leq t\leq\tau\limply \inv(x(t-\tau)))}}
     %             }
     %         }{
-    %             \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
+    %             \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(\ivr\land 0\leq t\leq\tau)}}{\inv(x(t-\tau))}}
     %         }
     %     \end{sequentdeduction}
 
@@ -638,24 +652,24 @@ Moreover, they can be implemented in software for computer-aided verification.
     %                     \linfer[]{
     %                         \lclose
     %                     }{
-    %                         \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\inv(x(0))}
+    %                         \lsequent{\hs{\bsfml(s)},t=0}{\bsfml(0)}
     %                     }
     %                 }{
-    %                     \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0,A, \inv(x(t-\tau))}{\inv(x(t))}
+    %                     \lsequent{\hs{\bsfml(s)},t=0,A, \inv(x(t-\tau))}{\bsfml(0)}
     %                 }
     %                 % TODO: A=\ivr, 0\leq t\leq\tau
-    %                 &\lsequent{A, \inv(x(t-\tau)))}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{ \D{x}}{\eta(x(t),x(t-\tau))}}}{\der{\inv(x(t))}}}
+    %                 &\lsequent{A, \inv(x(t-\tau)))}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{ \D{x}}{\astrm}}}{\der{\inv(x(t))}}}
     %                 %}
     %             }{
-    %                 \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau)))}}{\inv(x(t))}}
+    %                 \lsequent{\hs{\bsfml(s)},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(A\land \inv(x(t-\tau)))}}{\bsfml(0)}}
     %             }
     %             &\linfer[dW]{
     %                 (3)
     %             }{
-    %                 \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau))\land \inv(x(t)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
+    %                 \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(A\land \inv(x(t-\tau))\land \inv(x(t)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
     %             }
     %         }{
-    %             \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(t+s))},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
+    %             \lsequent{\hs{\bsfml(s)},t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(\ivr\land 0\leq t\leq\tau\land \inv(x(t-\tau)))}}{\lforall{s\in[-\tau,0]}{\inv(x(t+s))}}}
     %         }
     %     \end{sequentdeduction}
     %     % TODO: ref here (3)
@@ -675,12 +689,14 @@ Moreover, they can be implemented in software for computer-aided verification.
     %                 \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))}, t=0}{\lforall{(t,x)}{((A\land \inv(x(t-\tau))\land \inv(x(t)))\limply\lforall{s\in[-\tau,0]}{\inv(x(t+s))})}}
     %             }
     %         }{
-    %             \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))}, t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\eta(x,x(t-\tau))}{(A\land \inv(x(t-\tau))\land \inv(x(t)))}}{(\lforall{s\in[-\tau,0]}{\inv(x(t+s))})}}
+    %             \lsequent{\lforall{s\in[-\tau,0]}{\inv(x(s))}, t=0}{\dbox{\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{(A\land \inv(x(t-\tau))\land \inv(x(t)))}}{(\lforall{s\in[-\tau,0]}{\inv(x(t+s))})}}
     %         }
     %     \end{sequentdeduction}
-    %     \end{sidewaysfigure}
+    %     % \end{sidewaysfigure}
     %     \normalsize
-        %\end{proof}
+    %         \end{landscape}
+
+        % \end{proof}
 
     \subsection{Delay Differential Invariant}
         \label{sec:delay-differential-invariant}
@@ -715,35 +731,91 @@ Moreover, they can be implemented in software for computer-aided verification.
             DDE is autonomous, can assume $\tzero=0$.
             \footnotesize
             \begin{sequentdeduction}
-                \linfer[DDI]{
-                    \linfer[]{
-                        \lclose
-                    }{
-                        \lsequent{\x[-\tau]\geq 0}{\x[-\tau]^3\geq 0}
-                    }
-                    &\linfer[]{
-                        \linfer[]{
-                            \linfer[]{
-                                \lclose
+                \linfer[DC]{
+                    \linfer[DI]{
+                        \linfer[DDW]{
+                            \linfer[DE+G]{
+                                \linfer[assignb]{
+                                    \linfer[QE]{
+                                        \lclose
+                                    }{
+                                        (\hsc{\x[s]\geq 0}\limply x^3\geq 0 \land
+                                        3x^2\x[-\tau]\geq 0 \land
+                                        \hs{\x[s]\geq 0}) \land
+                                        (x^3\geq 0 \limply x\geq 0)
+                                    }
+                                }{
+                                    (\hsc{\x[s]\geq 0}
+                                    \limply x^3\geq 0
+                                    \land
+                                    \dbox{\Dupdate{\Dumod{\D{x}}{\x[-\tau]}}}{(3x^2\D{x}\geq 0)}
+                                    \land
+                                    \hs{\x[s]\geq 0})
+                                    \land
+                                    (x^3\geq 0 \limply x\geq 0)
+                                }
                             }{
-                                \lsequent{\theta^3\geq 0}{3x^2\theta\geq 0}
+                                (\hsc{\x[s]\geq 0}\limply x^3\geq 0
+                                \land
+                                \dbox{\hevolve{\D{x}=\x[-\tau]}}{(3x^2\D{x}\geq 0)}
+                                \land
+                                \hs{\x[s]\geq 0})
+                                \land
+                                (x^3\geq 0 \limply x\geq 0)
                             }
                         }{
-                            \lsequent{0\leq t\leq \tau,\theta^3\geq 0}{\dbox{\Dupdate{\Dumod{\D{x}}{\theta}}}{(3x^2 \D{x}\geq 0)}}
+                            \hsc{\x[s]\geq 0}
+                            \limply
+                            x^3\geq 0
+                            \land
+                            \dbox{\hevolvein{\D{x}=\x[-\tau]}{x^3\geq 0}}{(\hsc{\x[s]\geq 0})}
+                            \land
+                            \dbox{\hevolve{\D{x}=\x[-\tau]}}{(3x^2\D{x}\geq 0)}
                         }
                     }{
-                        %\lclose
-                        \lsequent{0\leq t\leq \tau,\theta^3\geq 0}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{\D{x}}{\theta}}}{\der{x^3\geq 0}}}
-                    }
-                    &\linfer[]{
-                        \lclose
-                    }{
-                        \lsequent{\x[-\tau]^3\geq 0}{\x[-\tau]\geq 0}
-                    }
+                        \hsc{\x[s]\geq 0}
+                        \limply
+                        \dbox{\hevolvein{\D{x}=\x[-\tau]}{x^3\geq 0}}{(\hsc{\x[s]\geq 0})}
+                        \land
+                        \dbox{\hevolve{\D{x}=\x[-\tau]}}{(x^3\geq 0)}
+                    }    
                 }{
-                    \lsequent{\holdssinceclosed{-\tau}{\x[s]\geq 0}}{\dbox{\D{x}=\x[-\tau]}{(\holdssinceclosed{-\tau}{\x[s]\geq 0})}}
+                    \hsc{\x[s]\geq 0}
+                    \limply
+                    \dbox{\hevolve{\D{x}=\x[-\tau]}}{(\hsc{\x[s]\geq 0})}
                 }
-            \end{sequentdeduction}\normalsize
+            \end{sequentdeduction}
+            % \begin{sequentdeduction}
+            %     \linfer[DDI]{
+            %         \linfer[]{
+            %             \lclose
+            %         }{
+            %             \lsequent{\x[-\tau]\geq 0}{\x[-\tau]^3\geq 0}
+            %         }
+            %         &\linfer[]{
+            %             \linfer[]{
+            %                 \linfer[]{
+            %                     \lclose
+            %                 }{
+            %                     \lsequent{\theta^3\geq 0}{3x^2\theta\geq 0}
+            %                 }
+            %             }{
+            %                 \lsequent{0\leq t\leq \tau,\theta^3\geq 0}{\dbox{\Dupdate{\Dumod{\D{x}}{\theta}}}{(3x^2 \D{x}\geq 0)}}
+            %             }
+            %         }{
+            %             %\lclose
+            %             \lsequent{0\leq t\leq \tau,\theta^3\geq 0}{\dbox{\Dupdate{\Dumod{\D{t}}{1},\Dumod{\D{x}}{\theta}}}{\der{x^3\geq 0}}}
+            %         }
+            %         &\linfer[]{
+            %             \lclose
+            %         }{
+            %             \lsequent{\x[-\tau]^3\geq 0}{\x[-\tau]\geq 0}
+            %         }
+            %     }{
+            %         \lsequent{\holdssinceclosed{-\tau}{\x[s]\geq 0}}{\dbox{\D{x}=\x[-\tau]}{(\holdssinceclosed{-\tau}{\x[s]\geq 0})}}
+            %     }
+            % \end{sequentdeduction}
+            \normalsize
             In the same way we can prove that the solution stays negative for all $t$, if the initial condition is non-positive.
 
         \subsubsection{Example 2}
@@ -799,28 +871,28 @@ Moreover, they can be implemented in software for computer-aided verification.
 
             This proof doesn't even need any premisse about $\x[-\tau]$ in the induction step.
 
-        \subsubsection{Example 3}
-            \label{sec:ddi-example-3}
+        % \subsubsection{Example 3}
+        %     \label{sec:ddi-example-3}
 
-            We want to proof the safety condition $\asfml\equiv(-1\leq x\wedge x\leq 1)$ for the continuous program with delay differential equation
-            \begin{equation}
-                \forall\,t\in[-\tau,0]:\,-1\leq\xbartaut{0}(t)\wedge\xbartaut{0}(t)\leq 1
-                \rightarrow
-                [\D{x}=-\x[-\tau]] (\forall\,s\in[-\tau,0]:\,-1\leq\xbartaut{t}(s)\wedge\xbartaut{t}(s)\leq 1)
-            \end{equation}
-            in explicit quantified representation. It can be simplified by using an implicit time variable and a context depending meaning of $\x[-\tau]$
-            \begin{equation}
-                -1\leq\x[-\tau]\leq 1 \rightarrow [\D{x}=-\x[-\tau]]\asfml.
-            \end{equation}
+        %     We want to proof the safety condition $\asfml\equiv(-1\leq x\wedge x\leq 1)$ for the continuous program with delay differential equation
+        %     \begin{equation}
+        %         \forall\,t\in[-\tau,0]:\,-1\leq\xbartaut{0}(t)\wedge\xbartaut{0}(t)\leq 1
+        %         \rightarrow
+        %         [\D{x}=-\x[-\tau]] (\forall\,s\in[-\tau,0]:\,-1\leq\xbartaut{t}(s)\wedge\xbartaut{t}(s)\leq 1)
+        %     \end{equation}
+        %     in explicit quantified representation. It can be simplified by using an implicit time variable and a context depending meaning of $\x[-\tau]$
+        %     \begin{equation}
+        %         -1\leq\x[-\tau]\leq 1 \rightarrow [\D{x}=-\x[-\tau]]\asfml.
+        %     \end{equation}
 
-            We apply the rule of steps using the safety condition $\phi$ as step condition $F(x)\equiv(\forall\,t\in[-\tau,0]:\,-1\leq x(t)\wedge x(t)\leq 1)$.
+        %     We apply the rule of steps using the safety condition $\phi$ as step condition $F(x)\equiv(\forall\,t\in[-\tau,0]:\,-1\leq x(t)\wedge x(t)\leq 1)$.
 
-            The first and third premisses hold. The second by ??? (delay differential invariant)
+        %     The first and third premisses hold. The second by ??? (delay differential invariant)
 
-            Use the algebraic differential invariant $F\equiv(-1\leq x^3\wedge x^3\leq1)$, which is valid for the initial condition. Differentiation leads to the inequalities, which needs to be shown $\forall t\in[0,\tau]$
-            \begin{equation}
-                0\leq 3\,x(t)^2 \D{x}(t) = -3\,x(t)^2 \x[-\tau](t)
-            \end{equation}
+        %     Use the algebraic differential invariant $F\equiv(-1\leq x^3\wedge x^3\leq1)$, which is valid for the initial condition. Differentiation leads to the inequalities, which needs to be shown $\forall t\in[0,\tau]$
+        %     \begin{equation}
+        %         0\leq 3\,x(t)^2 \D{x}(t) = -3\,x(t)^2 \x[-\tau](t)
+        %     \end{equation}
 
-            This holds since
+        %     This holds since
 
