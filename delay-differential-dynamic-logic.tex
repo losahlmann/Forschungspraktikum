@@ -416,7 +416,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             \D{(\x[c])} &= \Dx[c]\\
             %\Dx[b] &=\\
             \D{(a)} &= 0\\
-            \D{(f(\range{\istrm{1}}{\istrm{k}}))} &=\\
+            % \D{(f(\range{\istrm{1}}{\istrm{k}}))} &=\\
             \D{(\astrm+\bstrm)} &= \D{(\astrm)}+\D{(\bstrm)}\\
             \D{(\astrm\cdot\bstrm)} &= \D{(\astrm)}\cdot\bstrm + \astrm\cdot\D{(\bstrm)}\\
             % FIXME: is term' allowed? diff inv is only a FOLR formula? even for dL valid?
@@ -438,7 +438,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             \ivaluation{\IddL}{\D{(\x[c])}}
             &= \sum_{\x[d]\in\delayvars} \asstate(\D{x})(d)\frac{\partial\ivaluation{\IddL}{\x[c]}}{\partial \x[d]}+ \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\x[c]}}{\partial \x[s]}\\
             &= \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\x[c]}}{\partial \x[c]}
-            = \asstate(\D{x})(c) = \ivaluation{\IddL}{\Dx[b]}
+            = \asstate(\D{x})(c) = \ivaluation{\IddL}{\Dx[c]}
         \end{align*}
         \begin{align*}
             % constant
@@ -447,11 +447,11 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             % &= \asstate(\D{x})(c)\frac{\partial\interpret[a]}{\partial \x[c] 
             = 0
         \end{align*}
-        \begin{align*}
-            % chain rule
-            % FIXME: derivation of function symbol
-            \ivaluation{\IddL}{\D{(f(\range{\istrm{1}(s)}{\istrm{k}(s)}))}} &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})}}{\partial \x[c]}\\ &+ \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})}}{\partial \x[s]}
-        \end{align*}
+        % \begin{align*}
+        %     % chain rule
+        %     % TODO: derivation of function symbol
+        %     \ivaluation{\IddL}{\D{(f(\range{\istrm{1}(s)}{\istrm{k}(s)}))}} &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})}}{\partial \x[c]}\\ &+ \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})}}{\partial \x[s]}
+        % \end{align*}
         \begin{align*}
             % addition rule
             \ivaluation{\IddL}{\D{(\astrm(s)+\bstrm(s))}}
@@ -470,7 +470,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[c]}\ivaluation{\IddL}{\bstrm(s)} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}\ivaluation{\IddL}{\bstrm(s)}\\
             &+ \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[c]}\ivaluation{\IddL}{\astrm(s)} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[s]}\ivaluation{\IddL}{\astrm(s)}\\
             &= \ivaluation{\IddL}{\D{(\astrm(s))}}\cdot\ivaluation{\IddL}{\bstrm(s)} + \ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\D{(\bstrm(s)}}\\
-            &= \ivaluation{\IddL}{\D{(\astrm(s))}\cdot\bstrm(s)+\astrm(s)\cdot\D{(\bstrm(s)}}
+            &= \ivaluation{\IddL}{\D{(\astrm(s))}\cdot\bstrm(s)+\astrm(s)\cdot\der{\bstrm(s)}}
         \end{align*}
         
     \end{proof}

@@ -295,7 +295,9 @@ See \cite{Bellen13NumericalDDEs} or \cite{Szczlina14RigorousDDEs} for a rigorous
 
     \begin{theorem}[Existence of a unique solution]
         \label{thm:solution-existence}
-        For a continuous function $f\from\deff\to\R^n$, satisfying the Lipschitz condition (Def.~\ref{def:lipschitz}) in all but its zeroth argument, consider the IVP for a delay differential equation
+        For a continuous function $f\from\deff\to\R^n$, satisfying the
+        % FIXME: Lip only in first arg?
+        Lipschitz condition (Def.~\ref{def:lipschitz}) in all but its zeroth argument, consider the IVP for a delay differential equation
         \begin{equation}
             \begin{cases}
                 \D{x} = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k)) & \text{for } t\geq\tzero\\

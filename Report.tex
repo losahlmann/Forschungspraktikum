@@ -39,6 +39,12 @@
 \usepackage{amsthm} % provides theorem environment
 %\usepackage{nicefrac} % better slash fracs in inline
 
+% load one single symbol from stix font
+\DeclareFontEncoding{LS1}{}{}
+\DeclareFontSubstitution{LS1}{stix}{m}{n}
+\DeclareSymbolFont{arrows1}{LS1}{stixsf}{m}{n}
+\DeclareMathDelimiter{\steps}{\mathrel}{arrows1}{"EC}{arrows1}{"EC}
+
 % subfigures
 \usepackage{subcaption}
 
@@ -54,6 +60,8 @@
 
 % rotate figures
 \usepackage{rotating}
+
+\usepackage{pdflscape}
 
 % diplay URL
 \usepackage{url}
@@ -122,11 +130,14 @@
     access=\rho % reachability relation
     ]}
 
+% no parentheses around axiom names
+\renewcommand*{\irrulename}[1]{\text{#1}}
+
 %% Settings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % serif titles
 \addtokomafont{disposition}{\rmfamily}
-\addtokomafont{descriptionlabel}{\rmfamily}
+\setkomafont{descriptionlabel}{\normalfont}
 
 % additional title page variables
 \newcommand*{\cdepartment}{}%
@@ -200,7 +211,7 @@
 
 \include{delay-differential-dynamic-logic}
 
-% \include{axiomatization-proof-calculus}
+\include{axiomatization-proof-calculus}
 
 % \include{example}
 
