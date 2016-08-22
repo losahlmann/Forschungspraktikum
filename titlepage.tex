@@ -3,7 +3,7 @@
 \begin{titlepage}
 
 \noindent\begin{tikzpicture}[x=1cm,y=-1cm]
-    \node at (0,0) {};
+    % \node at (0,0) {};
     % 567 × 368 px, 1.54 x 1, tight
     \node [inner sep=0cm, below left] at (12.6,0.07) {\includegraphics[width=4cm]{figures/CMU_logo_stack_red}};
     % 392 × 177 px, 2.21 x 1, almost tight (+5px each side)
@@ -12,7 +12,7 @@
 %\draw (0,1.39) -- (13.1,1.39);
 \end{tikzpicture}
 
-\bigskip
+% \bigskip
 \bigskip
 \bigskip
 \begin{center}
@@ -20,7 +20,9 @@
     \Large \cinstitution
 
     \bigskip\bigskip
-    \Large\bfseries\@subject%\\[-0.5\baselineskip]
+    \Large\textbf{\@subject}\\%\\[-0.5\baselineskip]
+    \medskip
+    \textsc{\Large \ctype}
 
     \noindent\rule{\textwidth}{1pt}
     \huge\bfseries\@title\\[-0.5\baselineskip]
@@ -37,17 +39,24 @@
 
 \vfill
 \begin{center}
-    \normalsize supervised by\\ 
+    % supervised by
+    \normalsize\csupervisortitle\\ 
     \Large\csupervisor\\
     \Large\,\large\csupervisorinst\\
-    \Large\,\normalsize and\\
+    \medskip
+    % and
+    \Large\,\normalsize\cscndsupervisortitle\\
     \Large\cscndsupervisor\\
     \Large\,\large\cscndsupervisorinst
-
     % \medskip
     % \large\csupervisorinst
 \end{center}
-
+%
+\begin{tikzpicture}[overlay]
+    \node [xshift=-0cm, yshift=-1.5cm, text width=7cm, below right] at (current page.south west) {\caddress};
+    % \node at (0,19) 
+\end{tikzpicture}
+%
 \end{titlepage}
 
 \makeatother

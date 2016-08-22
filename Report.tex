@@ -68,7 +68,7 @@
 
 % shows labels and references in margin, good for correction
 \usepackage{showkeys}
-%\usepackage{showframe}
+% \usepackage{showframe}
 
 % LS-Lab auxiliary math commands
 \usepackage[Dprime]{math}
@@ -144,14 +144,22 @@
 \newcommand*{\department}[1]{\gdef\cdepartment{#1}}
 \newcommand*{\cinstitution}{}%
 \newcommand*{\institution}[1]{\gdef\cinstitution{#1}}
+\newcommand*{\ctype}{}%
+\newcommand*{\type}[1]{\gdef\ctype{#1}}
 \newcommand*{\csupervisor}{}%
 \newcommand*{\supervisor}[1]{\gdef\csupervisor{#1}}
+\newcommand*{\csupervisortitle}{}%
+\newcommand*{\supervisortitle}[1]{\gdef\csupervisortitle{#1}}
 \newcommand*{\csupervisorinst}{}%
 \newcommand*{\supervisorinst}[1]{\gdef\csupervisorinst{#1}}
 \newcommand*{\cscndsupervisor}{}%
 \newcommand*{\scndsupervisor}[1]{\gdef\cscndsupervisor{#1}}
+\newcommand*{\cscndsupervisortitle}{}%
+\newcommand*{\scndsupervisortitle}[1]{\gdef\cscndsupervisortitle{#1}}
 \newcommand*{\cscndsupervisorinst}{}%
 \newcommand*{\scndsupervisorinst}[1]{\gdef\cscndsupervisorinst{#1}}
+\newcommand*{\caddress}{}%
+\newcommand*{\address}[1]{\gdef\caddress{#1}}
 \renewcommand{\maketitle}{\include{Titlepage}}
 
 % Title for algorithm environment
@@ -186,15 +194,22 @@
 
 \department{Master Comasic}
 \institution{École Polytechnique}
-\subject{Stage de Recherche\\ at\\ Carnegie Mellon University}
+\type{Rapport Non\,Confidentiel}
+\subject{Stage de Recherche at\\ Carnegie Mellon University}
 \title{Delay Differential Logic for Hybrid Systems with Delay}
 \author{Lorenz Sahlmann}
-\date{March\,--\,August 2016}
+\date{Mars\,--\,Août 2016}
 % FIXME: proper titles of professors
 \supervisor{Prof.~Dr.~André Platzer}
+\supervisortitle{Tuteur de stage}
 \supervisorinst{Carnegie Mellon University}
 \scndsupervisor{Prof.~Eric Goubault}
+\scndsupervisortitle{Enseignant référent}
 \scndsupervisorinst{École Polytechnique}
+\address{Computer Science Department\\
+        Carnegie Mellon University\\
+        Pittsburgh, PA 15213-3891\\
+        USA}
 
 \maketitle
 
