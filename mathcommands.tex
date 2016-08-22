@@ -24,6 +24,9 @@
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\nonposQ}{\Q^-_0}
 
+% parentheses for operator arguments
+\DeclarePairedDelimiter{\parentheses}{(}{)}
+
 % sets
 \DeclarePairedDelimiter{\braces}{\{}{\}} % \braces* uses \left\right, but without space before
 \renewcommand{\set}[1]{\braces*{#1}} % override def in malgebra.sty
@@ -196,13 +199,16 @@
 %\newcommand{\xtau}[1][-\tau]{x[#1]}
 %\newcommand{\Dxtau}[1][-\tau]{\D{x}[#1]}
 
-
-
+% use \freevars*{} for parentheses autostretch, \freevars[\big]{} for manual
+\renewcommand{\freevars}{\operatorname{FV}\parentheses}
+\renewcommand{\boundvars}{\operatorname{BV}\parentheses}
+\renewcommand{\mustboundvars}{\operatorname{MBV}\parentheses}
 
 % History Horizon
-\DeclareMathOperator{\HHtrm}{HH_{\ltermsname}}
-\DeclareMathOperator{\HHfml}{HH_{\lformulasname}}
-\DeclareMathOperator{\HHprg}{HH_{\lprogramsname}}
+\newcommand{\HH}{\operatorname{HH}\parentheses}
+% \newcommand{\HHtrm}{\operatorname{HH_{\ltermsname}}\parentheses}
+% \newcommand{\HHfml}{\operatorname{HH_{\lformulasname}}\parentheses}
+% \newcommand{\HHprg}{\operatorname{HH_{\lprogramsname}}\parentheses}
 
 % Deprecated
 % FIXME: make sure not used any more
