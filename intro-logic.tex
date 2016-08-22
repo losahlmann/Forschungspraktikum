@@ -234,240 +234,270 @@
             % satisfieable if there is at least one model in which formula evaluates to true
             % valid if always evaluates to true, in every model
 
-    %     \subsection{Proof Theory}
-    %     \label{sec:FOL-proof-theory}
+        % TODO: free variables
+        \subsection{Variable Binding}
+            \label{sec:FOL-variable-binding}
 
-    %         % FIXME: when to use vDash instead of models? because of \entails in semantics
-    %         test $\models\vDash $ establish validity by proofs
-    %         semantics: given interpretation,assignment -> compute its truth value, check satisfaction easy
-    %         check validity difficult, need to check for all interpretations, assignments
-    %         proofs shows validity, but not valid difficult, how to show that there is no proof?
+            Quantifiers in formula bind occurences of variable, in such a way that a \emph{bound variable} does not need an assignment in order to determine a truth value for the formula.
+            In contrast, a \emph{free variable} requires an assignment.
 
-    %         proof for establishing evidence of assertions, like $\lsequent{\Gamma}{\astrm}$ valid
-    %         not useful for $\lsequent{\Gamma}{\astrm}$ not valid
+            % sentence is formula without free variables, has a determined truth value
+            % sentence: formula without free formula
 
-    %         two characterisations need be equivalent, ie soundness and completeness
+            \begin{definition}[Variable binding]
+                A variable $x$ occuring in a subformula of the form $\lforall{x}{\bsfml}$ or $\lexists{x}{\bsfml}$ is \emph{bound} in the formula $\asfml$.
+                If not it is free
+            \end{definition}
 
-    %         valid formulas are of particular interest, hold under all circumstances, ie for all interpretations and assignments
+            subst of free variables possible
+            % TODO: is it same subst as in semantics? or better use writing A(x) for free x
 
-    %         need to identify these, check validity
+            in terms only free variables -> quantifier rules einschrankungen
+            y must not occurr free in $\asfmls,\bsfmls$
 
-    %         if not valid, there is a counterexample, an interpretation and assignment for which not true, ie false
+        \subsection{Proof Theory}
+            \label{sec:FOL-proof-theory}
 
-    %         can be hard to find such, but easy to check to be one
+            % FIXME: when to use vDash instead of models? because of \entails in semantics
+            % test $\models\vDash $
+            % establish validity by proofs
+            
+            Given an interpretation and assignment the semantics of a logic allow to compute the truth value of a formula. This means, checking satisfaction is easy.
+            However to check the validity of a formula by the semantics is difficult. We would need to check all possible interpretations and assignments.
 
-    %         want to easily show validity
-    %         witness for not validity: counterexample
-    %         witness for validity: (formal) proof
+            To tackle that problem, one introduces the concept of a proof calculus, which allows to show the validity of a formula.
+            A \emph{formal proof} derives an obviously valid formula from the initial formula, using a set of \emph{sound} derivation rules.
 
-    %         formal proof is a derived formula, which is obviously valid
-    %         form initial formula by valid rules
+            In general, it can be difficult to find a proof.
+            But once a proof is found, it can easily be verified by the validity of the proof rules.
+            This means, as opposed to the semantics, showing that a formula is not valid using the proof calculus, is difficult.
+            Using the semantics, it is sufficient to find a counter-example, but how can one show that there is no proof?
 
-    %         can be difficult to find a proof
-    %         but proof can easil be verified by validity of proof rules
+            % if not valid, there is a counterexample, an interpretation and assignment for which not true, ie false
 
-    %         proof rules are derived from axioms or easy valid formulas
+            A counterexample is a witness for not validity, a (formal) proof is a witness for validity. 
 
-    %         different styles of formal logical argumentation
+            % proof for establishing evidence of assertions, like $\lsequent{\Gamma}{\astrm}$ valid
+            % not useful for $\lsequent{\Gamma}{\astrm}$ not valid
 
-    %         deduction systems in which a proof can be represented
+            These two characterisations of truth, semantics and proof calculus, need to be equivalent.
+            A proof calculus is \emph{sound} if invalid sequents are not deriveable and \emph{complete} if every valid sequent can be derived.
 
-    %         proof of a sequent is a tree, initial sequent as root, axioms as leaves
+            % valid formulas are of particular interest, hold under all circumstances, ie for all interpretations and assignments
+            % need to identify these, check validity
 
-    %         $w\models\Gamma$ means $w\models\asfml$ for all $\asfml\in\Gamma$
-    %         definition
-    %         logical consequence $\Gamma\models\bsfml$ if $w\models\bsfml$ for every model of $\Gamma$
-    %         $w\models\Gamma\limply w\models\bsfml$ for all valuations w
-    %         super charged symbol but context
+            % proof rules are derived from axioms or easy valid formulas
+            % proof of a sequent is a tree, initial sequent as root, axioms as leaves
 
-    %         $T$ entails $\asfml$, all interpretations satisfying $T$ also satisfy $\asfml$
-    %         $\asfml$ is valid, if every interpretation makes it true
+            % $w\models\Gamma$ means $w\models\asfml$ for all $\asfml\in\Gamma$
+            % definition
+            % logical consequence $\Gamma\models\bsfml$ if $w\models\bsfml$ for every model of $\Gamma$
+            % $w\models\Gamma\limply w\models\bsfml$ for all valuations w
+            % super charged symbol but context
 
-    %         a sequent is deriveable/provable in proof calculus $C$, $T|-_C\asfml$ if there is a formal proof in the calculus for the sequent
+            % $T$ entails $\asfml$, all interpretations satisfying $T$ also satisfy $\asfml$
+            % $\asfml$ is valid, if every interpretation makes it true
 
-    %         judgement of form
-    %         \begin{equation}
-    %             \lsequent{\range{\asfml_1}{\asfml_n}}{\bsfml}
-    %         \end{equation}
-    %         called sequent
-    %         sets may be empty
-    %         sequent is valid, if there is a proof
+            % a sequent is deriveable/provable in proof calculus $C$, $T|-_C\asfml$ if there is a formal proof in the calculus for the sequent
 
-    %         proof calculus is sound if invalid sequents are not deriveable in C
-    %         is complete if every valid sequent can be derived
+            % judgement of form
+            % \begin{equation}
+            %     \lsequent{\range{\asfml_1}{\asfml_n}}{\bsfml}
+            % \end{equation}
+            % called sequent
+            % sets may be empty
+            % sequent is valid, if there is a proof
 
-    %         \subsubsection{Logical Axioms}
-    %             \label{sec:FOL-axioms}
+            There are different styles of formal logical argumentation. We consider two different deduction systems in which a proof can be represented.
+            
 
-    %             axiom system contains countably infinite number of axioms
-    %             made from set of axiom schemata
-    %             concrete instance
+            % \subsubsection{Logical Axioms}
+            %     \label{sec:FOL-axioms}
 
-    %             theory of $\model$ is set of sentences satisfied by $\model$
-    %             generally, theory is set of sentences
-    %             model class of theory $T$: all interpretations which satisfy $T$ (all sentences given in T)
-    %             if $K$ (interpretations) is model class of theory $T$, then $T$ is set of axioms for $K$ (\cite{Hodges01ClassicalLogic})
+                
 
-    %             zero-premise rule
-    %             \begin{calculus}
-    %                 \cinferenceRule[ax|]{}{
-    %                     \linferenceRule[sequent]{}{\lsequent{\asfml}{\asfml}}
-    %                 }{}
-    %             \end{calculus}
+            \subsubsection{Hilbert Calculus}
+                \label{sec:hilbert-calculus}
 
-    %         \subsubsection{Hilbert Calculus}
-    %             \label{sec:hilbert-calculus}
+                Hilbert Style deduction system/calculi
 
-    %             \cite{Hodges01ClassicalLogic}
+                selected tautologies with role of axiom
+                selection is rather arbitrary
+                depending on signature
 
-    %             selected tautologies with role of axiom
-    %             selection is rather arbitrary
-    %             depending on signature
+                define class of axioms, ie the set of all formulas which have any of the forms ...
 
-    %             inference rules
+                axiom system contains countably infinite number of axioms
+                made from set of axiom schemata
+                concrete instance
 
-    %             modus ponens (MP)
+                % theory of $\model$ is set of sentences satisfied by $\model$
+                % generally, theory is set of sentences
+                % model class of theory $T$: all interpretations which satisfy $T$ (all sentences given in T)
+                % if $K$ (interpretations) is model class of theory $T$, then $T$ is set of axioms for $K$ (\cite{Hodges01ClassicalLogic})
 
-    %             logical axiom scheme, all formulas of the form
+                zero-premise rule
+                % \begin{calculus}
+                %     \cinferenceRule[ax|]{}{
+                %         \linferenceRule[sequent]{}{
+                %             \lsequent{\asfml}{\asfml}
+                %         }
+                %     }{}
+                % \end{calculus}
 
-    %             % TODO: axioms for Hilbert FOL
-    %             \begin{calculus}
-    %                 \cinferenceRule[L1|$\Lambda1$]{}{
-    %                     \linferenceRule[impl]{(\asfml\limply(\bsfml\limply\csfml))}{(\asfml\limply\bsfml)\limply(\asfml\limply\csfml)}
-    %                 }{}
-    %                 \cinferenceRule[L2|$\Lambda2$]{}{
-    %                     \linferenceRule[impl]{a}{a}
-    %                 }{}
-    %                 \cinferenceRule[L3|$\Lambda3$]{}{
-    %                     \linferenceRule[impl]{a}{a}
-    %                 }{}
-    %                 \cinferenceRule[L4|$\Lambda4$]{}{
-    %                     \linferenceRule[impl]{a}{a}
-    %                 }{}
+                \cite{Hodges01ClassicalLogic}
 
-    %             \end{calculus}
+                
 
-    %             are all tautologies
+                and only a small number of inference rules: \emph{modus ponens} (MP)
 
-    %             Hilbert Style deduction system/calculi
-    %             every line of a proof is unconditional tautology or theorem
+                logical axiom scheme, all formulas of the form
 
-    %             small number of inference rules
-    %             relying more on axioms
+                % TODO: axioms for Hilbert FOL
+                \begin{calculus}
+                    \cinferenceRule[L1|$\Lambda1$]{}{
+                        \linferenceRule[impl]{
+                            \big(\asfml\limply(\bsfml\limply\csfml)\big)
+                        }{
+                            \big((\asfml\limply\bsfml)\limply(\asfml\limply\csfml)\big)
+                        }
+                    }{}
+                    \cinferenceRule[L2|$\Lambda2$]{}{
+                        \linferenceRule[impl]{a}{a}
+                    }{}
+                    \cinferenceRule[L3|$\Lambda3$]{}{
+                        \linferenceRule[impl]{a}{a}
+                    }{}
+                    \cinferenceRule[L4|$\Lambda4$]{}{
+                        \linferenceRule[impl]{a}{a}
+                    }{}
 
-    %             reach a conclusion by applying deduction rules to axioms
+                \end{calculus}
 
-    %             useful when one wants to add further axioms to first-order base
+                are all tautologies
 
-    %             judgement is any formula of given (first-order) logic
-    %             theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
+                
+                every line of a proof is unconditional tautology or theorem
 
-    %             define class of axioms, ie the set of all formulas which have any of the forms ...
+                relying more on axioms
 
-    %             formal proof is a derivation of the formula (conclusion) from axioms and premises by applying in each step modus ponens or quantifier-generalization
+                reach a conclusion by applying deduction rules to axioms
 
-    %             $\bsfml$ deriveable in C from premises, if exists a derivation with conclusion $\bsfml$
+                % useful when one wants to add further axioms to first-order base
 
-    %             lemma to be used in another proof
+                judgement is any formula of given (first-order) logic
+                theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
 
-    %             % Nomenklatur
-    %             deductive rules
-    %             inference rules
+                In this calculus, a formal proof is a derivation of the formula to be shown (conclusion) from the axioms and premises by applying in each step modus ponens or quantifier-generalization.
 
+                $\bsfml$ deriveable in C from premises, if exists a derivation with conclusion $\bsfml$
 
-    %         % TODO: natural deduction calculus
-    %         \subsubsection{Natural Deduction}
-    %             \label{sec:natural-deduction}
+                % lemma to be used in another proof
 
-    %             The \emph{natural deduction} is a calculus of the so-called Gentzen style,
-    %             which relies on only a few axioms but an exhaustive collection of inference rules operating on sequents.
-
-    %             By applying these rules one infers formulas from formulas and finally deduces a conclusion from the given set of promises.
-
-    %             \cite{Rautenberg10ConciseLogic}
-
-    %             % TODO: replace \Gamma with \asfmls, \Delta with \bsfmls
-    %             \begin{calculus}
-    %                 \cinferenceRule[FOLax|ax]{axiom, initial rule}{
-    %                     \linferenceRule[sequent]{
-    %                         \lsequent{}{}
-    %                     }{
-    %                         \lsequent{\asfmls,\asfml}{\asfml}
-    %                     }
-    %                 }{}
-    %                 \cinferenceRule[FOLmono|$\land$i]{monotonicity rule}{
-    %                     \linferenceRule[sequent]{
-    %                         \lsequent{\asfmls}{}
-    %                     }{
-    %                         \lsequent{\asfmls}{}
-    %                     }
-    %                 }{}
-    %                 \cinferenceRule[FOLandi|$\land$i]{and introduction}{
-    %                     \linferenceRule[sequent]{
-    %                         \lsequent{\asfmls}{\asfml}
-    %                         &\lsequent{\asfmls}{\bsfml}
-    %                     }{
-    %                         \lsequent{\asfmls}{\asfml\land\bsfml}
-    %                     }
-    %                 }{}
-    %                 \cinferenceRule[FOLande|$\land$i]{and elimination}{
-    %                     \linferenceRule[sequent]{
-    %                         \lsequent{\asfmls}{\asfml\land\bsfml}
-    %                     }{
-    %                         \lsequent{}{}
-    %                     }
-    %                 }{}
-    %                 \cinferenceRule[FOLnotr|$\land$r]{not elimination}{
-    %                     \linferenceRule[sequent]{
-    %                         \lsequent{\asfmls}{\bsfml}
-    %                         &\lsequent{\asfmls}{\lnot\bsfml}
-    %                     }{
-    %                         \lsequent{\asfmls}{\asfml}
-    %                     }
-    %                 }{}
-    %                 \cinferenceRule[FOLnotl|$\land$l]{not elimination}{
-    %                     \linferenceRule[sequent]{
-    %                         \lsequent{\asfmls,\asfml}{\bsfml}
-    %                         &\lsequent{\asfmls,\lnot\asfml}{\bsfml}
-    %                     }{
-    %                         \lsequent{\asfmls}{\bsfml}
-    %                     }
-    %                 }{}
-    %                 \cinferenceRule[FOLalle|$\forall$e]{forall elimination}{
-    %                     \linferenceRule[sequent]{
-    %                         \lsequent{\asfmls}{\lforall{x}{\asfml}}
-    %                     }{
-    %                         \lsequent{\asfmls}{\subst[\asfml]{x}{t}}
-    %                     }
-    %                 }{collision free}
-    %                 \cinferenceRule[FOLalli|$\forall$i]{forall introduction}{
-    %                     \linferenceRule[sequent]{
-    %                         \lsequent{\asfmls}{\subst[\asfml]{x}{y}}
-    %                     }{
-    %                         \lsequent{\asfmls}{\lforall{x}{\asfml}}
-    %                     }
-    %                 }{y not in free vars von $\Gamma$ and vars von $\asfml$}
-    %             \end{calculus}
-
-    %             % ??? oder mehrere premises (sequents) oben one unten
-    %             Every line of a proof is a conditional tautology, with zero or more conditions on the left side of the sequent and exactly one asserted proposition on the right hand side.
-
-    %             premises: set of formulas $\range{\asfml_1}{\asfml_n}$
-    %             conclusion $\bsfml$ single formula
-
-    %             umforme premises with rules into conclusion
-    %             this intention, written as
-    %             from premisses conclude conclusion $\bsfml$
+                % Nomenklatur
+                % deductive rules
+                % inference rules
 
 
-    %             in contrast to relationship $\range{\asfml_1}{\asfml_n}\models\bsfml$, see semantics
+            % TODO: natural deduction calculus
+            \subsubsection{Natural Deduction}
+                \label{sec:natural-deduction}
 
-    %             Finding a proof can be difficult, because it might not be obvious which proof rules need to be applied and in what order.
+                The \emph{natural deduction} is a calculus of the so-called Gentzen style,
+                which relies on only a few axioms but an exhaustive collection of inference rules operating on sequents.
 
-    %             theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
+                By applying these rules one infers formulas from formulas and finally deduces a conclusion from the given set of promises.
 
-    %             % TODO: add ref to soundness
-    %             rules well chosen, see soundness
+                \cite{Rautenberg10ConciseLogic}
+
+                % TODO: replace \Gamma with \asfmls, \Delta with \bsfmls
+                \begin{figure}[t]
+                    \begin{calculuscollections}{\textwidth}
+                    \begin{calculus}
+                        \cinferenceRule[FOLax|ax]{axiom, initial rule}{
+                            \linferenceRule[sequent]{
+                                \lsequent{}{}
+                            }{
+                                \lsequent{\asfmls,\asfml}{\asfml}
+                            }
+                        }{}
+                        \cinferenceRule[FOLmono|$\land$i]{monotonicity rule}{
+                            \linferenceRule[sequent]{
+                                \lsequent{\asfmls}{}
+                            }{
+                                \lsequent{\asfmls}{}
+                            }
+                        }{}
+                        \cinferenceRule[FOLandi|$\land$i]{and introduction}{
+                            \linferenceRule[sequent]{
+                                \lsequent{\asfmls}{\asfml}
+                                &\lsequent{\asfmls}{\bsfml}
+                            }{
+                                \lsequent{\asfmls}{\asfml\land\bsfml}
+                            }
+                        }{}
+                        \cinferenceRule[FOLande|$\land$i]{and elimination}{
+                            \linferenceRule[sequent]{
+                                \lsequent{\asfmls}{\asfml\land\bsfml}
+                            }{
+                                \lsequent{}{}
+                            }
+                        }{}
+                        \cinferenceRule[FOLnotr|$\land$r]{not elimination}{
+                            \linferenceRule[sequent]{
+                                \lsequent{\asfmls}{\bsfml}
+                                &\lsequent{\asfmls}{\lnot\bsfml}
+                            }{
+                                \lsequent{\asfmls}{\asfml}
+                            }
+                        }{}
+                        \cinferenceRule[FOLnotl|$\land$l]{not elimination}{
+                            \linferenceRule[sequent]{
+                                \lsequent{\asfmls,\asfml}{\bsfml}
+                                &\lsequent{\asfmls,\lnot\asfml}{\bsfml}
+                            }{
+                                \lsequent{\asfmls}{\bsfml}
+                            }
+                        }{}
+                        \cinferenceRule[FOLalle|$\forall$e]{forall elimination}{
+                            \linferenceRule[sequent]{
+                                \lsequent{\asfmls}{\lforall{x}{\asfml}}
+                            }{
+                                \lsequent{\asfmls}{\subst[\asfml]{x}{t}}
+                            }
+                        }{collision free}
+                        \cinferenceRule[FOLalli|$\forall$i]{forall introduction}{
+                            \linferenceRule[sequent]{
+                                \lsequent{\asfmls}{\subst[\asfml]{x}{y}}
+                            }{
+                                \lsequent{\asfmls}{\lforall{x}{\asfml}}
+                            }
+                        }{y not in free vars von $\Gamma$ and vars von $\asfml$}
+                    \end{calculus}
+                    \end{calculuscollections}
+                    % \caption{Delay differential dynamic logic axioms and proof rules.}
+                    % \label{fig:axioms}
+                \end{figure}
+
+                % ??? oder mehrere premises (sequents) oben one unten
+                Every line of a proof is a conditional tautology, with zero or more conditions on the left side of the sequent and exactly one asserted proposition on the right hand side.
+
+                premises: set of formulas $\range{\asfml_1}{\asfml_n}$
+                conclusion $\bsfml$ single formula
+
+                umforme premises with rules into conclusion
+                this intention, written as
+                from premisses conclude conclusion $\bsfml$
+
+
+                in contrast to relationship $\range{\asfml_1}{\asfml_n}\models\bsfml$, see semantics
+
+                Finding a proof can be difficult, because it might not be obvious which proof rules need to be applied and in what order.
+
+                theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
+
+                % TODO: add ref to soundness
+                rules well chosen, see soundness
 
     %         \subsubsection{Sequent Calculus}
     %             \label{sec:sequent-calculus}
@@ -671,23 +701,7 @@
     %         % TODO: Bruch schreibweise, not iff, only if
 
 
-    %         % TODO: free variables
-    %         free variable: needs an object assigned in order to determine a truth value for formula
-    %         bound variable: no assignment needed
-    %         sentence is formula without free variables, has a determined truth value
-    %         quantifiers bind occurences of variable in formula
-    %         sentence: formula without free formula
-    %         \begin{definition}[Variable binding]
-
-    %         variable $x$ occuring in a subformula of form $\lforall{x}{\bsfml}$ or $\lexists{x}{\bsfml}$ is \emph{bound} in the formula $\asfml$.
-    %         If not it is free
-    %     \end{definition}
-
-    %         subst of free variables possible
-    %         % TODO: is it same subst as in semantics? or better use writing A(x) for free x
-
-    %         in terms only free variables -> quantifier rules einschrankungen
-    %         y must not occurr free in $\asfmls,\bsfmls$
+    %         
 
 
     %         \subsubsection{Proof Rules}
