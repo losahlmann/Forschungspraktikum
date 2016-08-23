@@ -580,40 +580,94 @@ Moreover, they can be implemented in software for computer-aided verification.
 
     %     Formulas of the form $\asfmls(\x[-\tau])$ implicitely also include a statement about $x$.
 
-    % \subsection{Delay Differential Induction}
-    %     \label{sec:delay-differential-induction}
+    \subsection{Delay Differential Induction}
+        \label{sec:delay-differential-induction}
 
-    %     Like loop+DI, the former for $\lforall{k\geq 0}$, the latter for $\lforall{k\tau\leq t \leq (k+1)\tau}$
-    %     The idea behind this proof rule is
-    %     the initial condition fulfills a certain condition
-    %     evolve a little in time
-    %     the values which come out of the dde also fulfill this condition
-    %     all runs od dde lead to states satisfying formula
-    %     start in safe state
-    %     dynamical system only evolve in direction of safe states in $\inv$
-    %     direction is given by dde: in state $\omega$ it is $\imodel{}{f(x)}\omega$
-    %     only need how system evolves in relation to $\inv$
-    %     hence stays safe forever
-    %     so the state after the DDE fulfills the condition, parts of the state come from initial condition, parts from dde outcome
+        % TODO: include loop rule?
+        % Like loop+DI, the former for $\lforall{k\geq 0}$, the latter for $\lforall{k\tau\leq t \leq (k+1)\tau}$
+        % evolve a little in time
+        % the values which come out of the dde also fulfill this condition
+        % all runs od dde lead to states satisfying formula
+        % start in safe state
+        % dynamical system only evolve in direction of safe states in $\inv$
+        % direction is given by dde: in state $\omega$ it is $\imodel{}{f(x)}\omega$
+        % only need how system evolves in relation to $\inv$
+        % hence stays safe forever
+        % so the state after the DDE fulfills the condition, parts of the state come from initial condition, parts from dde outcome
+        % invariant of form with $\x[s]$, but without $\x[c]$, i.e. becomes \FOLR formula if I fix $\past=0$.
 
-    %     invariant of form with $\x[s]$, but without $\x[c]$, i.e. becomes \FOLR formula if I fix $\past=0$.
+        In order to facilitate a frequently appearing sequence of proof steps, we combine the differential cut, the differential invariant and delay differential weakening axioms to a new axiom, called \emph{delay differential induction axiom}.
+        The idea behind this derived axiom is that if
+        the initial condition fulfills a certain safety condition $\asfml(s)$
+        and (with the evolution domain constraint $\ivr$) an invariant (\FOLR) formula $\inv$
+        and if following the evolution of the DDE leads into the direction of safe values,
+        it is sufficient that the invariant (with $\ivr$) implies the safety condition for the current time instant $\asfml(0)$
+        in order to establish the validity of the safety conditon for the entire final state after the DDE.
+        \begin{equation*}
+            \cinferenceRule[DDI|DDI]{delay differential induction}{
+                % FIXME: \der{} <-> \D{} ?
+                \linferenceRule[sequent]{
+                     \bsfml \limply \hs{\asfml(s)}
+                    &\lforall{x}{\big(\ivr\land\inv\limply\asfml(0)\big)}
+                    &\bsfml\land\ivr \limply \inv
+                    &\bsfml \limply
+                        \dbox{
+                            \hevolvein{\D{x}=\astrm}{\ivr}
+                        }{
+                            \der{\inv}
+                        }
+                }{
+                    \bsfml \limply
+                        \dbox{
+                            \hevolvein{\D{x}=\astrm}{\ivr}
+                        }{
+                            \hsc{\asfml(s)}
+                        }
+                }
+            }{}
+        \end{equation*}
+        For this rule to be sound, we demand the safety condition $\asfml(s)$ not to be a stiff s-formula, i.e.\ $\x[c]\notin\asfml(s)$ for any $c\in\constants$.
 
-    %     \begin{calculus}
-    %         \cinferenceRule[DDI|DDI]{delay differential induction proof rule}{
-    %             % FIXME: \der{} <-> \D{} ?
-    %             \linferenceRule[sequent]{
-    %                 \lsequent{\asfmls}{\hsc{\bsfml(s)},\bsfmls}
-    %                 &\lsequent{\ivr,0\leq t\leq\tau,\inv(\theta)}{\dbox{\hevolve{\Dupdate{\Dumod{\D{x}}{\rho(x,\theta)}}}}{\der{\bsfml(0)}}}
-    %                 % FIXME: only hs?
-    %                 &\lsequent{\hsc{\bsfml(s)}}{\asfml(s)}
-    %             }{
-    %                 \lsequent{\asfmls}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)},\bsfmls}
-    %             }
-    %         }{}
-    %     \end{calculus}
+        \begin{proof}
+            \footnotesize
+            \begin{sequentdeduction}
+                \linfer[DC]{
+                    \linfer[DI]{
+                        \linfer[DW]{
+                            \big(\bsfml \limply \hs{\asfml(s)}\big)
+                            \land
+                            \lforall{x}{\big(\ivr\land\inv\limply\asfml(0)\big)}
+                            \land
+                            (\bsfml\land\ivr \limply \inv)
+                            \land
+                            \big(\bsfml\limply\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\der{\inv}}\big)
+                        }{
+                            \bsfml \limply
+                            \big(
+                            \dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\inv}}{\hsc{\asfml(s)}}
+                            \land
+                            (\ivr\limply\inv)
+                            \land
+                            \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\der{\inv}}
+                            \big)
+                        }
+                    }{
+                        \bsfml \limply
+                        \big(
+                        \dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\inv}}{\hsc{\asfml(s)}}
+                        \land
+                        \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\inv}
+                        \big)
+                    }
+                }{
+                    \bsfml \limply
+                    \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\hsc{\asfml(s)}}
+                }
+            \end{sequentdeduction}
+        \end{proof}
 
-    %     % sidewaysfigure
-    %     %\begin{proof}\small
+        % sidewaysfigure
+        %\begin{proof}\small
     % \begin{landscape}
         
     %     % \begin{sidewaysfigure}
@@ -758,14 +812,15 @@ Moreover, they can be implemented in software for computer-aided verification.
             \label{sec:ddi-example-1}
 
             Consider the first-order delay differential equation
-            \begin{equation}
+            \begin{equation*}
                 \begin{cases}
                     \D{x}(t) = x(t-\tau) & t \geq \tzero\\
-                    x(t) = \theta(t)\geq 0 & t \in [\tzero-\tau,\tzero]
+                    x(t) \geq 0 & t \in [\tzero-\tau,\tzero]
                 \end{cases}
-            \end{equation}
-            Using the invariant $F\equiv(x^3\geq 0)$ we prove that the solution stays non-negativ for all time $t$.
-            DDE is autonomous, can assume $\tzero=0$.
+            \end{equation*}
+            for any $\tau>0$.
+            Using the invariant $\inv\equiv(x^3\geq 0)$, we prove that the solution stays non-negativ for all time $t\geq\tzero-\tau$.
+            Since the DDE is autonomous, we can assume $\tzero=0$.
             \footnotesize
             \begin{sequentdeduction}
                 \linfer[DC]{
@@ -822,6 +877,8 @@ Moreover, they can be implemented in software for computer-aided verification.
                     \dbox{\hevolve{\D{x}=\x[-\tau]}}{(\hsc{\x[s]\geq 0})}
                 }
             \end{sequentdeduction}
+            \normalsize
+            The first three axioms correspond to the derived axiom~\irref{DDI}.
             % \begin{sequentdeduction}
             %     \linfer[DDI]{
             %         \linfer[]{
@@ -852,8 +909,7 @@ Moreover, they can be implemented in software for computer-aided verification.
             %         \lsequent{\holdssinceclosed{-\tau}{\x[s]\geq 0}}{\dbox{\D{x}=\x[-\tau]}{(\holdssinceclosed{-\tau}{\x[s]\geq 0})}}
             %     }
             % \end{sequentdeduction}
-            \normalsize
-            In the same way we can prove that the solution stays negative for all $t$, if the initial condition is non-positive.
+            In the same way we can prove that the solution stays non-positive for all $t$, if the initial condition is non-positive.
 
         % \subsubsection{Example 2}
         %     \label{sec:ddi-example-2}
