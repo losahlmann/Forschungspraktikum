@@ -2,8 +2,6 @@
 % FIXME: proper use of lforall and mforall
 
 
-
-
 % fix bugs: fixes already in kernel now
 %\RequirePackage{fixltx2e}
 
@@ -78,6 +76,7 @@
     varterms, sigmaterms, septerms,
     substopinline,
     modifopinline, % arrow notation for \imodif in semantics
+    % seqarrow, % -> as sequent symbol in calculus rules
     %longinterpret,
     bracketinterpret,%
     bracketmodalinterpret,
@@ -162,6 +161,60 @@
 \newcommand*{\address}[1]{\gdef\caddress{#1}}
 \renewcommand{\maketitle}{\include{Titlepage}}
 
+% two-language abstract
+\newenvironment{abstractpage}{
+    \cleardoublepage
+    \vspace*{\fill}
+    \thispagestyle{empty}
+}{
+    \vfill\cleardoublepage
+}
+\renewenvironment{abstract}[1]{
+    \selectlanguage{#1}%
+    \bigskip
+    \begin{center}
+    \normalfont\sectfont\nobreak\abstractname
+    \end{center}
+}{
+    \par\bigskip
+}
+
+% \renewenvironment{abstract}[1]{%
+%   \if@titlepage
+%     \titlepage
+%     \null\vfil
+%     \@beginparpenalty\@lowpenalty
+%     \if@abstrt
+%       \selectlanguage{#1}%
+%       \begin{center}
+%         \normalfont\sectfont\nobreak\abstractname
+%         \@endparpenalty\@M
+%       \end{center}
+%     \fi
+%   \else
+%     \if@twocolumn\if@abstrt
+%         \addsec*{\abstractname}
+%       \fi
+%     \else
+%       \if@abstrt
+%         \selectlanguage{#1}%
+%         \small
+%         \begin{center}
+%           {\normalfont\sectfont\nobreak\abstractname
+%             \vspace{-.5em}\vspace{\z@}}%
+%         \end{center}
+%       \fi
+%       \quotation
+%     \fi
+%   \fi
+% }{%
+%   \if@titlepage
+%     \par\vfil\null\endtitlepage
+%   \else
+%     \if@twocolumn\else\endquotation\fi
+%   \fi
+% }
+
 % Title for algorithm environment
 \floatname{algorithm}{Model}
 
@@ -213,24 +266,24 @@
 
 \maketitle
 
-% \include{preface}
+\include{preface}
 
 % \cleardoubleoddemptypage
 % \tableofcontents
 
-\include{introduction}
+% \include{introduction}
 
 % \include{intro-logic}
 
-\include{delay-differential-equations}
+% \include{delay-differential-equations}
 
-\include{delay-differential-dynamic-logic}
+% \include{delay-differential-dynamic-logic}
 
-\include{axiomatization-proof-calculus}
+% \include{axiomatization-proof-calculus}
 
 % \include{example}
 
-% \include{conclusion}
+\include{conclusion}
 
 \appendix
 
