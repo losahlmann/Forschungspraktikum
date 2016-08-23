@@ -1,65 +1,63 @@
-\chapter{Examples}\label{sec:example-hp}
+\chapter{Examples}
+\label{ch:example-hp}
 
-To motivate the need of being able to treat Delayed Differential Equations in hybrid programs, we present some examples.
+To motivate the practical relevance of hybrid programs incorporating delayed differential equations, we present some examples of controllers modeled in \ddL.
 
 \section{Car Following Model}
 
-    ref
+    The following example is adapted from~\cite{Erneux09AppliedDDEs}.
+    We want to model an acceleration-controller for a car, trying to keep a constant distance to a car driving in front.
 
-    We want to model a controller for a car
-    trying to keep a constant distance between
-    considering a reaction time $\tau$, causing a delay in control decision
-    controller is ideal continuous, not discrete
+    We consider a continuous controller, though with an internal delay $\tau$ between the sensed velocities and the controller output, caused by the internal processing time of the controller.
+    % a delay in control decision
+    % controller is ideal continuous, not discrete
 
-    Given the speed pattern of a leading car, the systems models the position and velocity of a following car.
-
+    Given the speed pattern of the leading car ($n$), the systems models the position and velocity of the (following $n+1$) car depending on its controlled acceleration by:
     \begin{equation*}
         \begin{cases}
             \D[2]{x_{n+1}}(t) = \alpha (\D{x_n}(t-\tau)-\D{x_{n+1}}(t-\tau))\\
             \D{x_n}(t) = v(t)
         \end{cases}
     \end{equation*}
-
-    The coefficient $\alpha$ can be seen as a sport or fun factor, describing the strengh of acceleration and deacceleration applied to the following car.
-
+    The coefficient $\alpha$ can be seen as a comfort or sport factor, describing the strengh of acceleration and deacceleration applied to the car.
     By introducing $v_{n+1}$ for $x_{n+1}$, we reduce the system to first order.
 
-    Preconditions (for all $t\in\closeddelayinterval{-\tau}$):
+    The preconditions need to be specified for all $t\in\closeddelayinterval[-\tau]$). We consider feasable intervals for the initial distance between the cars, the velocity of the following car and specify a constant speed $v_0$ for the leading car.
     \begin{align*}
         d(t) &= x_n(t)-x_{n+1}(t) \in\compactum{D-m}{D+m}\\
         \D{x_{n+1}}(t) &\in\compactum{V-l}{V+l}\\
-        \D{x_n}(t) &= v(t) = 
+        \D{x_n}(t) &= v(t) = v_0 >0
     \end{align*}
-    Both $\alpha$ and $\tau$ are considered to be constant.
+    Both $\alpha>0$ and $\tau>0$ are considered to be constant.
 
-    % TODO: verify: leading car with constant deacceleration, choose initial safe alpha (no rep in controller)
     \begin{algorithm}
-        \caption{}
+        \caption{Example model in \ddL for the following car controller.}
         \label{mdl:car} % needs be after caption
         \begin{align*}
             % FIXME: add missing formulas
             &\init \limply \dbox{\ctrl;\plant}{(\req)}\\
-            % FIXME: add A and B and K and taus
-            \init &\equiv \\
-            \ctrl &\equiv \hupdate{\humod{\alpha}{}}\\
+            \init &\equiv \hsc[-\tau]{
+                (D-m\leq x_n[s]-x_{n+1}[s] \leq D+m\\
+                &\quad\land V-l \leq\D{x_{n+1}}[s] \leq V+l\\
+                &\quad\land v[s]=v_0)}\\
+            \ctrl &\equiv \hupdate{\humod{\alpha}{1}}\\
             \plant &\equiv \hevolve{
                 \D{v_{n+1}} = \alpha(\D{x_n}[-\tau]-\D{x_{n+1}}[-\tau])\syssep
                 \D{x_{n+1}} = v_{n+1}\syssep
                 \D{x_n} = v
             }\\
-            \req &\equiv d\geq\delta
+            \req &\equiv d\geq \delta
         \end{align*}
     \end{algorithm}
 
-    Model \ref{mdl:car}
+    Model~\ref{mdl:car} gives a possible implementation of the described controller as delay hybrid program, using the language of \ddL to describe its properties.
 
-    too strong reactions of the following car lead to damped oscillations
+    % TODO: verify: leading car with constant deacceleration, choose initial safe alpha (no rep in controller)
+    Of practical interest would be to prove the safety condition that the cars always keep a certain minimal distance, i.e.\ $d\geq\delta$, after having chosen a feasable $\alpha$ in the $\ctrl$-part.
+    % too strong reactions of the following car lead to damped oscillations
 
-    Of practical interest would be to prove the safety condition that the cars always keep a certain minimal distance, i.e.\ $d\geq\delta$.
 
 \section{Network Induced Delay in Control Loops}
-
-    
 
     only an input or measurement delay (in u)
 
