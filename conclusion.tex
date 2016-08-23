@@ -1,6 +1,32 @@
-\chapter{Conclusions}
+\chapter{Conclusion}
+    \label{ch:conclusion}
+
+    we have presented ...
+
+    \section{Related Work}
+        Verification theory for hybrid systems governed by ordinary differential equations is well established, as can be seen by the exhaustive list of literature to \dL given in the introduction.
+        Literature on formal methods with applied to DDEs is rare.
+        
+        Huang et al.~\cite{Huang16BoundedVerificationNNDS} describe an algorithm allowing bounded invariant verification for dynamical systems with delayed interconnections.
+        This is done by numerically computing bounds on the trajectories of a (non-linear) delay differential equation given a set of possible initial states (sensitivity of the solution on initial data).
+        
+        Zou et al.~\cite{Zou15AutomaticVerifDDEs} have presented an iteration method, combining numerical integration of DDEs with multiple constant delays based on interval Taylor forms
+        with real arithmetic constraint solving.
+        It automatically analyzes the integration-operator, which yields the Taylor coefficients for the next temporal segment, given by the method of step.
+        This procedure allows to compute safety and stability certificates in terms of set constraints.
+
+        To the knowledge of the author, no work combining logics and delay differential equations has been published yet.
+
     \section{Future Work}
-    	compute invariants and differential invariants
+    	hard part, where the magic happens
+        find differential invariant
+        automatically compute invariants and differential invariants
+        as possible for \dL
+
+        prove redution to \dL given by axiom of steps
+        completeness
+
+        apply to examples
 
     	uniform substitution calculus, proof rules, substitutes formula for a predicate symbol
     	US, classical rule in for first-order logic proof calculus
@@ -8,13 +34,17 @@
     	leads to a calculus with finite number od \ddL formulas as axioms
     	to facilitate a sound implementation in a prover
 
-        completeness
+        
 
     	state dependent delay
-    	    % TODO: source for state-dependent and distributed delays
-    % The definition of a DDE can be extended to state-dependent or distributed delays
+    	% TODO: source for state-dependent and distributed delays
+        % The definition of a DDE can be extended to state-dependent or distributed delays
 
-    potential implementation in Keymaera X: use modularity, existing axioms, lemmata
-    axiomatization, proof rules important for automatization of proofs
-    for that as \dL in \cite{Platzer15Uniform} no axiom schemata, but finite number of axioms and proof rules (sets of formulas)
-proof rule for substitution on axiom preserving soundness
+        potential implementation in Keymaera X: use modularity, existing axioms, lemmata
+        axiomatization, proof rules important for automatization of proofs
+        for that as \dL in \cite{Platzer15Uniform} no axiom schemata, but finite number of axioms and proof rules (sets of formulas)
+        proof rule for substitution on axiom preserving soundness
+
+        sequent proof calculus
+
+        
