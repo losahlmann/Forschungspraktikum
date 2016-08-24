@@ -224,6 +224,12 @@
 % \newcommand{\HHfml}{\operatorname{HH_{\lformulasname}}\parentheses}
 % \newcommand{\HHprg}{\operatorname{HH_{\lprogramsname}}\parentheses}
 
+% load one single symbol from stix font
+\DeclareFontEncoding{LS1}{}{}
+\DeclareFontSubstitution{LS1}{stix}{m}{n}
+\DeclareSymbolFont{arrows1}{LS1}{stixsf}{m}{n}
+\DeclareMathDelimiter{\steps}{\mathrel}{arrows1}{"EC}{arrows1}{"EC}
+
 % Deprecated
 % FIXME: make sure not used any more
 \newcommand{\xbartau}{\bar{x}_{\tau}}

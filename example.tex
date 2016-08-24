@@ -140,24 +140,24 @@ To motivate the practical relevance of hybrid programs incorporating delayed dif
 
         what allows applying stability theory for hybrid systems to derive conditions for asymptotical stability depending on the sampling rate $h$ and the network delay $\tau$.
 
-    \subsection{Compensation of Network Induced Delay}
-        If the plant and the controller have synchronized clocks, the sensor-controller delay can be determined in the controller.
-        Using an estimator to approximate the evolved full plant state at time of reception even if only the partial state measurements $y(t)$ are available, one can try to compensate the sensor-controller delay by an estimator-predictor scheme.
+    % \subsection{Compensation of Network Induced Delay}
+    %     If the plant and the controller have synchronized clocks, the sensor-controller delay can be determined in the controller.
+    %     Using an estimator to approximate the evolved full plant state at time of reception even if only the partial state measurements $y(t)$ are available, one can try to compensate the sensor-controller delay by an estimator-predictor scheme.
 
-        Having an estimation of the full plant state $\hat{x}(kh)$ for time $kh$, one awaits the reception of the plant output $y(kh)$ for this instant. Receiving this packet at time $kh+\tau_{sc,k}$ one can correct the former prediction $\hat{x}(kh)$ to a better estimation $\bar{x}(kh)$.
-        Assuming that this estimation fulfills the equations describing the system, one forwards the estimation to $\bar{x}(kh+\tau_{sc,k})$ which is used to calculate the control command $u(kh+\tau_{sc,k})$.
-        In order to prepare the next iteration, $\bar{x}(kh)$ is further forwarded to obtain a prediction of the plant state at time $(k+1)h$.
+    %     Having an estimation of the full plant state $\hat{x}(kh)$ for time $kh$, one awaits the reception of the plant output $y(kh)$ for this instant. Receiving this packet at time $kh+\tau_{sc,k}$ one can correct the former prediction $\hat{x}(kh)$ to a better estimation $\bar{x}(kh)$.
+    %     Assuming that this estimation fulfills the equations describing the system, one forwards the estimation to $\bar{x}(kh+\tau_{sc,k})$ which is used to calculate the control command $u(kh+\tau_{sc,k})$.
+    %     In order to prepare the next iteration, $\bar{x}(kh)$ is further forwarded to obtain a prediction of the plant state at time $(k+1)h$.
 
-    \subsection{Modelling Packet Loss}
-        The potential loss of data packets on the network can be modeled as an \emph{Asynchronous Dynamical System} (ADS), which comprises continuous dynamics (described by differential/difference equations) and discrete dynamics (governed by finite automata).
-        Assuming that the non-networked system is stable, that the network is lossy only between sensor and controller and that the packets contain $x(kh)$ to provide the full current state to the controller, a pair of difference equations
-        \begin{align*}
-            S_0:&\quad \bar{x}(kh) = \bar{x}((k-1)h)\\
-            S_1:&\quad  \bar{x}(kh) = x(kh)
-        \end{align*}
-        is obtained.
+    % \subsection{Modelling Packet Loss}
+    %     The potential loss of data packets on the network can be modeled as an \emph{Asynchronous Dynamical System} (ADS), which comprises continuous dynamics (described by differential/difference equations) and discrete dynamics (governed by finite automata).
+    %     Assuming that the non-networked system is stable, that the network is lossy only between sensor and controller and that the packets contain $x(kh)$ to provide the full current state to the controller, a pair of difference equations
+    %     \begin{align*}
+    %         S_0:&\quad \bar{x}(kh) = \bar{x}((k-1)h)\\
+    %         S_1:&\quad  \bar{x}(kh) = x(kh)
+    %     \end{align*}
+    %     is obtained.
 
-        This system can be interpreted as a switch that closes at a certain rate $r$, indicating if a message is lost ($S_0$) or delivered ($S_1$). 
-        In the case of $S_0$ the state in the controller $x(kh)$ is held at its previous value.
-        For this system, Lyaponov theory gives conditions for exponential stability.
+    %     This system can be interpreted as a switch that closes at a certain rate $r$, indicating if a message is lost ($S_0$) or delivered ($S_1$). 
+    %     In the case of $S_0$ the state in the controller $x(kh)$ is held at its previous value.
+    %     For this system, Lyaponov theory gives conditions for exponential stability.
 

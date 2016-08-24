@@ -13,12 +13,12 @@ For example a controller which approximates a derivative by a difference quotien
 The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduces to classical \emph{differential dynamic logic}.
 
 
-% Similiar to first-order logic and essentially as an extension of dL we define delay differential logic
+% 
 % in general an arbitrary unknown initial function, only conditions on it
 
 % time-invariant
 
-% safety and liveness properties specify
+% 
 
 % TODO: Abgrenzung zu Trace Semantics
     % The temporal character of delay differential equations (they depend on their own temporal evolution with limited horizon) suggests the introduction of trace semantics.
@@ -64,10 +64,6 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         \end{align*}
         % FIXME: is term' allowed? diff inv is only a FOLR formula? even for dL valid?
         % TODO: line breaks and explination text in syntax
-        % \begin{align}
-        %     \astrm\Coloneqq{}&\\
-        %     &\mid \astrm+\bstrm\hfill\text{test}
-        % \end{align}
         where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
         The symbol $a\in\constants$ stands for a constant value in $\Q$. The constant parameters $c\in\nonposQ$ are not allowed to be positive.
     \end{definition}
@@ -167,6 +163,8 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
     We note $\asfml$ to indicate that $s$ is not a free variable of $\asfml(s)$ and $\asfml(b)$ with $b\in\nonposQ$ to express that each term $\astrm(s)$ in the formula was replaced by its corresponding $\astrm(b)$, even if it was bound by a $\hs{}$.
     % TODO: or only which is not under the scope of a \hs? at the moment I overwrite each \hs
     If we write $\asfml(x)$, we mean entire function $x$, not only the value $\x[0]$ (cf.\ usage for $\forall$).
+
+    A s-formula $\asfml(s)$, which contains a $\x[c]$ for any $c\in\constants$ is called \emph{stiff}.
     
     % TODO: on variables \allvars (signature)
     Formulas of first-order logic of real arithmetic constitute a subset of \ddL, i.e.\ every \FOLR formula is also a formula of delay differential dynamic logic.

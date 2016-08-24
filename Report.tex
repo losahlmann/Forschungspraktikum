@@ -15,7 +15,8 @@
 ]{scrreprt}
 
 % encoding of tex-file
-\usepackage[utf8x]{inputenc}
+% utf8x clashes with biblatex
+\usepackage[utf8]{inputenc}
 
 % for propper Umlaute
 \usepackage[T1]{fontenc}
@@ -37,11 +38,7 @@
 \usepackage{amsthm} % provides theorem environment
 %\usepackage{nicefrac} % better slash fracs in inline
 
-% load one single symbol from stix font
-\DeclareFontEncoding{LS1}{}{}
-\DeclareFontSubstitution{LS1}{stix}{m}{n}
-\DeclareSymbolFont{arrows1}{LS1}{stixsf}{m}{n}
-\DeclareMathDelimiter{\steps}{\mathrel}{arrows1}{"EC}{arrows1}{"EC}
+\usepackage[style=numeric]{biblatex}
 
 % subfigures
 \usepackage{subcaption}
@@ -57,9 +54,8 @@
 \usepackage{tikz}
 
 % rotate figures
-\usepackage{rotating}
-
-\usepackage{pdflscape}
+% \usepackage{rotating}
+% \usepackage{pdflscape}
 
 % diplay URL
 \usepackage{url}
@@ -74,13 +70,13 @@
 % LS-Lab logic commands: includes lcalculus, lmeta, lsemantics, lsyntax
 \usepackage[
     varterms, sigmaterms, septerms,
-    substopinline,
+    %substopfrac,
     modifopinline, % arrow notation for \imodif in semantics
     % seqarrow, % -> as sequent symbol in calculus rules
     %longinterpret,
     bracketinterpret,%
     bracketmodalinterpret,
-    fixformat,%
+    % fixformat,%
     sidenotecalculus,%
     %silentconst,%
     longseqcontext%
@@ -91,7 +87,7 @@
     %bracketmodalinterpret,% use [[]] for semantics
     bracketinterpret,%
     bracketmodalinterpret,
-    fixformat,%
+    % fixformat,%
     %silentconst,% don't show `const' and `algebra'
     precisenames%
     ]{dL}
@@ -103,23 +99,23 @@
 
 % classic first order logic
 \newcommand{\IFOL}{\interpretation[
-    algebra=\model,
+    % algebra=\model,
     const=I,
     assign=\assignment,
-    % state=\nu,
+    % state={},
     universe=\universe
-    ]}
+]}
 
 % classic modal logic
 \newcommand{\IML}{\interpretation[
-    algebra=\model,
+    % algebra=\model,
     %const=I,
     %assign=\assignment,
     state=\nu,
     worlds=W,
-    access=R,
+    access=\rho,
     universe=\universe
-    ]}
+]}
 
 % ddL
 \newcommand{\IddL}{\vdLint[
@@ -127,7 +123,7 @@
     state=\nu, % state
     assign=\past, % time parameter
     access=\rho % reachability relation
-    ]}
+]}
 
 % no parentheses around axiom names
 \renewcommand*{\irrulename}[1]{\text{#1}}
@@ -160,6 +156,9 @@
 \newcommand*{\caddress}{}%
 \newcommand*{\address}[1]{\gdef\caddress{#1}}
 \renewcommand{\maketitle}{\include{Titlepage}}
+
+% Bibliography
+\bibliography{Bibliography}
 
 % two-language abstract
 \newenvironment{abstractpage}{
@@ -268,28 +267,26 @@
 
 \include{preface}
 
-% \cleardoubleoddemptypage
-% \tableofcontents
+\cleardoubleoddemptypage
+\tableofcontents
 
-% \include{introduction}
+\include{introduction}
 
-% \include{intro-logic}
+\include{intro-logic}
 
-% \include{delay-differential-equations}
+\include{delay-differential-equations}
 
-% \include{delay-differential-dynamic-logic}
+\include{delay-differential-dynamic-logic}
 
-% \include{axiomatization-proof-calculus}
+\include{axiomatization-proof-calculus}
 
-% \include{example}
+\include{example}
 
 \include{conclusion}
 
 \appendix
 
-% TODO: choose good citation style. Chicago?
-\nocite{Fulton16LogicProofs,*}
-\bibliographystyle{plain}
-\bibliography{Bibliography}
+\nocite{*}
+\printbibliography
 
 \end{document}

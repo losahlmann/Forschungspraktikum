@@ -10,10 +10,10 @@
         Verification theory for hybrid systems governed by ordinary differential equations is well established, as can be seen by the exhaustive list of literature to \dL given in the introduction.
         Literature on formal methods applied to DDEs is rare.
         
-        Huang et al.~\citeauthor{Huang16BoundedVerificationNNDS} describe an algorithm allowing bounded invariant verification for dynamical systems with delayed interconnections.
+        \citeauthor*{Huang16BoundedVerificationNNDS}~\cite{Huang16BoundedVerificationNNDS} describe an algorithm allowing bounded invariant verification for dynamical systems with delayed interconnections.
         This is done by numerically computing bounds on the trajectories of a (non-linear) delay differential equation given a set of possible initial states (sensitivity of the solution on initial data).
         
-        Zou et al.~\cite{Zou15AutomaticVerifDDEs} have presented an iteration method, combining numerical integration of DDEs with multiple constant delays based on interval Taylor forms
+        \citeauthor{Zou15AutomaticVerifDDEs}~\cite{Zou15AutomaticVerifDDEs} have presented an iteration method, combining numerical integration of DDEs with multiple constant delays based on interval Taylor forms
         with real arithmetic constraint solving.
         It automatically analyzes the integration-operator, which yields the Taylor coefficients for the next temporal segment, given by the method of step.
         This procedure allows to compute safety and stability certificates in terms of set constraints.
