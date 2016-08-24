@@ -78,7 +78,7 @@
         \label{sec:first-order-logic}
 
         \emph{First-order logic} (\FOL) extends propositional logic with quantifiers, variables, functions and predicates.
-        We introduce first-order logic similiar to the definitions given in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}. More subtleties are adapted from \cite{Hodges01ClassicalLogic} and \cite{Rautenberg10ConciseLogic}.
+        We introduce first-order logic similiar to the definitions given in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}. More subtleties are adapted from \cite{Hodges01ClassicalLogic}, \cite{Buss98HandbookProofTheory} and \cite{Rautenberg10ConciseLogic}.
 
         % though with a different notation/nomenclature
         % predicate logic
@@ -216,15 +216,15 @@
             \begin{definition}[Valuation of First-Order Formulas]
                 The \emph{valuation} of the first-order formulas $\FOLformulas$ in the interpretation $\interpret$ under the assignment $\assignment$ is given by
                 \begin{enumerate}
-                    \item predicate $\ivaluation{\IFOL}{p(\range{\istrm{1}}{\istrm{n}})} = \interpret[p](\range{\ivaluation{\IFOL}{\istrm{1}}}{\ivaluation{\IFOL}{\istrm{n}}})$
-                    \item The conjunction $\ivaluation{\IFOL}{\astrm\land\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ and $\ivaluation{\IFOL}{\bstrm}=\ltrue$.
-                    \item The disjunction $\ivaluation{\IFOL}{\astrm\lor\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm}=\ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$.
-                    \item The negation $\ivaluation{\IFOL}{\lnot\astrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$.
-                    \item The implication $\ivaluation{\IFOL}{\astrm\limply\bstrm} = \ltrue$ iff $\ivaluation{\IFOL}{\astrm} \neq \ltrue$ or $\ivaluation{\IFOL}{\bstrm}=\ltrue$.
-                    \item The universal quantifier $\ivaluation{\IFOL}{\lforall{x}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[algebra]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for all $a\in\R$.
-                    \item The existential quantifier $\ivaluation{\IFOL}{\lexists{x}{\astrm}} = \ltrue$ iff $\ivaluation{\imodif[algebra]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for some $a\in\R$.
+                    \item predicate $\imodel{\IFOL}{p(\range{\istrm{1}}{\istrm{n}})} = \interpret[p](\range{\imodel{\IFOL}{\istrm{1}}}{\imodel{\IFOL}{\istrm{n}}})$
+                    \item The conjunction $\imodel{\IFOL}{\astrm\land\bstrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm}=\ltrue$ and $\imodel{\IFOL}{\bstrm}=\ltrue$.
+                    \item The disjunction $\imodel{\IFOL}{\astrm\lor\bstrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm}=\ltrue$ or $\imodel{\IFOL}{\bstrm}=\ltrue$.
+                    \item The negation $\imodel{\IFOL}{\lnot\astrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm} \neq \ltrue$.
+                    \item The implication $\imodel{\IFOL}{\astrm\limply\bstrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm} \neq \ltrue$ or $\imodel{\IFOL}{\bstrm}=\ltrue$.
+                    \item The universal quantifier $\imodel{\IFOL}{\lforall{x}{\astrm}} = \ltrue$ iff $\imodel{\imodif[algebra]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for all $a\in\R$.
+                    \item The existential quantifier $\imodel{\IFOL}{\lexists{x}{\astrm}} = \ltrue$ iff $\imodel{\imodif[algebra]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for some $a\in\R$.
                 \end{enumerate}
-                The statement $\ivaluation{\IFOL}{\astrm}=\ltrue$ can also be written as $\imodels{\IFOL}{\astrm}$, the so-called \emph{satisfaction/satisfiability relation}.
+                The statement $\imodel{\IFOL}{\astrm}=\ltrue$ can also be written as $\imodels{\IFOL}{\astrm}$, the so-called \emph{satisfaction/satisfiability relation}.
                 One says that $(\interpret,\assignment)$ \emph{satisfies} $\asfml$, that $(\interpret,\assignment)$ is a model for $\asfml$ or that $\asfml$ is \emph{true} in $\interpret$ under $\assignment$.
 
                 A formula $\asfml$ is called \emph{valid} (or a \emph{tautology}) if $\imodels{\IFOL}{\asfml}$ for every model $\model$ (i.e.\ for all possible interpretations $\interpret$ and assignments $\assignment$). In this case, one writes shortly $\models\asfml$.
@@ -235,25 +235,32 @@
             % valid if always evaluates to true, in every model
 
         % TODO: free variables
-        \subsection{Variable Binding}
+        \subsection{Variable Binding and Substitution}
             \label{sec:FOL-variable-binding}
 
-            Quantifiers in formula bind occurences of variable, in such a way that a \emph{bound variable} does not need an assignment in order to determine a truth value for the formula.
+            Quantifiers in formulas bind occurences of variables in such way that a \emph{bound variable} does not need an assignment in order to determine a truth value for the formula.
             In contrast, a \emph{free variable} requires an assignment.
 
             % sentence is formula without free variables, has a determined truth value
-            % sentence: formula without free formula
 
             \begin{definition}[Variable binding]
-                A variable $x$ occuring in a subformula of the form $\lforall{x}{\bsfml}$ or $\lexists{x}{\bsfml}$ is \emph{bound} in the formula $\asfml$.
-                If not it is free
+                A variable $x$ in a formula $\asfml$ which occures in subformulas of the form $\lforall{x}{\bsfml}$ or $\lexists{x}{\bsfml}$ is \emph{bound} in $\asfml$.
+                If it appears in $\asfml$ outside the scope ($\bsfml$) of a quantifier, is called \emph{free}.
             \end{definition}
 
-            subst of free variables possible
-            % TODO: is it same subst as in semantics? or better use writing A(x) for free x
+            Variables are place holders and hence demand a means for being replaced with concrete information. With a little restriction, it is possible to substitute free variables by another term.
 
-            in terms only free variables -> quantifier rules einschrankungen
-            y must not occurr free in $\asfmls,\bsfmls$
+            \begin{definition}[Admissible substitution]
+                The term $\astrm$ is an \emph{admissible substitution} for $x$ in $\asfml(x)$, if no free occurence of $x$ in $\asfml$ is in the scope of a $\forall{y}$ or $\lexists{y}$ for any variable $y$ appearing in $t$.
+
+                In this case, we define the \emph{substitution} $\substl[\asfml]{x}{\astrm}$ of the variable $x$ by the admissible term $\astrm$ in the formula $\asfml$ as the formula obtain from $\asfml$ by replacing each occurence of the free variable $x$ outside the scope of a quantifier by $\astrm$.
+            \end{definition}
+
+            This restriction is necessary for the soundness of the quantifier axioms given in the next section.
+
+            We agree on the following notational convention
+            (which is not to be confused with syntax for functions and predicates with arguments):
+            When me mention $\asfml(x)$ and $\asfml(\astrm)$ in the same context, we mean that $x$ is a free variable of the formula $\asfml$ and that $\asfml(\astrm)$ is $\substl[\asfml]{x}{\astrm}$.
 
         \subsection{Proof Theory}
             \label{sec:FOL-proof-theory}
@@ -319,185 +326,194 @@
             \subsubsection{Hilbert Calculus}
                 \label{sec:hilbert-calculus}
 
-                Hilbert Style deduction system/calculi
+                \begin{figure}[b]
+                    \centering
+                    \begin{calculuscollections}{\textwidth}
+                    \begin{calculus}
+                        \cinferenceRule[L1|$\Lambda1$]{premise charge}{
+                            \linferenceRule[impl]{
+                                \asfml
+                            }{
+                                (\bsfml\limply\asfml)
+                            }
+                        }{}
+                        \cinferenceRule[L2|$\Lambda2$]{Frege's formula}{
+                            \linferenceRule[impl]{
+                                \big(\asfml\limply(\bsfml\limply\csfml)\big)
+                            }{
+                                \big((\asfml\limply\bsfml)\limply(\asfml\limply\csfml)\big)
+                            }
+                        }{}
+                        \cinferenceRule[L3|$\Lambda3$]{}{
+                            \linferenceRule[impl]{
+                                (\lnot\asfml\limply\lnot\bsfml)
+                            }{
+                                \big((\lnot\asfml\limply\bsfml)\limply\asfml\big)
+                            }
+                        }{}
+                        \cinferenceRule[L4|$\Lambda4$]{}{
+                            \linferenceRule[impl]{
+                                \lforall{x}{\asfml(x)}
+                            }{
+                                \asfml(y)
+                            }
+                        }{$y$ admissible for substitution}
+                        \cinferenceRule[L5|$\Lambda5$]{}{
+                            \linferenceRule[impl]{
+                                \lforall{x}{(\asfml\limply\bsfml)}
+                            }{
+                                (\asfml\limply\lforall{x}{\bsfml})
+                                \qquad\qquad
+                            }
+                        }{$x$ is not free in $\asfml$}
+                    \end{calculus}
+                    \begin{calculus}
+                        \cinferenceRule[MPfol|MP]{modus ponens rule}{
+                            \linferenceRule[sequent]{
+                                \asfml\limply\bsfml & \asfml
+                            }{
+                                \bsfml
+                            }
+                        }{}
+                        \cinferenceRule[GenAfol|$\forall$]{forall generalization rule}{
+                            \linferenceRule[sequent]{
+                                \asfml
+                            }{
+                                \lforall{x}{\asfml}
+                            }
+                        }{}
+                    \end{calculus}
+                    \end{calculuscollections}
+                    \label{fig:fol-axioms}
+                    \caption{A complete axiomatization of \FOL and Hilbert-calculus deduction rules.}
+                \end{figure}
 
-                selected tautologies with role of axiom
-                selection is rather arbitrary
-                depending on signature
+                A Hilbert-style deduction system is based on a finite set of selected tautologies with the role of axioms and only a small number of inference rules.
 
-                define class of axioms, ie the set of all formulas which have any of the forms ...
+                In such a calculus, a formal \emph{proof} is a derivation of the formula to be shown (conclusion) from the axioms and premises by applying in each step one of the deduction rules.
+                In such a proof, every line is again an unconditional tautology.
+                A formula $\asfml$ is called \emph{deriveable} from the premises in the given calculus, if there exists a derivation with conclusion $\asfml$.
 
-                axiom system contains countably infinite number of axioms
-                made from set of axiom schemata
-                concrete instance
+                The axiomatization consists of logical \emph{axiom schemes}. They describe the countably infinite number of axioms the deduction system comprises. A concrete axiom is obtained by replacing the placeholders by concrete formulas.
+
+                There are many possible selections of an axiom system. However it should be sufficiently strong, such that each tautology is deriveable by the given inference rules and depends of course on the signature, too.
 
                 % theory of $\model$ is set of sentences satisfied by $\model$
                 % generally, theory is set of sentences
                 % model class of theory $T$: all interpretations which satisfy $T$ (all sentences given in T)
                 % if $K$ (interpretations) is model class of theory $T$, then $T$ is set of axioms for $K$ (\cite{Hodges01ClassicalLogic})
 
-                zero-premise rule
-                % \begin{calculus}
-                %     \cinferenceRule[ax|]{}{
-                %         \linferenceRule[sequent]{}{
-                %             \lsequent{\asfml}{\asfml}
-                %         }
-                %     }{}
-                % \end{calculus}
 
-                \cite{Hodges01ClassicalLogic}
-
+                A possible sound and complete axiomatization for first-order logic is given in \cite{Bimbo14ProofTheory} and shown in Figure~\ref{fig:fol-axioms}.                
+                It combines axioms for classical propositional logic with axioms for quantifiers and relies only on two deduction rules: \emph{modus ponens}~(\irref{MPfol}), which infers formula $\bsfml$ from the hypotheses $\asfml$, and $\asfml\limply\bsfml$ and \emph{quantifier-generalization}~(\irref{GenAfol}).
+                % TODO: how does GenA work?
                 
-
-                and only a small number of inference rules: \emph{modus ponens} (MP)
-
-                logical axiom scheme, all formulas of the form
-
-                % TODO: axioms for Hilbert FOL
-                \begin{calculus}
-                    \cinferenceRule[L1|$\Lambda1$]{}{
-                        \linferenceRule[impl]{
-                            \big(\asfml\limply(\bsfml\limply\csfml)\big)
-                        }{
-                            \big((\asfml\limply\bsfml)\limply(\asfml\limply\csfml)\big)
-                        }
-                    }{}
-                    \cinferenceRule[L2|$\Lambda2$]{}{
-                        \linferenceRule[impl]{a}{a}
-                    }{}
-                    \cinferenceRule[L3|$\Lambda3$]{}{
-                        \linferenceRule[impl]{a}{a}
-                    }{}
-                    \cinferenceRule[L4|$\Lambda4$]{}{
-                        \linferenceRule[impl]{a}{a}
-                    }{}
-
-                \end{calculus}
-
-                are all tautologies
-
-                
-                every line of a proof is unconditional tautology or theorem
-
-                relying more on axioms
-
-                reach a conclusion by applying deduction rules to axioms
-
+                % \irref{L1} premise charge
+                % \irref{L2} Frege's formula
                 % useful when one wants to add further axioms to first-order base
-
-                judgement is any formula of given (first-order) logic
-                theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
-
-                In this calculus, a formal proof is a derivation of the formula to be shown (conclusion) from the axioms and premises by applying in each step modus ponens or quantifier-generalization.
-
-                $\bsfml$ deriveable in C from premises, if exists a derivation with conclusion $\bsfml$
-
-                % lemma to be used in another proof
-
-                % Nomenklatur
-                % deductive rules
-                % inference rules
+                % judgement is any formula of given (first-order) logic
+                % theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
 
 
             % TODO: natural deduction calculus
-            \subsubsection{Natural Deduction}
-                \label{sec:natural-deduction}
+            % \subsubsection{Natural Deduction}
+            %     \label{sec:natural-deduction}
 
-                The \emph{natural deduction} is a calculus of the so-called Gentzen style,
-                which relies on only a few axioms but an exhaustive collection of inference rules operating on sequents.
+            %     The \emph{natural deduction} is a calculus of the so-called Gentzen style,
+            %     which relies on only a few axioms but an exhaustive collection of inference rules operating on sequents.
 
-                By applying these rules one infers formulas from formulas and finally deduces a conclusion from the given set of promises.
+            %     By applying these rules one infers formulas from formulas and finally deduces a conclusion from the given set of promises.
 
-                \cite{Rautenberg10ConciseLogic}
+            %     \cite{Rautenberg10ConciseLogic}
 
-                % TODO: replace \Gamma with \asfmls, \Delta with \bsfmls
-                \begin{figure}[t]
-                    \begin{calculuscollections}{\textwidth}
-                    \begin{calculus}
-                        \cinferenceRule[FOLax|ax]{axiom, initial rule}{
-                            \linferenceRule[sequent]{
-                                \lsequent{}{}
-                            }{
-                                \lsequent{\asfmls,\asfml}{\asfml}
-                            }
-                        }{}
-                        \cinferenceRule[FOLmono|$\land$i]{monotonicity rule}{
-                            \linferenceRule[sequent]{
-                                \lsequent{\asfmls}{}
-                            }{
-                                \lsequent{\asfmls}{}
-                            }
-                        }{}
-                        \cinferenceRule[FOLandi|$\land$i]{and introduction}{
-                            \linferenceRule[sequent]{
-                                \lsequent{\asfmls}{\asfml}
-                                &\lsequent{\asfmls}{\bsfml}
-                            }{
-                                \lsequent{\asfmls}{\asfml\land\bsfml}
-                            }
-                        }{}
-                        \cinferenceRule[FOLande|$\land$i]{and elimination}{
-                            \linferenceRule[sequent]{
-                                \lsequent{\asfmls}{\asfml\land\bsfml}
-                            }{
-                                \lsequent{}{}
-                            }
-                        }{}
-                        \cinferenceRule[FOLnotr|$\land$r]{not elimination}{
-                            \linferenceRule[sequent]{
-                                \lsequent{\asfmls}{\bsfml}
-                                &\lsequent{\asfmls}{\lnot\bsfml}
-                            }{
-                                \lsequent{\asfmls}{\asfml}
-                            }
-                        }{}
-                        \cinferenceRule[FOLnotl|$\land$l]{not elimination}{
-                            \linferenceRule[sequent]{
-                                \lsequent{\asfmls,\asfml}{\bsfml}
-                                &\lsequent{\asfmls,\lnot\asfml}{\bsfml}
-                            }{
-                                \lsequent{\asfmls}{\bsfml}
-                            }
-                        }{}
-                        \cinferenceRule[FOLalle|$\forall$e]{forall elimination}{
-                            \linferenceRule[sequent]{
-                                \lsequent{\asfmls}{\lforall{x}{\asfml}}
-                            }{
-                                \lsequent{\asfmls}{\subst[\asfml]{x}{t}}
-                            }
-                        }{collision free}
-                        \cinferenceRule[FOLalli|$\forall$i]{forall introduction}{
-                            \linferenceRule[sequent]{
-                                \lsequent{\asfmls}{\subst[\asfml]{x}{y}}
-                            }{
-                                \lsequent{\asfmls}{\lforall{x}{\asfml}}
-                            }
-                        }{y not in free vars von $\Gamma$ and vars von $\asfml$}
-                    \end{calculus}
-                    \end{calculuscollections}
-                    % \caption{Delay differential dynamic logic axioms and proof rules.}
-                    % \label{fig:axioms}
-                \end{figure}
+            %     % TODO: replace \Gamma with \asfmls, \Delta with \bsfmls
+            %     \begin{figure}[t]
+            %         \begin{calculuscollections}{\textwidth}
+            %         \begin{calculus}
+            %             \cinferenceRule[FOLax|ax]{axiom, initial rule}{
+            %                 \linferenceRule[sequent]{
+            %                     \lsequent{}{}
+            %                 }{
+            %                     \lsequent{\asfmls,\asfml}{\asfml}
+            %                 }
+            %             }{}
+            %             \cinferenceRule[FOLmono|$\land$i]{monotonicity rule}{
+            %                 \linferenceRule[sequent]{
+            %                     \lsequent{\asfmls}{}
+            %                 }{
+            %                     \lsequent{\asfmls}{}
+            %                 }
+            %             }{}
+            %             \cinferenceRule[FOLandi|$\land$i]{and introduction}{
+            %                 \linferenceRule[sequent]{
+            %                     \lsequent{\asfmls}{\asfml}
+            %                     &\lsequent{\asfmls}{\bsfml}
+            %                 }{
+            %                     \lsequent{\asfmls}{\asfml\land\bsfml}
+            %                 }
+            %             }{}
+            %             \cinferenceRule[FOLande|$\land$i]{and elimination}{
+            %                 \linferenceRule[sequent]{
+            %                     \lsequent{\asfmls}{\asfml\land\bsfml}
+            %                 }{
+            %                     \lsequent{}{}
+            %                 }
+            %             }{}
+            %             \cinferenceRule[FOLnotr|$\land$r]{not elimination}{
+            %                 \linferenceRule[sequent]{
+            %                     \lsequent{\asfmls}{\bsfml}
+            %                     &\lsequent{\asfmls}{\lnot\bsfml}
+            %                 }{
+            %                     \lsequent{\asfmls}{\asfml}
+            %                 }
+            %             }{}
+            %             \cinferenceRule[FOLnotl|$\land$l]{not elimination}{
+            %                 \linferenceRule[sequent]{
+            %                     \lsequent{\asfmls,\asfml}{\bsfml}
+            %                     &\lsequent{\asfmls,\lnot\asfml}{\bsfml}
+            %                 }{
+            %                     \lsequent{\asfmls}{\bsfml}
+            %                 }
+            %             }{}
+            %             \cinferenceRule[FOLalle|$\forall$e]{forall elimination}{
+            %                 \linferenceRule[sequent]{
+            %                     \lsequent{\asfmls}{\lforall{x}{\asfml}}
+            %                 }{
+            %                     \lsequent{\asfmls}{\subst[\asfml]{x}{t}}
+            %                 }
+            %             }{collision free}
+            %             \cinferenceRule[FOLalli|$\forall$i]{forall introduction}{
+            %                 \linferenceRule[sequent]{
+            %                     \lsequent{\asfmls}{\subst[\asfml]{x}{y}}
+            %                 }{
+            %                     \lsequent{\asfmls}{\lforall{x}{\asfml}}
+            %                 }
+            %             }{y not in free vars von $\Gamma$ and vars von $\asfml$}
+            %         \end{calculus}
+            %         \end{calculuscollections}
+            %         % \caption{Delay differential dynamic logic axioms and proof rules.}
+            %         % \label{fig:axioms}
+            %     \end{figure}
 
-                % ??? oder mehrere premises (sequents) oben one unten
-                Every line of a proof is a conditional tautology, with zero or more conditions on the left side of the sequent and exactly one asserted proposition on the right hand side.
+            %     % ??? oder mehrere premises (sequents) oben one unten
+            %     Every line of a proof is a conditional tautology, with zero or more conditions on the left side of the sequent and exactly one asserted proposition on the right hand side.
 
-                premises: set of formulas $\range{\asfml_1}{\asfml_n}$
-                conclusion $\bsfml$ single formula
+            %     premises: set of formulas $\range{\asfml_1}{\asfml_n}$
+            %     conclusion $\bsfml$ single formula
 
-                umforme premises with rules into conclusion
-                this intention, written as
-                from premisses conclude conclusion $\bsfml$
+            %     umforme premises with rules into conclusion
+            %     this intention, written as
+            %     from premisses conclude conclusion $\bsfml$
 
 
-                in contrast to relationship $\range{\asfml_1}{\asfml_n}\models\bsfml$, see semantics
+            %     in contrast to relationship $\range{\asfml_1}{\asfml_n}\models\bsfml$, see semantics
 
-                Finding a proof can be difficult, because it might not be obvious which proof rules need to be applied and in what order.
+            %     Finding a proof can be difficult, because it might not be obvious which proof rules need to be applied and in what order.
 
-                theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
+            %     theorems: formulae appearing in concluding judgement of a valid proof $\lsequent{}{\bsfml}$
 
-                % TODO: add ref to soundness
-                rules well chosen, see soundness
+            %     % TODO: add ref to soundness
+            %     rules well chosen, see soundness
 
     %         \subsubsection{Sequent Calculus}
     %             \label{sec:sequent-calculus}
@@ -751,38 +767,34 @@
 
 
 
-    %     \subsection{First-Order Logic of Real Arithmetic}
-    %         \label{sec:FOL-R}
+        % \subsection{First-Order Logic of Real Arithmetic}
+        %     \label{sec:FOL-R}
 
-    %         Formulas of first-order logic of real-closed fields
-    %         first-order logic of real arithmetic (\FOLR)
-    %         formula of real arithmetic
-    %         is first-order formula
-    %         function/predicate symbols $ = {+,-,\cdot,/,=,<,\leq,>,\geq}$
-    %         constant symbols $\Sigma$
-    %         logical Variables $V$
+        %     Formulas of first-order logic of real-closed fields
+        %     first-order logic of real arithmetic (\FOLR)
+        %     formula of real arithmetic
+        %     is first-order formula
+        %     function/predicate symbols $ = {+,-,\cdot,/,=,<,\leq,>,\geq}$
+        %     constant symbols $\Sigma$
+        %     logical Variables $V$
 
-    %     \subsection{Decideability}
-    %         \label{sec:decideability}
+        % \subsection{Decideability}
+        %     \label{sec:decideability}
 
-    %         (\cite{Hodges01ClassicalLogic})
-    %         language (e.g. FOL) decideable if there is an algorithm which returns for any finite sequent if it is valid or not
+        %     (\cite{Hodges01ClassicalLogic})
+        %     language (e.g. FOL) decideable if there is an algorithm which returns for any finite sequent if it is valid or not
 
-    %     \subsection{Correctness}
-    %         \label{sec:correctness}
+        % \subsection{Correctness}
+        %     \label{sec:correctness}
 
-    %         $\bsfml$ deriveable from premises, then sequent is valid
+        %     $\bsfml$ deriveable from premises, then sequent is valid
 
-    %     \subsection{Completeness}
-    %         \label{sec:completeness}
+        % \subsection{Completeness}
+        %     \label{sec:completeness}
 
-    %         given a valid sequent, then conclusion is deriveable from premises
+        %     given a valid sequent, then conclusion is deriveable from premises
 
-    %     % \subsubsection{Substitution}
-    %     % \label{sec:substitution}
-    %     %
-    %     % variables are place holders
-    %     % means of replacing with concrete information
+        
     % \section{Modal Logic}
     %     \label{sec:Modal-logic}
 
