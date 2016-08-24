@@ -784,6 +784,7 @@
         %     (\cite{Hodges01ClassicalLogic})
         %     language (e.g. FOL) decideable if there is an algorithm which returns for any finite sequent if it is valid or not
 
+        % TODO: mention correctness and completeness above in Proof calc 
         % \subsection{Correctness}
         %     \label{sec:correctness}
 
@@ -795,78 +796,94 @@
         %     given a valid sequent, then conclusion is deriveable from premises
 
         
-    % \section{Modal Logic}
-    %     \label{sec:Modal-logic}
+    \section{Modal Logic}
+        \label{sec:modal-logic}
 
-    %     \subsection{Syntax}
-    %         \label{sec:ML-yntax}
+        In propositional and first-order logic is each formula either true or false for a given model.
+        In this section, we present another concept of logics, called \emph{modal logic}, which allows different \emph{modes of truth}. An example is truth with respect to time.
+        To that end, modal logic extends the language of propositional logic with two new unary connectives, $\lbox{}$ and $\ldiamond{}$, whose exact meaning depends on a specific incarnation of modal logics.
 
-    %         \cite{Huth04LogicInCS}
-    %         language of propositional logic with two new unary connectives, called box and diamond whose meaning will be specified by an incarnation of modal logic
-    %         atomic formulas $\asprop$, set of propositional variables
-    %         \begin{definition}[Syntax]
-    %             BNF
-    %             \begin{equation}
-    %                 \asfml,\bsfml \Coloneqq
-    %                     \lfalse \mid
-    %                     \ltrue \mid
-    %                     \asprop \mid
-    %                     \lnot\asfml \mid
-    %                     \asfml\land\bsfml \mid
-    %                     \asfml\lor\bsfml \mid
-    %                     \asfml\limply\bsfml \mid
-    %                     \asfml\lbisubjunct\bsfml \mid
-    %                     \lbox{\asfml} \mid
-    %                     \ldiamond{\asfml}
-    %             \end{equation}
-    %         \end{definition}
+        We define modal logic as in \cite{Huth04LogicInCS}
+        \cite{JaparidzeJongh98HandbookProofTheory}
+        \cite{BlackburnModalLogic}
 
-    %     \subsection{Semantics}
-    %         \label{sec:ML-semantics}
+        \subsection{Syntax}
+            \label{sec:ML-syntax}
 
-    %         \cite{Huth04LogicInCS}, \cite{JaparidzeJongh98HandbookProofTheory}
-    %         Kripke Model
-    %         \begin{definition}[Model]
-    %             A \emph{model} $\model=(W,R,L)$ of modal logic
-    %             \begin{enumerate}
-    %                 \item nonempty Set of \emph{worlds/states} $W$
-    %                 \item relation $R\subseteq W\times w$, accessibility relation
-    %                 \item labelling function $L:W\to P(atoms)$
-    %             \end{enumerate}
-    %             write $R(v,w)$ for $(v,w)\in R$, world $w$ accessible from $v$
+            % TODO: we write ... for propositions
+            % TODO: grammar BNF -> words of finite length
 
-    %         \end{definition}
-    %         forcing relation $\Vdash$ between worlds and propositional variables (is L),
-    %         extended to formulas
+            \begin{definition}[Syntax]
+                The syntax of \emph{modal logic} is defined by the grammar
+                \begin{equation*}
+                    \asfml,\bsfml \Coloneqq
+                        \lfalse \mid
+                        \ltrue \mid
+                        \asprop \mid
+                        \lnot\asfml \mid
+                        \asfml\land\bsfml \mid
+                        \asfml\lor\bsfml \mid
+                        \asfml\limply\bsfml \mid
+                        \asfml\lbisubjunct\bsfml \mid
+                        \lbox{\asfml} \mid
+                        \ldiamond{\asfml}
+                \end{equation*}
+                with an atomic formula $\asprop$ from the set of propositions $P$. 
+            \end{definition}
 
-    %         \begin{definition}[Valuation of modal formulae]
-    %             satisfaction relation $ $
-    %             valuation of formulas
-    %             inductively
-    %             \begin{enumerate}
-    %                 \item box $\lbox{\asfml}$ iff $w$ holds for each $w\in W$ with $R(v,w)$
-    %                 \item diamond $\ldiamond{\asfml}$ iff there is $w$ holds such that $w\in W$ with $R(v,w)$
-    %             \end{enumerate}
-    %             A model satisfies a formula iff each world satisfies formula
-    %             Write $\imodels{\IML}{\asfml}$
-    %             say $\asfml$ is valid in $\model$
-    %         \end{definition}
+        \subsection{Semantics}
+            \label{sec:ML-semantics}
 
-    %     \subsection{Axiomatizations}
-    %         \label{sec:ML-Axiomatizations}
+            
+            Kripke Model
+            \begin{definition}[Model]
+                A \emph{model} $\model=(\worlds,\access,\valuation)$ of modal logic consists of
+                \begin{enumerate}
+                    \item a nonempty set of \emph{worlds/states} $\worlds$
+                    \item an accessibility relation $\access\subseteq \worlds\times \bswrld$ between the worlds
+                    \item a labelling function $\valuation\from\worlds\to\powerset{P}$
+                \end{enumerate}
+                write $\ireachability{\IML}{\aswrld,\bswrld}$ for $(\aswrld,\bswrld)\in\access$, world $\bswrld$ accessible from $\aswrld$
 
-    %         % cite: Handbook of proof theory, chapter VII
-    %         modal logic \textbf{K} axiomized by:
-    %         1. all propositional tautologies in the given modal language
-    %         2. $\lbox{\asfml\limply\bsfml}\limply (\lbox{\asfml}\limply\lbox{\bsfml})$
-    %         with rules of modus ponens and necessitation
+            \end{definition}
+            forcing relation $\Vdash$ between worlds and propositional variables (is L),
+            extended to formulas
+            
+            \begin{definition}[Semantics of modal formulas]
+                The semantics of modal formulas is defined by a \emph{satisfaction relation}.
+                It specifies inductively the truth value of each symbolic expression with regard to the worlds. A formula $\asfml$ is true in a world $\aswrld$ or equivalently the world $\aswrld$ satisfies formula $\asfml$, iff $\imodels{\IML}{\asfml}$.
+                \begin{enumerate}
+                    \item $\inonmodels{\IML}{\lfalse}$
+                    \item $\imodels{\IML}{\ltrue}$
+                    \item $\imodels{\IML}{\asprop}$ iff $\asprop\in \valuation(\aswrld)$
+                    \item $\imodels{\IML}{\lnot\asfml}$ iff $\inonmodels{\IML}{\asfml}$
+                    \item $\imodels{\IML}{\asfml\land\bsfml}$ iff $\imodels{\IML}{\asfml}$ and $\imodels{\IML}{\bsfml}$
+                    \item $\imodels{\IML}{\asfml\lor\bsfml}$ iff $\imodels{\IML}{\asfml}$ or $\imodels{\IML}{\bsfml}$
+                    \item $\imodels{\IML}{\asfml\limply\bsfml}$ iff $\imodels{\IML}{\bsfml}$ whenever $\imodels{\IML}{\bsfml}$
+                    \item $\imodels{\IML}{\asfml\lbisubjunct\bsfml}$ iff $\imodels{\IML}{\asfml}$ if and only if $\imodels{\IML}{\bsfml}$
+                    % FIXME: \imodels{\iconcat[state=w]{\IML}}{\asfml}
+                    \item $\imodels{\IML}{\lbox{\asfml}}$ iff $\bswrld\models\asfml$ for each $\bswrld\in\worlds$ with $\ireachability{\IML}{\aswrld,\bswrld}$
+                    \item $\imodels{\IML}{\ldiamond{\asfml}}$ iff there is a $\bswrld\in\worlds$ with $\ireachability{\IML}{\aswrld,\bswrld}$ such that $\bswrld\models\asfml$
+                \end{enumerate}
+                A model satisfies a formula if and only if each world of the model satisfies the formula. In this case, we write $\model\models\asfml$ and say $\asfml$ is \emph{valid} in $\model$.
+                A formula $\asfml$ is \emph{valid}, if and only if it is true in every world of every model, written as $\models\asfml$.
+            \end{definition}
 
-    %         modal logic \textbf{L}:
-    %         adds $\lbox{(\lbox{\asfml}\limply\asfml)\limply\lbox{\asfml}}$
+        % \subsection{Axiomatizations}
+        %     \label{sec:ML-Axiomatizations}
 
-    %         K4: K + $\lbox{\asfml}\limply\lbox{\lbox{\asfml}}$
+        %     % cite: Handbook of proof theory, chapter VII
+        %     modal logic \textbf{K} axiomized by:
+        %     1. all propositional tautologies in the given modal language
+        %     2. $\lbox{\asfml\limply\bsfml}\limply (\lbox{\asfml}\limply\lbox{\bsfml})$
+        %     with rules of modus ponens and necessitation
 
-    %         K4 and L are closed under necessitation: called normal modal logics
+        %     modal logic \textbf{L}:
+        %     adds $\lbox{(\lbox{\asfml}\limply\asfml)\limply\lbox{\asfml}}$
 
-    %         accessibility relation R
-    %         R transitive -> K4
+        %     K4: K + $\lbox{\asfml}\limply\lbox{\lbox{\asfml}}$
+
+        %     K4 and L are closed under necessitation: called normal modal logics
+
+        %     accessibility relation R
+        %     R transitive -> K4
