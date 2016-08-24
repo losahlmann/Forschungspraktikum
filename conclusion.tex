@@ -1,13 +1,16 @@
 \chapter{Conclusion}
     \label{ch:conclusion}
 
-    we have presented ...
+    We have presented a combination of first-order and modal logic for the specification and verification of safety and liveness properties of time-delay hybrid systems.
+    This logic is essentially an extension of differential dynamic logic (\dL).
+    The approach taken in this work has been available for ODEs for several years, but has not yet been applied to DDEs. 
+    To the knowledge of the author, no work combining logics and delay differential equations has been published yet.
 
     \section{Related Work}
         Verification theory for hybrid systems governed by ordinary differential equations is well established, as can be seen by the exhaustive list of literature to \dL given in the introduction.
-        Literature on formal methods with applied to DDEs is rare.
+        Literature on formal methods applied to DDEs is rare.
         
-        Huang et al.~\cite{Huang16BoundedVerificationNNDS} describe an algorithm allowing bounded invariant verification for dynamical systems with delayed interconnections.
+        Huang et al.~\citeauthor{Huang16BoundedVerificationNNDS} describe an algorithm allowing bounded invariant verification for dynamical systems with delayed interconnections.
         This is done by numerically computing bounds on the trajectories of a (non-linear) delay differential equation given a set of possible initial states (sensitivity of the solution on initial data).
         
         Zou et al.~\cite{Zou15AutomaticVerifDDEs} have presented an iteration method, combining numerical integration of DDEs with multiple constant delays based on interval Taylor forms
@@ -15,36 +18,27 @@
         It automatically analyzes the integration-operator, which yields the Taylor coefficients for the next temporal segment, given by the method of step.
         This procedure allows to compute safety and stability certificates in terms of set constraints.
 
-        To the knowledge of the author, no work combining logics and delay differential equations has been published yet.
-
     \section{Future Work}
-    	hard part, where the magic happens
-        find differential invariant
-        automatically compute invariants and differential invariants
-        as possible for \dL
+        There are several avenues for future work. Practical applicability could be improved by combining axioms to rules for a sequent proof calculus, as it is available for \dL.
 
-        prove redution to \dL given by axiom of steps
-        completeness
+        Next, we would like to include \ddL into the interactive theorem prover \KeYmaeraX.
+        This would require an extension of the presented theory into the \emph{uniform substitution calculus} of~\cite{Platzer15Uniform}.
+        In contrast to the axiomatization presented in Chapter~\ref{sec:axiomatization}, this calculus uses a finite number of axioms, instead of axiom schemata, and an additional proof rule to substitute a formula by a predicate symbol, preserving the soundness of the axiom. This approach has the advantage that it can be much easier implemented in a software tool.
+        The first step towards this calculus is already done with the definition of \emph{free, bound} and \emph{mustbound variables} in Section~\ref{sec:static-semantics}.
 
-        apply to examples
+        The actual implementation od \ddL in \KeYmaeraX would benefit from its modularity and abstraction, since most existing axioms and lemmata could be taken over from \dL.
 
-    	uniform substitution calculus, proof rules, substitutes formula for a predicate symbol
-    	US, classical rule in for first-order logic proof calculus
-    	have axioms instead of axiom schemata
-    	leads to a calculus with finite number od \ddL formulas as axioms
-    	to facilitate a sound implementation in a prover
+        The axiom of steps (\irref{stps}) translates a delay differential equation into a ODE inside a loop. This indicates, that \ddL is actually \emph{reducible} to classical \dL. We leave the details, a formal proof and its significance for \emph{completeness} as future work.
 
-        
-
-    	state dependent delay
+        Differential invartiants provide a powerful tool for the verification of differential equations, if one has such an invariant formula for the given equation to hand.
+        However, finding such is in general not trivial. In the case of ordinary differential equations, different methods to automatically compute differential invariants have been presented~\cite{Platzer12LogicsDynSys}.
+        Their adaption to DDEs would mean a tremendous progress towards practical application and would help to demonstrate the utility of \ddL by proving more complex real-world examples.
+                
+        Moreover, the class of feasable delay differential equations can be extended to include e.g.\ state dependent delays, functional right hand sides or incertain delays.
+        This would allow even more realistic and powerful models of problems, but increases complexity of dynamics to a large extent.
+        It is not sure how far a logical approach can still capture these effects.
     	% TODO: source for state-dependent and distributed delays
         % The definition of a DDE can be extended to state-dependent or distributed delays
 
-        potential implementation in Keymaera X: use modularity, existing axioms, lemmata
-        axiomatization, proof rules important for automatization of proofs
-        for that as \dL in \cite{Platzer15Uniform} no axiom schemata, but finite number of axioms and proof rules (sets of formulas)
-        proof rule for substitution on axiom preserving soundness
-
-        sequent proof calculus
-
         
+
