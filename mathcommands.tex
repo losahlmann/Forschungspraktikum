@@ -29,7 +29,7 @@
 
 % sets
 \DeclarePairedDelimiter{\braces}{\{}{\}} % \braces* uses \left\right, but without space before
-\renewcommand{\set}[1]{\braces*{#1}} % override def in malgebra.sty
+
 % use as \Set{..\with ..},
 % \Set*{..\with ..} to autostretch,
 % \Set[\big]{..\with ..} to set size manually
@@ -234,3 +234,5 @@
 % FIXME: make sure not used any more
 \newcommand{\xbartau}{\bar{x}_{\tau}}
 \newcommand{\xbartaut}[1]{\bar{x}_{\tau,#1}}
+
+\renewcommand{\set}[1]{\braces*{#1}} % override def in malgebra.sty
