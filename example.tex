@@ -6,23 +6,23 @@ To motivate the practical relevance of hybrid programs incorporating delayed dif
 \section{Car Following Model}
 
     The following example is adapted from~\cite{Erneux09AppliedDDEs}.
-    We want to model an acceleration-controller for a car, trying to keep a constant distance to a car driving in front.
+    We want to model an acceleration-controller for a car, trying to keep a constant distance to another car driving in front.
 
     We consider a continuous controller, though with an internal delay $\tau$ between the sensed velocities and the controller output, caused by the internal processing time of the controller.
     % a delay in control decision
     % controller is ideal continuous, not discrete
 
-    Given the speed pattern of the leading car ($n$), the systems models the position and velocity of the (following $n+1$) car depending on its controlled acceleration by:
+    Given the speed pattern of the leading car ($n$), the systems models the position and velocity of the following car ($n+1$) depending on its controlled acceleration by:
     \begin{equation*}
         \begin{cases}
             \D[2]{x_{n+1}}(t) = \alpha (\D{x_n}(t-\tau)-\D{x_{n+1}}(t-\tau))\\
             \D{x_n}(t) = v(t)
         \end{cases}
     \end{equation*}
-    The coefficient $\alpha$ can be seen as a comfort or sport factor, describing the strengh of acceleration and deacceleration applied to the car.
-    By introducing $v_{n+1}$ for $x_{n+1}$, we reduce the system to first order.
+    The coefficient $\alpha$ can be seen as a comfort or sport factor, describing the strength of acceleration and deceleration applied to the car.
+    By introducing $v_{n+1}$ for $\D{x}_{n+1}$, we reduce the system to first order.
 
-    The preconditions need to be specified for all $t\in\closeddelayinterval[-\tau]$). We consider feasable intervals for the initial distance between the cars, the velocity of the following car and specify a constant speed $v_0$ for the leading car.
+    The preconditions need to be specified for all $t\in\closeddelayinterval[-\tau]$. We consider feasible intervals for the initial distance between the cars, the velocity of the following car and specify a constant speed $v_0$ for the leading car.
     \begin{align*}
         d(t) &= x_n(t)-x_{n+1}(t) \in\compactum{D-m}{D+m}\\
         \D{x_{n+1}}(t) &\in\compactum{V-l}{V+l}\\
@@ -53,13 +53,12 @@ To motivate the practical relevance of hybrid programs incorporating delayed dif
     Model~\ref{mdl:car} gives a possible implementation of the described controller as delay hybrid program, using the language of \ddL to describe its properties.
 
     % TODO: verify: leading car with constant deacceleration, choose initial safe alpha (no rep in controller)
-    Of practical interest would be to prove the safety condition that the cars always keep a certain minimal distance, i.e.\ $d\geq\delta$, after having chosen a feasable $\alpha$ in the $\ctrl$-part.
-    % too strong reactions of the following car lead to damped oscillations
+    Of practical interest would be to prove the safety condition that the cars always keep a certain minimal distance, i.e.\ $d\geq\delta$, after having chosen a feasible $\alpha$ in the $\ctrl$-part.
+    
+    Simulations show that too strong reactions of the following car lead to damped oscillations. Thus, the intelligent choice of $\alpha$ is of interest.
 
 
 \section{Network Induced Delay in Control Loops}
-
-    only an input or measurement delay (in u)
 
     A \emph{Networked Control Systems} (NCS) is a feedback control system with sensing and control data transmission over a network.
     Sensors sample the state of the \emph{plant} periodically and send their output as packet to an event-driven \emph{controller}, which calculates a control signal as soon as the sensor data arrives. This signal is then transmitted to event-driven actuators in the plant, which perform action immediately on reception of the command.
@@ -71,7 +70,7 @@ To motivate the practical relevance of hybrid programs incorporating delayed dif
     This scenario has some possible issues, such as network induced \emph{delay} and \emph{loss} of network packets.
     Due to different retardation times on the plant-controller and controller-plant connections, the plant output and the controller input may not be delivered at the same time. For this reason, the controller might not yet have received all the plant updates when it has to perform its control computations. This makes NCSs different to conventional sampled-data systems.
 
-    \subsection{Modelling NCSs with Network-Induced Delay}
+    \subsection{Modeling NCSs with Network-Induced Delay}
         The plant (physical component) is modeled as time continuous and the evolution of its state $x\in\R^{n}$ by
         \begin{equation*}
             \begin{cases}
@@ -101,7 +100,7 @@ To motivate the practical relevance of hybrid programs incorporating delayed dif
             \end{cases}
         \end{equation*}
 
-        \begin{algorithm}
+        \begin{algorithm}[b]
             \caption{Simple NCS model with network induced delay}
             \label{mdl:ncs} % needs be after caption
             % FIXME: for figures: label after caption?
@@ -132,13 +131,13 @@ To motivate the practical relevance of hybrid programs incorporating delayed dif
 
         This plant system can be solved using the standard \emph{variation of constants} method for ordinary differential equations in order to express the new state variables $u(kh)$ and $x((k+1)h)$ as function of their values at the previous sampling instant.
 
-        % TODO: can be written as HP of dL
-
         The NCS models above can be written as hybrid systems with delay.
         The former is given in Program~\ref{mdl:ncs}.
 
+        This example only admits a delay in the control-output $u$, but not in the dependence on the plant-state, what means that the differential equation describing the plant is actually of ordinary type. Thus, this example can also be written down in \dL, by splitting the ODE at $t=\tau_{sc}+\tau_{ca}<h$ and storing the value $x(t)$ for later use. However, the extended syntax of \ddL allows a more natural notation.
 
-        what allows applying stability theory for hybrid systems to derive conditions for asymptotical stability depending on the sampling rate $h$ and the network delay $\tau$.
+        
+        % what allows applying stability theory for hybrid systems to derive conditions for asymptotical stability depending on the sampling rate $h$ and the network delay $\tau$.
 
     % \subsection{Compensation of Network Induced Delay}
     %     If the plant and the controller have synchronized clocks, the sensor-controller delay can be determined in the controller.
