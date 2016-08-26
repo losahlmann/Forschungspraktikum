@@ -69,7 +69,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     Note that $s\notin\allvars\cup\diffvars\cup\constants$. It is a special variable symbol.
 
     The \emph{differential} $\D{(\astrm(s))}$ of a term $\astrm(s)$ is its syntactic (total) derivative, obtained by standard differentiation rules.
-    Lemma~\ref{lm:derivations} shows the validity of these rules and that the result is again a s-term.
+    Lemma~\ref{lm:derivatives} shows the validity of these rules and that the result is again a s-term.
 
     Subtraction can be defined using addition ($+$) and multiplication ($\cdot$), division would also be possible, if we can exclude any division by zero. The grammar allows in particular the construction of polynomial forms.
 
@@ -150,7 +150,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     We note $\asfml$ to indicate that $s$ is not a \emph{free variable} of $\asfml(s)$ and $\asfml(\past)$ with $\past\in\closeddelayinterval\subset\nonposR$ to express that each term $\astrm(s)$ in the formula was replaced by its corresponding $\astrm(r)$, even if the term appears in the scope of a $\hs{}$.
     % TODO: or only which is not under the scope of a \hs? at the moment I overwrite each \hs
     Sometimes we want to emphasize that a formula depends on a variable $x$. Then we write $\asfml(x)$ and refer to $x$ as function and element of the state space, not only the value $\x[0]$ (cf.\ usage for $\forall$).
-    A s-formula $\asfml(s)$, which contains at least one $\x[c]$ for any $c\in\constants$ is called \emph{stiff}.
+    A s-formula $\asfml(s)$, which contains ($\x[s]$ and) at least one $\x[c]$ for any $c\in\constants$ is called \emph{stiff}.
     
     % TODO: on variables \allvars (signature)
     Formulas of first-order logic of real arithmetic constitute a subset of \ddL, i.e.\ every \FOLR formula is also a formula of delay differential dynamic logic (though not containing any delay).
@@ -203,7 +203,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
 
     In this section, we give meaning to the syntax introduced above, by defining its semantics in a compositional way.
 
-    Following the definitions and theoretical results on the solutions of  DDEs in Section~\ref{sec:definition-of-solution}, we define the \emph{state space} in \ddL as $\statespace$, the set of piecewise continuously differentiable functions on $\closeddelayinterval$ (cf.\ Definition~\ref{def:piecewise-continuous}).
+    Following the definitions and theoretical results on the solutions of  DDEs in Section~\ref{sec:definition-dde}, we define the \emph{state space} in \ddL as $\statespace$, the set of piecewise continuously differentiable functions on $\closeddelayinterval$ (cf.\ Definition~\ref{def:pw-cont-diff}).
     This means that a variable remembers a limited part of its past evolution, what demands hence a notion of underlying time.
 
     We denote by $\states$ the \emph{set of states}. A \emph{state} $\asstate\in\states$ is a mapping

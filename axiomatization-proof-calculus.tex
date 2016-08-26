@@ -198,7 +198,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         The \emph{delay differential weakening axiom}~\irref{DDW} internalizes that all values referenced in the state after a the evolution along a DDE were either specified in the initial condition or result from the differential equation. In the latter case, they need to satisfy the evolution domain constraint.
         It should be pointed out, that the right hand side only demands the weaker $\hs{}$, as opposed to the $\hsc$ appearing on the left.
 
-        \begin{figure}[h]
+        \begin{figure}[t]
             \begin{calculuscollections}{\coloumnwidth}
             \begin{calculus}
                 % replace \D{(x)} with \der{x} 
@@ -379,7 +379,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         If we repeated the loop $m$ times, it holds after the last iteration that $\zeta=(m-1)\taumin+t\leq\duration$ and that the evolution is still restricted by $\ivr$. We know in this case that $\trajectory(\zeta)\in\imodel{\IddL}{\asfml(s)}$ what implies the assertion.
         The converse implication is shown analogously.
 
-        \item[{\parbox[t]{2em}{\irref{Dplus},\irref{Dmult},\\\irref{Dconst},\irref{Dvar}}}] These axioms are special instances of the equations proved in Lemma~\ref{lm:derivations}.
+        \item[{\parbox[t]{2em}{\irref{Dplus},\irref{Dmult},\\\irref{Dconst},\irref{Dvar}}}] These axioms are special instances of the equations proved in Lemma~\ref{lm:derivatives}.
 
         \item[\irref{DW}] Proof as for \dL.
         
@@ -581,7 +581,7 @@ Moreover, they can be implemented in software for computer-aided verification.
 
     %     Formulas of the form $\asfmls(\x[-\tau])$ implicitely also include a statement about $x$.
 
-    \subsection{Delay Differential Induction}
+    \section{Delay Differential Induction}
         \label{sec:delay-differential-induction}
 
         % TODO: include loop rule?

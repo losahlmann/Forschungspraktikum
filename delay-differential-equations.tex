@@ -291,11 +291,11 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
     \end{proof}
 
     The most important result for the considered class of delay differential equations is the following theorem.
-    Its proof is an adaption and extension of the existence theorem (Theorem 3.7) given in~\cite{Smith10IntroDDE} and the proof of uniqueness in \cite{PruessWilke10GewDiffGl}. It essentially reduces the DDE locally to an ODE by applying the method of steps.
+    Its proof is an adaption and extension of the existence theorem (Theorem 3.7) given in~\cite{Smith10IntroDDE} and the proof of uniqueness in \cite{PruessWilke10GewDiffGl}. It essentially reduces the DDE to a piecewise ODE by applying the method of steps.
 
     \begin{theorem}[Existence of a unique solution]
         \label{thm:solution-existence}
-        Given a continuous function $f\from\deff\to\R^n$, satisfying the Lipschitz condition (Def.~\ref{def:lipschitz}) in its first argument, consider the IVP for a delay differential equation
+        Given a continuous function $f\from\deff\to\R^n$, satisfying the local Lipschitz condition (Def.~\ref{def:lipschitz}) in its first argument, consider the IVP for a delay differential equation
         \begin{equation}
             \begin{cases}
                 \D{x} = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k)) & \text{for } t\geq\tzero\\
@@ -352,7 +352,7 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
         \begin{equation*}
             \nnorm*{x_{(m)}(t)-x_{(m-1)}(t)} \leq \frac{K}{L}\frac{L^m (t-\tzero)^m}{m!}.
         \end{equation*}
-        Let $t\in [\tzero,\tzero+T]$. Since for all $s\in [\tzero-\taumax,\tzero+T]$ obviously $\nnorm{x_{(0)}(s)}\leq M$, the statement for $m=0$ follows from the boundedness of $f$ on $S$ and the triangle inequality for integrals:
+        Let $t\in [\tzero,\tzero+T]$. Since for all $s\in [\tzero-\taumax,\tzero+T]$ obviously $\nnorm{x_{(0)}(s)}\leq M$, the statement for $m=1$ follows from the boundedness of $f$ on $S$ and the triangle inequality for integrals:
         \begin{equation*}
             \nnorm{x_{(1)}(t)-x_{(0)}(t)} = \nnorm*{\integral{\tzero}{t} f(s,x_{(0)}(s),x_{(0)}(s-\tau_1),\ldots,,x_{(0)}(s-\tau_k))\dx[s]} \leq K(t-\tzero)
         \end{equation*}

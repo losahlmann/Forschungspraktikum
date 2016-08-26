@@ -6,12 +6,12 @@
 %\RequirePackage{fixltx2e}
 
 \documentclass[
-    draft,
+    final,
     fontsize=10pt,
     a4paper,
     oneside,
     abstract=on,
-    toc=bibliographynumbered
+    % toc=bibliographynumbered
 ]{scrreprt}
 
 % encoding of tex-file
@@ -61,7 +61,7 @@
 \usepackage{url}
 
 % shows labels and references in margin, good for correction
-\usepackage{showkeys}
+% \usepackage{showkeys}
 % \usepackage{showframe}
 
 % LS-Lab auxiliary math commands
@@ -263,26 +263,26 @@
         Pittsburgh, PA 15213-3891\\
         USA}
 
-% \maketitle
+\maketitle
 
-% \include{preface}
+\include{preface}
 
-% \cleardoubleoddemptypage
-% \tableofcontents
+\cleardoubleoddemptypage
+\tableofcontents
 
-% \include{introduction}
+\include{introduction}
 
-% \include{intro-logic}
+\include{intro-logic}
 
-% \include{delay-differential-equations}
+\include{delay-differential-equations}
 
 \include{delay-differential-dynamic-logic}
 
-% \include{axiomatization-proof-calculus}
+\include{axiomatization-proof-calculus}
 
-% \include{example}
+\include{example}
 
-% \include{conclusion}
+\include{conclusion}
 
 \appendix
 
