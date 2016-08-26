@@ -8,17 +8,10 @@ To that purpose, we allow delay differential equations in hybrid programs, which
 The definition of \emph{delay differential dynamic logic} (\ddL) provides all operators of first-order logic, as well as modal operators, in order to specify and verify reachability properties about the state of such \dHPs.
 
 In the language of \ddL, we can not only model hybrid programs with DDEs in the continuous part, but also with temporal differences in the discrete fragment.
-For example a controller which approximates a derivative by a difference quotient.
+As an example consider a controller which approximates a derivative by a difference quotient.
 
-The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduces to classical \emph{differential dynamic logic}.
+The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{delay differential dynamic logic} reduces to classical \emph{differential dynamic logic}.
 
-
-% 
-% in general an arbitrary unknown initial function, only conditions on it
-
-% time-invariant
-
-% 
 
 % TODO: Abgrenzung zu Trace Semantics
     % The temporal character of delay differential equations (they depend on their own temporal evolution with limited horizon) suggests the introduction of trace semantics.
@@ -31,7 +24,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
     Terms and formulas in \ddL, as well as \dHPs are defined as \emph{words} of finite length, produced by their corresponding grammars in Backus-Naur-form (BNF).
     % The syntax of is defined inductively by 
 
-    We define by $\allvars$ be the set of \emph{all variables} and by $\diffvars\defeq\Set{\D{x} \with x\in\allvars}$ the corresponding set of \emph{differential symbols}.
+    We define by $\allvars$ be the set of \emph{variables} and by $\diffvars\defeq\Set{\D{x} \with x\in\allvars}$ the corresponding set of \emph{differential symbols}.
     % TODO: call delay or delayed?
     Let $\constants\subset\nonposQ$ be the set of \emph{constant parameters}.
     All three sets are supposed to be finite.
@@ -39,14 +32,11 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
     % TODO: finite sets, or sets infinite, but only finitely many symbols in one term/formula, Trm()
     % FIXME: parentheses
 
-    We will usually write variables as $x,y,z\in\allvars$ and their differential symbols as $\D{x},\D{y},\D{z}\in\diffvars$.
     % FIXME: just use \Q as set of constants, they have their semantics
-    \emph{Function symbols} $f,g,h$ and \emph{constant symbols} $a,b\in\Q$
-    % FIXME: do I use predicates?
-    % \emph{predicate symbols} $p,q,r$
-    are as in first-order logic (cf.\ Section~\ref{sec:first-order-logic}).
+    We will usually write variables as $x,y\in\allvars$ and their differential symbols as $\D{x},\D{y}\in\diffvars$.
+    \emph{Function symbols} $f,g$, \emph{predicate symbols} $p,q$ and \emph{constant symbols} $a,b\in\Q$ are as in first-order logic (cf.\ Section~\ref{sec:first-order-logic}).
 
-    Moreover, we write $\astrm,\bstrm$ for \ddL terms, $\asfml,\bsfml$ for \ddL formulas and $\asprg,\bsprg$ for \dHPs. For formulas of first-order logic of real arithmetic (\FOLR), we use the symbols $\asfmlfolR$ and $\bsfmlfolR$.
+    Moreover, we write $\astrm(s),\bstrm(s)$ for \ddL terms, $\asfml(s),\bsfml(s)$ for \ddL formulas and $\asprg,\bsprg$ for \dHPs. For formulas of first-order logic of real arithmetic (\FOLR), we use the symbols $\asfmlfolR$ and $\bsfmlfolR$.
 
     \begin{definition}[s-Terms]\label{def:syntax-terms}
         The syntax of \emph{terms} of \emph{delay differential dynamic logic} is defined by the following grammar:
@@ -65,7 +55,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         % FIXME: is term' allowed? diff inv is only a FOLR formula? even for dL valid?
         % TODO: line breaks and explination text in syntax
         where $x\in\allvars,\D{x}\in\diffvars$ and $f$ is a function symbol of arity $k$.
-        The symbol $a\in\constants$ stands for a constant value in $\Q$. The constant parameters $c\in\nonposQ$ are not allowed to be positive.
+        The symbol $a$ stands for a constant value from $\Q$. The constant parameters $c\in\constants$ are not allowed to be positive.
     \end{definition}
 
     The s-terms listed in the first line are called \emph{atomic}, as opposed to the \emph{composite} s-terms in the second line.
@@ -73,29 +63,29 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
     %extending \dL with symbols for \emph{delayed variables} and \emph{differentials}
     S-terms generally depend on the time parameter $s\in\nonposR$. This is why we write them as $\astrm(s)$.
     If a s-term $\astrm(s)$ does neither contain $\x[s]$ nor $\Dx[s]$, we say $s\notin\astrm(s)$ and abbreviate its notation to $\astrm$.
-    Writing $\astrm(b)$ means that all occurences of $s$ in $\astrm(s)$ have been replaced with $b\in\nonposQ$.
+    Writing $\astrm(b)$ means that all occurrences of $s$ in $\astrm(s)$ have been replaced with $b\in\nonposQ$.
+    % FIXME: or nonposR ? dilemma was kann ich explizit schreiben und was brauche ich nur implizit in der Theorie?
     Moreover, we agree on abbreviating $\x[0]$ to $x$ and $\Dx[0]$ to $\D{x}$.
-    % The variable symbol $x$ and the differential symbol $\D{x}$ are the only ones which allow explicitely mentioning this parameter. They are spelled slightly differently using square brackets as $\x[s]$ and $\Dx[s]$, respectively.
     Note that $s\notin\allvars\cup\diffvars\cup\constants$. It is a special variable symbol.
 
-    The \emph{differential} $\D{(\astrm(s))}$ of a term $\astrm(s)$ is its syntactic (total) derivation, obtained by standard differentiation rules.
+    The \emph{differential} $\D{(\astrm(s))}$ of a term $\astrm(s)$ is its syntactic (total) derivative, obtained by standard differentiation rules.
     Lemma~\ref{lm:derivations} shows the validity of these rules and that the result is again a s-term.
 
-    Subtraction can be defined using addition and multiplication, division would also be possible, if we can exclude any division by zero. The grammar allows in particular the construction of polynomial forms.
+    Subtraction can be defined using addition ($+$) and multiplication ($\cdot$), division would also be possible, if we can exclude any division by zero. The grammar allows in particular the construction of polynomial forms.
 
     \begin{example}
         Let us consider the s-term
         \begin{equation*}
-            \astrm(s) = \x[s] + \x[-\tau].
+            \astrm(s) \equiv \x[s] + \x[-\tau].
         \end{equation*}
         Setting $s=-1$ gives the term
         \begin{equation*}
-            \astrm(-1) = \x[-1] + \x[-\tau].
+            \astrm(-1) \equiv \x[-1] + \x[-\tau].
         \end{equation*}
     \end{example}
 
     Delay differential dynamic logic uses hybrid programs with delay differential equations as system model. 
-    The grammar defining these \emph{delayed hybrid programs} is the same as for classical \HPs (cf.~\cite{Platzer15Uniform}).
+    The grammar defining these \emph{delayed hybrid programs} is the same as for classical \HPs (cf.~\cite{Platzer10HybridSystems,Platzer12LogicsDynSys,Platzer15Uniform}). The difference is only given by their semantics.
 
     \begin{definition}[Delay Hybrid Programs]\label{def:syntax-HP}
         The syntax of \emph{delay hybrid programs} (\dHPs) is defined by
@@ -112,15 +102,13 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
                 \hrepeat{\asprg} \mid
                 \hevolvein{\D{x}=\astrm}{\ivr}
         \end{equation*}
-        where $\asprg,\bsprg$ denote \dHPs, $x$ a variable and $\astrm$ a term (possibly containing $x$ or $\x[b]$, but no $\x[s]$).
+        where $\asprg,\bsprg$ denote \dHPs, $x$ a variable, $\astrm$ a term (possibly containing $x$ or $\x[c]$, but not $\x[s]$) and $\asfml$ a \ddL formula (not mentioning $\x[s]$ or $\Dx[s]$).
         The formula $\asfmlfolR$ is of \FOLR, containing only normal variable symbols from $\allvars$.
     \end{definition}
     
     Note that the syntax only allows autonomous DDEs, though with multiple constant delays.
 
-    Atomic \dHPs are given by instantaneous discrete \emph{assignments} $\hupdate{\humod{x}{\astrm(0)}}$ and \emph{differential assignments} $\Dupdate{\Dumod{\D{x}}{\astrm(0)}}$, which change the value of the given variable only at the current time instant, not the past, \emph{tests} $\htest{\asfml}$, which pass only if the current state satisfies the formula $\asfml$
-    % first-order formula $\asfmlfolR$ of real arithmetic
-    and abords the program execution if not, as well as evolutions along \emph{delay differential equation} systems $\hevolvein{\D{x}=\astrm(0)}{\ivr}$ of an arbitrary amount of time, but restricted by the evolution domain constraint $\ivr$.
+    Atomic \dHPs are given by instantaneous discrete \emph{assignments} $\hupdate{\humod{x}{\astrm}}$ and \emph{differential assignments} $\Dupdate{\Dumod{\D{x}}{\astrm}}$, which change the value of the given variable only at the current time instant (not the past), \emph{tests} $\htest{\asfml}$, which pass only if the current state satisfies the formula $\asfml$ and aborts the program execution if not, as well as evolutions along \emph{delay differential equation} systems $\hevolvein{\D{x}=\astrm}{\ivr}$ of an arbitrary amount of time, but restricted by the evolution domain constraint $\ivr$.
 
     Compound \dHPs combine atomic programs, and comprise \emph{nondeterministic choices} $\hchoice{\asprg}{\bsprg}$, running either $\asprg$ or $\bsprg$, \emph{sequential compositions} $\asprg;\bsprg$, executing $\bsprg$ after $\asprg$ and \emph{nondeterministic repetitions} $\hrepeat{\asprg}$, repeating $\asprg$ any number of times, zero times included.
 
@@ -128,10 +116,10 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
     Observe that ODEs are still expressible by this syntax and that hybrid programs are hence only delayed hybrid programs with zero delay.
 
     % FIXME: where put general dL sources? only once at beginning
-    The difference between classical \HPs (as defined in \dL, cf.~\cite{Platzer10HybridSystems,Platzer12LogicsDynSys,Platzer15Uniform}) and \emph{delay hybrid programs} is not syntactical, but only given by their semantics.
+    
     
     \begin{definition}[s-Formulas]\label{def:syntax-formula}
-        The syntax for \emph{formulae} of \emph{delay differential dynamic logic} is defined by the grammar
+        The syntax for \emph{formulas} of \emph{delay differential dynamic logic} is defined by the grammar
         \begin{align*}
             \asfml(s),\bsfml(s) \Coloneqq{}& % fixes missing space
                 % TODO: better abbreviated notation for \holdssince, make forall only appear in semantics rhs
@@ -149,25 +137,23 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         with $\astrm(s),\bstrm(s),\range{\istrm{1}(s)}{\istrm{k}(s)}$ as s-terms, $p$ as predicate symbol, $x$ as variable, and $\asprg$ as \dHP.
     \end{definition}
 
-    These formulae combine connectives of propositional logic with first-order quantifiers (which both have standard meaning) and two modalities, describing \emph{necessary} and \emph{possible} properties.
+    These formulas combine connectives of propositional logic with first-order quantifiers (which all have standard meaning) and two modalities, describing \emph{necessary} and \emph{possible} properties.
 
-    The other comparison operators $<,\leq,>$ and logic connectives $\lor,\limply,\lbisubjunct$ can be defined using $=,\land,\lnot$ and are hence not explicitely mentioned in the grammar.
-    Analogoulsy is $\lexists{x}{\asfml}$ expressible as $\lnot\lforall{x}{\lnot\asfml}$ and the modal formula $\dbox{\asprg}{\asfml}$ ($\asfml$ holds in the state after all runs of $\asprg$) by its dual $\ddiamond{\asprg}{\asfml}\equiv\lnot\dbox{\asprg}{\lnot\asfml}$ (there is at least one state reachable by $\asprg$ such that $\asfml$ holds).
-    The quantifiers $\forall$ and $\exists$ quantify over the state space $\statespace$.
+    The other comparison operators $<,\leq,>$ and logic connectives $\lor,\limply,\lbisubjunct$ can be defined using $=,\geq,\land,\lnot$ and are hence not explicitly mentioned in the grammar.
+    Analogously is $\lexists{x}{\asfml(s)}$ expressible as $\lnot\lforall{x}{\lnot\asfml(s)}$ and the modal formula $\dbox{\asprg}{\asfml(s)}$ ($\asfml(s)$ holds in the state after all runs of $\asprg$) by its dual $\ddiamond{\asprg}{\asfml(s)}\equiv\lnot\dbox{\asprg}{\lnot\asfml(s)}$ (there is at least one state reachable by $\asprg$ such that $\asfml(s)$ holds).
+    The quantifiers $\forall$ and $\exists$ quantify over the elements of the state space $\statespace$.
     % FIXME: was state space mentioned before?
 
-    Like the s-terms defined above, the s-formulae depend on a time parameter $s\in\closeddelayinterval$. The symbol $T$ is a symbolic constant related to the length of the domain of the state space, which is induced by the occurence of delay symbols. Its value is defined by the static semantics and set by proof rules.
-    % TODO: proof rule/axiom to set T?
+    Like the s-terms defined above, the s-formulas depend on a time parameter $s\in\closeddelayinterval$. The symbol $T$ is a symbolic constant related to the length of the domain of the state space, which is induced by the occurrence of delay symbols. Its value is defined by the static semantics.
     The only way to bind the variable $s$ in a formula $\asfml(s)$ is by using $\hs{\asfml(s)}$, which quantifies $s$ over the domain of the state space, except for the current time point $0$.
 
-    We note $\asfml$ to indicate that $s$ is not a free variable of $\asfml(s)$ and $\asfml(b)$ with $b\in\nonposQ$ to express that each term $\astrm(s)$ in the formula was replaced by its corresponding $\astrm(b)$, even if it was bound by a $\hs{}$.
+    We note $\asfml$ to indicate that $s$ is not a \emph{free variable} of $\asfml(s)$ and $\asfml(\past)$ with $\past\in\closeddelayinterval\subset\nonposR$ to express that each term $\astrm(s)$ in the formula was replaced by its corresponding $\astrm(r)$, even if the term appears in the scope of a $\hs{}$.
     % TODO: or only which is not under the scope of a \hs? at the moment I overwrite each \hs
-    If we write $\asfml(x)$, we mean entire function $x$, not only the value $\x[0]$ (cf.\ usage for $\forall$).
-
-    A s-formula $\asfml(s)$, which contains a $\x[c]$ for any $c\in\constants$ is called \emph{stiff}.
+    Sometimes we want to emphasize that a formula depends on a variable $x$. Then we write $\asfml(x)$ and refer to $x$ as function and element of the state space, not only the value $\x[0]$ (cf.\ usage for $\forall$).
+    A s-formula $\asfml(s)$, which contains at least one $\x[c]$ for any $c\in\constants$ is called \emph{stiff}.
     
     % TODO: on variables \allvars (signature)
-    Formulas of first-order logic of real arithmetic constitute a subset of \ddL, i.e.\ every \FOLR formula is also a formula of delay differential dynamic logic.
+    Formulas of first-order logic of real arithmetic constitute a subset of \ddL, i.e.\ every \FOLR formula is also a formula of delay differential dynamic logic (though not containing any delay).
 
     \begin{convention}
         The frequently appearing fact that $\asfml(s)$ is not only supposed to hold for $s\in\delayinterval$ but also in $s=0$
@@ -183,7 +169,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
 
     In order to simplify notation by eliminating parentheses, we agree on the following
     \begin{convention}
-        The operators in \ddL formulae obey the following binding priorities (from highest to lowest):
+        The operators in \ddL formulas obey the following binding priorities (from highest to lowest):
         \begin{itemize}
             \item the quantifiers $\forall,\exists$ and the modal operators $\dbox{\cdot}{},\ddiamond{\cdot}{}$ bind strongest
             \item negation $\lnot$ binds stronger than
@@ -195,10 +181,10 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
     \end{convention}
 
         % TODO: Move to static semantics
-    Moreover, when a s-formula does not depend on the quantified parameter $s$, we can drop the quantifier $\hs{}$ in which this formula appears.
+    Moreover, when a s-formula does not depend on the quantified parameter $s$, we can drop the quantifier $\hs{}$ in whose scope this formula appears.
 
     \begin{example}
-        Consider the two well-formed \ddL formulae:
+        Consider the two well-formed \ddL formulas:
         \begin{align*}
             &\hs{(x+\x[s]\geq 0)}\\
             &\hs{(x+\x[-\tau]\geq 0)} 
@@ -217,8 +203,8 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
 
     In this section, we give meaning to the syntax introduced above, by defining its semantics in a compositional way.
 
-    Following the remark to the solution of a DDE (cf.\ Section~\ref{sec:definition-of-solution}), we define the \emph{state space} in \ddL as $\statespace$, the set of piecewise continuously differentiable functions on $\closeddelayinterval$, as defined in Definition~\ref{def:piecewise-continuous}.
-    This means that a variable remembers a limited part of its evolution history, what demands hence an implicit notion of a underlying time.
+    Following the definitions and theoretical results on the solutions of  DDEs in Section~\ref{sec:definition-of-solution}, we define the \emph{state space} in \ddL as $\statespace$, the set of piecewise continuously differentiable functions on $\closeddelayinterval$ (cf.\ Definition~\ref{def:piecewise-continuous}).
+    This means that a variable remembers a limited part of its past evolution, what demands hence a notion of underlying time.
 
     We denote by $\states$ the \emph{set of states}. A \emph{state} $\asstate\in\states$ is a mapping
     \begin{equation}
@@ -238,55 +224,36 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         The \emph{semantics} of a s-term $\astrm(s)$ in the state $\asstate\in\states$ with respect to the time instant $\past\in\closeddelayinterval$
         is a value in $\R$ and defined inductively as follows:
         \begin{enumerate}
-            \item $\ivaluation{\IddL}{\x[s]} = \asstate(x)(\past)$ for a variable $x\in\allvars$
-            % FIXME: need Cpw for derivatives or only \R?
+            \item $\ivaluation{\IddL}{\x[s]} = \asstate(x)(\past)$ %for a variable $x\in\allvars$
             \item $\ivaluation{\IddL}{\Dx[s]} = \asstate(\D{x})(\past) \defeq \lim_{t\downto \past} \frac{\asstate(x)(t)-\asstate(x)(\past)}{t-\past}$ (except in $\past=0$)
             % for a differential symbol $\D{x}\in\diffvars$
-            \item $\ivaluation{\IddL}{\x[c]} = \asstate(x)(c)$ for a variable $x\in\allvars$ 
-            % \item $\ivaluation{\IddL}{\Dx[b]} = \asstate(\D{x})(b)$ for a differential symbol $\D{x}\in\diffvars$ and a constant $b\in\constants$ with $\interpret[b]\in\nonposQ$
+            \item $\ivaluation{\IddL}{\x[c]} = \asstate(x)(c)$ %for a variable $x\in\allvars$ 
             \item $\ivaluation{\IddL}{\Dx[c]} = \asstate(\D{x})(c) \defeq \lim_{t\downto c} \frac{\asstate(x)(t)-\asstate(x)(c)}{t-c}$ (except in $c=0$)
-            \item $\ivaluation{\IddL}{a} = \interpret[a]$ for a constant $a\in\constants$
-            \item $\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}(s)}}{\ivaluation{\IddL}{\istrm{k}(s)}})$ for a function symbol $f$
+            \item $\ivaluation{\IddL}{a} = a$ %for a constant $a\in\constants$
+            \item $\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}(s)}}{\ivaluation{\IddL}{\istrm{k}(s)}})$ %for a function symbol $f$
             \item $\ivaluation{\IddL}{\astrm(s)+\bstrm(s)} = \ivaluation{\IddL}{\astrm(s)} + \ivaluation{\IddL}{\bstrm(s)}$
             \item $\ivaluation{\IddL}{\astrm(s)\cdot\bstrm(s)} = \ivaluation{\IddL}{\astrm(s)} \cdot \ivaluation{\IddL}{\bstrm(s)}$
             % FIXME: derivation of terms with x'?
-            \item $\ivaluation{\IddL}{\D{(\astrm(s))}} = \displaystyle\sum_{\x[c]\in\delayvars} \asstate(\D{x})(\interpret[c])\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[b]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}$
+            \item $\ivaluation{\IddL}{\D{(\astrm(s))}} = \displaystyle\sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}$
         \end{enumerate} 
-        where $c\in\nonposQ$ is a non-positive rational number.
+        where $c\in\nonposQ$ is a non-positive rational number and $a\in\Q$. Rationals have their natural meaning.
     \end{definition}
         % FIXME: interpretation of $f$ is a smooth function?
 
-    The meaning of the variable and differential symbols is determined by the state. Additionally, the value of a differential symbol has to coincide with the right derivative of the corresponding variable, except for $\past=0$.
+    The meaning of the variable and differential symbols is determined by the state. Additionally, the value of a differential symbol has to coincide with the right derivative of the corresponding variable, except in $\past=0$, where they can mismatch.
 
     The meaning of the differential of an arbitrary term is the total derivative of its value with respect to the underlying continuous time.
     As a composition of smooth functions is $\ivaluation{\IddL}{\astrm(s)}$ smooth itself and hence these derivatives exist.
     The sum is finite, since each term only mentions finitely many variables.
 
-    % The meaning of a differential symbol: defined by state, 
-    % The time derivative of a variable may not be defined in isolated state, because it might have a discontinuity here and we cannot use its history (provided by the state) to define derivative.
-    % However, we can define a state local semantics for a differential $\D{(\astrm)}$.
+    When a term $\astrm$ does not mention $s$, its valuation is independent of $\past\in\closeddelayinterval$. In this case we can write $\ivaluation{\iconcat[assign={}]{\IddL}}{\astrm}$, dropping the $\past$.
 
-    % Like for ODE case, only use last value given in state. Since in $t=0$ could be incontinuity 
+    If one explicitly specifies values for the derivatives, one needs to take care that they are compatible with their corresponding variables.
+    % In the precondition, no values are associated to the differential symbols. In general, the initial function is only piecewise continuous.
+    % Since for later time instances, the values of the differential symbols derive from the DDE, they become (locally) smooth function.
 
-    
-
-    % Along a solution of a DDE $\varphi:[0,r]\rightarrow\states$ (continous differentiable), the differential symbols are interpreted as time derivatives, $r>0$ at any $\zeta\in[0,r]$, meaning of symbol is rate of change of value of $x$ over time
-    % \begin{equation}
-    %     % TODO: replace \DD with Andres command
-    %     \imodel{\IddL}{\D{x}}\varphi(\zeta)
-    %         = \varphi(\zeta)(\D{x})(0)
-    %         \defeq \DD{\varphi(t)(x)(0)}{t}(\zeta)
-    %         = \DD{\imodel{\IddL}{x}\varphi(t)}{t}(\zeta)
-    % \end{equation}
-   
- 
-    
-
-    In the precondition, no values are associated to the differential symbols. In general, the initial function is only piecewise continuous.
-    Since for later time instances, the values of the differential symbols derive from the DDE, they become (locally) smooth function.
-
-    \begin{definition}[Semantics of s-formulae]\label{def:semantic-formulae}
-        The semantics of a \ddL formula $\asfml$ is the subset of all states $\imodel{\IddL}{\asfml}\subseteq\states$ in which $\asfml$ is true. This set is given inductively by
+    \begin{definition}[Semantics of s-formulas]\label{def:semantic-formulae}
+        The semantics of a \ddL formula $\asfml(s)$ is the subset of all states $\imodel{\IddL}{\asfml(s)}\subseteq\states$ in which $\asfml(s)$ is true at the time instant $\past\in\closeddelayinterval$. This set is given inductively by
         % TODO: mention interpretation I
         % FIXME: what is difference between \imodel and \ivaluation?
         % terms: ivaluation, formula: imodel, programms: ireachability
@@ -304,10 +271,11 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             \item $\imodel{\IddL}{\hs{\asfml(s)}} = \Set*{\asstate\in\states \with \mforall{\tilde{r}\in\delayinterval}\holds\asstate\in\imodel{\iconcat[assign=\tilde{r}]{\IddL}}{\asfml(s)}}$
             \item $\imodel{\IddL}{\lforall{x}{\asfml(s)}} = \Set*{\asstate\in\states \with \modif{\asstate}{x}{y}\in\imodel{\IddL}{\asfml(s)} \text{ for all } y\in\statespace}$
             \item $\imodel{\IddL}{\lexists{x}{\asfml(s)}} = \Set*{\asstate\in\states \with \modif{\asstate}{x}{y}\in\imodel{\IddL}{\asfml(s)} \text{ for some } y\in\statespace}$
-            \item $\imodel{\IddL}{\dbox{\asprg}{\asfml(s)}} = \Set*{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml(s)} \text{ for all $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}}$,\\ i.e. $=\Set*{\asstate\in\states \with \mforall{\bsstate\in\states}\holds(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\asfml(s)}}$
-            \item $\imodel{\IddL}{\ddiamond{\asprg}{\asfml(s)}} = \Set*{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml(s)} \text{ for some $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}}$,\\ i.e. $=\Set*{\asstate\in\states \with \mexists{\bsstate\in\states}\holds(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \land \bsstate\in\imodel{\IddL}{\asfml(s)}}$
+            \item $\imodel{\IddL}{\dbox{\asprg}{\asfml(s)}} = \Set*{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml(s)} \text{ for all $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}}$,\\ $=\Set*{\asstate\in\states \with \mforall{\bsstate\in\states}\holds(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \mimply \bsstate\in\imodel{\IddL}{\asfml(s)}}$
+            \item $\imodel{\IddL}{\ddiamond{\asprg}{\asfml(s)}} = \Set*{\asstate\in\states \with \bsstate\in\imodel{\IddL}{\asfml(s)} \text{ for some $\bsstate$ such that} (\asstate,\bsstate)\in\ireachability{\IddL}{\asprg}}$\\ $=\Set*{\asstate\in\states \with \mexists{\bsstate\in\states}\holds(\asstate,\bsstate)\in\ireachability{\IddL}{\asprg} \land \bsstate\in\imodel{\IddL}{\asfml(s)}}$
         \end{enumerate}
-        The fact that formula $\asfml(s)$ is true in state $\asstate$ under the interpretation $\interpret$ at past time instant $\past\in\closeddelayinterval$, i.e. $\asstate\in\imodel{\IddL}{\asfml(s)}$ can also be written as $\interpret,\asstate,\past\models\asfml(s)$.
+        The relation $\iget[access]{\IddL}$ is defined subsequently.
+        The fact that formula $\asfml(s)$ is true in state $\asstate$ under the interpretation $\interpret$ at past time instant $\past\in\closeddelayinterval$, i.e.\ $\asstate\in\imodel{\IddL}{\asfml(s)}$ can also be written as $\interpret,\asstate,\past\models\asfml(s)$.
         A formula $\asfml(s)$ is called valid, written as $\models\asfml(s)$, if and only if $\asfml(s)$ is true in all states, for all $\past\in\closeddelayinterval$ and under all interpretations.
     \end{definition}
 
@@ -326,13 +294,13 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
     % $\dbox{}{}$ and $\ddiamond{}{}$ only refer to last state and not intermediate states, as \dTL does.
 
     \begin{lemma}[Barcan formula]
-        The box modality and the quantification over $s$ commute
+        The box modality and the s-quantification  commute
         \begin{equation*}
             \imodel{\IddL}{\hs{\dbox{\asprg}{\asfml(s)}}} = \imodel{\IddL}{\dbox{\asprg}{(\hs{\asfml(s)})}}
         \end{equation*}
     \end{lemma}
     \begin{proof}
-        Since $\mforall{x}\holds(p\mimply q(x))\equiv p\mimply\mforall{x}\holds q(x)$, it holds
+        Since $\mforall{x}\holds(p\mimply q(x))$ iff $p\mimply\mforall{x}\holds q(x)$, it holds
         \begin{multline*}
             \imodel{\IddL}{\hs{\dbox{\asprg}{\asfml(s)}}} =\\
             \begin{aligned}
@@ -345,12 +313,20 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         \end{multline*}
     \end{proof}
     
-    However, the diamond modality does not commute with the s-quantification.
-    % TODO: counterexample for not commuting diamond and forall-s
+    \begin{example}
+        The diamond modality does not commute with the s-quantification
+        \begin{equation*}
+            \imodel{\IddL}{\hs{\ddiamond{\asprg}{\asfml(s)}}} \neq \imodel{\IddL}{\ddiamond{\asprg}{\hs{\asfml(s)}}}
+        \end{equation*}
+        as shown by the following counter example for the state $\asstate(x)(\past)=0$, $\forall\past\in\closeddelayinterval$:
+        \begin{align*}
+            &\asstate\in\imodel{\iconcat[assign={}]{\IddL}}{\hs{\ddiamond{\hevolve{\D{x}=1}}{(\x[s]=1)}}}\\
+            &\asstate\notin\imodel{\iconcat[assign={}]{\IddL}}{\ddiamond{\hevolve{\D{x}=1}}{\hs{(\x[s]=1)}}}
+        \end{align*}
+        
+    \end{example}
     % TODO: do we accept that or restrict formula after modality to not having $s$ free? then, since s\notin\asprg commutes also for diamond
-    \begin{equation*}
-        \imodel{\IddL}{\hs{\ddiamond{\asprg}{\asfml(s)}}} \neq \imodel{\IddL}{\ddiamond{\asprg}{\hs{\asfml(s)}}}
-    \end{equation*}
+    
 
     % Since, with respect to \dL, the state space has been replaced, we need to redefine the semantics.
     
@@ -360,25 +336,24 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             % \item $\ireachability{\IddL}{a} = \interpret[a]$ for a program constant $a$
             % FIXME: astrm(s) or without s
             \item\label{itm:sem-dHP-assgn} $\ireachability{\IddL}{\hupdate{\humod{x}{\astrm}}} =
-                \set{(\asstate,\bsstate)\with \bsstate=\asstate \text{ except }
+                \Set*{(\asstate,\bsstate)\with \bsstate=\asstate \text{ except }
                 \bsstate(x) = \left(\past\mapsto\begin{cases}
                     \ivaluation{\IddL}{\astrm(s)} & \past=0\\
                     \asstate(x)(\past) & \past\in\delayinterval
                 \end{cases}\right)}$
             \item $\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}} =
-                \set{(\asstate,\bsstate)\with \bsstate = \asstate \text{ except }
+                \Set*{(\asstate,\bsstate)\with \bsstate = \asstate \text{ except }
                 \bsstate(\D{x}) = \left(\past\mapsto\begin{cases}
                     \ivaluation{\IddL}{\astrm(s)} & \past=0\\
                     \asstate(\D{x})(\past) & \past\in\delayinterval
                 \end{cases}\right)}$
             % FIXME: no \assign for FOLR formula \imodel
-            \item $\ireachability{\IddL}{\htest{\asfml}} = \set{(\asstate,\asstate) \with \asstate\in\imodel{\iconcat[assign={}]{\IddL}}{\asfml}}$
+            \item $\ireachability{\IddL}{\htest{\asfml}} = \Set*{(\asstate,\asstate) \with \asstate\in\imodel{\iconcat[assign={}]{\IddL}}{\asfml}}$
             \item $\ireachability{\IddL}{\hchoice{\asprg}{\bsprg}} = \hchoice{\ireachability{\IddL}{\asprg}}{\ireachability{\IddL}{\bsprg}}$
-            \item $\ireachability{\IddL}{\asprg;\bsprg} = \set{(\asstate,\bsstate) \with (\asstate,\csstate)\in\ireachability{\IddL}{\asprg}, (\csstate,\bsstate)\in\ireachability{\IddL}{\bsprg}}$
+            \item $\ireachability{\IddL}{\asprg;\bsprg} = \Set{(\asstate,\bsstate) \with (\asstate,\csstate)\in\ireachability{\IddL}{\asprg}, (\csstate,\bsstate)\in\ireachability{\IddL}{\bsprg}}$
             \item $\ireachability{\IddL}{\hrepeat{\asprg}} 
-                = \displaystyle\cupfold_{n\in\N_0}\ireachability{\IddL}{\asprg^n}$ with $\asprg^{n+1}\equiv (\asprg^n;\asprg)$ and $\asprg^0\equiv (\htest{\ltrue})$
-            % TODO: semantics DDE
-            \item\label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm}{\ivr}} = \{(\asstate,\bsstate) \;\vert\; \mforall{\zeta\in[0,r]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\Set{\D{x}}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,r]\to\states\}$, i.e. there exists a $r\geq 0$ and a trajectory $\trajectory\from [0,r]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(s) \defeq \DD{\trajectory(t)(x)(s)}{t}(\zeta) \stackrel{!}{=} \ivaluation{\iconcat[state=\trajectory(\zeta+s)]{\IddL}}{\astrm}$ and satisfies $\ivr$ for all $s\in[-\min\Set{\zeta,T},0]$. On $[-T,-\min\Set{\zeta,T})$ it holds $\trajectory(\zeta)(\cdot)(s)=\asstate(\cdot)(s+\zeta)$ for all variables.
+                = \displaystyle\cupfold_{m\in\N_0}\ireachability{\IddL}{\asprg^m}$ with $\asprg^{m+1}\equiv (\asprg^m;\asprg)$ and $\asprg^0\equiv (\htest{\ltrue})$
+            \item\label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm}{\ivr}} = \{(\asstate,\bsstate) \;\vert\; \mforall{\zeta\in[0,\duration]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\Set{\Dx[0]}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,\duration]\to\states\}$, i.e.\ there exists a $\duration\geq 0$ and a trajectory $\trajectory\from [0,\duration]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(r) \defeq \DD{\trajectory(t)(x)(\past)}{t}(\zeta) = \ivaluation{\iconcat[state=\trajectory(\zeta+\past),assign={}]{\IddL}}{\astrm}$ and satisfies $\ivr$ for all $r\in[-\min\Set{\zeta,T},0]$. For $\past\in [-T,-\min\Set{\zeta,T}\big)$ it holds $\trajectory(\zeta)(x)(\past)=\asstate(x)(\past+\zeta)$ for all variables $x$.
             % TODO: case r=0
         \end{enumerate}
     \end{definition}
@@ -390,37 +365,36 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
 
     % The formula $\hevolve{\D{x}=\astrm(-\tau)}\land\ivr$ has dropped the $\hs{}$, all occurences of $x$ and $\D{x}$ of form with constant
 
-    % TODO: if $r=0$: 
-    initial value $\asstate(\D{x})$ may not be compatible with derivative
-    final values coincide
+    % TODO: if $R=0$: 
+    The initial value $\asstate(\D{x})(0)$ may not be compatible with the actual derivative of $x$. Following the evolution of a DDE, even for $\duration=0$, sets it properly, such that the rate of change of the values of a variable coincide with the values of the differential symbol.
 
     For the \emph{discrete assignment}, we only allow the values at the current time instant to be changed. A functional assignment would essentially allow to rewrite history, which is not permitted.
 
-    The jump behavior caused be discrete assignments is the actual reason why we need to consider piecewise continuous evolutions.
+    The jump behavior caused by discrete assignments is the actual reason why we need to consider piecewise continuous evolutions, as defined in Def.~\ref{def:pw-cont-diff}.
 
-    Time is implicit and usually not revealed. If it is explicitely needed, a clock variable $t$ can be introduced by $\hevolve{\D{t}=1}$.
+    Time is implicit and usually not revealed. If it is explicitly needed, a clock variable $t$ can be introduced by $\hevolve{\D{t}=1}$.
 
     %TODO: super dense time: multiple assignments, only consider last assignment
 
     % in general, we do not write expression explicitely, just give possible intervals in precondition
     
-    As a \FOLR formula, $\ivr$ do not contain any delayed variables and thus only depends on the values at the current time instant (and not over the entire interval $\delayinterval$).
+    As a \FOLR formula, $\ivr$ do not contain any delayed variables and thus only depends on the values at the current time instant (and not on the entire interval $\delayinterval$).
 
-    \begin{lemma}[Derivations]\label{lm:derivations}
+    \begin{lemma}[Derivatives]\label{lm:derivatives}
         Standard analysis derivation rules also hold in the semantics of \ddL terms, i.e.\ the following equations are valid \ddL formulas
         \begin{align}
-            \D{(\x[s])} &= \Dx[s]\\
+            \der{\x[s]} &= \Dx[s]\\
             %\Dx[s] &=\\
-            \D{(\x[c])} &= \Dx[c]\\
+            \der{\x[c]} &= \Dx[c]\\
             %\Dx[b] &=\\
-            \D{(a)} &= 0\\
+            \der{a} &= 0\\
             % \D{(f(\range{\istrm{1}}{\istrm{k}}))} &=\\
-            \D{(\astrm+\bstrm)} &= \D{(\astrm)}+\D{(\bstrm)}\\
-            \D{(\astrm\cdot\bstrm)} &= \D{(\astrm)}\cdot\bstrm + \astrm\cdot\D{(\bstrm)}\\
+            \der{\astrm+\bstrm} &= \der{\astrm}+\der{\bstrm}\\
+            \der{\astrm\cdot\bstrm} &= \der{\astrm}\cdot\bstrm + \astrm\cdot\der{\bstrm}\\
             % FIXME: is term' allowed? diff inv is only a FOLR formula? even for dL valid?
             %\D{(\astrm)}
         \end{align}
-        This allows to apply these rules on a syntactic level, what will be done in the form of axioms (see~\ref{sec:differential-axioms}).
+        This allows the usage of these rules on a syntactic level, what will be done in the form of axioms (see Section~\ref{sec:differential-axioms}).
     \end{lemma}
     \begin{proof}
         \begin{align*}
@@ -441,9 +415,9 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         \begin{align*}
             % constant
             \ivaluation{\IddL}{\D{(a)}}
-            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{a}}{\partial \x[c]}\\
+            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{a}}{\partial \x[c]}+ \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{a}}{\partial \x[s]}\\
             % &= \asstate(\D{x})(c)\frac{\partial\interpret[a]}{\partial \x[c] 
-            = 0
+            &= 0
         \end{align*}
         % \begin{align*}
         %     % chain rule
@@ -454,7 +428,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             % addition rule
             \ivaluation{\IddL}{\D{(\astrm(s)+\bstrm(s))}}
             &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)+\bstrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)+\bstrm(s)}}{\partial \x[s]}\\
-            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)}+\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}+\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[s]}\\
+            &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}+\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}+\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[s]}\\
             &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}\\
             &+ \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[s]}\\
             &= \ivaluation{\IddL}{\D{(\astrm(s))}} + \ivaluation{\IddL}{\D{(\bstrm(s)}}
@@ -467,7 +441,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
             &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[s]}\\
             &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[c]}\ivaluation{\IddL}{\bstrm(s)} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}\ivaluation{\IddL}{\bstrm(s)}\\
             &+ \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[c]}\ivaluation{\IddL}{\astrm(s)} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\bstrm(s)}}{\partial \x[s]}\ivaluation{\IddL}{\astrm(s)}\\
-            &= \ivaluation{\IddL}{\D{(\astrm(s))}}\cdot\ivaluation{\IddL}{\bstrm(s)} + \ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\D{(\bstrm(s)}}\\
+            &= \ivaluation{\IddL}{\D{(\astrm(s))}}\cdot\ivaluation{\IddL}{\bstrm(s)} + \ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\D{(\bstrm(s))}}\\
             &= \ivaluation{\IddL}{\D{(\astrm(s))}\cdot\bstrm(s)+\astrm(s)\cdot\der{\bstrm(s)}}
         \end{align*}
         
@@ -477,9 +451,9 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         We define by
         \begin{equation*}
             % TODO: what if x'[] in term ?
-            \constants[\astrm] \defeq \Set{c\in\constants \with \mexists{\x\in\allvars}\holds\x[c]\in\astrm(s)}
+            \constants[\astrm] \defeq \Set{c\in\constants \with \mexists{x\in\allvars}\holds\x[c]\in\astrm(s)}
         \end{equation*}
-        the set of constant parameter symbols occuring in the s-term $\astrm(s)$.
+        the set of constant parameter symbols occurring in the s-term $\astrm(s)$.
 
         Note that this set does not contain $s$, since it is, as a special purpose symbol, not in $\constants$.
     \end{definition}
@@ -494,7 +468,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
 
         % , instead of using the functional state space as domain.
 
-        This gives rise to the definition of the \emph{sampled trajectory} $\sampledtraj[\past]{\astrm}\from\compactum{0}{\duration}\to\R^{\abs{\mathcal{K}}}$ for a fixed $\past\in\closeddelayinterval$ and s-term $\astrm(s)$ (without loss of generality, considering $\allvars=\Set{x}$)
+        This gives rise to the definition of the \emph{sampled trajectory} $\sampledtraj[\past]{\astrm}\from\compactum{0}{\duration}\to\R^{\abs{\mathcal{K}}}$ for a fixed $\past\in\closeddelayinterval$ and s-term $\astrm(s)$, which looks in the case $\allvars=\Set{x}$ like
         % FIXME: differnt vars possible, not just x
         \begin{equation*}
             \sampledtraj[\past]{\astrm}(t) \defeq \colvec{
@@ -521,7 +495,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         \begin{equation*}
             \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(\bstrm(s))}} = \DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{\bstrm(s)}}{t}(\zeta)
         \end{equation*}
-        As in Definition~\ref{def:pw-cont-diff}, the derivative at a discontinuity point of is to be understood as right derivative.
+        As in Definition~\ref{def:pw-cont-diff}, the derivative at a ``bend point'' is to be understood as right derivative.
     \end{lemma}
     \begin{proof}
         \label{prf:differential-lemma}
@@ -530,43 +504,42 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         % FIXME: oBdA: t_0=0
 
         Without loss of generality, we restrict in this proof to a single variable $x$. If $\bstrm(s)$ depends on more variables, consider the union of their partitions in the initial condition.
-        Let $\partition{-T=t_0}{t_m=0}$ be the partition of the initial condition $\trajectory(0)(x)\in\statespace$.
+        Let $\partition{-T=t_0}{t_p=0}$ be the partition of the initial condition $\trajectory(0)(x)\in\statespace$.
 
-        We choose an arbitray but fixed valuation for $s$ from $\closeddelayinterval$, such that the symbol $s$ can be treated as a constant, in the same way as any $c\in\nonposQ$.
-        Depending on the s-term $\bstrm(s)$ and the fixed $s$, we define a partition $\mathcal{Z}_\bstrm^s=\partition{\hat{t}_0}{\hat{t}_p}$ of $\closedopen{0}{\infty}$ (which can be limited to $\compactum{0}{R}$) by
+        We choose an arbitrary but fixed valuation $\past\in\closeddelayinterval$ for $s$, such that the symbol $s$ can be treated as a constant parameter, in the same way as any $c\in\nonposQ$.
+        Depending on the s-term $\bstrm(s)$ and the fixed $\past$, we define a partition $\mathcal{Z}_\bstrm^s=\partition{\hat{t}_0}{\hat{t}_q}$ of $\closedopen{0}{\infty}$ (which can be limited to $\compactum{0}{R}$) by
         \begin{equation*}
-            \mathcal{Z}_\bstrm^s \defeq \set{0}\cup \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i-c}\cup \bigcup_{i=0}^m\bigcup_{j=1}^k\bigcup_{\substack{c\in \mathcal{K}\\ t_i+\tau_j\geq c}}\set{t_i+\tau_j-c}
+            \mathcal{Z}_\bstrm^\past \defeq \bigcup_{i=0}^m\bigcup_{\substack{c\in \mathcal{K}\\ t_i\geq c}}\set{t_i-c}\cup \bigcup_{i=0}^m\bigcup_{j=1}^k\bigcup_{\substack{c\in \mathcal{K}\\ t_i+\tau_j\geq c}}\set{t_i+\tau_j-c}
         \end{equation*}
-        where $\mathcal{K}\defeq\constants[\bstrm]\cup\set{s}$ is the set of the constants (the interpretations/valuations of the constant symbols) appearing in the term $\bstrm$ and $\tau_j\in\constants[\astrm]$ the delays in the right hand side of the DDE.
-        The set $\mathcal{Z}_\bstrm^s$ is finite and non-empty, since it contains at least the value $0$ and $\duration$.
-        % FIXME
-        % in side of a continuous diffable piece of init cond or solution (cf.)
+        where $\mathcal{K}\defeq\constants[\bstrm]\cup\set{0,\past}$ is the set of the constants (the interpretations of their symbols) appearing in the term $\bstrm$ and $\tau_j\in\constants[\astrm]$ the delays in the right hand side of the DDE.
+        The set $\mathcal{Z}_\bstrm^\past$ is finite and non-empty, since it contains at least the value $0$.
 
-        We show first that $\trajectory(t)(x)(c)$ is piecewise continuously differentiable in $t$ for all $c\in\mathcal{K}$ with partition $\mathcal{Z}_\bstrm^s$:
+        We show first that $\trajectory(t)(x)(c)$ is piecewise continuously differentiable in $t$ for each $c\in\mathcal{K}$ with partition $\mathcal{Z}_\bstrm^\past$:
 
         Let $c\in\mathcal{K}$ and $\zeta\in(\hat{t}_l,\hat{t}_{l+1})$.
-        Assume that $\zeta+c=t_i$ for some $i$. This implies $\zeta=t_i-c=\hat{t}_k$ for some $k$ by the definition of the partition. This is not possible by the choice of $\zeta$ lying between two consequtive $\hat{t}_l$.
+        Assume that $\zeta+c=t_i$ for some $i$. This implies $\zeta=t_i-c=\hat{t}_k$ for some $k$ by the definition of the partition. This is not possible by the choice of $\zeta$ lying between two consecutive $\hat{t}_l$.
         We apply the same argumentation to the assumption $\zeta+c=t_i+\tau_j$.
-        These contradictions show that for $\zeta\in(\hat{t}_j,\hat{t}_{j+1})$, it holds that $\zeta+c\neq t_i$ and $\zeta+c\neq t_i+\tau_j$ for all $c\in\mathcal{K}$ and for all $i\in\Set{\range{0}{m}}$, $j\in\set{\range{1}{k}}$.
+        These contradictions show that for $\zeta\in(\hat{t}_l,\hat{t}_{l+1})$, it holds that $\zeta+c\neq t_i$ and $\zeta+c\neq t_i+\tau_j$ for all $c\in\mathcal{K}$ and for all $i\in\Set{\range{0}{m}}$ and $j\in\set{\range{1}{k}}$.
         We now distinguish two cases:
 
-        If $\zeta+c<0$, it holds by the definition of the DDE semantics (Definition~\ref{def:semantic-HP}(\ref{itm:sem-HP-DDE})) that $\trajectory(\zeta)(x)(c)=\trajectory(0)(x)(\zeta+c)$, which is continuously differentiable as initial condition, if $\zeta+c\neq t_i$. Hence it follows
+        If $\zeta+c<0$, it holds by the definition of the DDE semantics (Definition~\ref{def:semantic-dHP}(\ref{itm:sem-HP-DDE})) that $\trajectory(\zeta)(x)(c)=\trajectory(0)(x)(\zeta+c)$, which is continuously differentiable as initial condition, if $\zeta+c\neq t_i$. Hence it follows
         \begin{equation*}
             \DD{\trajectory(t)(x)(c)}{t}(\zeta)=\DD{\trajectory(0)(x)(\past)}{\past}(\zeta+c)=\trajectory(0)(\D{x})(\zeta+c)=\trajectory(\zeta)(\D{x})(c)
         \end{equation*}
         For the right limit it holds
         \begin{align*}
-            \lim_{\zeta\downto\hat{t}_j} \DD{\trajectory(t)(x)(c)}{t}(\zeta)
-                & = \lim_{\zeta\downto t_i-c} \DD{\trajectory(0)(x)(\past)}{\past}(\zeta+c)\\
-                & = \lim_{\zeta\downto t_i} \DD{\trajectory(0)(x)(\past)}{\past}(\zeta)
+            \lim_{\zeta\downto\hat{t}_l} \DD{\trajectory(t)(x)(c)}{t}(\zeta)
+                & = \lim_{\zeta\downto \hat{t}_l} \DD{\trajectory(0)(x)(\past)}{\past}(\zeta+c)\\
+                & 
                 %=\lim_{s\downto t_i}\trajectory(0)(\D{x})(s)
-                = \trajectory(0)(\D{x})(t_i)
+                = \trajectory(0)(\D{x})(\hat{t}_l+c)
         \end{align*}
-        And analogously for the existence of the left limit for $\zeta\upto\hat{t}_{j+1}$
+        since $\zeta+c\in\open{t_i}{t_{i+1}}$.
+        And analogously for the existence of the left limit for $\zeta\upto\hat{t}_{l+1}$
 
-        If $\zeta+c\geq 0$, then $\trajectory(\zeta)(x)(\past)=\trajectory(\zeta+c)(x)(0)$ is differentiable in $\zeta$ with
+        If $\zeta+c\geq 0$, then $\trajectory(\zeta)(x)(c)=\trajectory(\zeta+c)(x)(0)$ is differentiable in $\zeta$ with
         \begin{equation*}
-            \trajectory(\zeta)(\D{x})(\past) = \DD{\trajectory(t)(x)(\past)}{t}(\zeta)
+            \DD{\trajectory(t)(x)(c)}{t}(\zeta) = \trajectory(\zeta)(\D{x})(c)
         \end{equation*}
         by the semantics of the DDEs, if $\zeta+c\neq t_i+\tau_j$.
         % FIXME: jumppoints and pw conitnuity/diffable
@@ -580,27 +553,27 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         %On each $\zeta\in(\hat{t}_k,\hat{t}_{k+1})$ is each $\ivaluation{\iconcat[state={\trajectory(\zeta)},assign=s]{\IddL}}{\x[c]}$ diffable in $\zeta$
 
         % TODO: f in terms smooth, hence each term on this open interval diffable
-        Let $\sampledtraj[s]{\bstrm}$ be the $\bstrm$-sampled trajectory for the considered delay differential equation and the fixed $s$.
+        Let $\sampledtraj[\past]{\bstrm}$ be the $\bstrm$-sampled trajectory for the considered delay differential equation and the fixed $\past$.
         It follows with the above results
         % By the transition semantics of DDEs (Definition~\ref{def:semantic-HP}\,(\ref{itm:sem-HP-DDE})), it holds for $\zeta+c\geq 0$ (along sol of DDE)
         % $\trajectory(\zeta)(\D{x})(c) = \DD{\trajectory(t)(x)(c)}{t}(\zeta)$, and for $\zeta+c\leq 0$ (init cond, match demanded)
 
         \begin{align*}
-            \DD{\ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign={}]{\IddL}}{\bstrm}}{t}
-            &= \D{\left(\ivaluation{\iconcat[state={},assign={}]{\IddL}}{\bstrm}\compose\sampledtraj[s]{\bstrm}(\zeta)\right)}
-            = \gradient{\ivaluation{\iconcat[state={},assign={}]{\IddL}}{\bstrm}}(\sampledtraj[s]{\bstrm}(\zeta))\cdot\DD{\sampledtraj[s]{\bstrm}}{t}(\zeta)\\
-            &= \sum_{\x[c]\in\delayvars[\bstrm]}\DD{\trajectory(t)(x)(c)}{t}(\zeta) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
-            % &= \sum_{\x[c]\in\delayvarswiths}\trajectory(\zeta)(\Dx[c])(s) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
-            &= \sum_{\x[c]\in\delayvars}\trajectory(\zeta)(\D{x})(c) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}\\
+            \DD{\ivaluation{\iconcat[state={\sampledtraj[\past]{\bstrm}(\zeta)},assign={}]{\IddL}}{\bstrm}}{t}
+            &= \D{\left(\ivaluation{\iconcat[state={},assign={}]{\IddL}}{\bstrm}\compose\sampledtraj[\past]{\bstrm}(\zeta)\right)}
+            = \gradient{\ivaluation{\iconcat[state={},assign={}]{\IddL}}{\bstrm}}(\sampledtraj[\past]{\bstrm}(\zeta))\cdot\DD{\sampledtraj[\past]{\bstrm}}{t}(\zeta)\\
+            &= \sum_{\x[c]\in\delayvars[\bstrm]}\DD{\trajectory(t)(x)(c)}{t}(\zeta) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\sampledtraj[\past]{\bstrm}(\zeta)}]{\IddL}}{\bstrm}}\\
+            % &= \sum_{\x[c]\in\delayvarswiths}\trajectory(\zeta)(\Dx[c])(s) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\sampledtraj[\past]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{(s)}\\
+            &= \sum_{\x[c]\in\delayvars}\trajectory(\zeta)(\D{x})(c) \Dp[{(\x[c])}]{\ivaluation{\iconcat[state={\sampledtraj[\past]{\bstrm}(\zeta)}]{\IddL}}{\bstrm}}\\
             %&= \sum_{\x[c]\in\delayvarswiths}\asstate(\D{x})(c) \Dp[{(\x[c])}]{\ivaluation{\IddL}{\bstrm}}{(s)}\\
-            &= \ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign={}]{\IddL}}{\D{(\bstrm})}
+            &= \ivaluation{\iconcat[state={\sampledtraj[\past]{\bstrm}(\zeta)},assign={}]{\IddL}}{\D{(\bstrm})}
         \end{align*}
-        where each sum only consits of finitely many summands.
+        where each sum only consists of finitely many summands.
         Moreover, it holds for the right limits
         \begin{equation*}
-            \lim_{\zeta\downto\hat{t}_j} \DD{\ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\zeta)},assign=s]{\IddL}}{\bstrm}}{t} = \ivaluation{\iconcat[state={\sampledtraj[s]{\bstrm}(\hat{t}_j)},assign={}]{\IddL}}{\D{(\bstrm})}
+            \lim_{\zeta\downto\hat{t}_l} \DD{\ivaluation{\iconcat[state={\sampledtraj[\past]{\bstrm}(\zeta)}]{\IddL}}{\bstrm}}{t} = \ivaluation{\iconcat[state={\sampledtraj[\past]{\bstrm}(\hat{t}_l)},assign={}]{\IddL}}{\D{(\bstrm})}
         \end{equation*}
-        and the left limits for $\zeta\upto\hat{t}_{j+1}$ exist.
+        and the left limits for $\zeta\upto\hat{t}_{l+1}$ exist.
     \end{proof}
 
     \begin{figure}[t]
@@ -644,13 +617,14 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
     \begin{lemma}[Differential assignment]\label{lm:diff-assignment}
         Let $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory satisfying a DDE for any duration $\duration\geq 0$, i.e.
         $\interpret,\trajectory\models(\D{x}=\astrm\land\ivr)$.
-        Then it holds:
+        Then it holds for $\past\in\closeddelayinterval$:
         \begin{equation*}
-            \interpret,\trajectory,\past\models\asfml(s) \lbisubjunct \trajectory(\zeta)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(s)}}  
+            \interpret,\trajectory,\past\models\asfml(s) \mbisubjunct \trajectory(\zeta)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(s)}}  
         \end{equation*}
     \end{lemma}
     \begin{proof}
-        Let $\zeta\in\compactum{0}{\duration}$. It is $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\ivr}$, which means $\trajectory(\zeta)(\D{x})(0)=\ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\astrm}$, since $\astrm$ is independent of $s$.
+        Let $\zeta\in\compactum{0}{\duration}$. It is $\trajectory(\zeta)\in\imodel{\iconcat[assign={}]{\IddL}}{\Dx[0]=\astrm}$ and $\trajectory(\zeta)\in\imodel{\iconcat[assign={}]{\IddL}}{\ivr}$, which means $\trajectory(\zeta)(\D{x})(0)=\ivaluation{\iconcat[state=\trajectory(\zeta),assign={}]{\IddL}}{\astrm}$.
+        % , since $\astrm$ is independent of $s$.
         By Definition~\ref{def:semantic-dHP}(\ref{itm:sem-dHP-assgn}) of the assignment's semantics, this implies $(\trajectory(\zeta),\bsstate)\in\ireachability{\IddL}{\Dupdate{\Dumod{\D{x}}{\astrm}}}$ if and only if $\bsstate=\trajectory(\zeta)$.
         Finally, this implies the equivalence
         \begin{align*}
@@ -672,8 +646,8 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, it reduc
         Delay hybrid programs and \ddL formulas can reference previous values of variables. These values need to be specified by the state.
         For that reason, the lower interval bound $T\in\nonposR$ of the state space domain needs to be chosen accordingly.
 
-        This bound is called \emph{history horizon} and depends on all occurences of $\x[c]$ and $\Dx[c]$ in the formula and the hybrid programs it contains.
-        The concrete value of $T$ needs to be known in order to determine tha validity of a formula, since it appears explicitely in the quantification $\hs{}$ for the special variable $s$.
+        This bound is called \emph{history horizon} and depends on all occurrences of $\x[c]$ and $\Dx[c]$ in the formula and the hybrid programs it contains.
+        The concrete value of $T$ needs to be known in order to determine the validity of a formula, since it appears explicitly in the quantification $\hs{}$ for the special variable $s$.
 
         \begin{definition}[History Horizon]
             % The \emph{history horizon} is a function
