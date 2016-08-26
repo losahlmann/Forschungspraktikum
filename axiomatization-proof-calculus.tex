@@ -1,7 +1,7 @@
 \chapter{Axiomatization and Proof Calculus}
 \label{ch:axiomatization-proof-calculus}
 
-Formulas of delay differential dynamic logic allow the specification of properties of hybrid programs with delay. Their truth value, whether a such formula is true or false, is determined by the semantics. However, finding the truth value only using the definition of the semantics is inpractical and tedious. As a more powerful means for this verification task, \ddL includes a proof calculus with rules based on axioms. These allow manipulations on a syntcatic level, without falling back on the semantics.
+Formulas of delay differential dynamic logic allow the specification of properties of hybrid programs with delay. Their truth value, whether a such formula is true or false, is determined by the semantics. However, finding the truth value only using the definition of the semantics is unpractical and tedious. As a more powerful means for this verification task, \ddL includes a proof calculus with rules based on axioms. These allow manipulations on a syntactic level, without falling back on the semantics.
 Moreover, they can be implemented in software for computer-aided verification.
 
 \section{Axiomatization}
@@ -32,9 +32,9 @@ Moreover, they can be implemented in software for computer-aided verification.
             }{}
             \cinferenceRule[testb|$\dibox{\htest{}}$]{test axiom}{
                 \linferenceRule[equiv]{
-                    \big(\bsfml(s)\limply\asfml(s)\big)
+                    \big(\bsfml\limply\asfml(s)\big)
                 }{
-                    \dbox{\htest{\bsfml(s)}}{\asfml(s)}
+                    \dbox{\htest{\bsfml}}{\asfml(s)}
                 }
             }{}
             % FIXME: do I need this axiom, problem of need specify initial condition
@@ -111,9 +111,9 @@ Moreover, they can be implemented in software for computer-aided verification.
             % TODO: check V axiom with def of FV, BV, can adds to fml?
             \cinferenceRule[V|V]{vacuous}{
                 \linferenceRule[impl]{
-                    \asfml
+                    \asfml(s)
                 }{
-                    \dbox{\asprg}{\asfml}
+                    \dbox{\asprg}{\asfml(s)}
                 }
             }{$\freevars{\asfml}\cap\boundvars{\asprg}=\emptyset$}
         \end{calculus}
@@ -122,9 +122,9 @@ Moreover, they can be implemented in software for computer-aided verification.
         \begin{calculus}
             \cinferenceRule[G|G]{Gödel's generalization rule}{
                 \linferenceRule[sequent]{
-                    \asfml
+                    \asfml(s)
                 }{
-                    \dbox{\asprg}{\asfml}
+                    \dbox{\asprg}{\asfml(s)}
                 }
             }{}
             \cinferenceRule[MP|MP]{modus ponens rule}{
@@ -154,39 +154,38 @@ Moreover, they can be implemented in software for computer-aided verification.
     The axiomatization for \ddL presented here is based on the \dL axiomatization, as given in \cite{Platzer12Complete}.
     It is a first-order Hilbert calculus, using \emph{modus ponens} and \emph{$\forall$-generalization} as a basis.
 
-    As opposed to an axiom schemata, which represents an infinte list of axioms by containing placeholders for concrete formulas and terms, we consider here for simplicity an axiom as a concrete formula.
+    % As opposed to an axiom schemata, which represents an infinte list of axioms by containing placeholders for concrete formulas and terms, we consider here for simplicity an axiom as a concrete formula.
     % FIXME: is s-formula allowed as axiom? or only without s?
 
     % FOLR or ddL formulas?
-    all instances of valid formulas of first-order real arithmetic are allowed as axiom
+    % all instances of valid formulas of first-order real arithmetic are allowed as axiom
 
     Similar to differential forms for \dL \cite{Platzer15Uniform}, we also consider a differential form axiomatization of differential equations.
 
-    The goal of transforming a \ddL formula into another formula by appliying the axioms is to eventually derive a first-order formula of real arithmetic, which is decideable by \emph{quantifier elimination}. The usage of real arithmetic is noted as (\irref{qear}).
+    The goal of transforming a \ddL formula into another formula by applying the axioms is to eventually derive a first-order formula of real arithmetic, which is decidable by \emph{quantifier elimination}. The usage of real arithmetic is noted as (\irref{qear}).
 
     % TODO: QE lifting
-    $\lforall{x}{\asfml}$ quantifies over statespace $\statespace$, QE needs lifting: have finitely many $\x[c]\in\asfml$. can introduce for each a quantification over $\R$. For $\x[s]$ need $\holdssince{}$, which already quantifies over a subset of $\R$.
+    As defined by the semantics $\lforall{x}{\asfml(s)}$ and $\lexists{x}{\asfml(s)}$ quantify over the state space $\statespace$, not only the reals.
+    However, since we have only finitely many $\x[c]\in\asfml(s)$, we can introduce a quantification over $\R$ for each $\x[c]$. The $\x[s]$ are bound by $\hs{}$, which already quantifies over a subset of $\R$.
+    This means, that we can lift the quantifier elimination of \FOLR to our needs.
 
     % FIXME: s-formula?
-    If the \ddL formula $\asfml$ can be derived by \ddL proof rules from \ddL axioms (this includes first-order logic axioms and rules), we say that this formula is \emph{provable} and write $\infers\asfml$.
+    If the \ddL formula $\asfml$ can be derived by \ddL proof rules from \ddL axioms (this includes first-order logic axioms), we say that this formula is \emph{provable} and write $\infers\asfml$.
 
     The axioms listed in Figure~\ref{fig:axioms} are expressed in $\dbox{\cdot}$. Axioms with the dual operator $\ddiamond{\cdot}$ can be obtained using the duality relation (axiom~\irref{diamond}).
     
-    % TODO: what about [a;b]p. is [a][b]p correct?
     % FIXME: axiom descriptions
-    The \emph{discrete assignment axiom}~\irref{assignb} substitutes $\x[0]$ by its new value $\astrm$ in the formula.
-    % FIXME: admissibility condition for assignb
-    This requires $x$ not to be ... (x and any variable in $\astrm$ not bound by quantifier or modalityadmissibility condition).
-    The \emph{test axiom}~\irref{testb}
-    The \emph{axiom of nondeterministic choice}~\irref{choiceb}
-    The \emph{composition axiom}~\irref{composeb}
+    The \emph{discrete assignment axiom}~\irref{assignb} substitutes $\x[0]$ by its new value $\astrm$ in the formula, requirering the admissibility condition (neither $x$ nor any variable in $\astrm$ get bound by a quantifier or modality, cf.~Section~\ref{sec:variable-binding}) to hold.
+    The \emph{test axiom}~\irref{testb} assumes that the test passes, because states which do not satisfy the condition are not considered anyway.
+    The \emph{axiom of nondeterministic choice}~\irref{choiceb} splits the transition into its two possibilities, demanding the validity of either. 
+    The \emph{composition axiom}~\irref{composeb} splits the modality into a nested modality.
     % The \emph{solution axiom}~\irref{solb} replaces a DDE with the solution of its symbolic initial-value problem (as opposed to a convential IVP, which is numerical), This solution must be expressible as first-order formula of real arithmetic, which is only the case for a small class of delay differential equations.
     The \emph{iteration axiom}~\irref{iterateb} partially unwinds a loop, which can also be used for bounded model checking.
     The \emph{induction axioms}~\irref{I}
     % and \irref{Cb}, which is a variant of Harel's convergence rule,
     can be applied when reasoning about loops with unbounded repetitions. 
     The \emph{modal modus ponens} axiom~\irref{K} and the \emph{Barcan formula}~\irref{B} are taken from first-order modal logic.
-    Axiom~\irref{V}
+    Axiom~\irref{V} is for modalities which are true for any state transition, since their condition does not depend on the variables that change.
 
     The basic \emph{proof rules} for the presented Hilbert calculus are \emph{Gödel's necessitation rule}~\irref{G} of modal logic, as well as \emph{modus ponens}~\irref{MP} and \emph{$\forall$-generalization}~\irref{gena} of first-order logic.
 
@@ -194,7 +193,9 @@ Moreover, they can be implemented in software for computer-aided verification.
     \subsection{Differential Axioms}
         \label{sec:differential-axioms}
 
-        The \emph{delay differential weakening axiom}~\irref{DDW} internalizes that all values referenced in the state after a the evolution along a DDE were either specified in the initial condition or result from the differential equation. In the latter case, they need satisfied the evolution domain constraint.
+        Some additional axioms are added to the calculus, allowing reasoning about delay differential equations. Most are similar to corresponding \dL axioms and listed in Figure~\ref{fig:D-axioms}.
+
+        The \emph{delay differential weakening axiom}~\irref{DDW} internalizes that all values referenced in the state after a the evolution along a DDE were either specified in the initial condition or result from the differential equation. In the latter case, they need to satisfy the evolution domain constraint.
         It should be pointed out, that the right hand side only demands the weaker $\hs{}$, as opposed to the $\hsc$ appearing on the left.
 
         \begin{figure}[h]
@@ -250,7 +251,7 @@ Moreover, they can be implemented in software for computer-aided verification.
                     }{
                         \big((\bsfml\limply\hs{\asfml(s)})
                         \land
-                        \lforall{x}{(\ivr\limply\asfml(0))}\big)
+                        \lforall{x}{(\ivr\limply\asfml(0))}\big)\quad
                     }
                 }{$\x[c]\notin\asfml(s)$}
                 % FIXME: space or linebreak for DDW condition
@@ -310,10 +311,10 @@ Moreover, they can be implemented in software for computer-aided verification.
     \subsection{Axiom of Steps}
         \label{sec:axiom-of-steps}
 
-        The \emph{method of steps} presented in Section~\ref{sec:method-of-steps} translates into an axiom.
+        The \emph{method of steps} presented in Section~\ref{sec:method-of-steps} translates into an axiom~\irref{stepsb}.
 
-        By introducing a fresh variable $t$ as a clock, we restrict the evolution of a delay differntial equation starting from a state by a duration not longer than its smallest delay $\taumin$. This evolution is then wrapped in a loop.
-        In this case, the right hand side of the differential equation only depends on the initial state of the loop, not on its own solution yet. Hence the differential equation is not longer a DDE, but of \emph{ordinary} type.
+        By introducing a fresh variable $t$ as clock, we restrict the evolution of a delay differential equation to a duration not longer than its smallest delay $\taumin$. This evolution is then wrapped in a loop.
+        In this case, the right hand side of the differential equation only depends on the initial state of the loop, not on its own solution. Hence the differential equation is not longer a DDE, but of \emph{ordinary} type.
         Its right hand side is in general piecewise continuous.
         Theorem~\ref{thm:solution-existence} shows the existence of a unique local solution in this case.
         \begin{equation*} % no blank line before, causes to much space
@@ -338,14 +339,13 @@ Moreover, they can be implemented in software for computer-aided verification.
 \section{Soundness}
     \label{sec:soundness}
 
-    The following theorem is obviously fundamental for the presented theory in order to make sense.
+    The following theorem is obviously fundamental for the presented theory.
 
     \begin{theorem}[Soundness of \ddL]\label{thm:ddL-soundness}
         The \ddL calculus is sound: every formula which is provable from \ddL axioms by \ddL proof rules is \emph{valid} (true in all states), i.e.\ $\infers\asfml$ implies $\models\asfml$.
     \end{theorem}
     \begin{proof}
         The soundness proof of most of the axioms adapted from \dL are independent of the definition of the state space, they only reason about states without considering their structure.
-        % The arguments of most proof parts are the same as they were for the classic \dL, since only the definition of the statespace has been replaced. The proofs were independent of this definition, though.
         This is the case for \irref{composeb}, \irref{choiceb}, \irref{iterateb}, \irref{K}, \irref{I},
         %\irref{C},
         \irref{B}, \irref{V} and \irref{G}, whose proof can be found in the literature to \dL~\cite{Platzer12Complete}.
@@ -361,22 +361,22 @@ Moreover, they can be implemented in software for computer-aided verification.
         It is $\asstate\in\imodel{\IddL}{\dbox{\hupdate{\humod{x}{\astrm}}}{\asfml(s,\x[0])}}$ iff $\bsstate\in\imodel{\IddL}{\asfml(s,\x[0])}$ for all $(\asstate,\bsstate)\in\ireachability{\IddL}{\hupdate{\humod{x}{\astrm}}}$. There exists only a unique such state $\bsstate\in\states$. For this state it holds $\bsstate=\asstate$ except for the variable $x$, for which
         \begin{equation*}
             \bsstate(x)(\past) = \begin{cases*}
-                    \ivaluation{\IddL}{\astrm} & if $\past=0$\\
+                    \ivaluation{\iconcat[assign={}]{\IddL}}{\astrm} & if $\past=0$\\
                     \asstate(x)(\past) & if $\past\in\delayinterval$
                 \end{cases*}
         \end{equation*}
         i.e.\ the two states coincide in the values for $\x[s]$, except in $\x[0]$. Hence $\asstate\in\imodel{\IddL}{\asfml(s,\astrm)}$ iff $\bsstate\in\imodel{\IddL}{\asfml(s,\x[0])}$.
         The same holds if $\asfml(\x[0])$ does not depend on $s$.
-         (->substitution lemma in book)
+         % (->substitution lemma in book)
         
-        \item[\irref{stepsb}] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory of duration $\duration\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\duration}$. By the choice of $\asstate$ it holds $\trajectory(\zeta)\in\imodel{\IddL}{\asfml(s)}$ for all $\zeta\in\compactum{0}{\duration}$.
+        \item[\irref{stepsb}] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory of duration $\duration\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\Dx[0]}}$ and $\trajectory(\zeta)\in\imodel{\iconcat[assign={}]{\IddL}}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\duration}$. By the choice of $\asstate$ it holds $\trajectory(\zeta)\in\imodel{\IddL}{\asfml(s)}$ for all $\zeta\in\compactum{0}{\duration}$ and $\past\in\closeddelayinterval$.
 
         We need to show that
         \begin{equation*}
             \asstate\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}};\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin})}}{\asfml(s)}}.
         \end{equation*}
         If we enter the loop in the right hand side zero times, this holds since $\trajectory(0)\in\imodel{\IddL}{\asfml(s)}$ and $\trajectory(0)=\modif{\asstate}{\Dx[0]}{\astrm}$.
-        If we repeated the loop $n$ times, it holds after the last iteration that $\zeta=(n-1)\taumin+t\leq\duration$, since the evolution is restricted by $\ivr$. We know in this case that $\trajectory(\zeta)\in\imodel{\IddL}{\asfml(s)}$ what implies the assertion.
+        If we repeated the loop $m$ times, it holds after the last iteration that $\zeta=(m-1)\taumin+t\leq\duration$ and that the evolution is still restricted by $\ivr$. We know in this case that $\trajectory(\zeta)\in\imodel{\IddL}{\asfml(s)}$ what implies the assertion.
         The converse implication is shown analogously.
 
         \item[{\parbox[t]{2em}{\irref{Dplus},\irref{Dmult},\\\irref{Dconst},\irref{Dvar}}}] These axioms are special instances of the equations proved in Lemma~\ref{lm:derivations}.
@@ -415,15 +415,16 @@ Moreover, they can be implemented in software for computer-aided verification.
         Since $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$, we have $\trajectory(\duration)\in\imodel{\IddL}{\asfml}$ which, by the Differential Assignment Lemma~\ref{lm:diff-assignment}, is equivalent to $\trajectory(\duration)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(s)}}$. Hence $\asstate\in\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(s)}}$.
         The inverse implication is shown in the same way.
 
-        \item[\irref{DDW}] Let $\asstate\in\imodel{\IddL}{\bsfml\limply\hs{\asfml(s)}}$ and $\asstate\in\imodel{\IddL}{\lforall{x}{(\ivr\limply\asfml(0))}}$.
-        We distinguish two cases: if $\asstate\notin\imodel{\IddL}{\bsfml}$ ... % FIXME: DDW proof case
-        If $\asstate\in\imodel{\IddL}{\bsfml}$ then $\asstate$ also satisfies $\hs{\asfml(s)}$.
-        We follow the given DDE along the trajectory $\trajectory:\from\compactum{0}{\duration}$ starting from $\asstate$ and of duration $\duration\geq 0$, i.e.\ $(\asstate,\trajectory(\zeta))\in\ireachability{\IddL}{\hevolvein{\D{x}=\astrm}{\ivr}}$ and hence $\trajectory(\zeta)\in\imodel{\IddL}{\ivr}$ for all $\zeta\in\compactum{0}{\duration}$. Let $\bsstate=\trajectory(R)$ be the state after the evolution. We show that $\bsstate\in\imodel{\IddL}{\asfml(s)}$ for all $\past\in\closeddelayinterval$.
+        \item[\irref{DDW}] Let $\asstate\in\imodel{\iconcat[assign={}]{\IddL}}{\bsfml\limply\hs{\asfml(s)}}$ and $\asstate\in\imodel{\iconcat[assign={}]{\IddL}}{\lforall{x}{(\ivr\limply\asfml(0))}}$.
+        We distinguish two cases:
+        if $\asstate\notin\imodel{\iconcat[assign={}]{\IddL}}{\bsfml}$, then the implication holds vacuously.
+        If $\asstate\in\imodel{\iconcat[assign={}]{\IddL}}{\bsfml}$ then $\asstate$ also satisfies $\hs{\asfml(s)}$.
+        We follow the given DDE along the trajectory $\trajectory\from\compactum{0}{\duration}\to\states$ starting from $\asstate$ and of duration $\duration\geq 0$, i.e.\ $(\asstate,\trajectory(\zeta))\in\ireachability{\IddL}{\hevolvein{\D{x}=\astrm}{\ivr}}$ and hence $\trajectory(\zeta)\in\imodel{\iconcat[assign={}]{\IddL}}{\ivr}$ for all $\zeta\in\compactum{0}{\duration}$. Let $\bsstate=\trajectory(R)$ be the state after the evolution. We show that $\bsstate\in\imodel{\IddL}{\asfml(s)}$ for all $\past\in\closeddelayinterval$.
 
-        Since $\x[c]\notin\asfml(s)$, it is $\bsstate\in\imodel{\IddL}{\asfml(s)}$ iff $\trajectory(\duration-\past)\in\imodel{\iconcat[assign=0]{\IddL}}{\asfml(s)}$.
+        Since the formula $\asfml(s)$ is demanded not to be stiff, i.e.\ $\x[c]\notin\asfml(s)$, it is $\bsstate\in\imodel{\IddL}{\asfml(s)}$ iff $\trajectory(\duration-\past)\in\imodel{\iconcat[assign=0]{\IddL}}{\asfml(s)}$.
 
-        For $\duration-\past<0$ this follows since initial state satisfies $\hs{\asfml(s)}$.
-        For $\duration-\past\geq 0$, the evolution domain $\trajectory(\zeta)\in\imodel{\IddL}{\ivr}$ implies by condition $\trajectory(\zeta)\in\imodel{\iconcat[assign=0]{\IddL}}{\asfml(s)}$.
+        For $\duration-\past<0$ this follows since the initial state satisfies $\hs{\asfml(s)}$.
+        For $\duration-\past\geq 0$, the satisfaction of the evolution domain constraint $\trajectory(\zeta)\in\imodel{\IddL}{\ivr}$ implies $\trajectory(\zeta)\in\imodel{\iconcat[assign=0]{\IddL}}{\asfml(s)}$.
     \end{labeling}
     \end{proof}
 
@@ -602,7 +603,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         and (with the evolution domain constraint $\ivr$) an invariant (\FOLR) formula $\inv$
         and if following the evolution of the DDE leads into the direction of safe values,
         it is sufficient that the invariant (with $\ivr$) implies the safety condition for the current time instant $\asfml(0)$
-        in order to establish the validity of the safety conditon for the entire final state after the DDE.
+        in order to establish the validity of the safety condition for the entire final state after the DDE-evolution.
         \begin{equation*}
             \cinferenceRule[DDI|DDI]{delay differential induction}{
                 % FIXME: \der{} <-> \D{} ?
@@ -629,6 +630,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         For this rule to be sound, we demand the safety condition $\asfml(s)$ not to be a stiff s-formula, i.e.\ $\x[c]\notin\asfml(s)$ for any $c\in\constants$.
 
         \begin{proof}
+            In the given Hilbert calculus, it holds:
             \footnotesize
             \begin{sequentdeduction}
                 \linfer[DC]{
@@ -805,12 +807,12 @@ Moreover, they can be implemented in software for computer-aided verification.
     %     Invariant for limited time: use with loop unrolling (can it be generalized to unlimited inv?)
 
     % TODO: Example
-    \subsection{Examples}
-        \label{sec:examples}
+    % \subsection{Example}
+    %     \label{sec:examples}
 
-        \subsubsection{Example 1}
-            \label{sec:ddi-example-1}
-
+        % \subsubsection{Example 1}
+        %     \label{sec:ddi-example-1}
+        \begin{example}
             Consider the first-order delay differential equation
             \begin{equation*}
                 \begin{cases}
@@ -819,7 +821,7 @@ Moreover, they can be implemented in software for computer-aided verification.
                 \end{cases}
             \end{equation*}
             for any $\tau>0$.
-            Using the invariant $\inv\equiv(x^3\geq 0)$, we prove that the solution stays non-negativ for all time $t\geq\tzero-\tau$.
+            Using the invariant $\inv\equiv(x^3\geq 0)$, we prove that the solution stays non-negative for all time $t\geq\tzero-\tau$.
             Since the DDE is autonomous, we can assume $\tzero=0$.
             \footnotesize
             \begin{sequentdeduction}
@@ -910,6 +912,7 @@ Moreover, they can be implemented in software for computer-aided verification.
             %     }
             % \end{sequentdeduction}
             In the same way we can prove that the solution stays non-positive for all $t$, if the initial condition is non-positive.
+        \end{example}
 
         % \subsubsection{Example 2}
         %     \label{sec:ddi-example-2}
