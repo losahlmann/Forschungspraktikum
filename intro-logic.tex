@@ -1,9 +1,9 @@
 \chapter{Introduction to Logic}
     \label{sec:introduction-logic}
 
-    \emph{Logics} is a framework for studying \emph{``rules of argument''}~\cite{Hodges01ClassicalLogic} and will be used as a means for the specification of properties of hybrid programs later on.
+    \emph{Logics} is a framework for studying \emph{``rules of argument''}~\cite{Hodges01ClassicalLogic} and can be used as a means for the specification of properties of hybrid programs.
 
-    This chapter gives a concise overview about the concepts of logics on which the later chapters are based and which are essential for their understanding.
+    We give a concise overview about the concepts of logics on which the later chapters are based and which are essential for their understanding.
 
 
     \section{Propositional Logic}
@@ -19,9 +19,9 @@
         The most familiar concept of logics is \emph{propositional logic} (eg.~\cite{Huth04LogicInCS}). It deals with \emph{declarative sentences}, so-called \emph{propositions}, which can be declared as either \emph{true} %($\ltrue$)
         or \emph{false}, %($\lfalse$)
         their truth value.
-        Declarative sentences can be a composition of atomic (indecomposible) sentences, using the logical connectives: negation ($\lnot$), conjunction ($\land$), disjunction ($\lor$), implication ($\limply$), equivalence ($\lbisubjunct$).
+        Declarative sentences can be a composition of atomic (indecomposable) sentences, using the logical connectives: negation ($\lnot$), conjunction ($\land$), disjunction ($\lor$), implication ($\limply$) or equivalence ($\lbisubjunct$).
 
-        Each connection results a new truth value depending on the the truth values of its sub-sentences. They are defined by truth tables (see Figure~\ref{fig:logical-connectives}), specifying the result for each combination of input values. They can be partly expressed by each other, demanding for example only the definition of $\lnot$, $\land$, $\lor$.
+        Each connection admits a new truth value depending on the the truth values of its sub-sentences. They are defined by truth tables (see Figure~\ref{fig:logical-connectives}), specifying the result for each combination of input values. These operators can be partly expressed by each other, demanding, for example, only the definition of $\lnot$, $\land$, $\lor$.
 
         % TODO: truth tables
         \begin{figure}[b]
@@ -78,37 +78,37 @@
         \label{sec:first-order-logic}
 
         \emph{First-order logic} (\FOL) extends propositional logic with quantifiers, variables, functions and predicates.
-        We introduce first-order logic similiar to the definitions given in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}. More subtleties are adapted from \cite{Hodges01ClassicalLogic}, \cite{Buss98HandbookProofTheory} and \cite{Rautenberg10ConciseLogic}.
+        We introduce first-order logic similar to the definitions given in \cite{Platzer10HybridSystems} and \cite{Huth04LogicInCS}. More subtleties are adapted from \cite{Hodges01ClassicalLogic}, \cite{Buss98HandbookProofTheory} and \cite{Rautenberg10ConciseLogic}.
 
         % though with a different notation/nomenclature
         % predicate logic
         % Precisely define a set of symbols and their roles
         \FOL is a class of logics, whose incarnations differ in their set of symbols and their roles, but follow all the same basic structure.
-        Besides the logical connectives from propositional logic, first-order logic comprises extralogical symbols (functions and predicates) as well as logical variables, which alltogether form its alphabet.
+        Besides the logical connectives from propositional logic, first-order logic comprises extralogical symbols (functions and predicates) as well as logical variables, which altogether form its alphabet.
 
-        \emph{Logical variables} provide a means of abstarction and refer to objects about which one wants to reason. They are usually called $x,y,z$. 
+        \emph{Logical variables} provide a means of abstraction and refer to objects about which one wants to reason. They are usually called $x,y,z$. 
 
         \emph{Functions} take values as argument and give back a new value, which can be of any type. Function symbols stand for a function and are denoted by $f,g,h$.
 
         In contrast to functions, \emph{predicates} return a truth value (\emph{true} or \emph{false}), depending on the values of their arguments.
         Predicate symbols are usually written as $p,q,r$.
 
-        The \emph{arity} of a function or predicate symbol is the number of arguments it demands.
-        Functions can be of arity zero, i.e. without any argument.
-        For clarity, we will treat these so-called \emph{constants} (or nullary functions) seperately and write their symbols as $a,b,c$.
+        The \emph{arity} of a function or predicate symbol is the number of arguments it expects.
+        Functions can be of arity zero, i.e.\ without any argument.
+        For clarity, we will treat these so-called \emph{constants} (or nullary functions) separately and write their symbols as $a,b,c$.
 
         % The arities are specified by the signature $\signature$.
 
         \subsection{Syntax}
             \label{sec:FOL-syntax}
 
-            First-order logic inductively defines a syntax of well-formed \emph{logical formulae} over an alphabet containing different kinds of symbols.
+            First-order logic inductively defines a syntax of well-formed \emph{logical formulas} over an alphabet containing different kinds of symbols.
 
             The syntax only defines rules which specify how the given symbols can be textually combined. At this stage, they have no specific meaning yet.
 
             The alphabet $\signature\cup\varsymbols$ comprises the \emph{signature} $\signature$ of the theory, which is a set of predicate, function and constant symbols, and the set of logical variable symbols $\varsymbols$.
 
-            Terms are the expressions which denote feasible arguments for functions and predicates. always denotes an element of universe
+            Terms are the expressions which denote feasible arguments for functions and predicates.
             \begin{definition}[Terms]
                 For a given \emph{signature} $\signature$ and set of variable symbols $\varsymbols$, the well-formed terms are either logical variables, constants or functions applied to terms:
                 The set of all \emph{terms} $\terms$ is the smallest set with
@@ -118,12 +118,12 @@
                     \item If $f\in\signature$ is a function symbol of arity $n\geq 1$ and $\istrm{i}\in\terms$ for $i=\range{1}{n}$, then $f(\range{\istrm{1}}{\istrm{n}})\in\terms$.
                 \end{enumerate}
                 This definition can alternatively be written as grammar in Backus-Naur form
-                \begin{equation}
+                \begin{equation*}
                     \astrm,\istrm{i} \Coloneqq
                         x \mid
                         c \mid
                         f(\range{\istrm{1}}{\istrm{n}})
-                \end{equation}
+                \end{equation*}
                 where $x$ is ranging over the set of logical variables $\varsymbols$, $c$ over the nullary functions in $\signature$ and $f$ over the elements in $\signature$ with arity $n\geq 1$.
             \end{definition}
 
@@ -133,7 +133,7 @@
                 The set of formulas $\FOLformulas$ is the smallest set with
                 % TODO: term1=term2, or is this predicate?
                 \begin{enumerate}
-                    \item If $p\in\signature$ is a predicate symbol of arity $n\geq 0$ and $\istrm{i}\in\terms$ for $i=\range{1}{n}$ then $p(\range{\istrm{1}}{\istrm{n}})\in\FOLformulas$.
+                    \item If $p\in\signature$ is a predicate symbol of arity $n\geq 0$ and $\istrm{i}\in\terms$ for $i=\range{1}{n}$, then $p(\range{\istrm{1}}{\istrm{n}})\in\FOLformulas$.
                     \item If $\asfml,\bsfml\in\FOLformulas$, then $\lnot\asfml,(\asfml\land\bsfml),(\asfml\lor\bsfml),(\asfml\limply\bsfml)\in\FOLformulas$.
                     \item If $\asfml\in\FOLformulas$ and $x\in\varsymbols$ then $(\lforall{x}{\asfml})\in\FOLformulas$ and  $(\lexists{x}{\asfml})\in\FOLformulas$.
                 \end{enumerate}
@@ -154,27 +154,27 @@
         \subsection{Semantics}
             \label{sec:FOL-semantics}
             
-            The \emph{semantics} of a first-order logic specifies the meaning of each symbol occuring in terms and formulae with the goal to assign a \emph{truth value} to a full formula.
+            The \emph{semantics} of a first-order logic specifies the meaning of each symbol occurring in terms and formulas with the goal to assign a \emph{truth value} to a full formula.
             Moreover, this requires the \emph{assignment} of a concrete value to each variable symbol, chosen from a \emph{universe}, the domain of discourse containing all objects of consideration.
 
             \begin{definition}[Universe]
-                A non-empty set $\universe$ containing the concrete objects of discurse, is called \emph{universe}.
+                A non-empty set $\universe$ containing the concrete objects of discourse, is called \emph{universe}.
             \end{definition}
 
             \begin{definition}[Interpretation]
-                An \emph{interpretation} $\interpret$ assigns concrete elements to their corresponding symbols in a given signature $\signature$. It consists of
+                An \emph{interpretation} $\interpret$ assigns concrete elements to their corresponding symbols in a given signature $\signature$. It consists of:
                 \begin{enumerate}
-                    \item For each constant symbol $c\in\signature$ a value $\interpret[c]\in\universe$.
+                    \item for each constant symbol $c\in\signature$ a value $\interpret[c]\in\universe$,
                     % TODO: reference to cartesian product
-                    \item For each function symbol $f\in\signature$ of arity $k\geq 1$, $\interpret[f]\from\universe^k\to\universe$ is a function with $k$ arguments.
-                    \item For each predicate symbol $p$ of arity $k\geq 1$, $\interpret[p]\subseteq\universe^n$ is a relation.
+                    \item for each function symbol $f\in\signature$ of arity $k\geq 1$ a function $\interpret[f]\from\universe^k\to\universe$ with $k$ arguments,
+                    \item for each predicate symbol $p$ of arity $k\geq 1$ a relation $\interpret[p]\subseteq\universe^k$.
                 \end{enumerate}
             \end{definition}
 
             % Interpretation associates $f$ with $\interpret{f}(\range{d_1}{d_n})\in\universe$ value of function at position $(\range{d_1}{d_n})\in\universe^k $
 
-            A predicate $p$ is \emph{true} at position $(\range{d_1}{d_n})\in\universe^k$ under $\model$ if and only if $(\range{d_1}{d_n})\in\interpret[p]$.
-            An alternative but equivalent formulation uses the characteristic function $\interpret[p]\from\universe^n\to\{\ltrue,\lfalse\}$, where $p$ is true at $(\range{d_1}{d_n})\in\universe^n$ if and only if $\interpret[p](\range{d_1}{d_n})=\ltrue$.
+            A predicate $p$ is \emph{true} at position $(\range{d_1}{d_n})\in\universe^k$ if and only if $(\range{d_1}{d_n})\in\interpret[p]$.
+            An alternative but equivalent formulation uses the characteristic function of the relation $\interpret[p]\from\universe^n\to\{\ltrue,\lfalse\}$, where $p$ is true at $(\range{d_1}{d_n})\in\universe^n$ if and only if $\interpret[p](\range{d_1}{d_n})=\ltrue$.
 
             % provide seperate characterisation, meaning of the connectives
             % truth tables
@@ -187,7 +187,7 @@
             % looking at truth values of atomic formulas in premises and conclusion, how manipulated by logical connectives, defined by a table for all possible cases
             % calculate truth value of formula from truth value of atomic propositions
 
-            As mentioned above, logical variables are only place holders and need, at some stage, refer to a concrete value. This interpretation is realized by an assignment.
+            As mentioned above, logical variables are only place holders and need, at some stage, refer to a concrete value. Their interpretation is realized by an assignment.
 
             \begin{definition}[Assignment]
                 An \emph{assignment} is a map $\assignment\from\varsymbols\to\universe$ which assigns a value of the universe to each variable symbol $x\in\varsymbols$.
@@ -201,30 +201,30 @@
 
             Given the information of a model, we can finally evaluate a formula, i.e.\ decide on its truth value.
 
-            The valuation of terms and formulae is again defined inductively.
+            The valuation of terms and formulas is again defined inductively.
             \begin{definition}[Valuation of Terms]
                 For $\terms$ a \emph{valuation} $\ivaluation{\IFOL}{\phi}$ is defined by
                 \begin{enumerate}
                     \item $\ivaluation{\IFOL}{x} = \assignment(x)$ for each logical variable $x\in\varsymbols$
-                    \item constant
+                    \item $\ivaluation{\IFOL}{c} = \interpret[c]$ for each constant $c\in\signature$
                     \item $\ivaluation{\IFOL}{f(\range{\istrm{1}}{\istrm{n}})} = \interpret[f](\range{\ivaluation{\IFOL}{\istrm{1}}}{\ivaluation{\IFOL}{\istrm{n}}})$ for each function symbol $f\in\signature$ of arity $n\geq 1$.
                 \end{enumerate}
             \end{definition}
 
-            The meaning of the logical connective symbols, how they preserve a truth value, is defined in the truth tables Figure~\ref{fig:logical-connectives}.
+            The meaning of the logical connective symbols, how they preserve a truth value, is defined in the truth tables, given in Figure~\ref{fig:logical-connectives}.
             % TODO: translation into natural language?
             \begin{definition}[Valuation of First-Order Formulas]
                 The \emph{valuation} of the first-order formulas $\FOLformulas$ in the interpretation $\interpret$ under the assignment $\assignment$ is given by
                 \begin{enumerate}
-                    \item predicate $\imodel{\IFOL}{p(\range{\istrm{1}}{\istrm{n}})} = \interpret[p](\range{\imodel{\IFOL}{\istrm{1}}}{\imodel{\IFOL}{\istrm{n}}})$
-                    \item The conjunction $\imodel{\IFOL}{\astrm\land\bstrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm}=\ltrue$ and $\imodel{\IFOL}{\bstrm}=\ltrue$.
-                    \item The disjunction $\imodel{\IFOL}{\astrm\lor\bstrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm}=\ltrue$ or $\imodel{\IFOL}{\bstrm}=\ltrue$.
-                    \item The negation $\imodel{\IFOL}{\lnot\astrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm} \neq \ltrue$.
-                    \item The implication $\imodel{\IFOL}{\astrm\limply\bstrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm} \neq \ltrue$ or $\imodel{\IFOL}{\bstrm}=\ltrue$.
-                    \item The universal quantifier $\imodel{\IFOL}{\lforall{x}{\astrm}} = \ltrue$ iff $\imodel{\imodif[algebra]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for all $a\in\R$.
-                    \item The existential quantifier $\imodel{\IFOL}{\lexists{x}{\astrm}} = \ltrue$ iff $\imodel{\imodif[algebra]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for some $a\in\R$.
+                    \item $\imodel{\IFOL}{p(\range{\istrm{1}}{\istrm{n}})} = \interpret[p](\range{\imodel{\IFOL}{\istrm{1}}}{\imodel{\IFOL}{\istrm{n}}})$ for predicates $p$
+                    \item the conjunction $\imodel{\IFOL}{\astrm\land\bstrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm}=\ltrue$ and $\imodel{\IFOL}{\bstrm}=\ltrue$.
+                    \item the disjunction $\imodel{\IFOL}{\astrm\lor\bstrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm}=\ltrue$ or $\imodel{\IFOL}{\bstrm}=\ltrue$.
+                    \item the negation $\imodel{\IFOL}{\lnot\astrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm} \neq \ltrue$.
+                    \item the implication $\imodel{\IFOL}{\astrm\limply\bstrm} = \ltrue$ iff $\imodel{\IFOL}{\astrm} \neq \ltrue$ or $\imodel{\IFOL}{\bstrm}=\ltrue$.
+                    \item the universal quantifier $\imodel{\IFOL}{\lforall{x}{\astrm}} = \ltrue$ iff $\imodel{\imodif[algebra]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for all $a\in\R$.
+                    \item the existential quantifier $\imodel{\IFOL}{\lexists{x}{\astrm}} = \ltrue$ iff $\imodel{\imodif[algebra]{\IFOL}{x}{a}}{\astrm} = \ltrue$ for some $a\in\R$.
                 \end{enumerate}
-                The statement $\imodel{\IFOL}{\astrm}=\ltrue$ can also be written as $\imodels{\IFOL}{\astrm}$, the so-called \emph{satisfaction/satisfiability relation}.
+                The statement $\imodel{\IFOL}{\astrm}=\ltrue$ can also be written as $\imodels{\IFOL}{\astrm}$, the so-called \emph{satisfaction relation}.
                 One says that $(\interpret,\assignment)$ \emph{satisfies} $\asfml$, that $(\interpret,\assignment)$ is a model for $\asfml$ or that $\asfml$ is \emph{true} in $\interpret$ under $\assignment$.
 
                 A formula $\asfml$ is called \emph{valid} (or a \emph{tautology}) if $\imodels{\IFOL}{\asfml}$ for every model $\model$ (i.e.\ for all possible interpretations $\interpret$ and assignments $\assignment$). In this case, one writes shortly $\models\asfml$.
@@ -238,28 +238,28 @@
         \subsection{Variable Binding and Substitution}
             \label{sec:FOL-variable-binding}
 
-            Quantifiers in formulas bind occurences of variables in such way that a \emph{bound variable} does not need an assignment in order to determine a truth value for the formula.
+            Quantifiers in formulas bind occurrences of variables in such way that a \emph{bound variable} does not need an assignment in order to determine a truth value for the formula.
             In contrast, a \emph{free variable} requires an assignment.
 
             % sentence is formula without free variables, has a determined truth value
 
             \begin{definition}[Variable binding]
-                A variable $x$ in a formula $\asfml$ which occures in subformulas of the form $\lforall{x}{\bsfml}$ or $\lexists{x}{\bsfml}$ is \emph{bound} in $\asfml$.
-                If it appears in $\asfml$ outside the scope ($\bsfml$) of a quantifier, is called \emph{free}.
+                A variable $x$ in a formula $\asfml$, which occurs in subformulas of the form $\lforall{x}{\bsfml}$ or $\lexists{x}{\bsfml}$, is \emph{bound} in $\asfml$.
+                If it appears in $\asfml$ outside the scope ($\bsfml$) of a quantifier, it is called \emph{free}.
             \end{definition}
 
             Variables are place holders and hence demand a means for being replaced with concrete information. With a little restriction, it is possible to substitute free variables by another term.
 
             \begin{definition}[Admissible substitution]
-                The term $\astrm$ is an \emph{admissible substitution} for $x$ in $\asfml(x)$, if no free occurence of $x$ in $\asfml$ is in the scope of a $\forall{y}$ or $\lexists{y}$ for any variable $y$ appearing in $t$.
+                The term $\astrm$ is an \emph{admissible substitution} for $x$ in $\asfml(x)$, if no free occurrence of $x$ in $\asfml$ is in the scope of a $\forall{y}$ or $\lexists{y}$ for any variable $y$ appearing in $t$.
 
-                In this case, we define the \emph{substitution} $\substl[\asfml]{x}{\astrm}$ of the variable $x$ by the admissible term $\astrm$ in the formula $\asfml$ as the formula obtain from $\asfml$ by replacing each occurence of the free variable $x$ outside the scope of a quantifier by $\astrm$.
+                In this case, we define the \emph{substitution} $\substl[\asfml]{x}{\astrm}$ of the variable $x$ by the admissible term $\astrm$ in the formula $\asfml$ as the formula obtain from $\asfml$ by replacing each occurrence of the free variable $x$ outside the scope of a quantifier by $\astrm$.
             \end{definition}
 
             This restriction is necessary for the soundness of the quantifier axioms given in the next section.
 
             We agree on the following notational convention
-            (which is not to be confused with syntax for functions and predicates with arguments):
+            (which is not to be confused with the syntax for functions and predicates with arguments):
             When me mention $\asfml(x)$ and $\asfml(\astrm)$ in the same context, we mean that $x$ is a free variable of the formula $\asfml$ and that $\asfml(\astrm)$ is $\substl[\asfml]{x}{\astrm}$.
 
         \subsection{Proof Theory}
@@ -269,7 +269,7 @@
             % test $\models\vDash $
             % establish validity by proofs
             
-            Given an interpretation and assignment the semantics of a logic allow to compute the truth value of a formula. This means, checking satisfaction is easy.
+            Given an interpretation and assignment, the semantics of a logic allow to compute the truth value of a formula. This means, checking satisfaction is easy.
             However to check the validity of a formula by the semantics is difficult. We would need to check all possible interpretations and assignments.
 
             To tackle that problem, one introduces the concept of a proof calculus, which allows to show the validity of a formula.
@@ -278,17 +278,17 @@
             In general, it can be difficult to find a proof.
             But once a proof is found, it can easily be verified by the validity of the proof rules.
             This means, as opposed to the semantics, showing that a formula is not valid using the proof calculus, is difficult.
-            Using the semantics, it is sufficient to find a counter-example, but how can one show that there is no proof?
+            Using the semantics, it is sufficient to find a counter-example. But how can one show that there is no proof?
+            A counterexample is a witness for non-validity, a (formal) proof is a witness for validity. 
 
             % if not valid, there is a counterexample, an interpretation and assignment for which not true, ie false
 
-            A counterexample is a witness for not validity, a (formal) proof is a witness for validity. 
 
             % proof for establishing evidence of assertions, like $\lsequent{\Gamma}{\astrm}$ valid
             % not useful for $\lsequent{\Gamma}{\astrm}$ not valid
 
-            These two characterisations of truth, semantics and proof calculus, need to be equivalent.
-            A proof calculus is \emph{sound} if invalid sequents are not deriveable and \emph{complete} if every valid sequent can be derived.
+            These two characterizations of truth, semantics and proof calculus, need to be equivalent.
+            A proof calculus is \emph{sound} if invalid sequents are not derivable and \emph{complete} if every valid sequent can be derived.
 
             % valid formulas are of particular interest, hold under all circumstances, ie for all interpretations and assignments
             % need to identify these, check validity
@@ -315,18 +315,12 @@
             % sets may be empty
             % sequent is valid, if there is a proof
 
-            There are different styles of formal logical argumentation. We consider two different deduction systems in which a proof can be represented.
-            
-
-            % \subsubsection{Logical Axioms}
-            %     \label{sec:FOL-axioms}
-
-                
+            There are different styles of formal logical argumentation. We consider so-called Hilbert deduction systems, in which a proof can be represented.
 
             \subsubsection{Hilbert Calculus}
                 \label{sec:hilbert-calculus}
 
-                \begin{figure}[b]
+                \begin{figure}[t]
                     \centering
                     \begin{calculuscollections}{\textwidth}
                     \begin{calculus}
@@ -384,25 +378,23 @@
                         }{}
                     \end{calculus}
                     \end{calculuscollections}
-                    \label{fig:fol-axioms}
                     \caption{A complete axiomatization of \FOL and Hilbert-calculus deduction rules.}
+                    \label{fig:fol-axioms}
                 \end{figure}
 
                 A Hilbert-style deduction system is based on a finite set of selected tautologies with the role of axioms and only a small number of inference rules.
 
                 In such a calculus, a formal \emph{proof} is a derivation of the formula to be shown (conclusion) from the axioms and premises by applying in each step one of the deduction rules.
                 In such a proof, every line is again an unconditional tautology.
-                A formula $\asfml$ is called \emph{deriveable} from the premises in the given calculus, if there exists a derivation with conclusion $\asfml$.
+                A formula $\asfml$ is called \emph{derivable} from the premises in the given calculus, if there exists a derivation with conclusion $\asfml$.
 
-                The axiomatization consists of logical \emph{axiom schemes}. They describe the countably infinite number of axioms the deduction system comprises. A concrete axiom is obtained by replacing the placeholders by concrete formulas.
+                The axiomatization consists of logical \emph{axiom schemes}. These describe the countably infinite number of axioms the deduction system comprises. A concrete axiom is obtained by replacing the placeholders by concrete formulas.
 
-                There are many possible selections of an axiom system. However it should be sufficiently strong, such that each tautology is deriveable by the given inference rules and depends of course on the signature, too.
-
+                There are many possible choices for an axiom system. However the selection should be sufficiently strong, such that each tautology is derivable by the given inference rules.
                 % theory of $\model$ is set of sentences satisfied by $\model$
                 % generally, theory is set of sentences
                 % model class of theory $T$: all interpretations which satisfy $T$ (all sentences given in T)
                 % if $K$ (interpretations) is model class of theory $T$, then $T$ is set of axioms for $K$ (\cite{Hodges01ClassicalLogic})
-
 
                 A possible sound and complete axiomatization for first-order logic is given in \cite{Bimbo14ProofTheory} and shown in Figure~\ref{fig:fol-axioms}.                
                 It combines axioms for classical propositional logic with axioms for quantifiers and relies only on two deduction rules: \emph{modus ponens}~(\irref{MPfol}), which infers formula $\bsfml$ from the hypotheses $\asfml$, and $\asfml\limply\bsfml$ and \emph{quantifier-generalization}~(\irref{GenAfol}).
@@ -799,16 +791,13 @@
     \section{Modal Logic}
         \label{sec:modal-logic}
 
-        In propositional and first-order logic is each formula either true or false for a given model.
+        In propositional and first-order logic, each formula is either \emph{true} or \emph{false} for a given model.
         In this section, we present another concept of logics, called \emph{modal logic}, which allows different \emph{modes of truth}. An example is truth with respect to time.
         To that end, modal logic extends the language of propositional logic with two new unary connectives, $\lbox{}$ and $\ldiamond{}$, whose exact meaning depends on a specific incarnation of modal logics.
+        We define modal logic as in \cite{Huth04LogicInCS,JaparidzeJongh98HandbookProofTheory}.
 
-        We define modal logic as in \cite{Huth04LogicInCS}
-        \cite{JaparidzeJongh98HandbookProofTheory}
-        \cite{BlackburnModalLogic}
-
-        \subsection{Syntax}
-            \label{sec:ML-syntax}
+        % \subsection{Syntax}
+        %     \label{sec:ML-syntax}
 
             % TODO: we write ... for propositions
             % TODO: grammar BNF -> words of finite length
@@ -831,27 +820,22 @@
                 with an atomic formula $\asprop$ from the set of propositions $P$. 
             \end{definition}
 
-        \subsection{Semantics}
-            \label{sec:ML-semantics}
+        % \subsection{Semantics}
+        %     \label{sec:ML-semantics}
 
-            
-            Kripke Model
-            \begin{definition}[Model]
+            \begin{definition}[(Kripke) Model]
                 A \emph{model} $\model=(\worlds,\access,\valuation)$ of modal logic consists of
                 \begin{enumerate}
                     \item a nonempty set of \emph{worlds/states} $\worlds$
-                    \item an accessibility relation $\access\subseteq \worlds\times \bswrld$ between the worlds
-                    \item a labelling function $\valuation\from\worlds\to\powerset{P}$
+                    \item an accessibility relation $\access\subseteq \worlds\times \worlds$ between the worlds
+                    \item a labeling function $\valuation\from\worlds\to\powerset{P}$
                 \end{enumerate}
-                write $\ireachability{\IML}{\aswrld,\bswrld}$ for $(\aswrld,\bswrld)\in\access$, world $\bswrld$ accessible from $\aswrld$
-
+                We write $\ireachability{\IML}{\aswrld,\bswrld}$ for $(\aswrld,\bswrld)\in\access$, meaning that the world $\bswrld$ is accessible from $\aswrld$.
             \end{definition}
-            forcing relation $\Vdash$ between worlds and propositional variables (is L),
-            extended to formulas
             
             \begin{definition}[Semantics of modal formulas]
                 The semantics of modal formulas is defined by a \emph{satisfaction relation}.
-                It specifies inductively the truth value of each symbolic expression with regard to the worlds. A formula $\asfml$ is true in a world $\aswrld$ or equivalently the world $\aswrld$ satisfies formula $\asfml$, iff $\imodels{\IML}{\asfml}$.
+                It specifies inductively the truth value of each symbolic expression with regard to the worlds. A formula $\asfml$ is \emph{true} in a world $\aswrld$ or equivalently the world $\aswrld$ \emph{satisfies} formula $\asfml$, iff $\imodels{\IML}{\asfml}$.
                 \begin{enumerate}
                     \item $\inonmodels{\IML}{\lfalse}$
                     \item $\imodels{\IML}{\ltrue}$
@@ -859,13 +843,13 @@
                     \item $\imodels{\IML}{\lnot\asfml}$ iff $\inonmodels{\IML}{\asfml}$
                     \item $\imodels{\IML}{\asfml\land\bsfml}$ iff $\imodels{\IML}{\asfml}$ and $\imodels{\IML}{\bsfml}$
                     \item $\imodels{\IML}{\asfml\lor\bsfml}$ iff $\imodels{\IML}{\asfml}$ or $\imodels{\IML}{\bsfml}$
-                    \item $\imodels{\IML}{\asfml\limply\bsfml}$ iff $\imodels{\IML}{\bsfml}$ whenever $\imodels{\IML}{\bsfml}$
+                    \item $\imodels{\IML}{\asfml\limply\bsfml}$ iff $\imodels{\IML}{\bsfml}$ whenever $\imodels{\IML}{\asfml}$
                     \item $\imodels{\IML}{\asfml\lbisubjunct\bsfml}$ iff $\imodels{\IML}{\asfml}$ if and only if $\imodels{\IML}{\bsfml}$
                     % FIXME: \imodels{\iconcat[state=w]{\IML}}{\asfml}
                     \item $\imodels{\IML}{\lbox{\asfml}}$ iff $\bswrld\models\asfml$ for each $\bswrld\in\worlds$ with $\ireachability{\IML}{\aswrld,\bswrld}$
                     \item $\imodels{\IML}{\ldiamond{\asfml}}$ iff there is a $\bswrld\in\worlds$ with $\ireachability{\IML}{\aswrld,\bswrld}$ such that $\bswrld\models\asfml$
                 \end{enumerate}
-                A model satisfies a formula if and only if each world of the model satisfies the formula. In this case, we write $\model\models\asfml$ and say $\asfml$ is \emph{valid} in $\model$.
+                A model $\model$ satisfies a formula if and only if each world of the model satisfies the formula. In this case, we write $\model\models\asfml$ and say $\asfml$ is \emph{valid} in $\model$.
                 A formula $\asfml$ is \emph{valid}, if and only if it is true in every world of every model, written as $\models\asfml$.
             \end{definition}
 
