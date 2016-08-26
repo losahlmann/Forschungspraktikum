@@ -638,7 +638,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     \label{sec:static-semantics}
 
     The static semantics of \ddL formulas and \dHPs defines some properties, which can be derived solely from their syntactic structure and without execution of their programs.
-    We adapt the notion of \emph{free} and \emph{bound} occurences of variables in formulas and introduce the so called \emph{history horizon}.
+    We adapt the notion of \emph{free} and \emph{bound} occurrences of variables in formulas and introduce the so called \emph{history horizon}.
 
     \subsection{History Horizon}
         \label{sec:history-horizon}
@@ -650,11 +650,11 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         The concrete value of $T$ needs to be known in order to determine the validity of a formula, since it appears explicitly in the quantification $\hs{}$ for the special variable $s$.
 
         \begin{definition}[History Horizon]
-            % The \emph{history horizon} is a function
+            The \emph{history horizon} is a function
             % \begin{equation*}
             %     \HH\from \ddLformulas \to \nonposR
             % \end{equation*}
-            % which
+            which
             assigns to each \ddL formula the earliest point in time it references to.
             It is defined inductively for s-formulas by:
             \begin{align*}
@@ -679,9 +679,9 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             \end{align*}
             and for \dHPs
             \begin{align*}
-                \HH{\hupdate{\humod{x}{\astrm}}} &= 0\\
-                \HH{\Dupdate{\Dumod{\D{x}}{\astrm}}} &= 0\\
-                \HH{\htest{\asfml}} &= 0\\
+                \HH{\hupdate{\humod{x}{\astrm}}} &= \HH{\astrm}\\
+                \HH{\Dupdate{\Dumod{\D{x}}{\astrm}}} &= \HH{\astrm}\\
+                \HH{\htest{\asfml}} &= \HH{\asfml}\\
                 \HH{\hchoice{\asprg}{\bsprg}} &= \max\set{\HH{\asprg},\HH{\bsprg}}\\
                 \HH{\asprg;\bsprg} &= \max\set{\HH{\asprg},\HH{\bsprg}}\\
                 \HH{\hrepeat{\asprg}} &= \HH{\asprg}\\
@@ -690,22 +690,24 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         \end{definition}
         %We need to use $\min$, since $\HH$ is a non-positive number. It is the biggest in absolute value.
         \begin{example}
+            Consider the following \ddL formula:
             \begin{multline*}
-                % FIXME: notation/syntax: ausgeklammertes forall in formulas
                 \hsc{(\x[s]=2)}\limply\\
                 \dbox{\hupdate{\humod{x}{\x[-3]^2}};\hevolvein{\D{x}=\x[-\tau]+2x}{(x\geq 0)}}{\big(\hsc{0\leq\x[s] \land \x[s]\leq\x[-5]}\big)}
             \end{multline*}
-            Hence the history horizon needs to be set to
-            \begin{equation*}
-                T=\max\set{\max\set{3,\tau},\max\set{0,5}}.
-            \end{equation*}
+            The history horizon needs to be set to
+            \begin{align*}
+                T&=\max\set{\max\set{3,\tau},\max\set{0,5}}\\
+                &=\max\set{\tau,5}.
+            \end{align*}
         \end{example}
     
     \subsection{Variable Binding}
         \label{sec:variable-binding}
 
         Similar to  \dL~\cite{Platzer15Uniform}, we define \emph{free}, \emph{bound} and \emph{must bound} variables.
-        A variable $x$ is bound by quantifiers of the form $\lforall{x}$ or $\exists{x}$ or through discrete assignment or differential evolution inside a modality, such as $\dbox{\hupdate{\humod{x}{4}}}{}$ or $\ddiamond{\hevolve{\D{x}=\x[-1]}}$.
+        These notions are needed for the sound definition of axioms, whenever they incorporate a substitution.
+        A variable $x$ is bound by quantifiers of the form $\lforall{x}$ or $\exists{x}$ or through discrete assignments or differential evolutions inside a modality, such as $\dbox{\hupdate{\humod{x}{4}}}{}$ or $\ddiamond{\hevolve{\D{x}=\x[-1]}}$.
         The only way to bind the special variable $s$ is by appearing inside the scope of $\hs{}$.
 
         More precisely, these notions can be defined by simultaneous induction over the syntax:
@@ -722,7 +724,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
                 \freevars[\big]{\astrm(s)+\bstrm(s)} = \freevars[\big]{\astrm(s)\cdot\bstrm(s)} &= \freevars{\astrm(s)}\cup\freevars{\bstrm(s)}\\
                 \freevars[\big]{\der{\astrm(s)}} &= \freevars{\astrm(s)}\cup\D{\freevars{\astrm(s)}}
             \end{align*}
-            The set $\freevars{\asfml(s)}\subseteq\allvars\cup\diffvars\cup\set{s}$ of a s-formula is defined as all its variables which appear outside the scope of quantifiers or modalities which bind it:
+            The set $\freevars{\asfml(s)}\subseteq\allvars\cup\diffvars\cup\set{s}$ for a s-formula is defined as all its variables which appear outside the scope of quantifiers or modalities which bind it:
             \begin{align*}
                 \freevars[\big]{\astrm(s)=\bstrm(s)} = \freevars[\big]{\astrm(s)\geq\bstrm(s)} &= \freevars{\astrm(s)}\cup\freevars{\bstrm(s)}\\
                 \freevars[\big]{p(\range{\istrm{1}(s)}{\istrm{k}(s)})} &= \freevars{\istrm{1}(s)} \cup\cdots\cup \freevars{\istrm{k}(s)}\\
@@ -735,7 +737,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             For a \dHP $\asprg$, its free variables $\freevars{\asprg}\subseteq\allvars\cup\diffvars$ are those which are potentially read:
             \begin{align*}
                 \freevars{\hupdate{\humod{x}{\astrm}}} = \freevars{\Dupdate{\Dumod{\D{x}}{\astrm}}} &= \freevars{\astrm} \\
-                \freevars{\htest{\asfml}} &= \\
+                \freevars{\htest{\asfml}} &= \freevars{\asfml}\\
                 \freevars{\hchoice{\asprg}{\bsprg}} &= \freevars{\asprg}\cup\freevars{\bsprg}\\
                 \freevars{\asprg;\bsprg} &= \freevars{\asprg}\cup\left(\freevars{\bsprg}\setminus\mustboundvars{\asprg}\right)\\
                 \freevars{\hrepeat{\asprg}} &= \freevars{\asprg}\\
@@ -744,6 +746,9 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         \end{definition} 
 
         Only bound variables can change their value during the execution of a delay hybrid program.
+        For formulas, bound variables are the variables which don't need an assignment in order to determine the truth value of the formula.
+        \newpage
+
         \begin{definition}[Bound variable]
             The set $\boundvars{\asfml(s)}\subseteq\allvars\cup\diffvars\cup\set{s}$ of a s-formula is defined as:
             \begin{align*}
@@ -768,7 +773,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         \end{definition}
 
         \begin{definition}[Must-bound variable]
-            The set of \emph{must-bound variables} $\mustboundvars{\asprg}\subseteq\allvars\cup\diffvars$ of a \dHP $\asprg$ are the variables which are written at all execution paths:
+            The set of \emph{must-bound variables} $\mustboundvars{\asprg}\subseteq\allvars\cup\diffvars$ of a \dHP $\asprg$, are the variables which are written at all execution paths:
             \begin{align*}
                 \mustboundvars{\hupdate{\humod{x}{\astrm}}} &= \boundvars{\hupdate{\humod{x}{\astrm}}} = \set{x} \\
                 \mustboundvars{\Dupdate{\Dumod{\D{x}}{\astrm}}} &= \boundvars{\Dupdate{\Dumod{\D{x}}{\astrm}}} = \set{\D{x}} \\
