@@ -148,9 +148,11 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     The only way to bind the variable $s$ in a formula $\asfml(s)$ is by using $\hs{\asfml(s)}$, which quantifies $s$ over the domain of the state space, except for the current time point $0$.
 
     We note $\asfml$ to indicate that $s$ is not a \emph{free variable} of $\asfml(s)$ and $\asfml(\past)$ with $\past\in\closeddelayinterval\subset\nonposR$ to express that each term $\astrm(s)$ in the formula was replaced by its corresponding $\astrm(r)$, even if the term appears in the scope of a $\hs{}$.
+    % TODO: is r=0 here allowed, since hs does not include 0
     % TODO: or only which is not under the scope of a \hs? at the moment I overwrite each \hs
     Sometimes we want to emphasize that a formula depends on a variable $x$. Then we write $\asfml(x)$ and refer to $x$ as function and element of the state space, not only the value $\x[0]$ (cf.\ usage for $\forall$).
     A s-formula $\asfml(s)$, which contains ($\x[s]$ and) at least one $\x[c]$ for any $c\in\constants$ is called \emph{stiff}.
+    % FIXME: c=0 allowed? denke nicht
     
     % TODO: on variables \allvars (signature)
     Formulas of first-order logic of real arithmetic constitute a subset of \ddL, i.e.\ every \FOLR formula is also a formula of delay differential dynamic logic (though not containing any delay).
