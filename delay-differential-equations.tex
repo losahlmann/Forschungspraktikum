@@ -16,12 +16,12 @@ These previous values need to be specified in an initial condition, for at least
 
 Examples of phenomena which have been modeled using delay differential equations include epidemics, traffic flow and vibrations/chattering. See \cite{Falbo06FDEs} and the references therein for a number of examples.
 
-Some methods to solve basic DDEs analytically are presented in \cite{Falbo06FDEs}. Numerical procedures are not as far developed as for ODEs. 
+Some methods to solve basic DDEs analytically are presented in \cite{Falbo06FDEs}. Numerical procedures are not as far developed as for ODEs.
 See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorous integration algorithm.
 
 \section{Piecewise Continuous Functions}
     \label{sec:piecewise-continuous-functions}
-    
+
     The following definition is motivated by the character of evolution arising from hybrid systems. We define the main functional space of operation for the following chapters.
 
     \begin{definition}[Piecewise Continuously Differentiable]
@@ -158,9 +158,9 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
             \D{x}(t) = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))
         \end{equation*}
         on each (open) interval $\open{t_i}{t_{i+1}}$ of its partition $\partition{\tzero=t_0}{t_p=\tzero+T}$.
-        If the function $x$ is a solution for all $T>0$, it is called \emph{global}.   
+        If the function $x$ is a solution for all $T>0$, it is called \emph{global}.
     \end{definition}
-    
+
     The piecewise continuity of the derivative means that the left limits
     \begin{equation*}
         \lim_{s\upto t_i}\D{x}(s) = \lim_{s\upto t_i}f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))
@@ -181,13 +181,15 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
 
 \section{Method of Steps}
     \label{sec:method-of-steps}
-    
+
     If we restrict the IVP~\eqref{eq:ivp} onto an interval $\compactum{\tzero}{\tzero+T_1}$ with $T_1\leq\taumin$, then the values of each $x(t-\tau_j)$ is specified by the initial condition and can thus be replaced by $x_{\tzero}(t-\tau_j)$.
     We obtain an \emph{initial value problem} for an \emph{ordinary differential equation}.
     If we can solve this ordinary IVP, i.e.\ if we can find a solution of the ODE on $\compactum{\tzero}{\tzero+T_1}$, then we can reapply this method by plugging the computed solution into the DDE and solving the resulting ODE on the interval $\compactum{\tzero+T_1}{\tzero+T_2}$, where again $T_2\leq\taumin$. As long as one can solve the resulting ordinary differential equation (for suitable $f$ and $x_{\tzero}$, the existence and uniqueness of a solution is guaranteed by Picard-Lindelöf's theorem), this step can be iterated.
 
     This method, which allows to convert a DDE into an ODE on a certain interval, eliminating the explicit dependence on the past by inserting the initial condition, is known as \emph{method of steps}.
     Examples using this method are given in~\cite{Falbo06FDEs}.
+
+    % TODO: picture
 
     % TODO: Why? It shows that solution is sequence of polynomials
     % with incrasing degree, smoothing property
@@ -196,14 +198,16 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
 \section{Existence and Uniqueness of Solutions}
     \label{solutions-existence-uniqueness}
 
-    In this section, we show that under certain conditions, we can guarantee the existence of a solution for the DDE-IVP~\eqref{eq:ivp} and that in general, it cannot have more than one. 
+    % TODO: discuss if known in literature
+
+    In this section, we show that under certain conditions, we can guarantee the existence of a solution for the DDE-IVP~\eqref{eq:ivp} and that in general, it cannot have more than one.
 
     % will consider rhs cont and lip
     % $f$ Lipschitz with piecewise continuous initial function have existence and uniqueness ???? smoothing
 
     \begin{definition}[Lipschitz Continuity]\label{def:lipschitz}
         % similar to \cite{pruesswilke10GewDiffGl,Smith10IntroDDE}
-        % FIXME: dont I need xtau in right side ??? 
+        % FIXME: dont I need xtau in right side ???
         A function $f\from\deff\to\R^n$ is called \emph{(locally) Lipschitz continuous} (in its $j$-th argument, referring to $t$ as zeroth argument) if and only if for all $a,b\in\R$ and $M>0$ there is a $L>0$, such that
         \begin{equation*}
             % TODO: is L(\nnorm*{x-x}+\nnorm*{y-y}) better? is equiv, with different L
@@ -238,6 +242,7 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
 
     \begin{lemma}\label{lm:integral-equation}
         %TODO: compare with ODE lecture notes
+        % TODO: André: Lebesgue integral?
         Finding a solution of the initial value problem~\eqref{eq:ivp} is equivalent to solving the integral equation
         \begin{equation*}\label{eq:integral-equation}
             \normalfont
@@ -265,17 +270,19 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
         By the fundamental theorem of calculus, $x$ is continuous on $\compactum{\tzero}{\tzero+T}$.
 
         From the partition $\partition{t_0}{t_p}$ of $x_{\tzero}$, we construct a partition of $\compactum{\tzero}{\tzero+T}$ by
+        % FIXME: inprecise, define properly
         \begin{equation}\label{eq:partition}
             \mathcal{Z}\defeq \partition{\hat{t}_0}{\hat{t}_q}
             \defeq \set{\tzero,\tzero+T}\cup\bigcup_{j=1}^{k}\bigcup_{\substack{i=1\\t_i+\tau_j\geq\tzero}}^{p}\set{t_i+\tau_j}
         \end{equation}
-        Let $t\in\open{\hat{t}_{l-1}}{\hat{t}_l}$ for any $l\in\set{\range{1}{q}}$. If for any $j\in\set{\range{1}{k}}$ and $i\in\set{\range{0}{p}}$ was $t-\tau_j = t_i$, then $t=t_i+\tau_j=\hat{t}_r$ for a $r\in\set{\range{1}{p}}$ by the construction of $\mathcal{Z}$. However this would be a contradiction to the choice of $t$. Hence $t-\tau_j \neq t_i$ for all $j\in\set{\range{1}{k}}$ and $i\in\set{\range{0}{m}}$, what implies that each $s\mapsto x(s-\tau_j)=x_{\tzero}(s-\tau_j)$ is continuous in the point $t$. Thus the composition
+        Let $t\in\open{\hat{t}_{l-1}}{\hat{t}_l}$ for any $l\in\set{\range{1}{q}}$. If for any $j\in\set{\range{1}{k}}$ and $i\in\set{\range{0}{p}}$ was $t-\tau_j = t_i$, then $t=t_i+\tau_j=\hat{t}_r$ for a $r\in\set{\range{1}{p}}$ by the construction of $\mathcal{Z}$. However this would be a contradiction to the choice of $t$. Hence $t-\tau_j \neq t_i$ for all $j\in\set{\range{1}{k}}$ and $i\in\set{\range{0}{m}}$, which implies that each $s\mapsto x(s-\tau_j)=x_{\tzero}(s-\tau_j)$ is continuous in the point $t$. Thus the composition
         \begin{equation*}
             s\mapsto f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))
         \end{equation*}
         is continuous in $t$. The fundamental theorem of calculus states in this case that $x$ is differentiable in the point $t$ and that $\D{x}(t)=f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))$.
 
         For the right limits it follows by the continuity of $f$ and the existence of the limits $\lim_{t\downto\hat{t}_l} x(t-\tau_j) = x(\hat{t}_l-\tau_j)$, that
+        % FIXME: elaborate l and j in line before
         \begin{align*}
             \lim_{t\downto\hat{t}_l} \D{x}(t)
             &= \lim_{t\downto\hat{t}_l} f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))\\
@@ -283,9 +290,10 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
         \end{align*}
         The left limits
         \begin{equation*}
-            \lim_{t\upto\hat{t}_l} \D{x}(t) = \lim_{t\upto\hat{t}_l} f(t,x(s),x(t-\tau_1),\ldots,x(t-\tau_k)) 
+            \lim_{t\upto\hat{t}_l} \D{x}(t) = \lim_{t\upto\hat{t}_l} f(t,x(s),x(t-\tau_1),\ldots,x(t-\tau_k))
         \end{equation*}
         exist for the same reason.
+        % FIXME: replace 'summarily'
         Summarily, $x$ is continuous and piecewise continuously differentiable on $\compactum{\tzero}{\tzero+T}$ with piecewise derivative $f$ and it obviously obeys the initial condition, i.e. $x(t)=x_{\tzero}(t)$ for all $t\in\compactum{\tzero-\tau}{\tzero}$.
         % FIXME: f cont uberall in Voraussetzung?
     \end{proof}
@@ -304,7 +312,8 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
             \end{cases}
         \end{equation}
         with zero-aligned initial function.
-        
+
+        % TODO: define norms
         % where $\nnorm{\cdot}$ denotes the Euclidian norm on $\R^n$ and $\supnorm{\cdot}$ the supremum norm of the Banach space of continuous functions on $[-\tau,0]$.
 
         Then, for each \emph{initial condition} $x_{\tzero}\in\statespace[-\taumax]$ and start time $\tzero\in\R$, there \emph{exists} a \emph{unique local solution} of the IVP on a time interval $\compactum{\tzero-\taumax}{\tzero+T}$.
@@ -312,9 +321,9 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
     \end{theorem}
 
     \begin{proof}
-        % FIXME: where sup-norm?
-        Let $\partition{-\taumax=t_0}{t_p=0}$ be the partition of $x_{\tzero}$. As a piecewise continuous function, the initial condition can be bounded on $\closeddelayinterval[-\taumax]$ by any $M\geq \supnorm{x_\tzero}$.      
-        
+        % FIXME: where sup-norm? define notation
+        Let $\partition{-\taumax=t_0}{t_p=0}$ be the partition of $x_{\tzero}$. As a piecewise continuous function, the initial condition can be bounded on $\closeddelayinterval[-\taumax]$ by any $M\geq \supnorm{x_\tzero}$.
+
         Since $f$ is continuous, its sup-norm admits a maximum $K>0$
         on the compact set
         \begin{equation*}
@@ -325,42 +334,43 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
         Let $L>0$ be the Lipschitz constant of $f$ for that set with respect to its first argument.
         We put $T\defeq\min\set{\taumin,\frac{M}{K}}$ to restrict in the following the domain of $f$ as integrand to $S$.
 
-        We construct a series $\{x_{(m)}\}_{m\in\N_0}$ of piecewise continuous functions, which approximates the solution of the initial value problem. Set
+        We construct a series $\{\seq{x}{m}\}_{m\in\N_0}$ of piecewise continuous functions, which approximates the solution of the initial value problem. Set
         \begin{equation*}
-            x_{(0)}(t)= \begin{cases}
+            \seq{x}{0}(t)= \begin{cases}
                 x_\tzero(0) & \text{for } t\in\compactum{\tzero}{\tzero+T}\\
                 x_\tzero(t-\tzero) & \text{for } t\in\compactum{\tzero-\taumax}{\tzero}
             \end{cases}
         \end{equation*}
+        % TODO: only use one domain notation of IVP
         For $m\in\N_{>0}$ define
         \begin{equation*}
-            x_{(m)}(t)= \begin{dcases*}
+            \seq{x}{m}(t)= \begin{dcases*}
                 \begin{multlined}[c][0.57\displaywidth]
                     x_\tzero(0) + \integral{\tzero}{t}
-                f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots\\
-                \ldots,x_{(m-1)}(s-\tau_k))\dx[s] 
+                f(s,\seq{x}{m-1}(s),\seq{x}{m-1}(s-\tau_1),\ldots\\
+                \ldots,\seq{x}{m-1}(s-\tau_k))\dx[s]
                 \end{multlined} & for $t\in\compactum{\tzero}{\tzero+T}$\\
                 x_\tzero(t-\tzero) \vphantom{\int} & for $t\in\compactum{\tzero-\taumax}{\tzero}$
             \end{dcases*}
         \end{equation*}
         The integral exists, because the integrand is a composition of a continuous and piecewise continuous function, which is again piecewise continuous (Lemma~\ref{lm:comp-pw-cont}) and hence by Lemma~\ref{lm:pc-integrable} integrable and continuous on $\compactum{\tzero}{\tzero+T}$.
 
-        It holds for all $m>0$ and $t\in \compactum{\tzero-\taumax}{\tzero}$ by the definition of this sequence that
+        It holds for all $m>0$ by the definition of this sequence that
         \begin{equation*}
-            \nnorm*{x_{(m)}(t)-x_{(m-1)}(t)}=0
+            \nnorm*{\seq{x}{m}(t)-\seq{x}{m-1}(t)} = 0 \quad\text{for } t\in \compactum{\tzero-\taumax}{\tzero}.
         \end{equation*}
-        We show by induction over $m$ that for all $t\in [\tzero,\tzero+T]$ it holds
+        We show by induction over $m$ that it holds
         \begin{equation*}
-            \nnorm*{x_{(m)}(t)-x_{(m-1)}(t)} \leq \frac{K}{L}\frac{L^m (t-\tzero)^m}{m!}.
+            \nnorm*{\seq{x}{m}(t)-\seq{x}{m-1}(t)} \leq \frac{K}{L}\frac{L^m (t-\tzero)^m}{m!} \quad\text{for all } t\in [\tzero,\tzero+T].
         \end{equation*}
-        Let $t\in [\tzero,\tzero+T]$. Since for all $s\in [\tzero-\taumax,\tzero+T]$ obviously $\nnorm{x_{(0)}(s)}\leq M$, the statement for $m=1$ follows from the boundedness of $f$ on $S$ and the triangle inequality for integrals:
+        Let $t\in [\tzero,\tzero+T]$. Since for all $s\in [\tzero-\taumax,\tzero+T]$ obviously $\nnorm{\seq{x}{0}(s)}\leq M$, the statement for $m=1$ follows from the boundedness of $f$ on $S$ and the triangle inequality for integrals:
         \begin{equation*}
-            \nnorm{x_{(1)}(t)-x_{(0)}(t)} = \nnorm*{\integral{\tzero}{t} f(s,x_{(0)}(s),x_{(0)}(s-\tau_1),\ldots,,x_{(0)}(s-\tau_k))\dx[s]} \leq K(t-\tzero)
+            \nnorm{\seq{x}{1}(t)-\seq{x}{0}(t)} = \nnorm*{\integral{\tzero}{t} f(s,\seq{x}{0}(s),\seq{x}{0}(s-\tau_1),\ldots,,\seq{x}{0}(s-\tau_k))\dx[s]} \leq K(t-\tzero)
         \end{equation*}
-        In the inductive step for any $m>0$, we assume that $\nnorm{x_{(m-1)}(s)}\leq 2M$ for all $s\in [\tzero-\taumax,\tzero+T]$, what implies that also
+        In the inductive step for any $m>0$, we assume that $\nnorm{\seq{x}{m-1}(s)}\leq 2M$ for all $s\in [\tzero-\taumax,\tzero+T]$, what implies that also
         % TODO: why do integral and norm commute? once integral over vectors, once over scalars
         \begin{align}\label{eq:bounded-xm}
-            \nnorm*{x_{(m)}(t)} &\leq \nnorm*{x_\tzero(0)} + \integral{\tzero}{t} \nnorm*{f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots,x_{(m-1)}(s-\tau_k))}\dx[s] \nonumber \\
+            \nnorm*{\seq{x}{m}(t)} &\leq \nnorm*{x_\tzero(0)} + \integral{\tzero}{t} \nnorm*{f(s,\seq{x}{m-1}(s),\seq{x}{m-1}(s-\tau_1),\ldots,\seq{x}{m-1}(s-\tau_k))}\dx[s] \nonumber \\
             &\leq M + K(t-\tzero) \leq M+KT \nonumber \\
             &\leq 2M
         \end{align}
@@ -368,36 +378,36 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
 
         Using this and given the second restriction on $T\leq\taumin$, it follows by the Lipschitz property of $f$ (for its first argument) that
         \begin{multline*}
-            \nnorm*{x_{(m+1)}(t)-x_{(m)}(t)} =\\
+            \nnorm*{\seq{x}{m+1}(t)-\seq{x}{m}(t)} =\\
             \!\begin{multlined}[t][0.8\displaywidth]
-                = \left\lVert\integral{\tzero}{t} f(s,x_{(m)}(s),x_{(m)}(s-\tau_1),\ldots,x_{(m)}(s-\tau_k))\right.\\
-                \left.- f(s,x_{(m-1)}(s),x_{(m-1)}(s-\tau_1),\ldots,x_{(m-1)}(s-\tau_k))\dx[s]
+                = \left\lVert\integral{\tzero}{t} f(s,\seq{x}{m}(s),\seq{x}{m}(s-\tau_1),\ldots,\seq{x}{m}(s-\tau_k))\right.\\
+                \left.- f(s,\seq{x}{m-1}(s),\seq{x}{m-1}(s-\tau_1),\ldots,\seq{x}{m-1}(s-\tau_k))\dx[s]
                 \vphantom{\integral{\tzero}{t}}\right\rVert
             \end{multlined}\\
             \!\begin{multlined}[t][0.8\displaywidth]
-                = \left\lVert\integral{\tzero}{t} f(s,x_{(m)}(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))\right.\\
-                \left.- f(s,x_{(m-1)}(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))\dx[s]
+                = \left\lVert\integral{\tzero}{t} f(s,\seq{x}{m}(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))\right.\\
+                \left.- f(s,\seq{x}{m-1}(s),x_{\tzero}(s-\tau_1-\tzero),\ldots,x_{\tzero}(s-\tau_k-\tzero))\dx[s]
                 \vphantom{\integral{\tzero}{t}}\right\rVert
             \end{multlined}\\
-            \begin{aligned}   
-            &\leq L \integral{\tzero}{t} \nnorm*{x_{(m)}(s) - x_{(m-1)}(s)}\dx[s]\\
+            \begin{aligned}
+            &\leq L \integral{\tzero}{t} \nnorm*{\seq{x}{m}(s) - \seq{x}{m-1}(s)}\dx[s]\\
             &\leq \frac{L^m K}{m!} \integral{\tzero}{t} (s-\tzero)^m\dx[s]
             = \frac{L^m K}{(m+1)!}(t-\tzero)^{m+1}
             \end{aligned}
         \end{multline*}
         %We use this bound and the triangle inequality in
-        The Cauchy criterion for convergent series (\cite[Theorem~6.13]{Gathmann12GDM}, \cite[Theorem~3.22]{Rudin76PrinciplesAnalysis}) applied to the exponential series states that
+        Next note that the Cauchy criterion for convergent series (\cite[Theorem~6.13]{Gathmann12GDM}, \cite[Theorem~3.22]{Rudin76PrinciplesAnalysis}) applied to the exponential series states that
         \begin{equation*}
             % "\ " needed for space
             \mforall{\varepsilon>0}\ \mexists{n_0\in\N_0}\ \mforall{m\geq \tilde{m}\geq n_0}\holds \sum_{i=\tilde{m}+1}^m \frac{(LT)^i}{i!} <\varepsilon
         \end{equation*}
         So for any $\varepsilon>0$ exist $n_0\in\N_0$ and $m\geq n_0$, such that
         \begin{align*}
-            \nnorm*{x_{(m)}(t)-x_{(n_0)}(t)}
+            \nnorm*{\seq{x}{m}(t)-\seq{x}{n_0}(t)}
             &\leq \!\begin{multlined}[t][0.55\displaywidth]
-                % FIXME: Bug: no space after first line break 
-                \nnorm*{x_{(m)}(t)-x_{(m-1)}(t)} + \nnorm*{x_{(m-1)}(t)-x_{(m-2)}(t)} + {}\\[0.5em]
-                +\ldots+\nnorm*{x_{(n_0+1)}(t)-x_{(n_0)}(t)}
+                % FIXME: Bug: no space after first line break
+                \nnorm*{\seq{x}{m}(t)-\seq{x}{m-1}(t)} + \nnorm*{\seq{x}{m-1}(t)-\seq{x}{m-2}(t)} + {}\\[0.5em]
+                +\ldots+\nnorm*{\seq{x}{n_0+1}(t)-\seq{x}{n_0}(t)}
             \end{multlined}\\
             &\leq \!\begin{multlined}[t][0.6\displaywidth]
                 \frac{K}{L}\frac{L^m (t-\tzero)^m}{m!} + \frac{K}{L}\frac{L^{m-1} (t-\tzero)^{m-1}}{(m-1)!} + {}\\
@@ -405,35 +415,36 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
             \end{multlined}\\
             &\leq \frac{K}{L}\sum_{i=n_0+1}^m \frac{(LT)^i}{i!} < \varepsilon
         \end{align*}
-        for all $t\in [\tzero,\tzero+T]$, i.e. $\{x_{(m)}\}$ is a Cauchy sequence.
-        Since each $x_{(m)}$ is continuous on $\compactum{\tzero}{\tzero+T}$, this Cauchy sequence admits a limit $x$ in the Banach space $\Cn[0]{\compactum{\tzero}{\tzero+T}}{\R^n}$ with respect to the sup-norm.
+        for all $t\in [\tzero,\tzero+T]$, i.e. $\{\seq{x}{m}\}$ is a Cauchy sequence.
+        Since each $\seq{x}{m}$ is continuous on $\compactum{\tzero}{\tzero+T}$, this Cauchy sequence has a limit $x$ in the Banach space $\Cn[0]{\compactum{\tzero}{\tzero+T}}{\R^n}$ with respect to the sup-norm.
 
-        Again, we extend $x$ to $\compactum{\tzero-\taumax}{\tzero}$ with $x_\tzero$, such that $x\in\Cnpw[0]{\compactum{\tzero-\tau}{\tzero+T}}{\R^n}$.
+        Again, we extend the continuous $x$ backwards to $\compactum{\tzero-\taumax}{\tzero}$ with the piecewise continuous $x_\tzero$, such that $x\in\Cnpw[0]{\compactum{\tzero-\tau}{\tzero+T}}{\R^n}$.
 
         By the continuity of the sup-norm it follows from~\eqref{eq:bounded-xm} that
         \begin{equation*}
-            \supnorm*{x}=\lim_{m\to\infty}\supnorm*{x_{(m)}}\leq 2M
+            \supnorm*{x}=\lim_{m\to\infty}\supnorm*{\seq{x}{m}}\leq 2M
         \end{equation*}
         and by the Lipschitz property of $f$
+        % TODO: why can replace x_m
         \begin{align*}
             &\!\begin{multlined}[t][0.8\displaywidth]
-                \sup_{t\in\compactum{\tzero}{\tzero+T}}\lVert f(t,x_{(m)}(t),x_{(m)}(t-\tau_1),\ldots,x_{(m)}(t-\tau_k))\\
+                \sup_{t\in\compactum{\tzero}{\tzero+T}}\lVert f(t,\seq{x}{m}(t),\seq{x}{m}(t-\tau_1),\ldots,\seq{x}{m}(t-\tau_k))\\
                 -f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))\rVert
             \end{multlined}\\
             ={} &\!\begin{multlined}[t][0.8\displaywidth]
-                \sup_{t\in\compactum{\tzero}{\tzero+T}}\lVert f(t,x_{(m)}(t),x_{\tzero}(t-\tau_1-\tzero),\ldots,x_{\tzero}(t-\tau_k-\tzero))\\
+                \sup_{t\in\compactum{\tzero}{\tzero+T}}\lVert f(t,\seq{x}{m}(t),x_{\tzero}(t-\tau_1-\tzero),\ldots,x_{\tzero}(t-\tau_k-\tzero))\\
                 -f(t,x(t),x_{\tzero}(t-\tau_1-\tzero),\ldots,x_{\tzero}(t-\tau_k-\tzero))\rVert
             \end{multlined}\\
-            \leq{} &\sup_{t\in\compactum{\tzero}{\tzero+T}}\nnorm*{x_{(m)}(t)-x(t)}
+            \leq{} &\sup_{t\in\compactum{\tzero}{\tzero+T}}\nnorm*{\seq{x}{m}(t)-x(t)}
         \end{align*}
-        Given this bound, the uniform convergence (convergence in sup-norm) of $x_{(m)}\to x$, implies the uniform convergence
+        Given this bound, the uniform convergence (convergence in sup-norm) of $\seq{x}{m}\to x$, implies the uniform convergence
         \begin{equation*}
-            f(s,x_{(m)}(s),x_{(m)}(s-\tau_1),\ldots,x_{(m)}(s-\tau_k)) \xrightarrow{m\to\infty} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))
+            f(s,\seq{x}{m}(s),\seq{x}{m}(s-\tau_1),\ldots,\seq{x}{m}(s-\tau_k)) \xrightarrow{m\to\infty} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))
         \end{equation*}
         and hence we can commute the integral and the limit process in
         \begin{align*}
-            x(t) &= \lim_{m\to\infty} x_{(m+1)}\\
-            &= x_\tzero(0) + \lim_{m\to\infty}\integral{\tzero}{t} f(s,x_{(m)}(s),x_{(m)}(s-\tau_1),\ldots,x_{(m)}(s-\tau_k))\dx[s]\\
+            x(t) &= \lim_{m\to\infty} \seq{x}{m+1}\\
+            &= x_\tzero(0) + \lim_{m\to\infty}\integral{\tzero}{t} f(s,\seq{x}{m}(s),\seq{x}{m}(s-\tau_1),\ldots,\seq{x}{m}(s-\tau_k))\dx[s]\\
             &= x_\tzero(0) + \integral{\tzero}{t} f(s,x(s),x(s-\tau_1),\ldots,x(s-\tau_k))\dx[s]
         \end{align*}
         where $t\in\compactum{\tzero}{\tzero+T}$.
@@ -470,7 +481,7 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
             & \leq\frac{L}{\alpha}\e{\alpha t} \sup_{s\in [\tzero,\tzero+T]}\left(\e{-\alpha s}\rho(s)\right)
         \end{align*}
         %with $L$ the Lipschitz constant of $f$ on the set ...
-        The continuity of $x$ and $\bar{x}$ also assert the continuity of $\rho$.
+        The continuity of $x$ and $\bar{x}$ also entails the continuity of $\rho$.
         Choosing $\alpha=2L$ and multiplying with $\e{-\alpha t}>0$ leads to
         \begin{equation*}
             \e{-2Lt}\rho(t) \leq \frac{1}{2}\sup_{s\in [\tzero,\tzero+T]}\left(\e{-2L s}\rho(s)\right)
@@ -522,7 +533,7 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
     % derivative not necessarily continuous at knots
     % TODO: non-autonomous -> autonomous
     % TODO: autonomous DDEs is without loss of generality?
-    In the following chapters, we will only consider autonomous DDEs. This allows to restrict to the case of initial time $\tzero=0$.
+    In the following chapters, we will only consider autonomous DDEs. This allows to restrict to the case of time-independent $f$ and initial time $\tzero=0$.
     The notion of solution for an autonomous DDE can be lifted to be a trajectory $\trajectory$ in the state space
     \begin{equation}
         \trajectory \from \compactum{0}{T} \to \statespace[-\taumax]
@@ -531,7 +542,8 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
     This notion of solution is a \emph{dynamical systems'} point of view which turns out to be useful later.
 
     Other results know from ordinary differential equations can be adapted to delay differential equations, such as continuous (or even differentiable) dependence of the solution on initial data, etc.\ (cf.~\cite{Dads06DDEs}).
-    
+
+    % TODO: example earlier
     \begin{example}\label{ex:ode-dde}
         Delay differential equations can often incorporate a much richer behavior than ordinary differential equations.
         The basic ordinary IVP
@@ -548,7 +560,7 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
                 x(t) = x_0(t) & t\in\compactum{-\tau}{0}
             \end{cases}
         \end{equation*}
-        has a much complexer dynamics, which is shown in Figure~\ref{fig:plot-ex-dde} for $x_0\equiv 1$. The solution can be computed as a series of polynomial pieces by the method of steps.   
+        has a much complexer dynamics, which is shown in Figure~\ref{fig:plot-ex-dde} for $x_0\equiv 1$. The solution can be computed as a series of polynomial pieces by the method of steps.
     \end{example}
 
     % TODO: order caption

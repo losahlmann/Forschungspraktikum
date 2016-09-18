@@ -1,7 +1,8 @@
 \chapter{Delay Differential Dynamic Logic}
 \label{ch:delay-differential-dynamic-logic}
 
-We extent classical differential dynamic logic (\dL) (see e.g.~\cite{Platzer12LogicsDynSys}) with syntax, semantics, axiomatization and proof rules to support reasoning about hybrid dynamical systems with delay.
+% TODO: cite JAR2016 and JAR2008 and LMCS2012
+We extend classical differential dynamic logic (\dL) (see e.g.~\cite{Platzer12LogicsDynSys}) with syntax, semantics, axiomatization and proof rules to support reasoning about hybrid dynamical systems with delay.
 
 To that purpose, we allow delay differential equations in hybrid programs, which are then called \emph{delay hybrid program} (\dHP).
 
@@ -10,6 +11,7 @@ The definition of \emph{delay differential dynamic logic} (\ddL) provides all op
 In the language of \ddL, we can not only model hybrid programs with DDEs in the continuous part, but also with temporal differences in the discrete fragment.
 As an example consider a controller which approximates a derivative by a difference quotient.
 
+% FIXME: only the syntax? or also semantics and axioms?
 The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{delay differential dynamic logic} reduces to classical \emph{differential dynamic logic}.
 
 
@@ -22,7 +24,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     \label{sec:syntax}
 
     Terms and formulas in \ddL, as well as \dHPs are defined as \emph{words} of finite length, produced by their corresponding grammars in Backus-Naur-form (BNF).
-    % The syntax of is defined inductively by 
+    % The syntax of is defined inductively by
 
     We define by $\allvars$ be the set of \emph{variables} and by $\diffvars\defeq\Set{\D{x} \with x\in\allvars}$ the corresponding set of \emph{differential symbols}.
     % TODO: call delay or delayed?
@@ -65,7 +67,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     If a s-term $\astrm(s)$ does neither contain $\x[s]$ nor $\Dx[s]$, we say $s\notin\astrm(s)$ and abbreviate its notation to $\astrm$.
     Writing $\astrm(b)$ means that all occurrences of $s$ in $\astrm(s)$ have been replaced with $b\in\nonposQ$.
     % FIXME: or nonposR ? dilemma was kann ich explizit schreiben und was brauche ich nur implizit in der Theorie?
-    Moreover, we agree on abbreviating $\x[0]$ to $x$ and $\Dx[0]$ to $\D{x}$.
+    Moreover, we abbreviate $\x[0]$ to $x$ and $\Dx[0]$ to $\D{x}$.
     Note that $s\notin\allvars\cup\diffvars\cup\constants$. It is a special variable symbol.
 
     The \emph{differential} $\D{(\astrm(s))}$ of a term $\astrm(s)$ is its syntactic (total) derivative, obtained by standard differentiation rules.
@@ -76,16 +78,17 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     \begin{example}
         Let us consider the s-term
         \begin{equation*}
-            \astrm(s) \equiv \x[s] + \x[-\tau].
+            \astrm(s) \equiv 2\x[s] + \x[-\tau].
         \end{equation*}
         Setting $s=-1$ gives the term
         \begin{equation*}
-            \astrm(-1) \equiv \x[-1] + \x[-\tau].
+            \astrm(-1) \equiv 2\x[-1] + \x[-\tau].
         \end{equation*}
     \end{example}
 
-    Delay differential dynamic logic uses hybrid programs with delay differential equations as system model. 
+    Delay differential dynamic logic uses hybrid programs with delay differential equations as system model.
     The grammar defining these \emph{delayed hybrid programs} is the same as for classical \HPs (cf.~\cite{Platzer10HybridSystems,Platzer12LogicsDynSys,Platzer15Uniform}). The difference is only given by their semantics.
+    % FIXME: which defines now DDEs instead of ODEs
 
     \begin{definition}[Delay Hybrid Programs]\label{def:syntax-HP}
         The syntax of \emph{delay hybrid programs} (\dHPs) is defined by
@@ -105,10 +108,12 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         where $\asprg,\bsprg$ denote \dHPs, $x$ a variable, $\astrm$ a term (possibly containing $x$ or $\x[c]$, but not $\x[s]$) and $\asfml$ a \ddL formula (not mentioning $\x[s]$ or $\Dx[s]$).
         The formula $\asfmlfolR$ is of \FOLR, containing only normal variable symbols from $\allvars$.
     \end{definition}
-    
-    Note that the syntax only allows autonomous DDEs, though with multiple constant delays.
 
-    Atomic \dHPs are given by instantaneous discrete \emph{assignments} $\hupdate{\humod{x}{\astrm}}$ and \emph{differential assignments} $\Dupdate{\Dumod{\D{x}}{\astrm}}$, which change the value of the given variable only at the current time instant (not the past), \emph{tests} $\htest{\asfml}$, which pass only if the current state satisfies the formula $\asfml$ and aborts the program execution if not, as well as evolutions along \emph{delay differential equation} systems $\hevolvein{\D{x}=\astrm}{\ivr}$ of an arbitrary amount of time, but restricted by the evolution domain constraint $\ivr$.
+    % FIXME: double: this appears again after def
+    Note that the syntax only allows autonomous DDEs, though with multiple constant delays.
+    % time can be added as new variable t with \D{t}=1
+
+    Atomic \dHPs are given by instantaneous discrete \emph{assignments}\footnote{Recall that $\hupdate{\humod{x}{\astrm}}$ means $\hupdate{\humod{\x[0]}{\astrm}}$} $\hupdate{\humod{x}{\astrm}}$ and \emph{differential assignments} $\Dupdate{\Dumod{\D{x}}{\astrm}}$, which change the value of the given variable only at the current time instant (not the past), \emph{tests} $\htest{\asfml}$, which pass only if the current state satisfies the formula $\asfml$ and aborts the program execution if not, as well as evolutions along \emph{delay differential equation} systems $\hevolvein{\D{x}=\astrm}{\ivr}$ of an arbitrary amount of time, but restricted by the evolution domain constraint $\ivr$.
 
     Compound \dHPs combine atomic programs, and comprise \emph{nondeterministic choices} $\hchoice{\asprg}{\bsprg}$, running either $\asprg$ or $\bsprg$, \emph{sequential compositions} $\asprg;\bsprg$, executing $\bsprg$ after $\asprg$ and \emph{nondeterministic repetitions} $\hrepeat{\asprg}$, repeating $\asprg$ any number of times, zero times included.
 
@@ -116,8 +121,8 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     Observe that ODEs are still expressible by this syntax and that hybrid programs are hence only delayed hybrid programs with zero delay.
 
     % FIXME: where put general dL sources? only once at beginning
-    
-    
+
+
     \begin{definition}[s-Formulas]\label{def:syntax-formula}
         The syntax for \emph{formulas} of \emph{delay differential dynamic logic} is defined by the grammar
         \begin{align*}
@@ -146,17 +151,19 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
 
     Like the s-terms defined above, the s-formulas depend on a time parameter $s\in\closeddelayinterval$. The symbol $T$ is a symbolic constant related to the length of the domain of the state space, which is induced by the occurrence of delay symbols. Its value is defined by the static semantics.
     The only way to bind the variable $s$ in a formula $\asfml(s)$ is by using $\hs{\asfml(s)}$, which quantifies $s$ over the domain of the state space, except for the current time point $0$.
+    % TODO: discuss why the latter is important
 
-    We note $\asfml$ to indicate that $s$ is not a \emph{free variable} of $\asfml(s)$ and $\asfml(\past)$ with $\past\in\closeddelayinterval\subset\nonposR$ to express that each term $\astrm(s)$ in the formula was replaced by its corresponding $\astrm(r)$, even if the term appears in the scope of a $\hs{}$.
+    We write $\asfml$ to indicate that $s$ is not a \emph{free variable} of $\asfml(s)$ and $\asfml(\past)$ with $\past\in\closeddelayinterval\subset\nonposR$ to express that each term $\astrm(s)$ in the formula was replaced by its corresponding $\astrm(r)$, even if the term appears in the scope of a $\hs{}$.
     % TODO: is r=0 here allowed, since hs does not include 0
     % TODO: or only which is not under the scope of a \hs? at the moment I overwrite each \hs
     Sometimes we want to emphasize that a formula depends on a variable $x$. Then we write $\asfml(x)$ and refer to $x$ as function and element of the state space, not only the value $\x[0]$ (cf.\ usage for $\forall$).
     A s-formula $\asfml(s)$, which contains ($\x[s]$ and) at least one $\x[c]$ for any $c\in\constants$ is called \emph{stiff}.
     % FIXME: c=0 allowed? denke nicht
-    
+
     % TODO: on variables \allvars (signature)
     Formulas of first-order logic of real arithmetic constitute a subset of \ddL, i.e.\ every \FOLR formula is also a formula of delay differential dynamic logic (though not containing any delay).
 
+    % TODO: find other notation for \hs, [] confuses with box modality
     \begin{convention}
         The frequently appearing fact that $\asfml(s)$ is not only supposed to hold for $s\in\delayinterval$ but also in $s=0$
         \begin{equation*}
@@ -175,7 +182,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         \begin{itemize}
             \item the quantifiers $\forall,\exists$ and the modal operators $\dbox{\cdot}{},\ddiamond{\cdot}{}$ bind strongest
             \item negation $\lnot$ binds stronger than
-            \item conjunction $\land$ binds stronger than 
+            \item conjunction $\land$ binds stronger than
             \item disjunction $\lor$ binds stronger than
             \item implication $\limply$ binds stronger than
             \item equivalence $\lbisubjunct$, which binds weakest.
@@ -183,15 +190,15 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     \end{convention}
 
         % TODO: Move to static semantics
-    Moreover, when a s-formula does not depend on the quantified parameter $s$, we can drop the quantifier $\hs{}$ in whose scope this formula appears.
+    Moreover, when a s-formula does not mention on the quantified parameter $s$, we can drop the quantifier $\hs{}$ in whose scope this formula appears.
 
     \begin{example}
         Consider the two well-formed \ddL formulas:
         \begin{align*}
             &\hs{(x+\x[s]\geq 0)}\\
-            &\hs{(x+\x[-\tau]\geq 0)} 
+            &\hs{(x+\x[-\tau]\geq 0)}
         \end{align*}
-        The quantification over $s$ in the second formula can be dropped, what leads to the equivalent formula
+        The quantification over $s$ in the second formula is vacuous and can be dropped, what leads to the equivalent formula
         \begin{equation*}
             x+\x[-\tau]\geq 0.
         \end{equation*}
@@ -220,16 +227,18 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     %at the time $t=0$. The value of $x$ for the time before does not change.
 
     % FIXME: let interpretation $\interpret$ be fixed
-    
+
+    % FIXME: explain earlier why quantification over s needed
 
     \begin{definition}[Semantics of s-terms]\label{def:sematic-terms}
         The \emph{semantics} of a s-term $\astrm(s)$ in the state $\asstate\in\states$ with respect to the time instant $\past\in\closeddelayinterval$
         is a value in $\R$ and defined inductively as follows:
         \begin{enumerate}
             \item $\ivaluation{\IddL}{\x[s]} = \asstate(x)(\past)$ %for a variable $x\in\allvars$
+            % FIXME: explain limit and case r=0
             \item $\ivaluation{\IddL}{\Dx[s]} = \asstate(\D{x})(\past) \defeq \lim_{t\downto \past} \frac{\asstate(x)(t)-\asstate(x)(\past)}{t-\past}$ (except in $\past=0$)
             % for a differential symbol $\D{x}\in\diffvars$
-            \item $\ivaluation{\IddL}{\x[c]} = \asstate(x)(c)$ %for a variable $x\in\allvars$ 
+            \item $\ivaluation{\IddL}{\x[c]} = \asstate(x)(c)$ %for a variable $x\in\allvars$
             \item $\ivaluation{\IddL}{\Dx[c]} = \asstate(\D{x})(c) \defeq \lim_{t\downto c} \frac{\asstate(x)(t)-\asstate(x)(c)}{t-c}$ (except in $c=0$)
             \item $\ivaluation{\IddL}{a} = a$ %for a constant $a\in\constants$
             \item $\ivaluation{\IddL}{f(\range{\istrm{1}(s)}{\istrm{k}(s)})} = \interpret[f](\range{\ivaluation{\IddL}{\istrm{1}(s)}}{\ivaluation{\IddL}{\istrm{k}(s)}})$ %for a function symbol $f$
@@ -237,7 +246,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             \item $\ivaluation{\IddL}{\astrm(s)\cdot\bstrm(s)} = \ivaluation{\IddL}{\astrm(s)} \cdot \ivaluation{\IddL}{\bstrm(s)}$
             % FIXME: derivation of terms with x'?
             \item $\ivaluation{\IddL}{\D{(\astrm(s))}} = \displaystyle\sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)}}{\partial \x[s]}$
-        \end{enumerate} 
+        \end{enumerate}
         where $c\in\nonposQ$ is a non-positive rational number and $a\in\Q$. Rationals have their natural meaning.
     \end{definition}
         % FIXME: interpretation of $f$ is a smooth function?
@@ -295,7 +304,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
 
     % $\dbox{}{}$ and $\ddiamond{}{}$ only refer to last state and not intermediate states, as \dTL does.
 
-    \begin{lemma}[Barcan formula]
+    \begin{lemma}[Time Barcan formula]
         The box modality and the s-quantification  commute
         \begin{equation*}
             \imodel{\IddL}{\hs{\dbox{\asprg}{\asfml(s)}}} = \imodel{\IddL}{\dbox{\asprg}{(\hs{\asfml(s)})}}
@@ -314,7 +323,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             \end{aligned}
         \end{multline*}
     \end{proof}
-    
+
     \begin{example}
         The diamond modality does not commute with the s-quantification
         \begin{equation*}
@@ -325,18 +334,18 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             &\asstate\in\imodel{\iconcat[assign={}]{\IddL}}{\hs{\ddiamond{\hevolve{\D{x}=1}}{(\x[s]=1)}}}\\
             &\asstate\notin\imodel{\iconcat[assign={}]{\IddL}}{\ddiamond{\hevolve{\D{x}=1}}{\hs{(\x[s]=1)}}}
         \end{align*}
-        
+
     \end{example}
     % TODO: do we accept that or restrict formula after modality to not having $s$ free? then, since s\notin\asprg commutes also for diamond
-    
+
 
     % Since, with respect to \dL, the state space has been replaced, we need to redefine the semantics.
-    
+
     \begin{definition}[Transition semantics of \dHPs]\label{def:semantic-dHP}
         The interpretation of a \dHP is given by a binary \emph{reachability relation} $\ireachability{\IddL}{\asprg}\subseteq\states\times\states$ between states:
         \begin{enumerate}
             % \item $\ireachability{\IddL}{a} = \interpret[a]$ for a program constant $a$
-            % FIXME: astrm(s) or without s
+            % FIXME: astrm(s) without s, but need semantics klammer of terms without s/r
             \item\label{itm:sem-dHP-assgn} $\ireachability{\IddL}{\hupdate{\humod{x}{\astrm}}} =
                 \Set*{(\asstate,\bsstate)\with \bsstate=\asstate \text{ except }
                 \bsstate(x) = \left(\past\mapsto\begin{cases}
@@ -353,7 +362,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             \item $\ireachability{\IddL}{\htest{\asfml}} = \Set*{(\asstate,\asstate) \with \asstate\in\imodel{\iconcat[assign={}]{\IddL}}{\asfml}}$
             \item $\ireachability{\IddL}{\hchoice{\asprg}{\bsprg}} = \hchoice{\ireachability{\IddL}{\asprg}}{\ireachability{\IddL}{\bsprg}}$
             \item $\ireachability{\IddL}{\asprg;\bsprg} = \Set{(\asstate,\bsstate) \with (\asstate,\csstate)\in\ireachability{\IddL}{\asprg}, (\csstate,\bsstate)\in\ireachability{\IddL}{\bsprg}}$
-            \item $\ireachability{\IddL}{\hrepeat{\asprg}} 
+            \item $\ireachability{\IddL}{\hrepeat{\asprg}}
                 = \displaystyle\cupfold_{m\in\N_0}\ireachability{\IddL}{\asprg^m}$ with $\asprg^{m+1}\equiv (\asprg^m;\asprg)$ and $\asprg^0\equiv (\htest{\ltrue})$
             \item\label{itm:sem-HP-DDE} $\ireachability{\IddL}{\hevolvein{\D{x}=\astrm}{\ivr}} = \{(\asstate,\bsstate) \;\vert\; \mforall{\zeta\in[0,\duration]}\holds\trajectory(\zeta)\in\imodel{\IddL}{\hevolve{\D{x}=\astrm}\land\ivr}$ and $\asstate=\trajectory(0)$ on $\scomplement{\Set{\Dx[0]}}$ and $\bsstate=\trajectory(r)$ for a $\trajectory\from [0,\duration]\to\states\}$, i.e.\ there exists a $\duration\geq 0$ and a trajectory $\trajectory\from [0,\duration]\to\states$, which fulfills $\trajectory(\zeta)(\D{x})(r) \defeq \DD{\trajectory(t)(x)(\past)}{t}(\zeta) = \ivaluation{\iconcat[state=\trajectory(\zeta+\past),assign={}]{\IddL}}{\astrm}$ and satisfies $\ivr$ for all $r\in[-\min\Set{\zeta,T},0]$. For $\past\in [-T,-\min\Set{\zeta,T}\big)$ it holds $\trajectory(\zeta)(x)(\past)=\asstate(x)(\past+\zeta)$ for all variables $x$.
             % TODO: case r=0
@@ -362,12 +371,12 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     The semantics of a delay differential equation is motivated by the definition of a solution for a DDE-IVP (cf.\ Definition~\ref{def:solution-dde}), following the evolution for a nondeterministic period of time, as long as the evolution domain constraint holds.
 
     % To facilitate notation, we define a \emph{satisfaction relation} with respect to a DDE: the trajectory $\trajectory$ (which is a set of states) is said to \emph{satisfy} $\hevolvein{\D{x}=\astrm}{\ivr}$, written as $\trajectory\models\hevolvein{\D{x}=\astrm}{\ivr}$
-    % TODO: :  fulfills DDE 
+    % TODO: :  fulfills DDE
     % $\trajectory$ solves the DDE and satisfies $\ivr$ in each time instant/state
 
     % The formula $\hevolve{\D{x}=\astrm(-\tau)}\land\ivr$ has dropped the $\hs{}$, all occurences of $x$ and $\D{x}$ of form with constant
 
-    % TODO: if $R=0$: 
+    % TODO: if $R=0$:
     The initial value $\asstate(\D{x})(0)$ may not be compatible with the actual derivative of $x$. Following the evolution of a DDE, even for $\duration=0$, sets it properly, such that the rate of change of the values of a variable coincide with the values of the differential symbol.
 
     For the \emph{discrete assignment}, we only allow the values at the current time instant to be changed. A functional assignment would essentially allow to rewrite history, which is not permitted.
@@ -379,10 +388,11 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     %TODO: super dense time: multiple assignments, only consider last assignment
 
     % in general, we do not write expression explicitely, just give possible intervals in precondition
-    
+
     As a \FOLR formula, $\ivr$ do not contain any delayed variables and thus only depends on the values at the current time instant (and not on the entire interval $\delayinterval$).
 
     \begin{lemma}[Derivatives]\label{lm:derivatives}
+        % FIXME: r=0 issue
         Standard analysis derivation rules also hold in the semantics of \ddL terms, i.e.\ the following equations are valid \ddL formulas
         \begin{align}
             \der{\x[s]} &= \Dx[s]\\
@@ -418,7 +428,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             % constant
             \ivaluation{\IddL}{\D{(a)}}
             &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{a}}{\partial \x[c]}+ \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{a}}{\partial \x[s]}\\
-            % &= \asstate(\D{x})(c)\frac{\partial\interpret[a]}{\partial \x[c] 
+            % &= \asstate(\D{x})(c)\frac{\partial\interpret[a]}{\partial \x[c]
             &= 0
         \end{align*}
         % \begin{align*}
@@ -428,6 +438,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         % \end{align*}
         \begin{align*}
             % addition rule
+            % FIXME: line breaks in add rule
             \ivaluation{\IddL}{\D{(\astrm(s)+\bstrm(s))}}
             &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)+\bstrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)+\bstrm(s)}}{\partial \x[s]}\\
             &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}+\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}+\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[s]}\\
@@ -438,6 +449,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         \end{align*}
         \begin{align*}
             % multiplication rule
+            % FIXME: line breaks in mult rule
             \ivaluation{\IddL}{\D{(\astrm(s)\cdot\bstrm(s))}}
             &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\ivaluation{\IddL}{\astrm(s)\cdot\bstrm(s)}}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\ivaluation{\IddL}{\astrm(s)\cdot\bstrm(s)}}{\partial \x[s]}\\
             &= \sum_{\x[c]\in\delayvars} \asstate(\D{x})(c)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[c]} + \asstate(\D{x})(\past)\frac{\partial\left(\ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\bstrm(s)}\right)}{\partial \x[s]}\\
@@ -446,7 +458,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             &= \ivaluation{\IddL}{\D{(\astrm(s))}}\cdot\ivaluation{\IddL}{\bstrm(s)} + \ivaluation{\IddL}{\astrm(s)}\cdot\ivaluation{\IddL}{\D{(\bstrm(s))}}\\
             &= \ivaluation{\IddL}{\D{(\astrm(s))}\cdot\bstrm(s)+\astrm(s)\cdot\der{\bstrm(s)}}
         \end{align*}
-        
+
     \end{proof}
 
     \begin{definition}\label{def:termvars}
@@ -463,10 +475,10 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     \begin{definition}[Sampled trajectory]\label{def:sampled-trajectory}
         Since a s-term $\astrm(s)$ only comprises a finite number of atomic terms, its valuation can also be seen as a mapping
         \begin{equation*}
-            \ivaluation{\interpretation[const=\interpret]}{\astrm(s)} \from \R^{\abs{\mathcal{K}}} \to \R  
+            \ivaluation{\interpretation[const=\interpret]}{\astrm(s)} \from \R^{\abs{\mathcal{K}}} \to \R
         \end{equation*}
         % TODO: what about x'
-        from the concrete values for each element of $\mathcal{K}\defeq \delayvars[\astrm] \cup \delaydiffvars[\astrm] \cup \Set{\x[s], \Dx[s]}$ into the reals, if we assign a fixed $r\in\closeddelayinterval$ to $s$.
+        from the concrete values for each element of the finite set $\mathcal{K}\defeq \delayvars[\astrm] \cup \delaydiffvars[\astrm] \cup \Set{\x[s], \Dx[s]}$ into the reals, if we assign a fixed $r\in\closeddelayinterval$ to $s$.
 
         % , instead of using the functional state space as domain.
 
@@ -483,12 +495,13 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     \end{definition}
     % TODO: alternatively, could maybe have \trajectory Fréchet-diffable
 
-    The following lemma shows the consistency of the semantics for differentials with the semantics of the evolution of a delay differential equation.
+    The following lemma is the DDE counterpart to the differential lemma for ODEs~\cite{Platzer15Uniform} and shows the consistency of the semantics for differentials with the semantics of the evolution of a delay differential equation.
     This means that along a DDE, the values of differential symbols coincide with the time derivative of the value of the corresponding variable.
     % Derivative means right-hand in points of partition.
 
     \begin{lemma}[Differential Lemma]\label{lm:differential-lemma}
         % FIXME: check if everywhere correctly used: \states=(\statespace)^n
+        % FIXME: check if alle Annahmen, e.g. FV
         The value of a s-term $\bstrm(s)$ along a trajectory $\trajectory\from\compactum{0}{\duration}\to\states$ satisfying a DDE for any duration $\duration>0$, i.e.
         % FIXME:doFormatList does not work with iconcat $\imodels{\iconcat[state=\trajectory]{\IddL}}{\D{x}=\asfml\land\ivr}$
         $\interpret,\trajectory\models(\D{x}=\astrm\land\ivr)$,
@@ -497,6 +510,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         \begin{equation*}
             \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(\bstrm(s))}} = \DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{\bstrm(s)}}{t}(\zeta)
         \end{equation*}
+        % FIXME: replace with def here, use notation d+/dt f(zeta) for right derivative
         As in Definition~\ref{def:pw-cont-diff}, the derivative at a ``bend point'' is to be understood as right derivative.
     \end{lemma}
     \begin{proof}
@@ -532,7 +546,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         \begin{align*}
             \lim_{\zeta\downto\hat{t}_l} \DD{\trajectory(t)(x)(c)}{t}(\zeta)
                 & = \lim_{\zeta\downto \hat{t}_l} \DD{\trajectory(0)(x)(\past)}{\past}(\zeta+c)\\
-                & 
+                &
                 %=\lim_{s\downto t_i}\trajectory(0)(\D{x})(s)
                 = \trajectory(0)(\D{x})(\hat{t}_l+c)
         \end{align*}
@@ -601,7 +615,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         % \begin{equation*}
         %     \D{\left(\hs{x+\x[c]+\x[s]\geq 0}\right)} \equiv \hs{\D{x}+\Dx[c]+\Dx[s]\geq 0}
         % \end{equation*}
-        
+
         % then $g_s\in\Cnpw[1]{\compactum{0}{r}}{\R}$ along traj de dde
         % \begin{equation*}
         %     g_s(t)=\ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\bstrm} = \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[0]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[c]} + \ivaluation{\iconcat[state=\trajectory(t),assign=s]{\IddL}}{\x[s]}
@@ -620,8 +634,9 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
         Let $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory satisfying a DDE for any duration $\duration\geq 0$, i.e.
         $\interpret,\trajectory\models(\D{x}=\astrm\land\ivr)$.
         Then it holds for $\past\in\closeddelayinterval$:
+        % FIXME: change notation without zeta
         \begin{equation*}
-            \interpret,\trajectory,\past\models\asfml(s) \mbisubjunct \trajectory(\zeta)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(s)}}  
+            \interpret,\trajectory,\past\models\asfml(s) \mbisubjunct \trajectory(\zeta)\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}}}{\asfml(s)}}
         \end{equation*}
     \end{lemma}
     \begin{proof}
@@ -645,7 +660,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
     \subsection{History Horizon}
         \label{sec:history-horizon}
 
-        Delay hybrid programs and \ddL formulas can reference previous values of variables. These values need to be specified by the state.
+        Delay hybrid programs and \ddL formulas can reference past values of variables. These values need to be specified by the state.
         For that reason, the lower interval bound $T\in\nonposR$ of the state space domain needs to be chosen accordingly.
 
         This bound is called \emph{history horizon} and depends on all occurrences of $\x[c]$ and $\Dx[c]$ in the formula and the hybrid programs it contains.
@@ -659,9 +674,12 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             which
             assigns to each \ddL formula the earliest point in time it references to.
             It is defined inductively for s-formulas by:
+            % TODO: compactify by combining equalities to single line
+            % TODO: mention c in Q in entsprechenden lines
             \begin{align*}
                 \HH{\astrm(s)=\bstrm(s)} = \HH{\astrm(s)\geq\bstrm(s)} &= \max\set{\HH{\astrm(s)},\HH{\bstrm(s)}}\\
                 \HH{p(\range{\istrm{1}(s)}{\istrm{k}(s)})} &= \max\set{\range{\HH{\istrm{1}(s)}}{\HH{\istrm{k}(s)}}}\\
+                % FIXME: here max(T,HH(phi)) needed?
                 \HH[\big]{\hs{\asfml(s)}} &= \HH{\asfml(s)}\\
                 \HH{\lnot\asfml(s)} &= \HH{\asfml(s)}\\
                 \HH{\asfml(s)\land\bsfml(s)} &= \max\set{\HH{\asfml(s)},\HH{\bsfml(s)}}\\
@@ -695,7 +713,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             Consider the following \ddL formula:
             \begin{multline*}
                 \hsc{(\x[s]=2)}\limply\\
-                \dbox{\hupdate{\humod{x}{\x[-3]^2}};\hevolvein{\D{x}=\x[-\tau]+2x}{(x\geq 0)}}{\big(\hsc{0\leq\x[s] \land \x[s]\leq\x[-5]}\big)}
+                \dbox{\hupdate{\humod{x}{\x[-3]\cdot\x[-3]}};\hevolvein{\D{x}=\x[-\tau]+2x}{(x\geq 0)}}{\big(\hsc{0\leq\x[s] \land \x[s]\leq\x[-5]}\big)}
             \end{multline*}
             The history horizon needs to be set to
             \begin{align*}
@@ -703,10 +721,11 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
                 &=\max\set{\tau,5}.
             \end{align*}
         \end{example}
-    
+
     \subsection{Variable Binding}
         \label{sec:variable-binding}
 
+        % TODO: explain differences free/bound/must bound variables
         Similar to  \dL~\cite{Platzer15Uniform}, we define \emph{free}, \emph{bound} and \emph{must bound} variables.
         These notions are needed for the sound definition of axioms, whenever they incorporate a substitution.
         A variable $x$ is bound by quantifiers of the form $\lforall{x}$ or $\exists{x}$ or through discrete assignments or differential evolutions inside a modality, such as $\dbox{\hupdate{\humod{x}{4}}}{}$ or $\ddiamond{\hevolve{\D{x}=\x[-1]}}$.
@@ -719,8 +738,8 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             \begin{align*}
                 \freevars{\x[s]} &= \set{x,s}\\
                 \freevars{\Dx[s]} &= \set{\D{x},s}\\
-                \freevars{\x[c]} &= \set{x}\\
-                \freevars{\Dx[c]} &= \set{\D{x}}\\
+                \freevars{\x[c]} &= \set{x}, \quad c\in\Q\\
+                \freevars{\Dx[c]} &= \set{\D{x}}, \quad c\in\Q\\
                 \freevars{a} &= \emptyset\\
                 \freevars[\big]{f(\range{\istrm{1}(s)}{\istrm{k}(s)})} &= \freevars{\istrm{1}(s)} \cup\cdots\cup \freevars{\istrm{k}(s)}\\
                 \freevars[\big]{\astrm(s)+\bstrm(s)} = \freevars[\big]{\astrm(s)\cdot\bstrm(s)} &= \freevars{\astrm(s)}\cup\freevars{\bstrm(s)}\\
@@ -745,7 +764,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
                 \freevars{\hrepeat{\asprg}} &= \freevars{\asprg}\\
                 \freevars{\hevolvein{\D{x}=\astrm}{\ivr}} &= \set{x}\cup\freevars{\astrm}\cup\freevars{\ivr}
             \end{align*}
-        \end{definition} 
+        \end{definition}
 
         Only bound variables can change their value during the execution of a delay hybrid program.
         For formulas, bound variables are the variables which don't need an assignment in order to determine the truth value of the formula.
@@ -788,11 +807,11 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
             Obviously, it holds $\mustboundvars{\asprg}\subseteq\boundvars{\asprg}$.
         \end{definition}
 
-%           
+%
 
 %     \subsection{Well-defined Formulae}
 %         \label{sec:well-definedness}
-    
+
 %         $s$ must not be free
 %         and
 
@@ -801,7 +820,7 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
 %             premisse defines element od statespace for all occuring variables and diffs
 %         \end{definition}
 
-%         
+%
 
 %         % TODO: feasible history horizon for a HP
 %         \begin{lemma}
@@ -809,5 +828,5 @@ The logic \ddL is a superset of \dL, i.e.\ in the absence of any delay, \emph{de
 %         \end{lemma}
 
 %         \begin{example}
-            
+
 %         \end{example}

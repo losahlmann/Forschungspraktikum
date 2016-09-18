@@ -116,6 +116,7 @@ Moreover, they can be implemented in software for computer-aided verification.
                     \dbox{\asprg}{\asfml(s)}
                 }
             }{$\freevars{\asfml}\cap\boundvars{\asprg}=\emptyset$}
+            % TODO: add Time Barcan, if useful
         \end{calculus}
         \qquad
         % proof rules
@@ -173,17 +174,17 @@ Moreover, they can be implemented in software for computer-aided verification.
     If the \ddL formula $\asfml$ can be derived by \ddL proof rules from \ddL axioms (this includes first-order logic axioms), we say that this formula is \emph{provable} and write $\infers\asfml$.
 
     The axioms listed in Figure~\ref{fig:axioms} are expressed in $\dbox{\cdot}$. Axioms with the dual operator $\ddiamond{\cdot}$ can be obtained using the duality relation (axiom~\irref{diamond}).
-    
+
     % FIXME: axiom descriptions
-    The \emph{discrete assignment axiom}~\irref{assignb} substitutes $\x[0]$ by its new value $\astrm$ in the formula, requirering the admissibility condition (neither $x$ nor any variable in $\astrm$ get bound by a quantifier or modality, cf.~Section~\ref{sec:variable-binding}) to hold.
+    The \emph{discrete assignment axiom}~\irref{assignb} substitutes $\x[0]$ (alias $x$) by its new value $\astrm$ in the formula, requirering the admissibility condition (neither $x$ nor any variable in $\astrm$ get bound by a quantifier or modality, cf.~Section~\ref{sec:variable-binding}) to hold.
     The \emph{test axiom}~\irref{testb} assumes that the test passes, because states which do not satisfy the condition are not considered anyway.
-    The \emph{axiom of nondeterministic choice}~\irref{choiceb} splits the transition into its two possibilities, demanding the validity of either. 
+    The \emph{axiom of nondeterministic choice}~\irref{choiceb} splits the transition into its two possibilities, demanding the validity of either.
     The \emph{composition axiom}~\irref{composeb} splits the modality into a nested modality.
     % The \emph{solution axiom}~\irref{solb} replaces a DDE with the solution of its symbolic initial-value problem (as opposed to a convential IVP, which is numerical), This solution must be expressible as first-order formula of real arithmetic, which is only the case for a small class of delay differential equations.
     The \emph{iteration axiom}~\irref{iterateb} partially unwinds a loop, which can also be used for bounded model checking.
-    The \emph{induction axioms}~\irref{I}
+    The \emph{induction axiom}~\irref{I}
     % and \irref{Cb}, which is a variant of Harel's convergence rule,
-    can be applied when reasoning about loops with unbounded repetitions. 
+    can be applied when reasoning about loops with unbounded repetitions.
     The \emph{modal modus ponens} axiom~\irref{K} and the \emph{Barcan formula}~\irref{B} are taken from first-order modal logic.
     Axiom~\irref{V} is for modalities which are true for any state transition, since their condition does not depend on the variables that change.
 
@@ -201,7 +202,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         \begin{figure}[t]
             \begin{calculuscollections}{\coloumnwidth}
             \begin{calculus}
-                % replace \D{(x)} with \der{x} 
+                % replace \D{(x)} with \der{x}
                 \cinferenceRule[Dconst|$c'$]{derive constant}{
                     \linferenceRule[eq]{0}{\der{a}}
                 }{}
@@ -244,6 +245,7 @@ Moreover, they can be implemented in software for computer-aided verification.
                         \big(\ivr\limply\inv\land\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\der{\inv}}\big)
                     }
                 }{}
+                % TODO: no precond left and psi replaced by chi on right?
                 \cinferenceRule[DDW|DDW]{delay differential weakening}{
                     \linferenceRule[lpmi]{
                         \big(\bsfml\limply
@@ -261,6 +263,7 @@ Moreover, they can be implemented in software for computer-aided verification.
             \label{fig:D-axioms}
         \end{figure}
 
+        % TODO: mention axioms where not allowed
         $\Dx[c]$ and $\x[c]$ are not allowed in the expression of an differential invariant, because they would lead to discontinuities. Thus differential invariants $\inv$ must be \FOLR formulas.
 
     % \subsection{History Axiom}
@@ -320,7 +323,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         \begin{equation*} % no blank line before, causes to much space
             \cinferenceRule[stepsb|$\dibox{\steps}$]{method of steps axiom}{
                 \linferenceRule[equiv]{
-                    \dbox{\Dupdate{\Dumod{\D{x}}{\astrm}};\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin})}}{\asfml(s)}
+                    \dbox{\htest{\ivr};\Dupdate{\Dumod{\D{x}}{\astrm}};\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin})}}{\asfml(s)}
                 }{
                     \dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}
                 }
@@ -354,7 +357,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         % TODO: axiom [&] in combination with [steps]
         % backward continuation (Richard) -> [\&] limit up to T, state contains entire evolution, can check evo domain constraint on this state
 
-        % 
+        %
     \begin{labeling}{~~~~~~~}
         % FIXME: assignment symbol
         \item[\irref{assignb}]
@@ -368,7 +371,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         i.e.\ the two states coincide in the values for $\x[s]$, except in $\x[0]$. Hence $\asstate\in\imodel{\IddL}{\asfml(s,\astrm)}$ iff $\bsstate\in\imodel{\IddL}{\asfml(s,\x[0])}$.
         The same holds if $\asfml(\x[0])$ does not depend on $s$.
          % (->substitution lemma in book)
-        
+
         \item[\irref{stepsb}] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory of duration $\duration\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\Dx[0]}}$ and $\trajectory(\zeta)\in\imodel{\iconcat[assign={}]{\IddL}}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\duration}$. By the choice of $\asstate$ it holds $\trajectory(\zeta)\in\imodel{\IddL}{\asfml(s)}$ for all $\zeta\in\compactum{0}{\duration}$ and $\past\in\closeddelayinterval$.
 
         We need to show that
@@ -382,7 +385,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         \item[{\parbox[t]{2em}{\irref{Dplus},\irref{Dmult},\\\irref{Dconst},\irref{Dvar}}}] These axioms are special instances of the equations proved in Lemma~\ref{lm:derivatives}.
 
         \item[\irref{DW}] Proof as for \dL.
-        
+
         \item[\irref{DC}] For a formula $\bsfmlfolR$ of \FOLR, let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\bsfmlfolR}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be an arbitrary trajectory of duration $\duration\geq 0$, solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\D{x}}}$ and $\trajectory(\xi)\in\imodel{\IddL}{\Dx[0]=\astrm\land\ivr}$ for all $\xi\in\compactum{0}{\duration}$.
 
         Suppose $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$, i.e.\ there exists a $0\leq \bar{r}\leq\duration$, such that $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\bar{r}}$ and $\trajectory(\bar{r})\in\imodel{\IddL}{\asfml(s)}$. Since $\zeta\leq\duration$ it is also $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$. This is equivalent to $\trajectory(\zeta)\in\imodel{\IddL}{\D{x}=\astrm\land\ivr\land\bsfmlfolR}$ and $\trajectory(\zeta)\in\imodel{\IddL}{\bsfmlfolR}$ for all $\zeta\in\compactum{0}{\bar{r}}$, which is the same as $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr\land\bsfmlfolR}}{\asfml(s)}}$.
@@ -404,7 +407,7 @@ Moreover, they can be implemented in software for computer-aided verification.
             0 \leq \ivaluation{\iconcat[state=\trajectory(\zeta)]{\IddL}}{\D{(g(x))}}=\DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{g(x)}}{t}(\zeta)
         \end{equation*}
         $\freevars{\inv}\cap\set{\D{x}}=\emptyset$ (means no $\D{x}$ in invariant) implies $\trajectory(0)=\asstate\in\imodel{\IddL}{g(x)\geq 0}$.
-        no $\x[c]$ in invariant, hence continuous. 
+        no $\x[c]$ in invariant, hence continuous.
         Lemma~\ref{lm:pc-integrable} yields for any $z\in\compactum{0}{\duration}$
         \begin{equation*}
             \ivaluation{\iconcat[state=\trajectory(z)]{\IddL}}{g(x)}= \ivaluation{\iconcat[state=\trajectory(0)]{\IddL}}{g(x)} + \integral{0}{z} \DD{\ivaluation{\iconcat[state=\trajectory(t)]{\IddL}}{g(x)}}{t}(\zeta)\dx[\zeta] \geq 0
@@ -438,7 +441,7 @@ Moreover, they can be implemented in software for computer-aided verification.
 
 
 %         combine proof rule to tactic
-    
+
 
 
     % \paragraph{Propositional Sequent Calculus Proof Rules}
@@ -597,6 +600,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         % so the state after the DDE fulfills the condition, parts of the state come from initial condition, parts from dde outcome
         % invariant of form with $\x[s]$, but without $\x[c]$, i.e. becomes \FOLR formula if I fix $\past=0$.
 
+        % TODO: write as Lemma: DDI is a derived rule
         In order to facilitate a frequently appearing sequence of proof steps, we combine the differential cut, the differential invariant and delay differential weakening axioms to a new axiom, called \emph{delay differential induction axiom}.
         The idea behind this derived axiom is that if
         the initial condition fulfills a certain safety condition $\asfml(s)$
@@ -671,7 +675,7 @@ Moreover, they can be implemented in software for computer-aided verification.
         % sidewaysfigure
         %\begin{proof}\small
     % \begin{landscape}
-        
+
     %     % \begin{sidewaysfigure}
     %     \footnotesize
     %     % \centering
@@ -872,7 +876,7 @@ Moreover, they can be implemented in software for computer-aided verification.
                         \dbox{\hevolvein{\D{x}=\x[-\tau]}{x^3\geq 0}}{(\hsc{\x[s]\geq 0})}
                         \land
                         \dbox{\hevolve{\D{x}=\x[-\tau]}}{(x^3\geq 0)}
-                    }    
+                    }
                 }{
                     \hsc{\x[s]\geq 0}
                     \limply
@@ -991,4 +995,3 @@ Moreover, they can be implemented in software for computer-aided verification.
         %     \end{equation}
 
         %     This holds since
-
