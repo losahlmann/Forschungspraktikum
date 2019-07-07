@@ -177,12 +177,13 @@ See \cite{Bellen13NumericalDDEs}, or \cite{Szczlina14RigorousDDEs} for a rigorou
         = f(t,x(t),x(t-\tau_1),\ldots,x(t-\tau_k))
     \end{equation*}
     for all $t\in\compactum{\tzero}{\tzero+T}$.
+    % FIXME: no right derivative in tzero+T, here left derivative
 
 
 \section{Method of Steps}
     \label{sec:method-of-steps}
 
-    If we restrict the IVP~\eqref{eq:ivp} onto an interval $\compactum{\tzero}{\tzero+T_1}$ with $T_1\leq\taumin$, then the values of each $x(t-\tau_j)$ is specified by the initial condition and can thus be replaced by $x_{\tzero}(t-\tau_j)$.
+    If we restrict the IVP~\eqref{eq:ivp} onto an interval $\compactum{\tzero}{\tzero+T_1}$ with $T_1\leq\taumin$, then the values of each $x(t-\tau_j)$ are specified by the initial condition and can thus be replaced by $x_{\tzero}(t-\tau_j)$.
     We obtain an \emph{initial value problem} for an \emph{ordinary differential equation}.
     If we can solve this ordinary IVP, i.e.\ if we can find a solution of the ODE on $\compactum{\tzero}{\tzero+T_1}$, then we can reapply this method by plugging the computed solution into the DDE and solving the resulting ODE on the interval $\compactum{\tzero+T_1}{\tzero+T_2}$, where again $T_2\leq\taumin$. As long as one can solve the resulting ordinary differential equation (for suitable $f$ and $x_{\tzero}$, the existence and uniqueness of a solution is guaranteed by Picard-Lindelöf's theorem), this step can be iterated.
 

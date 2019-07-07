@@ -374,6 +374,7 @@ Moreover, they can be implemented in software for computer-aided verification.
 
         \item[\irref{stepsb}] Let $\asstate\in\imodel{\IddL}{\dbox{\hevolvein{\D{x}=\astrm}{\ivr}}{\asfml(s)}}$ and $\trajectory\from\compactum{0}{\duration}\to\states$ be a trajectory of duration $\duration\geq 0$ solving the DDE and having $\asstate$ as initial condition, i.e.\ $\trajectory(0)=\asstate$ on $\scomplement{\set{\Dx[0]}}$ and $\trajectory(\zeta)\in\imodel{\iconcat[assign={}]{\IddL}}{\Dx[0]=\astrm\land\ivr}$ for all $\zeta\in\compactum{0}{\duration}$. By the choice of $\asstate$ it holds $\trajectory(\zeta)\in\imodel{\IddL}{\asfml(s)}$ for all $\zeta\in\compactum{0}{\duration}$ and $\past\in\closeddelayinterval$.
 
+        % FIXME: add entry test
         We need to show that
         \begin{equation*}
             \asstate\in\imodel{\IddL}{\dbox{\Dupdate{\Dumod{\D{x}}{\astrm}};\hrepeat{(\hupdate{\humod{t}{0}};\hevolvein{\D{t}=1\syssep \D{x}=\astrm}{\ivr\land 0\leq t\leq\taumin})}}{\asfml(s)}}.
